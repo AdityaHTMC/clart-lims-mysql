@@ -1,0 +1,14 @@
+.market-chart canvas {
+    width: 100% !important;
+}
+
+.circelBtnBx .btn{margin:0 2px;padding:0;width:36px;height:36px;line-height:38px;border-radius:100%;font-size:16px;border:1px solid #dee2e6;background:#fff;color:#ff8084;transition:all .5s ease-in-out;}
+.circelBtnBx .btn:hover{background:#ff8084;color:#fff;}
+
+.searchBx{border:1px solid #c1c1c1;border-radius:4px;}
+.searchBx fieldset{border:none!important;}
+.searchBx .MuiFormLabel-root{padding-left:10px;padding-right:10px;background:#fff;border-radius:4px;font-weight:600;}
+
+.ql-editor{
+    height: 300px!important;
+}
