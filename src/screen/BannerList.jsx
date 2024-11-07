@@ -48,10 +48,7 @@ const BannerList = () => {
   const [formData, setFormData] = useState({
     category_id: "",
     title: "",
-    title2: "",
     description: "",
-    primary_color: "#FFFFFF",
-    secondary_color: "#000000",
     image: null,
     target_url: "",
     type: "",
@@ -59,14 +56,11 @@ const BannerList = () => {
 
   const [selectedBanner, setSelectedBanner] = useState({
     title: "",
-    title2: "",
     description: "",
-    primary_color: "#FFFFFF",
-    secondary_color: "#000000",
     image: "",
     target_url: "",
     type: "",
-    _id: "",
+    id: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -79,9 +73,7 @@ const BannerList = () => {
   const onOpenModal = () => {
     setOpen(true);
   };
-  const handleEdit = (id) => {
-    navigate(`/product-edit/${id}`);
-  };
+
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
@@ -136,10 +128,7 @@ const BannerList = () => {
     formDataToSend.append("target_url", formData.target_url);
     formDataToSend.append("type", formData.type);
     formDataToSend.append("title", formData.title);
-    formDataToSend.append("title2", formData.title2);
     formDataToSend.append("description", formData.description);
-    formDataToSend.append("primary_color", formData.primary_color);
-    formDataToSend.append("secondary_color", formData.secondary_color);
     if (formData.image) {
       formDataToSend.append("image", formData.image); // Append the file as binary
     }
@@ -169,7 +158,6 @@ const BannerList = () => {
 
     // Append title and brand ID
     formData.append("title", selectedBanner.title || '');
-    formData.append("title2", selectedBanner.title2 || '');
     formData.append("description", selectedBanner.description || '');
     formData.append("primary_color", selectedBanner.primary_color || '');
     formData.append("secondary_color", selectedBanner.secondary_color ||'');
@@ -183,7 +171,7 @@ const BannerList = () => {
       formData.append("image", selectedBanner.image); // Existing image URL or identifier
     }
 
-    editBranner(selectedBanner._id, formData);
+    editBranner(selectedBanner.id, formData);
 
     onCloseModal2();
   };
@@ -293,7 +281,7 @@ const BannerList = () => {
                               />
                               <AiOutlineDelete
                                 size={20}
-                                onClick={() => handleDelete(product._id)}
+                                onClick={() => handleDelete(product.id)}
                                 style={{ cursor: "pointer" }}
                               />
                             </td>

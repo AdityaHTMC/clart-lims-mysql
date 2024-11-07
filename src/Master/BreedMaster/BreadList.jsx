@@ -1,20 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-  ArcElement,
-  BarController,
-  BarElement,
-  CategoryScale,
-  Chart as ChartJS,
-  Filler,
-  Legend,
-  LineElement,
-  LinearScale,
-  PointElement,
-  RadialLinearScale,
-  Title,
-  Tooltip,
-} from "chart.js";
 
 import {
   Button,
@@ -41,57 +26,66 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
 
 // Register the necessary Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  BarController,
-  BarElement,
-  ArcElement,
-  Filler,
-  RadialLinearScale
-);
 
 const BreadList = () => {
   const navigate = useNavigate();
 
-  const { breedLists , getBreedList } = useMasterContext();
+  const { breedLists, getBreedList, getAllSpeciesList, allspecies,editBreed,deleteBreed } =
+    useMasterContext();
 
-  const [open, setOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [selectedvarity, setSelectedvarity] = useState({
+    name: "",
+    discount_percentage: "",
+    species: "",
+    breed: "",
+    id: "",
+  });
 
   useEffect(() => {
     getBreedList();
+    getAllSpeciesList();
   }, []);
-
-  console.log(breedLists, "breedLists");
 
   const onOpenModal = () => {
     navigate("/add-breed");
   };
-  const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+  const handleEdit = (product) => {
+    setSelectedvarity(product);
+    setModalOpen(true);
+    console.log(selectedvarity,'setSelectedvarity')
+  };
+
+  const handleInputChanges = (e) => {
+    const { name, value } = e.target;
+    setSelectedvarity((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
   };
 
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      // ProductDelete(id);
+    if (window.confirm("Are you sure you wish to delete this ?")) {
+      console.log(id,'delete')
+      deleteBreed(id);
     }
   };
 
-  const onCloseModal = () => {
-    setOpen(false);
+  const handleSubmits = () => {
+    editBreed(selectedvarity.id,selectedvarity)
+    console.log(selectedvarity,'submit edit')
+    onCloseModal2();
+  };
+
+  const onCloseModal2 = () => {
+    setModalOpen(false);
+    setSelectedvarity({ name: "" });
   };
 
   return (
     <>
-      <CommonBreadcrumb
-        title="Animal and Breed List"
-      />
+      <CommonBreadcrumb title="Animal and Breed List" />
       <Container fluid>
         <Row>
           <Col sm="12">
@@ -131,7 +125,7 @@ const BreadList = () => {
                             </td>
                           </tr>
                         ) : (
-                            breedLists?.data?.map((product, index) => (
+                          breedLists?.data?.map((product, index) => (
                             <tr key={index}>
                               <td>{product?.name}</td>
                               <td>{product?.species}</td>
@@ -141,14 +135,14 @@ const BreadList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product?._id)}
+                                    onClick={() => handleEdit(product)}
                                   >
                                     <FaEdit />
                                   </Button>
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -166,6 +160,71 @@ const BreadList = () => {
           </Col>
         </Row>
       </Container>
+
+      <Modal isOpen={modalOpen} toggle={onCloseModal2}>
+        <ModalHeader toggle={onCloseModal2}>
+          <h5 className="modal-title f-w-600" id="exampleModalLabel2">
+            Edit Breed
+          </h5>
+        </ModalHeader>
+        <ModalBody>
+          <Form>
+            <FormGroup>
+              <Label htmlFor="name" className="col-form-label">
+                name:
+              </Label>
+              <Input
+                type="text"
+                name="name"
+                value={selectedvarity.name}
+                onChange={handleInputChanges}
+                id="name"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="breed" className="col-form-label">
+                breed:
+              </Label>
+              <Input
+                type="text"
+                name="breed"
+                value={selectedvarity.breed}
+                onChange={handleInputChanges}
+                id="breed"
+              />
+            </FormGroup>
+
+            <FormGroup>
+              <Label htmlFor="species" className="col-form-label">
+                Species:
+              </Label>
+              <Input
+                type="select"
+                name="species"
+                value={selectedvarity.species}
+                onChange={handleInputChanges}
+                id="species"
+              >
+                <option value="">Select Species</option>
+                {allspecies?.data?.map((variety) => (
+                  <option key={variety._id} value={variety.title}>
+                    {variety.title}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleSubmits}>
+            Save
+          </Button>
+          <Button color="secondary" onClick={onCloseModal2}>
+            Close
+          </Button>
+        </ModalFooter>
+      </Modal>
     </>
   );
 };

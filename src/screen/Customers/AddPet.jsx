@@ -15,10 +15,7 @@ const AddPet = () => {
   const { allBreedList, allbreed, getSpeciesMasterList, speciesMasterList } =
     useMasterContext();
 
-  useEffect(() => {
-    allBreedList();
-    getSpeciesMasterList();
-  }, []);
+
 
   const [inputData, setInputData] = useState({
     date_of_birth: "",
@@ -35,6 +32,14 @@ const AddPet = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  useEffect(() => {
+    const dataToSend = {
+      species: inputData.species,
+    }
+    allBreedList(dataToSend);
+    getSpeciesMasterList();
+  }, [inputData.species]);
 
   //   const handleBreedChange = (e) => {
   //     setInputData((prevData) => ({

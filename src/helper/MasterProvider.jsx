@@ -35,6 +35,7 @@ export const MasterProvider = ({ children }) => {
   const [tpdetails, setTpdetails] = useState({loading: true,data: []});
   const [timeList, settimeList] = useState({loading: true,data: [],total: ""});
   const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
+  const [designationMasterList, setdesignationMasterList] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -95,7 +96,6 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            "Content-Type": "multipart/form-data", // Set correct content type for FormData
           },
         }
       );
@@ -135,12 +135,56 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const editBreed = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/breed/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getBreedList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error adding Breed:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
 
-  const allBreedList = async (data) => {
+  const deleteBreed = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/breed/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getBreedList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error adding Breed:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const allBreedList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/all/breeds`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -1079,8 +1123,106 @@ export const MasterProvider = ({ children }) => {
 
 
 
+  const getDesignationMasterList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/designation/list`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setdesignationMasterList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setdesignationMasterList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setdesignationMasterList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const addDesignation = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/designation/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getDesignationMasterList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const DeleteDesignation = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/designation/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getDesignationMasterList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const editDesignation = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/designation/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getDesignationMasterList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

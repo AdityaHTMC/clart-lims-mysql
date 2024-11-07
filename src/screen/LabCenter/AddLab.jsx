@@ -78,11 +78,11 @@ const AddLab = () => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product._id)
+      ...selectedProducts.map(product => product.id)
     ];
     
     const allSelectedProduct2Ids = [
-      ...selectedProducts2.map(product => product._id)
+      ...selectedProducts2.map(product => product.id)
     ];
 
     const formDataToSend = new FormData();

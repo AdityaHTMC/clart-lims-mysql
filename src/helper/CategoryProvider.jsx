@@ -94,6 +94,30 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+  const DeleteLab = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/lab/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getLabsList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   const addlab = async (formDataToSend) => {
     try {
       const response = await axios.post(
@@ -101,8 +125,8 @@ export const CategoryProvider = ({ children }) => {
         formDataToSend,
         {
           headers: {
-            Authorization: AuthToken,
-            "Content-Type": "multipart/form-data", // Set correct content type for FormData
+            Authorization: AuthToken, 
+            
           },
         }
       );
@@ -339,7 +363,7 @@ export const CategoryProvider = ({ children }) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/faq/update/${id}`,
-        formDataToSend,  
+        {...formDataToSend},  
         { 
           headers: { 
             Authorization: AuthToken,
@@ -431,7 +455,7 @@ export const CategoryProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            "Content-Type": "multipart/form-data", // Set this for FormData
+            "Content-Type": "multipart/form-data", 
           },
         }
       );
@@ -496,7 +520,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

@@ -33,7 +33,7 @@ import { Pagination, Stack } from "@mui/material";
 const LabList = () => {
   const navigate = useNavigate();
 
-  const { getLabsList, labLists } = useCategoryContext();
+  const { getLabsList, labLists,DeleteLab } = useCategoryContext();
 
   const [open, setOpen] = useState(false);
 
@@ -66,7 +66,7 @@ const LabList = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
-      // ProductDelete(id);
+      DeleteLab(id);
     }
   };
 
@@ -139,7 +139,7 @@ const LabList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>

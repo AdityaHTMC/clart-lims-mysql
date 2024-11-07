@@ -48,7 +48,6 @@ const TestCategory = () => {
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
     discount_percentage:'',
- 
   });
 
   useEffect(() => {
@@ -59,10 +58,11 @@ const TestCategory = () => {
     gettestCategoryList(dataToSend);
   }, [currentPage]);
 
-  console.log(testCategory, "breedLists");
+ 
 
-  const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+  const handleEdit = (product) => {
+    setSelectedvarity(product);
+    setModalOpen(true);
   };
 
   const handleDelete = (id) => {
@@ -75,10 +75,7 @@ const TestCategory = () => {
   const onOpenModal = () => {
     setOpen(true);
   };
-  const onOpenModal2 = (product) => {
-    setSelectedvarity(product);
-    setModalOpen(true);
-  };
+
 
   // Close the modal
   const onCloseModal2 = () => {
@@ -145,6 +142,7 @@ const TestCategory = () => {
                       <thead>
                         <tr>
                           <th>Name </th>
+                          <th>Disscount Percentage </th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -167,12 +165,13 @@ const TestCategory = () => {
                           testCategory?.data?.map((product, index) => (
                             <tr key={index}>
                               <td>{product?.name}</td>
+                              <td>{product?.discount_percentage}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product._id)}
+                                    onClick={() => handleEdit(product)}
                                   >
                                     <FaEdit />
                                   </Button>
@@ -275,6 +274,18 @@ const TestCategory = () => {
                 value={selectedvarity.name}
                 onChange={handleInputChanges}
                 id="name"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="discount_percentage" className="col-form-label">
+                Discount :
+              </Label>
+              <Input
+                type="text"
+                name="discount_percentage"
+                value={selectedvarity.discount_percentage}
+                onChange={handleInputChanges}
+                id="discount_percentage"
               />
             </FormGroup>
           </Form>

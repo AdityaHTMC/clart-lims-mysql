@@ -98,6 +98,7 @@ import StockReport from "./StockManagement/StockReport";
 import StockHistory from "./StockManagement/StockHistory";
 import StockLQA from "./StockManagement/StockLQA";
 import AddPet from "./screen/Customers/AddPet";
+import DesignationList from "./Master/Designation/DesignationList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -166,6 +167,7 @@ function App() {
 
           <Route path="/state-management" element={<StateList />} />
           <Route path="/timeslots-management" element={<TimeSlotsList />} />
+          <Route path="/designation-management" element={<DesignationList />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />

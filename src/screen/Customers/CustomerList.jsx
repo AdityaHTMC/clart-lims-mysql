@@ -137,7 +137,7 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No Phlebotomist List Found
+                                No Customer List Found
                               </td>
                             </tr>
                           ) : (

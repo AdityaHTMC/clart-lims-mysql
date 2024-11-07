@@ -97,7 +97,7 @@ const FaqList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    editFaq(selectedvarity._id, selectedvarity);
+    editFaq(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -343,7 +343,7 @@ const FaqList = () => {
                 value={selectedvarity.answer}
                 onChange={handleInputChanges}
                 id="answer"
-                style={{ minHeight: "80px" }} 
+                style={{ minHeight: "180px" }} 
               />
             </FormGroup>
 
