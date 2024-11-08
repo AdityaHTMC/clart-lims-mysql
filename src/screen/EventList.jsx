@@ -53,6 +53,11 @@ const EventList = () => {
     //   await switchUser(product._id, newStatus); // Your API call here
   };
 
+  const handleEdit = (id) => {
+    navigate(`/edit-event/${id}`);
+  };
+
+
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
@@ -134,11 +139,7 @@ const EventList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() =>
-                                      console.log(
-                                        `Edit promo code ${event.code}`
-                                      )
-                                    }
+                                    onClick={() => handleEdit(event.id)}
                                   >
                                     <FaEdit />
                                   </Button>

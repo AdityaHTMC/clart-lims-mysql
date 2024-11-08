@@ -31,6 +31,7 @@ export const CommonProvider = ({ children }) => {
     const [boyDetails, setBoyDetails] = useState({ loading: true, data: [] , total:'' })
     const [allDeliveryList, setallDeliveryList] = useState({ loading: true, data: [] })
     const [storeSetting, setStoreSetting] = useState({ loading: false, data: {} })
+    const [eventDetails, setEventDetails] = useState({ loading: true, data: [] , total:[]  })
     const { Authtoken } = useAuthContext()
 
     const getMenuList = async () => {
@@ -201,7 +202,7 @@ export const CommonProvider = ({ children }) => {
         try {
             const response = await axios.get(`${base_url}/order/status/list`, { headers: { 'Authorization': Authtoken }});
             if (response.status === 200) {
-                setOrderStatusList({ data: response?.data?.data || [], loading: false })
+                setOrderStatusList({ data: response?.data?.data || [], total: response.data.total, loading: false })
             } else {
                 toast.error(response?.data?.message)
                 setOrderStatusList({ data:[], loading: false })
@@ -638,10 +639,46 @@ const edit_store_setting = async (body) => {
 }
 
 
+const geteventDetail = async (id) => {
+  try {
+   
+      const response = await axios.get(`${base_url}/admin/news-event/details/${id}`,
+      { headers: { 'Authorization': Authtoken }});
+      if (response.status === 200) {
+        setEventDetails({ data: response?.data?.data || [], total: response.data.total,  loading: false })
+      } else {
+          toast.error(response?.data?.message)
+          setEventDetails({ data:[],  loading: false })
+      }
+  } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+      setEventDetails({ data:[], loading: false })
+  }
+}
+
+
+const editEvent = async (id,dataToSend) => {
+  try {
+      const response = await axios.post(`${base_url}/admin/news-event/update/${id}`,dataToSend,
+      { headers: { 'Authorization': Authtoken }}); 
+      if (response.status === 200) {
+        toast.success(response?.data?.message)
+         navigate('/event-news')
+      } else {
+          toast.error(response?.data?.message)
+  
+      }
+  } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+
+  }
+}
+
+
 
     const values = {
         getMenuList, menuList , countryList , getCountryList , getStateList , stateList, getCityList, cityList,
-        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting
+        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails
     }
     return (
         <AppContext.Provider value={values} >

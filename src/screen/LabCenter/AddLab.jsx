@@ -13,13 +13,23 @@ const AddLab = () => {
   const navigate = useNavigate();
 
   const {
-    addlab,getAllCollection,collectionDropdown,getAllUnit,unitDropdown
+    addlab,
+    getAllCollection,
+    collectionDropdown,
+    getAllUnit,
+    unitDropdown,
+    getallstateList,
+    getallDistrictList,
+    allstateList,
+    alldistrictList,
   } = useCategoryContext();
 
-  useEffect(()=>{
-    getAllCollection()
-    getAllUnit()
-  },[])
+  useEffect(() => {
+    getAllCollection();
+    getAllUnit();
+    getallstateList();
+    getallDistrictList();
+  }, []);
 
   const [inputData, setInputData] = useState({
     organization_name: "",
@@ -44,45 +54,32 @@ const AddLab = () => {
     }));
   };
 
-  const handleOfferEndDateChange = (e) => {
-    const { value } = e.target;
+  const handleStateChange = (e) => {
+    const selectedStateName = e.target.value;
+    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
 
-    // Convert the date to ISO format
-    const formattedDate = new Date(value).toISOString();
-
-    setInputData((prevData) => ({
-      ...prevData,
-      offer_end_date: formattedDate,
-    }));
+    // Find the selected state object based on the state name
+    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
+    
+    if (selectedState) {
+      // Pass the selected state's _id to get the district list
+      getallDistrictList(selectedState.id);
+    }
   };
 
-
-
-
-  const handleImageChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setInputData((prevData) => ({
-      ...prevData,
-      images: [...prevData.images, ...selectedFiles], // Append new images
-    }));
-  };
-
-  const removeImage = (index) => {
-    setInputData((prevData) => ({
-      ...prevData,
-      images: prevData.images.filter((_, i) => i !== index), // Remove image at index
-    }));
+  const handleDistrictChange = (e) => {
+    setInputData({ ...inputData, district: e.target.value });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product.id)
+      ...selectedProducts.map((product) => product.id),
     ];
-    
+
     const allSelectedProduct2Ids = [
-      ...selectedProducts2.map(product => product.id)
+      ...selectedProducts2.map((product) => product.id),
     ];
 
     const formDataToSend = new FormData();
@@ -92,26 +89,24 @@ const AddLab = () => {
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("password", inputData.password);
     formDataToSend.append("email", inputData.email);
-    formDataToSend.append("address", inputData.address );
-    formDataToSend.append("district", inputData.district );
-    formDataToSend.append("state", inputData.state );
-    formDataToSend.append("pincode", inputData.pincode );
+    formDataToSend.append("address", inputData.address);
+    formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
+    formDataToSend.append("pincode", inputData.pincode);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
-  
+
     // Append associated_labs with array index
     allSelectedProduct2Ids.forEach((id, index) => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
-  
+
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
     addlab(formDataToSend);
-
-  
   };
 
   return (
@@ -175,7 +170,7 @@ const AddLab = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-            <FormGroup>
+              <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
                   Pincode:
                 </Label>
@@ -228,30 +223,45 @@ const AddLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="district" className="col-form-label">
-                  District:
-                </Label>
-                <Input
-                  type="text"
-                  name="district"
-                  value={inputData.district}
-                  onChange={handleInputChange}
-                  id="district"
-                />
-              </FormGroup>
-            </div>
-            <div className="col-md-6">
-              <FormGroup>
                 <Label htmlFor="state" className="col-form-label">
                   State:
                 </Label>
                 <Input
-                  type="text"
+                  type="select"
                   name="state"
                   value={inputData.state}
-                  onChange={handleInputChange}
+                  onChange={handleStateChange}
                   id="state"
-                />
+                >
+                  <option value="">Select State</option>
+                  {allstateList?.data?.map((state) => (
+                    <option key={state._id} value={state.state}>
+                      {state.state}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="district" className="col-form-label">
+                  District:
+                </Label>
+                <Input
+                  type="select"
+                  name="district"
+                  value={inputData.district}
+                  onChange={handleDistrictChange}
+                  id="district"
+                  disabled={!inputData.state} // Disable until a state is selected
+                >
+                  <option value="">Select District</option>
+                  {alldistrictList?.data?.map((district) => (
+                    <option key={district._id} value={district.district}>
+                      {district.district}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </div>
           </div>

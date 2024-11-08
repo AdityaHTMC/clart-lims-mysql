@@ -99,6 +99,8 @@ import StockHistory from "./StockManagement/StockHistory";
 import StockLQA from "./StockManagement/StockLQA";
 import AddPet from "./screen/Customers/AddPet";
 import DesignationList from "./Master/Designation/DesignationList";
+import EmailSettings from "./Master/EmailSettings/EmailSettings";
+import EditEvent from "./screen/EditEvent";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -168,6 +170,7 @@ function App() {
           <Route path="/state-management" element={<StateList />} />
           <Route path="/timeslots-management" element={<TimeSlotsList />} />
           <Route path="/designation-management" element={<DesignationList />} />
+          <Route path="/email-setting" element={<EmailSettings />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />
@@ -239,6 +242,7 @@ function App() {
           <Route path="/edit-section/:id" element={<EditFeatured />} />
 
           <Route path="/addEvent" element={<AddEvent />} />
+          <Route path="/edit-event/:id" element={<EditEvent />} />
 
           <Route path="/delivery-boys" element={<DeliveryBoyList />} />
 

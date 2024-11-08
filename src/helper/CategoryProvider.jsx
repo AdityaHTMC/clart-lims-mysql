@@ -16,7 +16,10 @@ export const CategoryProvider = ({ children }) => {
   const [labDropdown, setlabDropdown] = useState({loading: true,data: []});
   const [unitDropdown, setUnitDropdown] = useState({loading: true,data: []});
   const [phlebotomistList, setPhlebotomistList] = useState({loading: true,data: [],total: ""});
-  const [ BannerList , setBannerList] = useState({ loading: true, data: [] , total:'' })
+  const [ BannerList , setBannerList] = useState({ loading: true, data: []  })
+  const [ allstateList , setallStateList] = useState({ loading: true, data: []  })
+  const [ alldistrictList , setallDristrictList] = useState({ loading: true, data: []  })
+  const [ labDetails , setlabDetails] = useState({ loading: true, data: []  })
   const [ FaqList , setFaqList] = useState({ loading: true, data: [] })
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
@@ -90,6 +93,52 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setLabLists({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch product list");
+    }
+  };
+
+  const getLabDetails = async (id) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/lab/details/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setlabDetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setlabDetails({ data: [], loading: false });
+        toast.error("Failed to fetch product list");
+      }
+    } catch (error) {
+      setlabDetails({ data: [], total: "", loading: false });
+      toast.error("Failed to fetch product list");
+    }
+  };
+
+
+  const editLab = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/lab/edit/${id}`,
+        {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setlabDetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setlabDetails({ data: [], loading: false });
+        toast.error("Failed to fetch product list");
+      }
+    } catch (error) {
+      setlabDetails({ data: [], total: "", loading: false });
       toast.error("Failed to fetch product list");
     }
   };
@@ -516,11 +565,50 @@ export const CategoryProvider = ({ children }) => {
       toast.error(error.response?.data?.message || "Server error");
     }
   }
+
+
+  const getallstateList = async (data) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/state/list`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallStateList({ data: response?.data?.data || [] , loading: false });
+      } else {
+        setallStateList({ data:[],  loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const getallDistrictList = async (state) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/state/district/list`,
+        {state_id: state},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setallDristrictList({ data: response?.data?.data || [] , loading: false });
+      } else {
+        setallDristrictList({ data:[],  loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
   
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

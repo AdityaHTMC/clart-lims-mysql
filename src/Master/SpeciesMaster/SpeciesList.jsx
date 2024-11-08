@@ -38,7 +38,7 @@ import { Pagination, Stack } from "@mui/material";
   const SpeciesList = () => {
     const navigate = useNavigate();
   
-    const {  getSpeciesMasterList,speciesMasterList,addSpeciesMasterList } = useMasterContext();
+    const {  getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,editSpeciesMasterList,DeleteSpecies } = useMasterContext();
    
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
@@ -98,14 +98,14 @@ import { Pagination, Stack } from "@mui/material";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      editSpeciesMasterList(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
-        // deleteCms(id);
+        DeleteSpecies(id);
       }
     };
   
@@ -183,7 +183,7 @@ import { Pagination, Stack } from "@mui/material";
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -213,7 +213,7 @@ import { Pagination, Stack } from "@mui/material";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -251,8 +251,8 @@ import { Pagination, Stack } from "@mui/material";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
+       
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">

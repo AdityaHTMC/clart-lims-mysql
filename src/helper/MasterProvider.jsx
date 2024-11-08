@@ -36,6 +36,7 @@ export const MasterProvider = ({ children }) => {
   const [timeList, settimeList] = useState({loading: true,data: [],total: ""});
   const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
   const [designationMasterList, setdesignationMasterList] = useState({loading: true,data: [],total: ""});
+  const [emailSettingsList, setEmailSettingsList] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -842,6 +843,54 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+
+  const editSpeciesMasterList = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/species/edit/${id}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getSpeciesMasterList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const DeleteSpecies = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/species/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getSpeciesMasterList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   const getOrderMasterList = async (testId) => {
     try {
       const response = await axios.post(
@@ -1113,11 +1162,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setallItemList({ data: [], loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       setallItemList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      // toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -1220,9 +1269,59 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getEmailSettingsList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/email-setting/list`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setEmailSettingsList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setEmailSettingsList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setEmailSettingsList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const editEmailSettingsList = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/email-setting/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getEmailSettingsList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

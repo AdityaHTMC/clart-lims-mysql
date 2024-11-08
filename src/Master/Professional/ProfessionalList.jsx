@@ -201,7 +201,7 @@ const ProfessionalList = () => {
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Add Test Category
+            Add Professional Fees
           </h5>
         </ModalHeader>
         <ModalBody>
