@@ -101,6 +101,7 @@ import AddPet from "./screen/Customers/AddPet";
 import DesignationList from "./Master/Designation/DesignationList";
 import EmailSettings from "./Master/EmailSettings/EmailSettings";
 import EditEvent from "./screen/EditEvent";
+import PetList from "./screen/Customers/PetList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -245,6 +246,8 @@ function App() {
           <Route path="/edit-event/:id" element={<EditEvent />} />
 
           <Route path="/delivery-boys" element={<DeliveryBoyList />} />
+
+          <Route path="/pet-list/:id" element={<PetList />} />
 
           <Route path="/add-delivery-boys" element={<AddDeliveryBoy />} />
 

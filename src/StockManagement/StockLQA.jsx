@@ -61,7 +61,7 @@ console.log(stocklqa,'stock')
   
     return (
       <>
-        <CommonBreadcrumb title="Stock Low quantity alart list" />
+        <CommonBreadcrumb title="Low quantity Stock alart list" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -95,7 +95,7 @@ console.log(stocklqa,'stock')
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No purchase-to-stock Found
+                              No Low Quantity Stock Found
                             </td>
                           </tr>
                         ) : (

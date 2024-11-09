@@ -87,7 +87,7 @@ const VendorManagement = () => {
       email:'',
       state:'',
       district:'',
-      pincode:'', _id: "" });
+      pincode:'', id: "" });
   };
 
   const onCloseModal = () => {
@@ -105,7 +105,7 @@ const VendorManagement = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    editVendor(selectedvarity._id, selectedvarity);
+    editVendor(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -189,7 +189,7 @@ const VendorManagement = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product._id)}
+                                  onClick={() => handleDelete(product.id)}
                                 >
                                   <FaTrashAlt />
                                 </Button>

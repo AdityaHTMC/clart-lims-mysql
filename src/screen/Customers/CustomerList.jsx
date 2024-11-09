@@ -54,7 +54,7 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
     };
 
     const handleaddPet = (id) => {
-      navigate(`/add-pet/${id}`);
+      navigate(`/pet-list/${id}`);
     };
   
     const handleDelete = (id) => {
@@ -168,7 +168,7 @@ import { IconButton, Pagination, Stack, TextField } from "@mui/material";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleaddPet(product?._id)}
+                                      onClick={() => handleaddPet(product?.id)}
                                     >
                                      <IoAddCircle />
                                     </Button>

@@ -12,7 +12,7 @@ const AddPet = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { allBreedList, allbreed, getSpeciesMasterList, speciesMasterList } =
+  const { allBreedList, allbreed, getSpeciesMasterList, speciesMasterList,addPet } =
     useMasterContext();
 
 
@@ -23,6 +23,7 @@ const AddPet = () => {
     color: "",
     breed: "",
     species: "",
+    name: "",
   });
 
   const handleInputChange = (e) => {
@@ -50,7 +51,8 @@ const AddPet = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    
+    addPet(id,inputData)
     console.log("Form Data:", inputData);
 
   };
@@ -70,22 +72,16 @@ const AddPet = () => {
           }}
         >
           <div className="row">
-            <div className="col-md-6">
+          <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="species">Species</Label>
+                <Label htmlFor="name">Name:</Label>
                 <Input
-                  type="select"
-                  name="species"
-                  value={inputData.species}
+                  type="text"
+                  name="name"
+                  value={inputData.name}
                   onChange={handleInputChange}
-                >
-                  <option value="">Select species</option>
-                  {speciesMasterList?.data?.map((breed) => (
-                    <option key={breed._id} value={breed.name}>
-                      {breed.title}
-                    </option>
-                  ))}
-                </Input>
+                  id="name"
+                />
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -148,6 +144,26 @@ const AddPet = () => {
                 />
               </FormGroup>
             </div>
+        
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="species">Species</Label>
+                <Input
+                  type="select"
+                  name="species"
+                  value={inputData.species}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select species</option>
+                  {speciesMasterList?.data?.map((breed) => (
+                    <option key={breed._id} value={breed.name}>
+                      {breed.title}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+        
           </div>
 
           <Button type="submit" color="primary">

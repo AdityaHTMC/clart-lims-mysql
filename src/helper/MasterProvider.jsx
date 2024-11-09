@@ -37,6 +37,8 @@ export const MasterProvider = ({ children }) => {
   const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
   const [designationMasterList, setdesignationMasterList] = useState({loading: true,data: [],total: ""});
   const [emailSettingsList, setEmailSettingsList] = useState({loading: true,data: [],total: ""});
+  const [petList, setPetList] = useState({loading: true,data: [],total: ""});
+  const [petDetails, setPetDetails] = useState({loading: true,data: []});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -1318,10 +1320,107 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getCustomerPetList = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/customer/pets/list/${id}`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setPetList({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setPetList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setPetList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const addPet = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/customer/pet/add/${id}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        navigate(`/pet-list/${id}`)
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
+  const getpetDetails = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/pet/details/${id}`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setPetDetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setPetDetails({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setPetDetails({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const editPetList = async (id,formDataToSend) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/admin/customer/pet/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getCustomerPetList(id)
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
