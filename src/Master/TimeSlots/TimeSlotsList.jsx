@@ -71,6 +71,7 @@ const TimeSlotsList = () => {
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({ start_time: "", end_time: "", _id: "" });
   };
 
   // Handle form input change

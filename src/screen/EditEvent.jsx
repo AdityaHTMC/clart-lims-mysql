@@ -118,7 +118,9 @@ const EditEvent = () => {
     formDataToSend.append("description", description);
     formDataToSend.append("location", location);
     formDataToSend.append("date", date);
-    formDataToSend.append("primary_image", priImages);
+    if(priImages.length > 0) {
+      formDataToSend.append("primary_image", priImages);
+    }
 
     newImages.forEach((image, index) => {
       formDataToSend.append(`gallery_images[${index}]`, image);

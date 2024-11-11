@@ -146,7 +146,7 @@ const EventList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(event._id)}
+                                    onClick={() => handleDelete(event.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>

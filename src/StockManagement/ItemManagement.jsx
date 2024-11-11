@@ -68,7 +68,7 @@ const ItemManagement = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    item_group: "",
+    item_group_id: "",
     amount: "",
     low_quantity_alert: "",
     stock_quantity: "",
@@ -79,7 +79,7 @@ const ItemManagement = () => {
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
-    item_group: "",
+    item_group_id: "",
     amount: "",
     low_quantity_alert: "",
     stock_quantity: "",
@@ -98,11 +98,11 @@ const ItemManagement = () => {
     setModalOpen(false);
     setSelectedvarity({
       name: "",
-      item_group: "",
+      item_group_id: "",
       amount: "",
       low_quantity_alert: "",
       stock_quantity: "",
-      _id: "",
+      id: "",
     });
   };
 
@@ -138,12 +138,13 @@ const ItemManagement = () => {
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+  
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "name" ? value : Number(value), // Convert to number if not 'name'
     }));
   };
-
+  
   // Handle form submission
   const handleSubmit = () => {
     addIM(formData);
@@ -239,7 +240,7 @@ const ItemManagement = () => {
                                   color="link"
                                   id={`historyTooltip-${product._id}`}
                                 >
-                                  <FaHistory onClick={() => handlehistory(product._id)} />
+                                  <FaHistory onClick={() => handlehistory(product.id)} />
                                 </Button>
                                 <UncontrolledTooltip
                                   target={`historyTooltip-${product._id}`}
@@ -301,7 +302,7 @@ const ItemManagement = () => {
                   Amount :
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="amount"
                   value={formData.amount}
                   onChange={handleInputChange}
@@ -315,7 +316,7 @@ const ItemManagement = () => {
                   Low Quantity Alert :
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="low_quantity_alert"
                   value={formData.low_quantity_alert}
                   onChange={handleInputChange}
@@ -327,7 +328,7 @@ const ItemManagement = () => {
                   Stock Quantity :
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="stock_quantity"
                   value={formData.stock_quantity}
                   onChange={handleInputChange}
@@ -336,19 +337,19 @@ const ItemManagement = () => {
               </FormGroup>
             </div>
             <FormGroup>
-              <Label htmlFor="item_group" className="col-form-label">
+              <Label htmlFor="item_group_id" className="col-form-label">
                 Item Group:
               </Label>
               <Input
                 type="select"
-                name="item_group"
-                value={formData.item_group}
+                name="item_group_id"
+                value={formData.item_group_id}
                 onChange={handleInputChange}
-                id="item_group"
+                id="item_group_id"
               >
                 <option value="">Select Item Group</option>
                 {itemgroup.data.map((group) => (
-                  <option key={group._id} value={group._id}>
+                  <option key={group._id} value={group.id}>
                     {group.title}
                   </option>
                 ))}
@@ -408,7 +409,7 @@ const ItemManagement = () => {
                 Amount :
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="amount"
                 value={selectedvarity.amount}
                 onChange={handleInputChanges}
@@ -420,7 +421,7 @@ const ItemManagement = () => {
                 low_quantity_alert :
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="low_quantity_alert"
                 value={selectedvarity.low_quantity_alert}
                 onChange={handleInputChanges}
@@ -428,19 +429,19 @@ const ItemManagement = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="item_group" className="col-form-label">
+              <Label htmlFor="item_group_id" className="col-form-label">
                 Item Group:
               </Label>
               <Input
                 type="select"
-                name="item_group"
-                value={selectedvarity.item_group}
+                name="item_group_id"
+                value={selectedvarity.item_group_id}
                 onChange={handleInputChanges}
-                id="item_group"
+                id="item_group_id"
               >
                 <option value="">Select Item Group</option>
                 {itemgroup.data.map((group) => (
-                  <option key={group._id} value={group._id}>
+                  <option key={group._id} value={group.id}>
                     {group.title}
                   </option>
                 ))}

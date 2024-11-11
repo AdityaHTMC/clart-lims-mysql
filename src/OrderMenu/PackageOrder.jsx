@@ -12,12 +12,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
 import { Pagination, Stack } from "@mui/material";
+import { useDashboardContext } from "../helper/DashboardProvider";
 
 
  const PackageOrder = () => {
     const Navigate = useNavigate()
     const { getpackageOrderList,packageOrder} = useOrderContext()
     const {  getOrderMasterList, addOrderMasterList , orderMasterList } = useMasterContext();
+
+    const { getAllOrderStatus, orderStatus } = useDashboardContext();
 
     const [selectedStatus, setSelectedStatus] = useState('')
 
@@ -38,6 +41,7 @@ import { Pagination, Stack } from "@mui/material";
 
     useEffect(() => {
     getOrderMasterList()
+    getAllOrderStatus()
     },[]);
 
     // useEffect(() => {
@@ -65,15 +69,17 @@ import { Pagination, Stack } from "@mui/material";
                                 </div>
                                 <div className="clearfix"></div> */}
                   <div className="d-flex gap-2 flex-wrap mb-3">
-                    <Button
-                      color={selectedStatus === "" ? "primary" : "danger"}
-                      style={{ minWidth: "max-content" }}
-                      onClick={() => setSelectedStatus("")}
-                      size="sm"
-                    >
-                      All
-                    </Button>
-                    {orderMasterList?.data?.map((el, i) => (
+                  <Button
+                    color={selectedStatus === "" ? "primary" : "danger"}
+                    style={{ minWidth: "max-content" }}
+                    onClick={() => setSelectedStatus("")}
+                    size="sm"
+                  >
+                    All
+                  </Button>
+                  {orderStatus?.data
+                    ?.filter((el) => el.title !== "All") // Filter out the "All" status
+                    .map((el, i) => (
                       <Button
                         color={
                           selectedStatus === el.title ? "primary" : "danger"
@@ -83,10 +89,10 @@ import { Pagination, Stack } from "@mui/material";
                         onClick={() => setSelectedStatus(el.title)}
                         size="sm"
                       >
-                        {el.title}
+                        {el.title} ({el.total})
                       </Button>
                     ))}
-                  </div>
+                </div>
                   <div className="promo-code-list">
                     <Table hover responsive>
                       <thead>

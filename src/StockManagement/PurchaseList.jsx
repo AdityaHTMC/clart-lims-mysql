@@ -318,7 +318,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
               </FormGroup>
             </div>
             {formData.stock.map((item, index) => (
-              <div className="row" key={index}>
+              <div className="row align-items-center mb-3 p-3 border rounded" key={index} style={{ backgroundColor: "#f8f9fa" }}>
                 <FormGroup className="col-md-3">
                   <Label htmlFor={`item_id_${index}`}>Item</Label>
                   <Autocomplete

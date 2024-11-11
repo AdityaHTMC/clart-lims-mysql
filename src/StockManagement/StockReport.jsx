@@ -322,7 +322,7 @@ const StockReport = () => {
                         // Show "No products found" when there's no data
                         <tr>
                           <td colSpan="7" className="text-center">
-                            No purchase-to-stock Found
+                            No Stock Report Found
                           </td>
                         </tr>
                       ) : (

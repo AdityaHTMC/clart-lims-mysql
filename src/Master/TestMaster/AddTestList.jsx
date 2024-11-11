@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Button, FormGroup, Input, Label } from "reactstrap";
@@ -9,15 +10,25 @@ import "react-quill/dist/quill.snow.css";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { useOrderContext } from "../../helper/OrderProvider";
 const AddTestList = () => {
   const navigate = useNavigate();
 
-  const { addlab, getAllTestCategory, addTest, alltestCategory,getAllSpeciesList,allspecies } =
-    useMasterContext();
+  const {
+    addlab,
+    getAllTestCategory,
+    addTest,
+    alltestCategory,
+    getAllSpeciesList,
+    allspecies,
+  } = useMasterContext();
+
+  const { getProfessionalFees, professionalFees } = useOrderContext();
 
   useEffect(() => {
     getAllTestCategory();
     getAllSpeciesList();
+    getProfessionalFees()
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -31,8 +42,10 @@ const AddTestList = () => {
     advice: "",
     duration: "",
     test_preparation: "",
+    why_the_test:"",
   });
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedFees, setSelectedFees] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -40,6 +53,10 @@ const AddTestList = () => {
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
+  };
+
+  const onFeesSelect = (data) => {
+    setSelectedFees(data);
   };
 
   const handlePopularChange = (e) => {
@@ -53,13 +70,17 @@ const AddTestList = () => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product._id)
+      ...selectedProducts.map((product) => product.id),
+    ];
+
+    const allSelectedfeesIds = [
+      ...selectedFees.map((product) => product.id),
     ];
 
     const formDataToSend = new FormData();
 
     formDataToSend.append("test_name", inputData.test_name);
-    formDataToSend.append("group", inputData.group);
+    formDataToSend.append("group_id", inputData.group);
     formDataToSend.append("price", inputData.price);
     formDataToSend.append("sell_price", inputData.sell_price);
     formDataToSend.append("collection_fee", inputData.collection_fee);
@@ -67,10 +88,16 @@ const AddTestList = () => {
     formDataToSend.append("advice", inputData.advice);
     formDataToSend.append("duration", inputData.duration);
     formDataToSend.append("test_preparation", inputData.test_preparation);
+    formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("is_popular", inputData.is_popular);
-    allSelectedProductIds.forEach((id, index) => {
-      formDataToSend.append(`species[${index}]`, id);
-    });
+
+  allSelectedProductIds.forEach((id, index) => {
+    formDataToSend.append(`species[${index}]`, Number(id));
+  });
+
+  allSelectedfeesIds.forEach((id, index) => {
+    formDataToSend.append(`professional_fees[${index}]`, Number(id));
+  });
 
     addTest(formDataToSend);
 
@@ -188,8 +215,6 @@ const AddTestList = () => {
             </div>
           </div>
 
-         
-
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -205,7 +230,7 @@ const AddTestList = () => {
                 >
                   <option value="">Select Group</option>
                   {alltestCategory?.data?.map((variety) => (
-                    <option key={variety._id} value={variety._id}>
+                    <option key={variety._id} value={variety.id}>
                       {variety.name}
                     </option>
                   ))}
@@ -226,7 +251,6 @@ const AddTestList = () => {
                 />
               </FormGroup>
             </div>
-            
           </div>
 
           <div className="row">
@@ -249,6 +273,53 @@ const AddTestList = () => {
                 />
               </FormGroup>
             </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup className="mt-3">
+               
+                <Autocomplete
+                  multiple
+                  options={professionalFees?.data || []}
+                  getOptionLabel={(option) =>
+                    `${option?.name} (${option?.expected_charges})` || ""
+                  }
+                  value={selectedFees}
+                 
+                  onChange={(event, newValue) => onFeesSelect(newValue)}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Professional Fees"
+                      placeholder="Select Professional Fees"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+            
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="why_the_test" className="col-form-label">
+                 Why The Test:
+                </Label>
+                <Input
+                  type="textarea"
+                  name="why_the_test"
+                  value={inputData.why_the_test}
+                  onChange={handleInputChange}
+                  rows="2"
+                  style={{
+                    borderRadius: "5px",
+                    padding: "10px",
+                  }}
+                  id="why_the_test"
+                />
+              </FormGroup>
+            </div>
+           
           </div>
 
           <div className="row">

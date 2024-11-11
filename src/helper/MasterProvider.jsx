@@ -765,7 +765,7 @@ export const MasterProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success("Test Parameter unit added successfully");
-       navigate('/test-parameter-units')
+        getunitMasterList()
       } else {
         toast.error("Failed to add Test Parameter unit");
       }

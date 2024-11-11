@@ -663,7 +663,7 @@ const editEvent = async (id,dataToSend) => {
       { headers: { 'Authorization': Authtoken }}); 
       if (response.status === 200) {
         toast.success(response?.data?.message)
-         navigate('/event-news')
+         navigate('/news-events')
       } else {
           toast.error(response?.data?.message)
   
