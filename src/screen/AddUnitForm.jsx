@@ -66,11 +66,11 @@ const AddUnitForm = () => {
     e.preventDefault();
   
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product._id)
+      ...selectedProducts.map(product => product.id)
     ];
     
     const allSelectedProduct2Ids = [
-      ...selectedProducts2.map(product => product._id)
+      ...selectedProducts2.map(product => product.id)
     ];
 
     const formDataToSend = new FormData();
@@ -140,6 +140,7 @@ const AddUnitForm = () => {
                 value={inputData.contact_person}
                 onChange={handleInputChange}
                 id="contact_person"
+                required
               />
             </FormGroup>
           </div>
@@ -158,6 +159,7 @@ const AddUnitForm = () => {
                 value={inputData.mobile}
                 onChange={handleInputChange}
                 id="mobile"
+                required
               />
             </FormGroup>
           </div>
@@ -172,6 +174,7 @@ const AddUnitForm = () => {
                 value={inputData.pincode}
                 onChange={handleInputChange}
                 id="pincode"
+                required
               />
             </FormGroup>
           </div>
@@ -192,6 +195,7 @@ const AddUnitForm = () => {
                 value={inputData.email}
                 onChange={handleInputChange}
                 id="email"
+                required
               />
             </FormGroup>
           </div>

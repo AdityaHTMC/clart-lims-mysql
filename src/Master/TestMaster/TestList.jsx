@@ -21,7 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const TestList = () => {
   const navigate = useNavigate();
 
-  const { gettestTestList, testList } = useMasterContext();
+  const { gettestTestList, testList,deleteTest } = useMasterContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const itemperPage = 8;
@@ -51,8 +51,7 @@ const TestList = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      // ProductDelete(id);
+      deleteTest(id);
     }
   };
 

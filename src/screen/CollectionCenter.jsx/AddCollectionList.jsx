@@ -110,7 +110,7 @@ const AddCollectionList = () => {
 
   return (
     <>
-    <CommonBreadcrumb title="Add Collection List" parent="Physical" />
+    <CommonBreadcrumb title="Add Collection Center" parent="Physical" />
     <div className="product-form-container" style={{ padding: "2px" }}>
       <form
         onSubmit={handleSubmit}
@@ -148,6 +148,7 @@ const AddCollectionList = () => {
                 value={inputData.contact_person}
                 onChange={handleInputChange}
                 id="contact_person"
+                required
               />
             </FormGroup>
           </div>
@@ -166,6 +167,7 @@ const AddCollectionList = () => {
                 value={inputData.mobile}
                 onChange={handleInputChange}
                 id="mobile"
+                required
               />
             </FormGroup>
           </div>
@@ -180,6 +182,7 @@ const AddCollectionList = () => {
                 value={inputData.pincode}
                 onChange={handleInputChange}
                 id="pincode"
+                required
               />
             </FormGroup>
           </div>
@@ -200,6 +203,7 @@ const AddCollectionList = () => {
                 value={inputData.email}
                 onChange={handleInputChange}
                 id="email"
+                required
               />
             </FormGroup>
           </div>
@@ -263,6 +267,7 @@ const AddCollectionList = () => {
                 value={inputData.serviceable_pin_code}
                 onChange={handleInputChange}
                 id="serviceable_pin_code"
+                required
               />
             </FormGroup>
           </div>
@@ -299,8 +304,8 @@ const AddCollectionList = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
+                      label="Select unit Center"
+                      placeholder="Select unit Center"
                     />
                   )}
                 />
@@ -322,8 +327,8 @@ const AddCollectionList = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
+                      label="Select lab Center"
+                      placeholder="Select lab Center"
                     />
                   )}
                 />

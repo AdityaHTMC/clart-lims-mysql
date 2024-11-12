@@ -28,7 +28,7 @@ const AddTestList = () => {
   useEffect(() => {
     getAllTestCategory();
     getAllSpeciesList();
-    getProfessionalFees()
+    getProfessionalFees();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -42,7 +42,8 @@ const AddTestList = () => {
     advice: "",
     duration: "",
     test_preparation: "",
-    why_the_test:"",
+    why_the_test: "",
+    image: null,
   });
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
@@ -52,6 +53,13 @@ const AddTestList = () => {
     setInputData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setInputData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0],
     }));
   };
 
@@ -73,9 +81,7 @@ const AddTestList = () => {
       ...selectedProducts.map((product) => product.id),
     ];
 
-    const allSelectedfeesIds = [
-      ...selectedFees.map((product) => product.id),
-    ];
+    const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
 
     const formDataToSend = new FormData();
 
@@ -90,14 +96,18 @@ const AddTestList = () => {
     formDataToSend.append("test_preparation", inputData.test_preparation);
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("is_popular", inputData.is_popular);
+    if (inputData.image) {
+      formDataToSend.append("image", inputData.image);
+    }
 
-  allSelectedProductIds.forEach((id, index) => {
-    formDataToSend.append(`species[${index}]`, Number(id));
-  });
-
-  allSelectedfeesIds.forEach((id, index) => {
-    formDataToSend.append(`professional_fees[${index}]`, Number(id));
-  });
+    allSelectedProductIds.forEach((id, index) => {
+      formDataToSend.append(`species[${index}]`, parseInt(id, 10));
+    });
+    
+    allSelectedfeesIds.forEach((id, index) => {
+      formDataToSend.append(`professional_fees[${index}]`, parseInt(id, 10));
+    });
+    
 
     addTest(formDataToSend);
 
@@ -278,7 +288,6 @@ const AddTestList = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup className="mt-3">
-               
                 <Autocomplete
                   multiple
                   options={professionalFees?.data || []}
@@ -286,7 +295,6 @@ const AddTestList = () => {
                     `${option?.name} (${option?.expected_charges})` || ""
                   }
                   value={selectedFees}
-                 
                   onChange={(event, newValue) => onFeesSelect(newValue)}
                   renderInput={(params) => (
                     <TextField
@@ -299,11 +307,11 @@ const AddTestList = () => {
                 />
               </FormGroup>
             </div>
-            
+
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="why_the_test" className="col-form-label">
-                 Why The Test:
+                  Why The Test:
                 </Label>
                 <Input
                   type="textarea"
@@ -319,7 +327,6 @@ const AddTestList = () => {
                 />
               </FormGroup>
             </div>
-           
           </div>
 
           <div className="row">
@@ -378,6 +385,22 @@ const AddTestList = () => {
                     </Label>
                   </div>
                 </div>
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="image" className="col-form-label">
+                  Test Image :
+                </Label>
+                <Input
+                  id="image"
+                  type="file"
+                  name="image"
+                  onChange={handleFileChange}
+                />
               </FormGroup>
             </div>
           </div>

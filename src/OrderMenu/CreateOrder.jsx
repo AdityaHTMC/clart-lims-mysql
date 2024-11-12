@@ -25,7 +25,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
 import { useCategoryContext } from "../helper/CategoryProvider";
-import profileImg from  '../../src/assets/profile.png'
+import profileImg from "../../src/assets/profile.png";
 
 const CreateOrder = () => {
   const {
@@ -66,6 +66,8 @@ const CreateOrder = () => {
     booking_date: "",
   });
 
+
+  
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -75,7 +77,7 @@ const CreateOrder = () => {
     setSelectedSlot(slot);
   };
 
-  // console.log(selectedCustomer,'selectedCustomer')
+
   // console.log(selectedSlot, "selectedSlot");
   // console.log(formData.booking_date, "booking_date");
   // console.log(selectedPhelbo, "phelobmist");
@@ -165,9 +167,6 @@ const CreateOrder = () => {
 
   const onPackageSelect = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    // if (selectedTest && selectedTest.length > 0) {
-    //   setSelectedTest([]);
-    // }
   };
 
   const handleLabSelect = (lab) => {
@@ -215,12 +214,15 @@ const CreateOrder = () => {
   const createOrder = async () => {
     let bodyData = new FormData();
 
-    bodyData.append("userId", selectedCustomer.id);
+    bodyData.append("user_id", selectedCustomer.id);
     bodyData.append("state", selectedCustomer.state);
     bodyData.append("district", selectedCustomer.district);
     bodyData.append("address", selectedCustomer.address);
+    bodyData.append("lab_id",selectedLab );
     bodyData.append("pincode", selectedCustomer.pincode);
-    bodyData.append("phlebotomist_id", selectedPhelbo);
+    if (selectedPhelbo) {
+      bodyData.append("phlebotomist_id", selectedPhelbo.id);
+    }
     bodyData.append("booking_date", formData.booking_date);
     bodyData.append("collection_type", formData.type);
     bodyData.append("pet_id", formData.pet);
@@ -229,18 +231,14 @@ const CreateOrder = () => {
       bodyData.append(`tests[${i}][price]`, el.sell_price);
     });
     selectedFees?.forEach((el, i) => {
-      bodyData.append(`professional_fees[${i}][professional_fee]`, el._id);
+      bodyData.append(`professional_fees[${i}][professional_fee]`, el.id);
       bodyData.append(`professional_fees[${i}][price]`, el.expected_charges);
     });
-    if (formData.test_package) {
-      const packageDetail = test_package?.data?.find(
-        (el) => el._id?.toString() === formData.test_package
-      );
-      if (packageDetail) {
-        bodyData.append("test_package[package_id]", packageDetail._id);
-        bodyData.append("test_package[price]", packageDetail.sell_price);
-      }
-    }
+
+     if (formData.test_package) {
+      bodyData.append("package_id", test_package.data[0]._id);
+    } 
+
     if (formData.images.length > 0) {
       for (let i = 0; i < formData.images.length; i++) {
         bodyData.append(`prescription`, formData.images[i]);
@@ -284,10 +282,7 @@ const CreateOrder = () => {
                             <div className="d-flex align-items-center gap-3">
                               <img
                                 className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
-                                src={
-                                  selectedCustomer?.image ||
-                                  profileImg
-                                }
+                                src={selectedCustomer?.image || profileImg}
                                 alt="header-user"
                               />
                               <div>
@@ -405,7 +400,6 @@ const CreateOrder = () => {
                               ))}
                             </Input>
                           </FormGroup>
-
                           <FormGroup className="mt-3">
                             <Label for="prescription" className="fw-bold">
                               Add Prescription
@@ -418,7 +412,6 @@ const CreateOrder = () => {
                               onChange={handleImageChange}
                             />
                           </FormGroup>
-
                           <FormGroup className="mt-4 d-flex align-items-center">
                             <Label className="me-3 fw-bold">
                               Collection Type
@@ -450,7 +443,6 @@ const CreateOrder = () => {
                               <Label className="form-check-label">Lab</Label>
                             </div>
                           </FormGroup>
-
                           {formData.type === "Lab" && (
                             <FormGroup className="mt-3">
                               <Label for="labSelect" className="fw-bold">
@@ -477,7 +469,6 @@ const CreateOrder = () => {
                               </Input>
                             </FormGroup>
                           )}
-
                           <FormGroup className="mt-3">
                             <Label for="bookingDate" className="fw-bold">
                               Booking Date
@@ -492,7 +483,6 @@ const CreateOrder = () => {
                               onChange={handleDateChange}
                             />
                           </FormGroup>
-
                           {formData.booking_date && (
                             <div className="mt-3">
                               <h6>Choose Time Slots</h6>
@@ -514,7 +504,6 @@ const CreateOrder = () => {
                               </div>
                             </div>
                           )}
-
                           <FormGroup className="mt-3">
                             <Label for="selectTest" className="fw-bold">
                               Select Test
@@ -541,7 +530,6 @@ const CreateOrder = () => {
                               )}
                             />
                           </FormGroup>
-
                           <FormGroup className="mt-3">
                             <Label for="selectPackage" className="fw-bold">
                               Select Health Package
@@ -556,13 +544,12 @@ const CreateOrder = () => {
                             >
                               <option value="">--Select--</option>
                               {test_package?.data?.map((el, i) => (
-                                <option key={i} value={el._id}>
+                                <option key={i} value={el.id}>
                                   {el?.package_name} ({el?.sell_price})
                                 </option>
                               ))}
                             </Input>
                           </FormGroup>
-
                           <FormGroup className="mt-3">
                             <Label for="selectFees" className="fw-bold">
                               Select Professional Fees
@@ -589,14 +576,17 @@ const CreateOrder = () => {
                               )}
                             />
                           </FormGroup>
-
                           <FormGroup className="mt-3">
                             <Autocomplete
                               options={allphelboList.data}
                               getOptionLabel={(option) => option.name}
+                              value={selectedPhelbo} 
                               onChange={(event, newValue) =>
-                                setSelectedPhelbo(newValue ? newValue._id : "")
+                                setSelectedPhelbo(newValue)
                               }
+                              isOptionEqualToValue={(option, value) =>
+                                option.id === value.id
+                              } 
                               renderInput={(params) => (
                                 <TextField
                                   {...params}
@@ -607,7 +597,7 @@ const CreateOrder = () => {
                               )}
                             />
                           </FormGroup>
-
+                          
                           {totalAmount > 0 && (
                             <>
                               <FormGroup className="mt-4">
@@ -661,7 +651,6 @@ const CreateOrder = () => {
                               </FormGroup>
                             </>
                           )}
-
                           <hr className="mt-4" />
                           <div className="d-flex justify-content-between align-items-center mt-3">
                             <div>

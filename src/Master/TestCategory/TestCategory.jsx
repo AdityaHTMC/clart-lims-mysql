@@ -85,6 +85,7 @@ const TestCategory = () => {
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({ name: "",discount_percentage:'' });
   };
 
   // Handle form input change

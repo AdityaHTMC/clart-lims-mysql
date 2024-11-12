@@ -15,15 +15,11 @@ import { useMasterContext } from "../../helper/MasterProvider";
 const AddPhlebotomist = () => {
   const navigate = useNavigate();
 
-  const {addphlebotomist,getAllCollection,collectionDropdown,getAllUnit,unitDropdown,} = useCategoryContext();
+  const {addphlebotomist,getAllCollection,collectionDropdown,getAllUnit,unitDropdown,getAllLabs,labDropdown} = useCategoryContext();
 
   const { getAlldistrictList, allDistrictList, getAllStateList, allStateList } =useMasterContext();
 
-  useEffect(() => {
-    getAllCollection();
-    getAllUnit();
-    getAllStateList();
-  }, []);
+
 
   const [inputData, setInputData] = useState({
     name: "",
@@ -31,10 +27,24 @@ const AddPhlebotomist = () => {
     email: "",
     address: "",
     pincode: "",
+    stateId:"",
+    districtId:"",
+    image: "",
   });
+
+  useEffect(() => {
+    getAllCollection();
+    getAllUnit();
+    getAllStateList();
+    getAllLabs();
+    if (inputData.stateId){
+      getAlldistrictList(inputData.stateId);
+    }
+  }, [inputData.stateId]);
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [selectedProducts3, setSelectedProducts3] = useState([]);
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
 
@@ -57,43 +67,43 @@ const AddPhlebotomist = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
       // If state is selected, fetch districts for the selected state
-  if (name === 'stateId') {
-    getAlldistrictList(value); // Call the API with the selected state's _id
-  }
+  // if (name === 'stateId') {
+  //   getAlldistrictList(value); // Call the API with the selected state's _id
+  // }
   };
 
-  const handleImageChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
+  const handleFileChange = (e) => {
     setInputData((prevData) => ({
       ...prevData,
-      images: [...prevData.images, ...selectedFiles], // Append new images
+      image: e.target.files[0], // Store file object
     }));
   };
 
-  const removeImage = (index) => {
-    setInputData((prevData) => ({
-      ...prevData,
-      images: prevData.images.filter((_, i) => i !== index), // Remove image at index
-    }));
-  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map((product) => product._id),
+      ...selectedProducts.map((product) => product.id),
     ];
 
-    const allSelectedProduct2Ids = [
-      ...selectedProducts2.map((product) => product._id),
+    const allselectedlab = [
+      ...selectedProducts2.map((product) => product.id),
+    ];
+
+    const allselectedunit = [
+      ...selectedProducts3.map((product) => product.id),
     ];
 
     const selectedState = allStateList?.data?.find(
-      (state) => state._id === inputData.stateId
+      (state) => state.id === Number(inputData.stateId)
     );
     const selectedDistrict = allDistrictList?.data?.find(
-      (district) => district._id === inputData.districtId
+      (district) => district.id === Number(inputData.districtId)
     );
+
+
 
     const formDataToSend = new FormData();
 
@@ -101,10 +111,17 @@ const AddPhlebotomist = () => {
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("email", inputData.email);
     formDataToSend.append("address", inputData.address);
+    formDataToSend.append("pincode", inputData.pincode);
     formDataToSend.append("state", selectedState?.state);
     formDataToSend.append("district", selectedDistrict?.district);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
+    });
+    allselectedlab.forEach((id, index) => {
+      formDataToSend.append(`associated_lab[${index}]`, id);
+    });
+    allselectedunit.forEach((id, index) => {
+      formDataToSend.append(`associated_unit[${index}]`, id);
     });
 
     pincodes.forEach((pin, index) => {
@@ -115,9 +132,9 @@ const AddPhlebotomist = () => {
     //   formDataToSend.append(`associated_units[${index}]`, id);
     // });
 
-    // inputData.images.forEach((image, index) => {
-    //   formDataToSend.append(`images[${index}]`, image);
-    // });
+    if (inputData.image) {
+      formDataToSend.append("image", inputData.image); // Append the file as binary
+    }
 
     addphlebotomist(formDataToSend);
 
@@ -218,7 +235,7 @@ const AddPhlebotomist = () => {
                 >
                   <option value="">Select State</option>
                   {allStateList?.data?.map((state) => (
-                    <option key={state._id} value={state._id}>
+                    <option key={state.id} value={state.id}>
                       {state.state}
                     </option>
                   ))}
@@ -241,7 +258,7 @@ const AddPhlebotomist = () => {
                 >
                   <option value="">Select District</option>
                   {allDistrictList?.data?.map((district) => (
-                    <option key={district._id} value={district._id}>
+                    <option key={district.id} value={district.id}>
                       {district.district}
                     </option>
                   ))}
@@ -251,7 +268,7 @@ const AddPhlebotomist = () => {
           </div>
 
           <div className="row">
-            <div className="col-md-12">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Add New Collection Center</Label>
                 <Autocomplete
@@ -268,6 +285,68 @@ const AddPhlebotomist = () => {
                       variant="outlined"
                       label="Select Collection Center"
                       placeholder="Select Collection Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+            <FormGroup>
+                <Label htmlFor="pincode" className="col-form-label">
+                  PinCode:
+                </Label>
+                <Input
+                  type="number"
+                  name="pincode"
+                  value={inputData.pincode}
+                  onChange={handleInputChange}
+                  id="address"
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add New Lab Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={labDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts2}
+                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Lab Center"
+                      placeholder="Select lab Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add New Unit Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={unitDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts3}
+                  onChange={(event, newValue) => setSelectedProducts3(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select unit Center"
+                      placeholder="Select unit Center"
                     />
                   )}
                 />
@@ -317,66 +396,22 @@ const AddPhlebotomist = () => {
             </div>
 
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="images" className="col-form-label">
-                  Upload Profile:
-                </Label>
-                <Input
-                  type="file"
-                  name="images"
-                  id="images"
-                  onChange={handleImageChange}
-                  multiple
-                />
-              </FormGroup>
+            <FormGroup>
+              <Label htmlFor="banner-image" className="col-form-label">
+                Upload Image :
+              </Label>
+              <Input
+                id="banner-image"
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+              />
+            </FormGroup>
             </div>
           </div>
 
           {/* Image previews */}
-          <div className="row">
-            {inputData.images?.length > 0 && (
-              <div className="col-md-12">
-                <div
-                  className="image-preview-container"
-                  style={{ display: "flex", flexWrap: "wrap" }}
-                >
-                  {inputData.images.map((image, index) => (
-                    <div
-                      key={index}
-                      className="image-preview"
-                      style={{ position: "relative", margin: "5px" }}
-                    >
-                      <img
-                        src={URL.createObjectURL(image)}
-                        alt={`preview-${index}`}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          marginRight: "10px",
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        style={{
-                          position: "absolute",
-                          top: "0",
-                          right: "0",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <FaTrash style={{ color: "red" }} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
+      
           <Button type="submit" color="primary">
             Add Phlebotomist
           </Button>

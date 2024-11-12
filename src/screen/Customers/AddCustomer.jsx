@@ -13,17 +13,15 @@ import { useNavigate } from "react-router-dom";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
-import { Autocomplete, TextField } from "@mui/material";
+
 const AddCustomer = () => {
   const navigate = useNavigate();
 
-  const { addBreed, allBreedList, allbreed,addCustomer,getSpeciesMasterList,speciesMasterList } = useMasterContext();
+  const {  allBreedList,addCustomer,getSpeciesMasterList } = useMasterContext();
   useEffect(() => {
     allBreedList();
     getSpeciesMasterList();
   }, []);
-
-  console.log(allbreed, "allBreedList");
 
   const [inputData, setInputData] = useState({
     name: "",
@@ -35,15 +33,6 @@ const AddCustomer = () => {
     city: "",
     state: "",
     district: "",
-    pet: [
-      {
-        date_of_birth: "",
-        sex: "",
-        color: "",
-        breed: "", 
-        species: "",
-      },
-    ],
   });
 
   const handleInputChange = (e) => {
@@ -54,63 +43,18 @@ const AddCustomer = () => {
     }));
   };
 
-  // Handle input changes for each pet
-  const handleBreedChange = (e, index) => {
-    const { value } = e.target;
-    const updatedPets = [...inputData.pet];
-    updatedPets[index].breed = value;
-    setInputData((prevData) => ({
-      ...prevData,
-      pet: updatedPets,
-    }));
-  };
 
-  const handleSpeciesChange = (e, index) => {
-    const { value } = e.target;
-    const updatedPets = [...inputData.pet];
-    updatedPets[index].species = value;
-    setInputData((prevData) => ({
-      ...prevData,
-      pet: updatedPets,
-    }));
-  };
 
-  const handlePetChange = (e, index) => {
-    const { name, value } = e.target;
-    const updatedPets = [...inputData.pet];
-    updatedPets[index][name] = value;
-    setInputData((prevData) => ({
-      ...prevData,
-      pet: updatedPets,
-    }));
-  };
+
+
+
 
   // Add new pet entry
-  const handleAddPet = () => {
-    setInputData((prevData) => ({
-      ...prevData,
-      pet: [
-        ...prevData.pet,
-        {
-          date_of_birth: "",
-          sex: "",
-          color: "",
-          breed: "", 
-          species:''
-        },
-      ],
-    }));
-  };
+
 
 
   // Remove pet entry
-  const handleRemovePet = (index) => {
-    const updatedPets = inputData.pet.filter((_, i) => i !== index);
-    setInputData((prevData) => ({
-      ...prevData,
-      pet: updatedPets,
-    }));
-  };
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -126,13 +70,13 @@ const AddCustomer = () => {
     formDataToSend.append("state", inputData.state);
     formDataToSend.append("district", inputData.district);
 
-    inputData.pet.forEach((pet, index) => {
-      formDataToSend.append(`pet[${index}][date_of_birth]`, pet.date_of_birth);
-      formDataToSend.append(`pet[${index}][sex]`, pet.sex);
-      formDataToSend.append(`pet[${index}][color]`, pet.color);
-      formDataToSend.append(`pet[${index}][breed]`, pet.breed);
-      formDataToSend.append(`pet[${index}][species]`, pet.species);
-    });
+    // inputData.pet.forEach((pet, index) => {
+    //   formDataToSend.append(`pet[${index}][date_of_birth]`, pet.date_of_birth);
+    //   formDataToSend.append(`pet[${index}][sex]`, pet.sex);
+    //   formDataToSend.append(`pet[${index}][color]`, pet.color);
+    //   formDataToSend.append(`pet[${index}][breed]`, pet.breed);
+    //   formDataToSend.append(`pet[${index}][species]`, pet.species);
+    // });
 
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
@@ -282,8 +226,8 @@ const AddCustomer = () => {
             </div>
           </div>
 
-          <div className="row">
-            {/* Pets Section */}
+          {/* <div className="row">
+        
             <div className="d-flex justify-content-between align-items-center mt-4 mb-3">
               <h5 className="mb-0">Pets</h5>
               <Button color="primary" onClick={handleAddPet} className="mr-3">
@@ -386,7 +330,7 @@ const AddCustomer = () => {
                 </CardBody>
               </Card>
             ))}
-          </div>
+          </div> */}
 
           <Button type="submit" color="primary">
             Add Customer

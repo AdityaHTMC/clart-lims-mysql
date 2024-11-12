@@ -230,7 +230,7 @@ export const CategoryProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success("Collection Center  added successfully");
-        navigate("Collection Center -center-list");
+        navigate('/collection-center-list');
       } else {
         toast.error("Failed to add Collection Center ");
       }

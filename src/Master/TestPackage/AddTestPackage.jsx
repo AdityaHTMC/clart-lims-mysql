@@ -69,7 +69,7 @@ const AddTestPackage = () => {
     formDataToSend.append("sell_price", inputData.sell_price );
     formDataToSend.append("is_popular", inputData.is_popular );
     allSelectedProductIds.forEach((id, index) => {
-      formDataToSend.append(`tests[${index}]`, id);
+      formDataToSend.append(`tests[${index}]`, parseInt(id, 10));
     });
   
 

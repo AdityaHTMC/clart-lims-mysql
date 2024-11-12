@@ -63,8 +63,8 @@ const AddTestParameter = () => {
     formDataToSend.append("parameter_unit_id", inputData.unit);
     formDataToSend.append("upper_range", inputData.upper_range);
     formDataToSend.append("lower_range", inputData.lower_range);
-    formDataToSend.append("parentId", inputData.parentId || "");
-    formDataToSend.append("testId", selectedTestId);
+    formDataToSend.append("parent_id", inputData.parentId || '');
+    formDataToSend.append("test_id", selectedTestId);
 
     addTestParameter(formDataToSend);
   };
@@ -110,7 +110,7 @@ const AddTestParameter = () => {
                 >
                   <option value="">Select Unit</option>
                   {allUnitList?.data?.map((parent) => (
-                    <option key={parent._id} value={parent._id}>
+                    <option key={parent._id} value={parent.id}>
                       {parent.title}
                     </option>
                   ))}
@@ -127,7 +127,7 @@ const AddTestParameter = () => {
                   Lower Range:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="lower_range"
                   value={inputData.lower_range}
                   onChange={handleInputChange}
@@ -141,7 +141,7 @@ const AddTestParameter = () => {
                   Upper Range:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="upper_range"
                   value={inputData.upper_range}
                   onChange={handleInputChange}

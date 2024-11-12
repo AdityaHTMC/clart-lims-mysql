@@ -311,7 +311,6 @@ export const StockProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      setIMAllList({ data: [], loading: false });
       toast.error(error.response?.data?.message || "Server error");
     }
   };

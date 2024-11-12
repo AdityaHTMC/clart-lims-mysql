@@ -148,6 +148,7 @@ const AddLab = () => {
                   value={inputData.contact_person}
                   onChange={handleInputChange}
                   id="contact_person"
+                  required
                 />
               </FormGroup>
             </div>
@@ -166,6 +167,7 @@ const AddLab = () => {
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
+                  required
                 />
               </FormGroup>
             </div>
@@ -180,6 +182,7 @@ const AddLab = () => {
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
+                  required
                 />
               </FormGroup>
             </div>
@@ -200,6 +203,7 @@ const AddLab = () => {
                   value={inputData.email}
                   onChange={handleInputChange}
                   id="email"
+                  required
                 />
               </FormGroup>
             </div>
