@@ -59,10 +59,10 @@ import RoleManagement from "./screen/RoleManagement";
 import UserManagement from "./screen/UserManagement";
 import UnitList from "./screen/UnitList";
 import AddUnitList from "./screen/AddUnitList";
-import CollectionList from "./screen/CollectionCenter.jsx/CollectionList";
+import CollectionList from "./screen/CollectionCenter/CollectionList";
 import LabList from "./screen/LabCenter/LabList";
 import AddLab from "./screen/LabCenter/AddLab";
-import AddCollectionList from "./screen/CollectionCenter.jsx/AddCollectionList";
+import AddCollectionList from "./screen/CollectionCenter/AddCollectionList";
 import PhlebotomistList from "./screen/Phlebotomist/PhlebotomistList";
 import AddPhlebotomist from "./screen/Phlebotomist/AddPhlebotomist";
 import BreadList from "./Master/BreedMaster/BreadList";
@@ -102,6 +102,9 @@ import DesignationList from "./Master/Designation/DesignationList";
 import EmailSettings from "./Master/EmailSettings/EmailSettings";
 import EditEvent from "./screen/EditEvent";
 import PetList from "./screen/Customers/PetList";
+import OrderDetailspage from "./OrderMenu/OrderDetailspage";
+import B2BUsersList from "./screen/B2BUsersList/B2BUsersList";
+import AddB2b from "./screen/B2BUsersList/AddB2b";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -142,7 +145,8 @@ function App() {
           
           <Route path="/phlebotomist-list" element={<PhlebotomistList />} />
 
-
+          <Route path="/b2b-users" element={<B2BUsersList />} />
+          <Route path="/add-b2b-users" element={<AddB2b />} />
           <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
 
           <Route path="/customers-list" element={<CustomerList />} />
@@ -187,6 +191,7 @@ function App() {
           <Route path="/test-order" element={<TestOrderList />} />
           <Route path="/package-orders" element={<PackageOrder />} />
           <Route path="/add-order" element={<CreateOrder />} />
+          <Route path="/order-details/:id" element={<OrderDetailspage />} />
           {/* order end */}
           
           <Route path="/add-pet/:id" element={<AddPet />} />

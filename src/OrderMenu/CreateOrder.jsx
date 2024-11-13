@@ -235,9 +235,10 @@ const CreateOrder = () => {
       bodyData.append(`professional_fees[${i}][price]`, el.expected_charges);
     });
 
-     if (formData.test_package) {
-      bodyData.append("package_id", test_package.data[0]._id);
-    } 
+    if (formData.test_package) {
+      bodyData.append("package_id", parseInt(test_package.data[0]._id, 10));
+    }
+    
 
     if (formData.images.length > 0) {
       for (let i = 0; i < formData.images.length; i++) {

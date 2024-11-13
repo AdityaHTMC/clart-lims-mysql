@@ -64,6 +64,11 @@ const TestOrderList = () => {
     setCurrentPage(newpage);
   };
 
+
+  const navigatOrderDetails =(id) => {
+    Navigate(`/order-details/${id}`);
+  }
+
   return (
     <>
       <CommonBreadcrumb title="Test Orders" parent="" />
@@ -150,12 +155,12 @@ const TestOrderList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    // onClick={() => handleRemove(lab)}
+                                    onClick={() => navigatOrderDetails(order?.order_id)}
                                   >
                                     <FaEye />
                                   </Button>
                                 </div>
-                                <div className="circelBtnBx">
+                                {/* <div className="circelBtnBx">
                                   <Button
                                     className="btn"
                                     color="link"
@@ -163,7 +168,7 @@ const TestOrderList = () => {
                                   >
                                     <FiEdit />
                                   </Button>
-                                </div>
+                                </div> */}
                               </div>
                             </td>
                           </tr>

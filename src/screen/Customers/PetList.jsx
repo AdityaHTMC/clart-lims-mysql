@@ -36,7 +36,7 @@ const PetList = () => {
     getCustomerPetList,
     petList,
     allBreedList,
-    allbreed,editPetList
+    allbreed,editPetList,deletePetList
   } = useMasterContext();
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -77,8 +77,8 @@ const PetList = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this ?")) {
-      console.log(id, "delete");
-      // deleteBreed(id);
+      deletePetList(id);
+      getCustomerPetList(id);
     }
   };
 

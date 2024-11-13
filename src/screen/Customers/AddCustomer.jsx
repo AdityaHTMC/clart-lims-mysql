@@ -13,14 +13,18 @@ import { useNavigate } from "react-router-dom";
 import { FaTrash, FaPlus } from "react-icons/fa";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { useCategoryContext } from "../../helper/CategoryProvider";
 
 const AddCustomer = () => {
   const navigate = useNavigate();
 
   const {  allBreedList,addCustomer,getSpeciesMasterList } = useMasterContext();
+
+  const {getallstateList,getallDistrictList,allstateList,alldistrictList} = useCategoryContext();
   useEffect(() => {
     allBreedList();
     getSpeciesMasterList();
+    getallstateList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -29,7 +33,7 @@ const AddCustomer = () => {
     mobile: "",
     image: "",
     address: "",
-    password: "",
+    pincode: "",
     city: "",
     state: "",
     district: "",
@@ -43,17 +47,22 @@ const AddCustomer = () => {
     }));
   };
 
+  const handleStateChange = (e) => {
+    const selectedStateName = e.target.value;
+    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
 
+    // Find the selected state object based on the state name
+    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
+    
+    if (selectedState) {
+      // Pass the selected state's _id to get the district list
+      getallDistrictList(selectedState.id);
+    }
+  };
 
-
-
-
-
-  // Add new pet entry
-
-
-
-  // Remove pet entry
+  const handleDistrictChange = (e) => {
+    setInputData({ ...inputData, district: e.target.value });
+  };
 
 
   const handleSubmit = (e) => {
@@ -65,10 +74,10 @@ const AddCustomer = () => {
     formDataToSend.append("email", inputData.email);
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("address", inputData.address);
-    formDataToSend.append("password", inputData.password);
+    formDataToSend.append("pincode", inputData.pincode);
     formDataToSend.append("city", inputData.city);
-    formDataToSend.append("state", inputData.state);
     formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
 
     // inputData.pet.forEach((pet, index) => {
     //   formDataToSend.append(`pet[${index}][date_of_birth]`, pet.date_of_birth);
@@ -167,15 +176,15 @@ const AddCustomer = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="password" className="col-form-label">
-                  Password:
+                <Label htmlFor="pincode" className="col-form-label">
+                  Pincode:
                 </Label>
                 <Input
-                  type="password"
-                  name="password"
-                  value={inputData.password}
+                  type="number"
+                  name="pincode"
+                  value={inputData.pincode}
                   onChange={handleInputChange}
-                  id="password"
+                  id="pincode"
                 />
               </FormGroup>
             </div>
@@ -202,12 +211,19 @@ const AddCustomer = () => {
                   State:
                 </Label>
                 <Input
-                  type="text"
+                  type="select"
                   name="state"
                   value={inputData.state}
-                  onChange={handleInputChange}
+                  onChange={handleStateChange}
                   id="state"
-                />
+                >
+                  <option value="">Select State</option>
+                  {allstateList?.data?.map((state) => (
+                    <option key={state._id} value={state.state}>
+                      {state.state}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -216,12 +232,20 @@ const AddCustomer = () => {
                   District:
                 </Label>
                 <Input
-                  type="text"
+                  type="select"
                   name="district"
                   value={inputData.district}
-                  onChange={handleInputChange}
+                  onChange={handleDistrictChange}
                   id="district"
-                />
+                  disabled={!inputData.state} // Disable until a state is selected
+                >
+                  <option value="">Select District</option>
+                  {alldistrictList?.data?.map((district) => (
+                    <option key={district._id} value={district.district}>
+                      {district.district}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </div>
           </div>

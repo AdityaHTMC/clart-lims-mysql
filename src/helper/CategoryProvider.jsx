@@ -21,6 +21,7 @@ export const CategoryProvider = ({ children }) => {
   const [ alldistrictList , setallDristrictList] = useState({ loading: true, data: []  })
   const [ labDetails , setlabDetails] = useState({ loading: true, data: []  })
   const [ FaqList , setFaqList] = useState({ loading: true, data: [] })
+  const [ b2busers, setb2busers] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -190,6 +191,9 @@ export const CategoryProvider = ({ children }) => {
       toast.error("An error occurred while adding the Lab");
     }
   };
+
+
+  
 
   const getCollectionList = async (dataToSend) => {
     try {
@@ -604,11 +608,36 @@ export const CategoryProvider = ({ children }) => {
       toast.error(error.response?.data?.message || "Server error");
     }
   };
+
+
+  const getB2bList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/b2b-users/list`,
+        {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setb2busers({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setb2busers({ data: [], total: "", loading: false });
+        toast.error("server errors");
+      }
+    } catch (error) {
+      setb2busers({ data: [], total: "", loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
   
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

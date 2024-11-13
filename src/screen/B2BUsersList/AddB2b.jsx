@@ -9,7 +9,7 @@ import "react-quill/dist/quill.snow.css";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Autocomplete, Chip, TextField } from "@mui/material";
-const AddLab = () => {
+const AddB2b = () => {
   const navigate = useNavigate();
 
   const {
@@ -22,12 +22,14 @@ const AddLab = () => {
     getallDistrictList,
     allstateList,
     alldistrictList,
+    getAllLabs,labDropdown 
   } = useCategoryContext();
 
   useEffect(() => {
     getAllCollection();
     getAllUnit();
     getallstateList();
+    getAllLabs()
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -40,10 +42,12 @@ const AddLab = () => {
     district: "",
     state: "",
     pincode: "",
+    GSTIN:"",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [selectedProducts3, setSelectedProducts3] = useState([]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -110,7 +114,7 @@ const AddLab = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Add Lab" parent="Physical" />
+      <CommonBreadcrumb title="Add B2B" parent="Physical" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -316,6 +320,46 @@ const AddLab = () => {
             </div>
           </div>
 
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Add New Lab Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={labDropdown.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts2}
+                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select lab Center"
+                      placeholder="Select lab Center"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+            <FormGroup>
+                <Label htmlFor="GSTIN" className="col-form-label">
+                GSTIN:
+                </Label>
+                <Input
+                  type="text"
+                  name="GSTIN"
+                  value={inputData.GSTIN}
+                  onChange={handleInputChange}
+                  id="GSTIN"
+                />
+              </FormGroup>
+            </div>
+          </div>
+
           {/* <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -402,4 +446,4 @@ const AddLab = () => {
   );
 };
 
-export default AddLab;
+export default AddB2b;

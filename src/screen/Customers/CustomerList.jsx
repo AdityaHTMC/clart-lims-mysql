@@ -125,7 +125,7 @@ const CustomerList = () => {
                           <th>Email</th>
                           <th>Mobile</th>
                           <th>Address</th>
-                          {/* <th>Pin Code</th> */}
+                          <th>District</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -151,6 +151,7 @@ const CustomerList = () => {
                               <td>{product?.email}</td>
                               <td>{product?.mobile}</td>
                               <td>{product?.address}</td>
+                              <td>{product?.district}</td>
                               {/* <td>{product.pincode}</td> */}
 
                               <td>

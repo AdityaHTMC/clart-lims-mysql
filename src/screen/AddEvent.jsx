@@ -213,35 +213,10 @@ const AddEvent = () => {
                 />
               </FormGroup>
 
-              {/* {inputData.primary_image && (
-              <div className="image-preview">
-                <img
-                  src={inputData.primary_image}
-                  alt="Preview"
-                  style={{ width: "100%", height: "auto", marginTop: "10px" }}
-                />
-                <button
-                  onClick={handleImageDelete}
-                  className="btn btn-danger"
-                  style={{
-                    position: "absolute",
-                    top: "10px",
-                    right: "10px",
-                    background: "red",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: "5px",
-                    borderRadius: "50%",
-                  }}
-                >
-                  <FaTrashAlt color="white" />
-                </button>
-              </div>
-            )} */}
+             
             </div>
           </div>
 
-          {/* upload multiple img */}
 
           <div className="row">
             <div className="col-md-6">

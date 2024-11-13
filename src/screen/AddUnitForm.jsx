@@ -9,12 +9,13 @@ const AddUnitForm = () => {
   const navigate = useNavigate();
 
   const {
-    addUnit,getAllLabs,labDropdown,getAllCollection,collectionDropdown
-  } = useCategoryContext();
+    addUnit,getAllLabs,labDropdown,getAllCollection,collectionDropdown} = useCategoryContext();
+  const {getallstateList,getallDistrictList,allstateList,alldistrictList} = useCategoryContext();
 
   useEffect(()=>{
     getAllCollection()
     getAllLabs()
+    getallstateList()
   },[])
 
   const [inputData, setInputData] = useState({
@@ -43,24 +44,24 @@ const AddUnitForm = () => {
   };
 
 
+  const handleStateChange = (e) => {
+    const selectedStateName = e.target.value;
+    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
 
-
-
-
-  const handleImageChange = (e) => {
-    const selectedFiles = Array.from(e.target.files);
-    setInputData((prevData) => ({
-      ...prevData,
-      images: [...prevData.images, ...selectedFiles], // Append new images
-    }));
+    // Find the selected state object based on the state name
+    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
+    
+    if (selectedState) {
+      // Pass the selected state's _id to get the district list
+      getallDistrictList(selectedState.id);
+    }
   };
 
-  const removeImage = (index) => {
-    setInputData((prevData) => ({
-      ...prevData,
-      images: prevData.images.filter((_, i) => i !== index), // Remove image at index
-    }));
+  const handleDistrictChange = (e) => {
+    setInputData({ ...inputData, district: e.target.value });
   };
+
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -215,37 +216,52 @@ const AddUnitForm = () => {
           </div>
         </div>
 
-        {/* Add the remaining inputs similarly, organizing them into rows as needed */}
+  
         <div className="row">
-          <div className="col-md-6">
-            <FormGroup>
-              <Label htmlFor="district" className="col-form-label">
-                District:
-              </Label>
-              <Input
-                type="text"
-                name="district"
-                value={inputData.district}
-                onChange={handleInputChange}
-                id="district"
-              />
-            </FormGroup>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="state" className="col-form-label">
+                  State:
+                </Label>
+                <Input
+                  type="select"
+                  name="state"
+                  value={inputData.state}
+                  onChange={handleStateChange}
+                  id="state"
+                >
+                  <option value="">Select State</option>
+                  {allstateList?.data?.map((state) => (
+                    <option key={state._id} value={state.state}>
+                      {state.state}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="district" className="col-form-label">
+                  District:
+                </Label>
+                <Input
+                  type="select"
+                  name="district"
+                  value={inputData.district}
+                  onChange={handleDistrictChange}
+                  id="district"
+                  disabled={!inputData.state} // Disable until a state is selected
+                >
+                  <option value="">Select District</option>
+                  {alldistrictList?.data?.map((district) => (
+                    <option key={district._id} value={district.district}>
+                      {district.district}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
           </div>
-          <div className="col-md-6">
-            <FormGroup>
-              <Label htmlFor="state" className="col-form-label">
-                State:
-              </Label>
-              <Input
-                type="text"
-                name="state"
-                value={inputData.state}
-                onChange={handleInputChange}
-                id="state"
-              />
-            </FormGroup>
-          </div>
-        </div>
 
         <div className="row">
             <div className="col-md-6">

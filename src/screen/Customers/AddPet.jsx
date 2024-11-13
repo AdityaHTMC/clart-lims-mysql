@@ -24,6 +24,7 @@ const AddPet = () => {
     breed: "",
     species: "",
     name: "",
+    pet_images:"",
   });
 
   const handleInputChange = (e) => {
@@ -49,13 +50,44 @@ const AddPet = () => {
   //     }));
   //   };
 
+  const handleImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setInputData((prevData) => ({
+      ...prevData,
+      pet_images: [...prevData.pet_images, ...selectedFiles], // Append new images
+    }));
+  };
+
+  const removeImage = (index) => {
+    setInputData((prevData) => ({
+      ...prevData,
+      pet_images: prevData.pet_images.filter((_, i) => i !== index), // Remove image at index
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    addPet(id,inputData)
-    console.log("Form Data:", inputData);
+  
+    const formData = new FormData();
+    formData.append("date_of_birth", inputData.date_of_birth);
+    formData.append("sex", inputData.sex);
+    formData.append("color", inputData.color);
+    formData.append("breed", inputData.breed);
+    formData.append("species", inputData.species);
+    formData.append("name", inputData.name);
+  
 
+
+    if(inputData.pet_images){
+      inputData.pet_images.forEach((image, index) => {
+        formData.append(`pet_images[${index}]`, image);
+      })
+    };
+  
+    addPet(id, formData);
+    console.log("Form Data:", inputData);
   };
+  
 
   return (
     <>
@@ -164,6 +196,70 @@ const AddPet = () => {
               </FormGroup>
             </div>
         
+          </div>
+
+       
+           <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="images" className="col-form-label">
+                  Upload Pets Images:
+                </Label>
+                <Input
+                  type="file"
+                  name="gallery_images"
+                  id="gallery_images"
+                  onChange={handleImageChange}
+                  multiple
+                />
+              </FormGroup>
+            </div>
+          </div>
+          
+
+
+          <div className="row">
+            {inputData?.pet_images?.length > 0 && (
+              <div className="col-md-12">
+                <div
+                  className="image-preview-container"
+                  style={{ display: "flex", flexWrap: "wrap" }}
+                >
+                  {inputData.pet_images?.map((image, index) => (
+                    <div
+                      key={index}
+                      className="image-preview"
+                      style={{ position: "relative", margin: "5px" }}
+                    >
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`preview-${index}`}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                          marginRight: "10px",
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        style={{
+                          position: "absolute",
+                          top: "0",
+                          right: "0",
+                          background: "none",
+                          border: "none",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <FaTrash style={{ color: "red" }} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <Button type="submit" color="primary">
