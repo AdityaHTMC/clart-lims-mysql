@@ -143,7 +143,7 @@ const OrderDetailspage = () => {
                     <thead>
                       <tr>
                         <th>Sample&nbsp;ID</th>
-                        <th className="text-break">Product</th>
+                        <th className="text-break">Test Name</th>
                         <th>Price</th>
                       </tr>
                     </thead>
@@ -196,7 +196,7 @@ const OrderDetailspage = () => {
                   <Table bordered hover style={{ marginTop: "10px" }}>
                     <thead>
                       <tr>
-                        <th>package_name</th>
+                        <th>Package Name</th>
                         <th>Price</th>
                       </tr>
                     </thead>
