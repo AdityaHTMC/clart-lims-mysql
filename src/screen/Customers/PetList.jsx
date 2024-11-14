@@ -51,12 +51,19 @@ const PetList = () => {
     sex:"",
   });
 
+
+
   useEffect(() => {
-    const dataToSend = {};
     getCustomerPetList(id);
     getAllSpeciesList();
-    allBreedList();
   }, [id]);
+
+  useEffect(()=>{
+    const dataToSend = {
+      species: selectedvarity.species,
+    }
+    allBreedList(dataToSend);
+  },[selectedvarity.species])
 
   const addpetpage = () => {
     navigate(`/add-pet/${id}`);
@@ -64,7 +71,6 @@ const PetList = () => {
   const handleEdit = (product) => {
     setSelectedvarity(product);
     setModalOpen(true);
-    console.log(selectedvarity, "setSelectedvarity");
   };
 
   const handleInputChanges = (e) => {
@@ -83,8 +89,7 @@ const PetList = () => {
   };
 
   const handleSubmits = () => {
-    editPetList(selectedvarity.id,selectedvarity);
-    console.log(selectedvarity, "submit edit");
+    editPetList(selectedvarity.id,selectedvarity, id);
     onCloseModal2();
   };
 
@@ -134,7 +139,7 @@ const PetList = () => {
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No Animal and Breed Master List Found
+                              No Data Found
                             </td>
                           </tr>
                         ) : (
@@ -184,7 +189,7 @@ const PetList = () => {
       <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-lg">
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Breed
+            Edit Pet
           </h5>
         </ModalHeader>
         <ModalBody>

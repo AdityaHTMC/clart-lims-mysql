@@ -334,11 +334,11 @@ export const CategoryProvider = ({ children }) => {
         });
       } else {
         setPhlebotomistList({ data: [],  loading: false });
-        // toast.error("Failed to fetch product list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setPhlebotomistList({ data: [], loading: false });
-      toast.error("Failed to fetch unit Center list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 

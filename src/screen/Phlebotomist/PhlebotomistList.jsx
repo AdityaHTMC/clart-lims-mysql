@@ -118,8 +118,6 @@ import SearchIcon from "@mui/icons-material/Search";
                             <th>Name </th>
                             <th>Email</th>
                             <th>Mobile</th>
-                            <th>Collection Center</th>
-                            {/* <th>Pin Code</th> */}
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -144,13 +142,6 @@ import SearchIcon from "@mui/icons-material/Search";
                                 <td>{product?.name}</td>
                                 <td>{product?.email}</td>
                                 <td>{product?.mobile}</td>
-                                <td>
-                                  {product?.collection_centers
-                                    ?.map((center) => center.organization_name)
-                                    ?.join(", ")} <br/>
-                                </td>
-                                {/* <td>{product.pincode}</td> */}
-
                                 <td>
                                   <div className="circelBtnBx">
                                     <Button

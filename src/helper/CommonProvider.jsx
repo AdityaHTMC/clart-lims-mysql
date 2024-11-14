@@ -32,6 +32,7 @@ export const CommonProvider = ({ children }) => {
     const [allDeliveryList, setallDeliveryList] = useState({ loading: true, data: [] })
     const [storeSetting, setStoreSetting] = useState({ loading: false, data: {} })
     const [eventDetails, setEventDetails] = useState({ loading: true, data: [] , total:[]  })
+    const [phlebotomistList, setPhlebotomistList] = useState({loading: true,data: [],total: ""});
     const { Authtoken } = useAuthContext()
 
     const getMenuList = async () => {
@@ -675,10 +676,45 @@ const editEvent = async (id,dataToSend) => {
 }
 
 
+const updateOrderStatus = async (dataToSend) => {
+  try {
+    const { id } = dataToSend;
+    const response = await axios.post(
+      `${base_url}/admin/order/update`,
+      { ...dataToSend },
+      { headers: { Authorization: Authtoken } }
+    );
+    if (response.status === 200) {
+      toast.success("Order status updated successfully");
+      getOrderDetails(id);
+    } else {
+      toast.error(response?.data?.message);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Server error");
+  }
+};
+
+const getallPhelboList = async () => {
+  try {
+      const response = await axios.post(`${base_url}/admin/phlebotomists/list`,{},
+      { headers: { 'Authorization': Authtoken }});
+      if (response.status === 200) {
+        setPhlebotomistList({ data: response?.data?.data || [] , loading: false })
+      } else {
+          toast.error(response?.data?.message)
+          setPhlebotomistList({ data:[], total:'',  loading: false })
+      }
+  } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+      setPhlebotomistList({ data:[], loading: false })
+  }
+}
+
 
     const values = {
         getMenuList, menuList , countryList , getCountryList , getStateList , stateList, getCityList, cityList,
-        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails
+        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails,updateOrderStatus,getallPhelboList, phlebotomistList
     }
     return (
         <AppContext.Provider value={values} >

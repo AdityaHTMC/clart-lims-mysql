@@ -6,6 +6,7 @@ import {
   Card,
   CardBody,
   FormGroup,
+  FormText,
   Input,
   Label,
 } from "reactstrap";
@@ -39,8 +40,16 @@ const AddCustomer = () => {
     district: "",
   });
 
+  const [error, setError] = useState("");
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    if (name === "mobile" && value.length > 10) {
+      setError("Mobile number cannot exceed 10 digits"); // Set error message
+      return;
+    } else {
+      setError(""); // Clear error message if valid
+    }
     setInputData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -155,6 +164,7 @@ const AddCustomer = () => {
                   onChange={handleInputChange}
                   id="mobile"
                 />
+                {error && <FormText color="danger">{error}</FormText>} 
               </FormGroup>
             </div>
             <div className="col-md-6">

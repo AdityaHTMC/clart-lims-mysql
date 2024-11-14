@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -44,9 +44,16 @@ const AddLab = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "mobile" && value.length > 10) {
+      setError("Mobile number cannot exceed 10 digits"); // Set error message
+      return;
+    } else {
+      setError(""); // Clear error message if valid
+    }
     setInputData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
@@ -125,7 +132,7 @@ const AddLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="title">Organization Name *</Label>
+                <Label for="title" className="col-form-label">Organization Name *</Label>
                 <Input
                   type="text"
                   name="organization_name"
@@ -168,6 +175,7 @@ const AddLab = () => {
                   id="mobile"
                   required
                 />
+                {error && <FormText color="danger">{error}</FormText>} 
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -176,7 +184,7 @@ const AddLab = () => {
                   Pincode:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="pincode"
                   value={inputData.pincode}
                   onChange={handleInputChange}

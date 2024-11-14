@@ -118,6 +118,39 @@ const AddPet = () => {
             </div>
             <div className="col-md-6">
               <FormGroup>
+                <Label htmlFor="date_of_birth">Date of Birth</Label>
+                <Input
+                  type="date"
+                  name="date_of_birth"
+                  value={inputData.date_of_birth}
+                  onChange={handleInputChange}
+                  id="date_of_birth"
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="species">Species</Label>
+                <Input
+                  type="select"
+                  name="species"
+                  value={inputData.species}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select species</option>
+                  {speciesMasterList?.data?.map((breed) => (
+                    <option key={breed._id} value={breed.name}>
+                      {breed.title}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
                 <Label htmlFor="breed">Breed</Label>
                 <Input
                   type="select"
@@ -163,40 +196,6 @@ const AddPet = () => {
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="date_of_birth">Date of Birth</Label>
-                <Input
-                  type="date"
-                  name="date_of_birth"
-                  value={inputData.date_of_birth}
-                  onChange={handleInputChange}
-                  id="date_of_birth"
-                />
-              </FormGroup>
-            </div>
-        
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="species">Species</Label>
-                <Input
-                  type="select"
-                  name="species"
-                  value={inputData.species}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select species</option>
-                  {speciesMasterList?.data?.map((breed) => (
-                    <option key={breed._id} value={breed.name}>
-                      {breed.title}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </div>
-        
-          </div>
 
        
            <div className="row">

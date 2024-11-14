@@ -3,7 +3,8 @@ import { createRoot } from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import "./assets/scss/app.scss";
-import { BrowserRouter } from "react-router-dom";
+// import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./Redux/Store.jsx";
 import "react-datepicker/dist/react-datepicker.css";
@@ -18,7 +19,7 @@ import { OrderProvider } from "./helper/OrderProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Provider store={store}>
         <AuthProvider>
           <CommonProvider>
@@ -38,6 +39,6 @@ createRoot(document.getElementById("root")).render(
           </CommonProvider>
         </AuthProvider>
       </Provider>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>
 );

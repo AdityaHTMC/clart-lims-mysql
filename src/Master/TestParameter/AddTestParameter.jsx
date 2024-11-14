@@ -24,7 +24,7 @@ const AddTestParameter = () => {
     getDDunitList();
   }, []);
 
-  console.log(allUnitList, "all unit list");
+
 
   const [inputData, setInputData] = useState({
     parameter: "",
@@ -174,9 +174,9 @@ const AddTestParameter = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              {selectedTestId && allPPL && (
+              {selectedTestId && allPPL?.data?.length > 0 && (
                 <FormGroup>
-                  <Label for="parentId">Choose Parent </Label>
+                  <Label for="parentId">Choose Parent Parameter </Label>
                   <Input
                     type="select"
                     name="parentId"

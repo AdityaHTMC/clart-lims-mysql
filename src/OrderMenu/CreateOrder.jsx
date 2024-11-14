@@ -241,13 +241,13 @@ const CreateOrder = () => {
     
 
     if (formData.images.length > 0) {
-      for (let i = 0; i < formData.images.length; i++) {
-        bodyData.append(`prescription`, formData.images[i]);
-      }
+      formData.images.forEach((image, index) => {
+        bodyData.append(`prescription[${index}]`, image); 
+      });
     }
 
-    bodyData.append("time_slot[start_time]", selectedSlot.start_time);
-    bodyData.append("time_slot[end_time]", selectedSlot.end_time);
+    bodyData.append("start_time", selectedSlot.start_time);
+    bodyData.append("end_time", selectedSlot.end_time);
 
     bodyData.append("payment_mode", formData.payment_mode);
     bodyData.append("total_amount", totalAmount);

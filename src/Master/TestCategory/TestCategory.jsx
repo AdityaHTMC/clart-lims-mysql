@@ -107,7 +107,7 @@ const TestCategory = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "discount_percentage" ? parseInt(value, 10) || 0 : value,
     }));
   };
 
@@ -238,7 +238,7 @@ const TestCategory = () => {
                 Discount :
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="discount_percentage"
                 value={formData.discount_percentage}
                 onChange={handleInputChange}
@@ -282,7 +282,7 @@ const TestCategory = () => {
                 Discount :
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="discount_percentage"
                 value={selectedvarity.discount_percentage}
                 onChange={handleInputChanges}

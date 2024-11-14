@@ -107,9 +107,10 @@ const ProfessionalList = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: name === "expected_charges" ? parseInt(value, 10) || 0 : value,
     }));
   };
+  
 
   // Handle form submission
   const handleSubmit = () => {
@@ -225,7 +226,7 @@ const ProfessionalList = () => {
                 Expected Charges :
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="expected_charges"
                 value={formData.expected_charges}
                 onChange={handleInputChange}
@@ -295,7 +296,7 @@ const ProfessionalList = () => {
                 Expected Charges:
               </Label>
               <Input
-                type="text"
+                type="number"
                 name="expected_charges"
                 value={selectedvarity.expected_charges}
                 onChange={handleInputChanges}

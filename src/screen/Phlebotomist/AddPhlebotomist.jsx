@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -47,6 +47,7 @@ const AddPhlebotomist = () => {
   const [selectedProducts3, setSelectedProducts3] = useState([]);
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
+  const [error, setError] = useState("");
 
   const handleAddPincode = () => {
     if (pincode) {
@@ -62,6 +63,12 @@ const AddPhlebotomist = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    if (name === "mobile" && value.length > 10) {
+      setError("Mobile number cannot exceed 10 digits"); // Set error message
+      return;
+    } else {
+      setError(""); // Clear error message if valid
+    }
     setInputData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
@@ -118,10 +125,10 @@ const AddPhlebotomist = () => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
     allselectedlab.forEach((id, index) => {
-      formDataToSend.append(`associated_lab[${index}]`, id);
+      formDataToSend.append(`associated_labs[${index}]`, id);
     });
     allselectedunit.forEach((id, index) => {
-      formDataToSend.append(`associated_unit[${index}]`, id);
+      formDataToSend.append(`associated_units[${index}]`, id);
     });
 
     pincodes.forEach((pin, index) => {
@@ -158,7 +165,7 @@ const AddPhlebotomist = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="title">Phlebotomist Name *</Label>
+                <Label for="title" className="col-form-label">Phlebotomist Name *</Label>
                 <Input
                   type="text"
                   name="name"
@@ -182,6 +189,7 @@ const AddPhlebotomist = () => {
                   id="mobile"
                   required
                 />
+                {error && <FormText color="danger">{error}</FormText>}
               </FormGroup>
             </div>
           </div>

@@ -448,7 +448,6 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );
@@ -496,7 +495,6 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );
@@ -691,11 +689,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setallPPL({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test parameter list");
+        // toast.error("Failed to fetch test parameter list");
       }
     } catch (error) {
       setallPPL({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test parameter list");
+      // toast.error("Failed to fetch test parameter list");
     }
   };
 
@@ -1410,9 +1408,9 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const editPetList = async (id,formDataToSend) => {
+  const editPetList = async (id,formDataToSend,customerId) => {
     try {
-      const response = await axios.put(
+      const response = await axios.post(
         `${base_url}/admin/customer/pet/edit/${id}`,
         formDataToSend,
         {
@@ -1424,7 +1422,7 @@ export const MasterProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success(response?.data?.message);
-        getCustomerPetList(id)
+        getCustomerPetList(customerId)
       } else {
         toast.error(response?.data?.message)
       }

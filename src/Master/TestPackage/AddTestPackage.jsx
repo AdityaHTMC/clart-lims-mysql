@@ -39,9 +39,16 @@ const AddTestPackage = () => {
     const { name, value, type, checked } = e.target;
     setInputData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : ["turn_around_time", "price", "sell_price"].includes(name)
+          ? parseInt(value, 10) || 0
+          : value,
     }));
   };
+  
+  
 
   const handlePopularChange = (e) => {
     setInputData((prevState) => ({
@@ -144,7 +151,7 @@ const AddTestPackage = () => {
                   Turn Around Time (in Hours):
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="turn_around_time"
                   value={inputData.turn_around_time}
                   onChange={handleInputChange}
@@ -164,7 +171,7 @@ const AddTestPackage = () => {
                   Price(Rs):
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="price"
                   value={inputData.price}
                   onChange={handleInputChange}
@@ -178,7 +185,7 @@ const AddTestPackage = () => {
                   Sell Price:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
                   name="sell_price"
                   value={inputData.sell_price}
                   onChange={handleInputChange}

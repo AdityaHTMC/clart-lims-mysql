@@ -98,7 +98,6 @@ const UnitList = () => {
                           <th>Mobile</th>
                           <th>District</th>
                           <th>Pin Code</th>
-                       
                           <th>Action</th>
                         </tr>
                       </thead>

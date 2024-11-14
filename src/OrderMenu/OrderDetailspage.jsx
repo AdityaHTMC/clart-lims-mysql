@@ -26,13 +26,13 @@ import { toast } from "react-toastify";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import { useMasterContext } from "../helper/MasterProvider";
+import { FaEdit } from "react-icons/fa";
 const OrderDetailspage = () => {
   const { id } = useParams();
-  const { OrderStatusUpdate } = useCommonContext();
+  const { updateOrderStatus,getallPhelboList, phlebotomistList } = useCommonContext();
 
-  const { getOrderMasterList, orderMasterList, orderDetails, getOrderDetails } =
-    useMasterContext();
-  const { getAllphlebotomist, phlebotomistList } = useCategoryContext();
+  const { getOrderMasterList, orderMasterList, orderDetails, getOrderDetails } = useMasterContext();
+
 
   const [activeTab, setActiveTab] = useState("1");
 
@@ -40,17 +40,22 @@ const OrderDetailspage = () => {
 
   const [selectedOption, setSelectedOption] = useState("Courier");
   const [selectedDeliveryBoy, setSelectedDeliveryBoy] = useState("");
+  const [isEditingStatus, setIsEditingStatus] = useState(false);
+  const [isEditingPhelbo, setIsEditingPhelbo] = useState(false);
 
-  const handleRadioChange = (e) => {
-    setSelectedOption(e.target.value);
-    setSelectedDeliveryBoy(""); // Reset selected delivery boy when switching to "Courier"
+  const toggleEditStatus = () => {
+    setIsEditingStatus(!isEditingStatus);
+  };
+
+  const toggleEditPhelbo = () => {
+    setIsEditingPhelbo(!isEditingPhelbo);
   };
 
   useEffect(() => {
     if (id) {
       getOrderDetails(id);
       getOrderMasterList();
-      getAllphlebotomist();
+      getallPhelboList();
     }
   }, [id]);
 
@@ -63,17 +68,17 @@ const OrderDetailspage = () => {
     const newStatus = event.target.value;
     setOrderStatusUpdates(newStatus);
 
-    if (newStatus) {
-      try {
-        const dataToSend = {
-          id: id,
-          status: newStatus,
-        };
-        await OrderStatusUpdate(dataToSend);
-      } catch (error) {
-        console.error("Error updating order status:", error);
-      }
-    }
+    // if (newStatus) {
+    //   try {
+    //     const dataToSend = {
+    //       id: id,
+    //       status: newStatus,
+    //     };
+    //     await updateOrderStatus(dataToSend);
+    //   } catch (error) {
+    //     console.error("Error updating order status:", error);
+    //   }
+    // }
   };
 
   const totalProfessionalFees = orderDetails.data?.professional_fees?.reduce(
@@ -82,18 +87,20 @@ const OrderDetailspage = () => {
   );
 
   const handleSubmit = () => {
-    const dataToSend = {
-      id: id,
-      shipping_method:
-        selectedOption === "Courier" ? "Courier" : "Delivery Boy",
-      delivery_boy_id:
-        selectedOption === "DeliveryBoy" ? selectedDeliveryBoy : "",
-    };
-
     if (selectedDeliveryBoy) {
-      OrderStatusUpdate(dataToSend);
-    } else {
-      toast.error("Select a delivery boy before Updating order status");
+      const dataToSend = {
+        phlebotomist_id: selectedDeliveryBoy,
+        id: parseInt(id, 10)
+      };
+      updateOrderStatus(dataToSend);
+    }
+    if (orderStatusUpdates) {
+      const dataToSend = {
+        id: parseInt(id, 10),
+        status: orderStatusUpdates,
+      };
+
+      updateOrderStatus(dataToSend);
     }
   };
 
@@ -281,10 +288,21 @@ const OrderDetailspage = () => {
                 <FaReceipt fontSize={12} /> Print Invoice
               </Button>
               <div style={{ marginBottom: "10px", clear: "both" }}>
-                <h5>
+                <div className="d-flex align-items-center">
                   Order Status:{" "}
-                  <Badge color="warning"> {orderDetails?.data?.status} </Badge>
-                </h5>
+                  <Badge color="warning" className="mx-2">
+                    {orderDetails?.data?.status}
+                  </Badge>
+                  <div className="circelBtnBx">
+                    <Button
+                      className="btn p-0"
+                      color="link"
+                      onClick={toggleEditStatus}
+                    >
+                      <FaEdit />
+                    </Button>
+                  </div>
+                </div>
                 {orderDetails?.data.payment_status && (
                   <>
                     <h5>
@@ -345,58 +363,72 @@ const OrderDetailspage = () => {
                 )}
 
                 {orderDetails?.data?.phlebotomist_name && (
-                  <h5>
+                  <div className="d-flex align-items-center">
                     Phlebotomist Name:{" "}
                     <span style={{ fontWeight: "bold" }}>
                       {" "}
                       {orderDetails?.data?.phlebotomist_name}{" "}
                     </span>
-                  </h5>
+                    <div className="circelBtnBx mx-2">
+                      <Button
+                        className="btn p-0"
+                        color="link"
+                        onClick={toggleEditPhelbo}
+                      >
+                        <FaEdit />
+                      </Button>
+                    </div>
+                  </div>
                 )}
               </div>
 
-              <FormGroup>
-                <Label for="orderStatus">Change Order Status</Label>
-                <Input
-                  type="select"
-                  name="orderStatus"
-                  value={orderStatusUpdates}
-                  onChange={handleInputChange}
-                  id="orderStatus"
-                >
-                  <option value="">Select Order Status</option>
-                  {orderMasterList?.data?.map((order) => (
-                    <option key={order._id} value={order.title}>
-                      {order.title}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
+              {isEditingStatus && (
+                <FormGroup>
+                  <Label for="orderStatus">Change Order Status</Label>
+                  <Input
+                    type="select"
+                    name="orderStatus"
+                    value={orderStatusUpdates}
+                    onChange={handleInputChange}
+                    id="orderStatus"
+                  >
+                    <option value="">Select Order Status</option>
+                    {orderMasterList?.data?.map((order) => (
+                      <option key={order._id} value={order.title}>
+                        {order.title}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              )}
 
               {/* Conditional Delivery Boy Dropdown */}
 
-              <FormGroup>
-                <Label for="deliveryBoy">Change Phlebotomist</Label>
-                <Input
-                  type="select"
-                  name="deliveryBoy"
-                  id="deliveryBoy"
-                  value={selectedDeliveryBoy}
-                  onChange={(e) => setSelectedDeliveryBoy(e.target.value)}
-                >
-                  <option value="">Select Phlebotomist</option>
-                  {phlebotomistList?.data?.map((boy) => (
-                    <option key={boy._id} value={boy._id}>
-                      {boy.name}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
+              {isEditingPhelbo && (
+                <FormGroup>
+                  <Label for="deliveryBoy">Change Phlebotomist</Label>
+                  <Input
+                    type="select"
+                    name="deliveryBoy"
+                    id="deliveryBoy"
+                    value={selectedDeliveryBoy}
+                    onChange={(e) => setSelectedDeliveryBoy(e.target.value)}
+                  >
+                    <option value="">Select Phlebotomist</option>
+                    {phlebotomistList?.data?.map((boy) => (
+                      <option key={boy._id} value={boy.id}>
+                        {boy.name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              )}
 
-              {/* Submit Button */}
-              <Button color="primary" type="submit" onClick={handleSubmit}>
-                Submit
-              </Button>
+              {(isEditingPhelbo || isEditingStatus) && (
+                <Button color="primary" type="submit" onClick={handleSubmit}>
+                  Submit
+                </Button>
+              )}
             </Card>
 
             {/* <Card

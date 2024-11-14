@@ -52,7 +52,12 @@ const AddTestList = () => {
     const { name, value, type, checked } = e.target;
     setInputData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : ["price", "sell_price", "collection_fee"].includes(name)
+          ? parseInt(value, 10) || 0
+          : value,
     }));
   };
 
