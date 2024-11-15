@@ -222,7 +222,7 @@ const FaqList = () => {
                               size={20}
                               onClick={(e) => {
                                 e.stopPropagation(); // Prevent collapse
-                                handleDelete(faq._id);
+                                handleDelete(faq.id);
                               }}
                               style={{
                                 marginRight: "10px",

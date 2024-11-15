@@ -44,11 +44,12 @@ const TimeSlotsList = () => {
 
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [selectedvarity, setSelectedvarity] = useState({
     start_time: "",
     end_time: "",
-    _id: "",
+    id: "",
   });
 
   useEffect(() => {
@@ -85,7 +86,7 @@ const TimeSlotsList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    editTimeMaster(selectedvarity._id, selectedvarity);
+    editTimeMaster(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -103,11 +104,20 @@ const TimeSlotsList = () => {
       ...prevData,
       [name]: value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   // Handle form submission
   const handleSubmit = () => {
     // Send formData to the backend
+     const newErrors = {};
+    if (!formData.start_time) newErrors.start_time = "Start Time is required.";
+    if (!formData.end_time) newErrors.end_time = "End Time is required.";
+   
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Set errors to display
+      return; // Stop form submission
+    }
     addTimeMaster(formData);
     onCloseModal(); // Close modal after saving
   };
@@ -164,7 +174,7 @@ const TimeSlotsList = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product._id)}
+                                  onClick={() => handleDelete(product.id)}
                                 >
                                   <FaTrashAlt />
                                 </Button>
@@ -206,7 +216,9 @@ const TimeSlotsList = () => {
                 value={formData.start_time}
                 onChange={handleInputChange}
                 id="start_time"
+                required
               />
+              {errors.start_time && <span className="text-danger">{errors.start_time}</span>}
             </FormGroup>
             <FormGroup>
               <Label htmlFor="end_time" className="col-form-label">
@@ -218,7 +230,9 @@ const TimeSlotsList = () => {
                 value={formData.end_time}
                 onChange={handleInputChange}
                 id="end_time"
+                required
               />
+              {errors.end_time && <span className="text-danger">{errors.end_time}</span>}
             </FormGroup>
           </Form>
         </ModalBody>
@@ -258,15 +272,15 @@ const TimeSlotsList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="start_time" className="col-form-label">
+              <Label htmlFor="end_time" className="col-form-label">
                 End Time :
               </Label>
               <Input
                 type="text"
-                name="start_time"
-                value={selectedvarity.start_time}
+                name="end_time"
+                value={selectedvarity.end_time}
                 onChange={handleInputChanges}
-                id="start_time"
+                id="end_time"
               />
             </FormGroup>
           </Form>

@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
+
 
   import {
     Badge,
@@ -41,21 +27,7 @@ import {
 
   import { FaTrashAlt } from "react-icons/fa";
 
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
+
   import { Spinner } from "reactstrap";
   import ReactQuill from "react-quill";
   import "react-quill/dist/quill.snow.css";
@@ -67,7 +39,7 @@ import { useStockContext } from "../helper/StockManagement";
   const ItemGroup = () => {
     const navigate = useNavigate();
   
-    const {  getItemGrList, itemgroup,addItemGr } = useStockContext();
+    const {  getItemGrList, itemgroup,addItemGr,editItemGr ,deleteitemGr} = useStockContext();
   
     const [formData, setFormData] = useState({
       title: "",
@@ -78,7 +50,7 @@ import { useStockContext } from "../helper/StockManagement";
   
     const [selectedvarity, setSelectedvarity] = useState({
       title: "",
-      _id: "",
+      id: "",
     });
   
     useEffect(() => {
@@ -96,7 +68,7 @@ import { useStockContext } from "../helper/StockManagement";
     // Close the modal
     const onCloseModal2 = () => {
       setModalOpen(false);
-      setSelectedvarity({ title: "", image: "", _id: "" });
+      setSelectedvarity({ title: "", image: "", id: "" });
     };
   
     const onCloseModal = () => {
@@ -116,14 +88,13 @@ import { useStockContext } from "../helper/StockManagement";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      editItemGr(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // deleteCms(id);
+        deleteitemGr(id)
       }
     };
   
@@ -196,7 +167,7 @@ import { useStockContext } from "../helper/StockManagement";
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -217,7 +188,7 @@ import { useStockContext } from "../helper/StockManagement";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-xs" // Increases the width
+          className="modal-ls" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -255,8 +226,8 @@ import { useStockContext } from "../helper/StockManagement";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
+          
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">

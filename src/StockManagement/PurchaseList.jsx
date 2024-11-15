@@ -98,7 +98,7 @@ const PurchaseList = () => {
       vendor_id: "",
       quantity: "",
       amount: "",
-      _id: "",
+      id: "",
     });
   };
 
@@ -134,7 +134,7 @@ const PurchaseList = () => {
     const updatedStock = [...formData.stock];
 
     if (name === "item_id") {
-      const selectedItem = allItemList?.data.find((item) => item._id === value);
+      const selectedItem = allItemList?.data.find((item) => item.id === value);
       if (selectedItem) {
         // Only update item_id and stock_quantity when item is selected
         updatedStock[index] = {
@@ -158,7 +158,7 @@ const PurchaseList = () => {
     // Update vendor_id in formData
     setFormData((prevData) => ({
       ...prevData,
-      vendor_id: newValue ? newValue._id : "", // Update vendor_id based on selection
+      vendor_id: newValue ? newValue.id : "", // Update vendor_id based on selection
     }));
   };
   // Add new row for stock
@@ -298,7 +298,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                   getOptionLabel={(option) => option.name}
                   value={
                     allvendorList.data?.find(
-                      (vendor) => vendor._id === formData.vendor_id
+                      (vendor) => vendor.id === formData.vendor_id
                     ) || null
                   } // Show the selected vendor
                   onChange={(event, newValue) => {
@@ -312,7 +312,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                     />
                   )}
                   isOptionEqualToValue={(option, value) =>
-                    option._id === value._id
+                    option.id === value.id
                   }
                 />
               </FormGroup>
@@ -329,7 +329,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                         {
                           target: {
                             name: "item_id",
-                            value: newValue?._id || "",
+                            value: newValue?.id || "",
                           },
                         },
                         index
@@ -343,7 +343,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                       />
                     )}
                     isOptionEqualToValue={(option, value) =>
-                      option._id === value._id
+                      option.id === value.id
                     }
                   />
                 </FormGroup>

@@ -22,7 +22,7 @@ const AddB2b = () => {
     getallDistrictList,
     allstateList,
     alldistrictList,
-    getAllLabs,labDropdown 
+    getAllLabs,labDropdown ,addB2b
   } = useCategoryContext();
 
   useEffect(() => {
@@ -92,6 +92,10 @@ const AddB2b = () => {
       ...selectedProducts2.map((product) => product.id),
     ];
 
+    const allSelectedProduct3Ids = [
+      ...selectedProducts3.map((product) => product.id),
+    ];
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("organization_name", inputData.organization_name);
@@ -103,6 +107,7 @@ const AddB2b = () => {
     formDataToSend.append("district", inputData.district);
     formDataToSend.append("state", inputData.state);
     formDataToSend.append("pincode", inputData.pincode);
+    formDataToSend.append("GSTIN", inputData.GSTIN);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
@@ -112,11 +117,16 @@ const AddB2b = () => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
 
+    allSelectedProduct3Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
+    });
+
+
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addlab(formDataToSend);
+    addB2b(formDataToSend);
   };
 
   return (
@@ -337,8 +347,8 @@ const AddB2b = () => {
                   multiple
                   options={labDropdown.data || []}
                   getOptionLabel={(option) => option?.organization_name || ""}
-                  value={selectedProducts2}
-                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
+                  value={selectedProducts3}
+                  onChange={(event, newValue) => setSelectedProducts3(newValue)}
                   disableCloseOnSelect
                   renderInput={(params) => (
                     <TextField
@@ -446,7 +456,7 @@ const AddB2b = () => {
           </div> */}
 
           <Button type="submit" color="primary">
-            Add Lab
+            Add B2B
           </Button>
         </form>
       </div>

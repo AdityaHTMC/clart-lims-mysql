@@ -350,6 +350,48 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const deleteTestcate = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/test-category/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        gettestCategoryList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const editTestCategory = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test-category/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        gettestCategoryList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      console.error("Error edit Test category:", error);
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
 
   const deleteTest = async (id) => {
     try {
@@ -1100,7 +1142,7 @@ export const MasterProvider = ({ children }) => {
 
   const editTimeMaster = async (id,dataToSend) => {
     try {
-      const response = await axios.post(
+      const response = await axios.put(
         `${base_url}/admin/time-slot/update/${id}`,
         {...dataToSend},
         {
@@ -1482,7 +1524,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

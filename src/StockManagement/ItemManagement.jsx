@@ -76,6 +76,7 @@ const ItemManagement = () => {
 
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
@@ -83,6 +84,7 @@ const ItemManagement = () => {
     amount: "",
     low_quantity_alert: "",
     stock_quantity: "",
+    id: "",
   });
 
   const onOpenModal = () => {
@@ -108,6 +110,14 @@ const ItemManagement = () => {
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({
+      name: "",
+      item_group_id: "",
+      amount: "",
+      low_quantity_alert: "",
+      stock_quantity: "",
+      id: "",
+    });
   };
 
   // Handle form input change
@@ -115,13 +125,16 @@ const ItemManagement = () => {
     const { name, value } = e.target;
     setSelectedvarity((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: ["low_quantity_alert", "stock_quantity", "item_group_id", "amount"].includes(name)
+        ? parseInt(value, 10) || 0
+        : value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    editIM(selectedvarity._id, selectedvarity);
+    editIM(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -138,15 +151,31 @@ const ItemManagement = () => {
   // Handle input changes
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-  
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: name === "name" ? value : Number(value), // Convert to number if not 'name'
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: ["low_quantity_alert", "stock_quantity", "item_group_id", "amount"].includes(name)
+        ? parseInt(value, 10) || 0
+        : value,
     }));
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
   
   // Handle form submission
   const handleSubmit = () => {
+    const newErrors = {};
+  
+    // Validate required fields
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.item_group_id) newErrors.item_group_id = "Item Group is required.";
+    if (!formData.amount) newErrors.amount = "Amount is required.";
+    if (!formData.stock_quantity) newErrors.stock_quantity = "Stock Quantity is required.";
+    if (!formData.low_quantity_alert) newErrors.low_quantity_alert = "Low Quantity Alert is required.";
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Set errors to display
+      return; // Stop form submission
+    }
+  
+    // If validation passes, call the API and close the modal
     addIM(formData);
     onCloseModal();
   };
@@ -226,7 +255,7 @@ const ItemManagement = () => {
                                   id={`deleteTooltip-${product._id}`}
                                 >
                                   <FaTrashAlt
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   />
                                 </Button>
                                 <UncontrolledTooltip
@@ -295,7 +324,9 @@ const ItemManagement = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   id="name"
+                  required
                 />
+                 {errors.name && <span className="text-danger">{errors.name}</span>}
               </FormGroup>
               <FormGroup className="col-md-6">
                 <Label htmlFor="amount" className="col-form-label">
@@ -307,7 +338,9 @@ const ItemManagement = () => {
                   value={formData.amount}
                   onChange={handleInputChange}
                   id="amount"
+                  required
                 />
+                {errors.amount && <span className="text-danger">{errors.amount}</span>}
               </FormGroup>
             </div>
             <div className="row">
@@ -321,7 +354,9 @@ const ItemManagement = () => {
                   value={formData.low_quantity_alert}
                   onChange={handleInputChange}
                   id="low_quantity_alert"
+                  required
                 />
+               {errors.amount && <span className="text-danger">{errors.low_quantity_alert}</span>}
               </FormGroup>
               <FormGroup className="col-md-6">
                 <Label htmlFor="stock_quantity" className="col-form-label">
@@ -333,7 +368,9 @@ const ItemManagement = () => {
                   value={formData.stock_quantity}
                   onChange={handleInputChange}
                   id="stock_quantity"
+                  required
                 />
+                {errors.stock_quantity && <span className="text-danger">{errors.stock_quantity}</span>}
               </FormGroup>
             </div>
             <FormGroup>
@@ -346,6 +383,7 @@ const ItemManagement = () => {
                 value={formData.item_group_id}
                 onChange={handleInputChange}
                 id="item_group_id"
+                required
               >
                 <option value="">Select Item Group</option>
                 {itemgroup.data.map((group) => (
@@ -354,6 +392,7 @@ const ItemManagement = () => {
                   </option>
                 ))}
               </Input>
+              {errors.item_group_id && <span className="text-danger">{errors.item_group_id}</span>}
             </FormGroup>
           </Form>
         </ModalBody>

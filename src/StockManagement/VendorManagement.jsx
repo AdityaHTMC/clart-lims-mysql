@@ -260,7 +260,7 @@ const VendorManagement = () => {
             Mobile:
           </Label>
           <Input
-            type="text"
+            type="number"
             name="mobile"
             value={formData.mobile}
             onChange={handleInputChange}
@@ -314,7 +314,7 @@ const VendorManagement = () => {
             Pincode:
           </Label>
           <Input
-            type="text"
+            type="number"
             name="pincode"
             value={formData.pincode}
             onChange={handleInputChange}
@@ -368,8 +368,8 @@ const VendorManagement = () => {
           <Input
             type="text"
             name="contact_person"
-            value={formData.contact_person}
-            onChange={handleInputChange}
+            value={selectedvarity.contact_person}
+            onChange={handleInputChanges}
             id="contact_person"
           />
         </FormGroup>
@@ -383,8 +383,8 @@ const VendorManagement = () => {
           <Input
             type="text"
             name="email"
-            value={formData.email}
-            onChange={handleInputChange}
+            value={selectedvarity.email}
+            onChange={handleInputChanges}
             id="email"
           />
         </FormGroup>
@@ -393,10 +393,10 @@ const VendorManagement = () => {
             Mobile:
           </Label>
           <Input
-            type="text"
+            type="number"
             name="mobile"
-            value={formData.mobile}
-            onChange={handleInputChange}
+            value={selectedvarity.mobile}
+            onChange={handleInputChanges}
             id="mobile"
           />
         </FormGroup>
@@ -410,8 +410,8 @@ const VendorManagement = () => {
           <Input
             type="text"
             name="address"
-            value={formData.address}
-            onChange={handleInputChange}
+            value={selectedvarity.address}
+            onChange={handleInputChanges}
             id="address"
           />
         </FormGroup>
@@ -422,8 +422,8 @@ const VendorManagement = () => {
           <Input
             type="text"
             name="state"
-            value={formData.state}
-            onChange={handleInputChange}
+            value={selectedvarity.state}
+            onChange={handleInputChanges}
             id="state"
           />
         </FormGroup>
@@ -437,8 +437,8 @@ const VendorManagement = () => {
           <Input
             type="text"
             name="district"
-            value={formData.district}
-            onChange={handleInputChange}
+            value={selectedvarity.district}
+            onChange={handleInputChanges}
             id="district"
           />
         </FormGroup>
@@ -447,10 +447,10 @@ const VendorManagement = () => {
             Pincode:
           </Label>
           <Input
-            type="text"
+            type="number"
             name="pincode"
-            value={formData.pincode}
-            onChange={handleInputChange}
+            value={selectedvarity.pincode}
+            onChange={handleInputChanges}
             id="pincode"
           />
         </FormGroup>

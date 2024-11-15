@@ -132,6 +132,7 @@ const AddTestParameter = () => {
                   value={inputData.lower_range}
                   onChange={handleInputChange}
                   id="lower_range"
+                  required
                 />
               </FormGroup>
             </div>
@@ -146,6 +147,7 @@ const AddTestParameter = () => {
                   value={inputData.upper_range}
                   onChange={handleInputChange}
                   id="upper_range"
+                  required
                 />
               </FormGroup>
             </div>

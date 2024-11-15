@@ -17,7 +17,7 @@ import {
   Spinner,
 } from "reactstrap";
 import { Autocomplete, Box, Chip, TextField, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import { FaCircleXmark } from "react-icons/fa6";
@@ -359,16 +359,17 @@ const CreateOrder = () => {
                                       style={{ placeItems: "center" }}
                                     >
                                       <p>No Customer found</p>
-                                      <p
+                                      <Link
                                         className=""
                                         style={{
                                           textDecoration: "underline",
                                           fontWeight: 600,
                                           cursor: "pointer",
-                                        }}
+                                        }} 
+                                        to="/add-customer"
                                       >
                                         Create New Customer
-                                      </p>
+                                      </Link>
                                     </div>
                                     // </li>
                                   )}

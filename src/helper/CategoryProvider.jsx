@@ -42,11 +42,11 @@ export const CategoryProvider = ({ children }) => {
         });
       } else {
         setUnitLists({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch product list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setUnitLists({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch product list");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -63,14 +63,14 @@ export const CategoryProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Unit added successfully");
+        toast.success(response.data.message);
         navigate("/unit-list");
       } else {
-        toast.error("Failed to add Unit");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
-      console.error("Error adding Unit:", error);
-      toast.error("An error occurred while adding the Unit");
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -90,11 +90,11 @@ export const CategoryProvider = ({ children }) => {
         });
       } else {
         setLabLists({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch product list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setLabLists({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch product list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -181,14 +181,37 @@ export const CategoryProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Lab added successfully");
+        toast.success(response?.data?.message);
         navigate("/lab-list");
       } else {
-        toast.error("Failed to add Lab");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       console.error("Error adding Lab:", error);
-      toast.error("An error occurred while adding the Lab");
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const addB2b = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/b2b-user/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken, 
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        navigate("/b2b-users");
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -211,11 +234,11 @@ export const CategoryProvider = ({ children }) => {
         });
       } else {
         setCollectionLists({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch product list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setCollectionLists({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch product list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -637,7 +660,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

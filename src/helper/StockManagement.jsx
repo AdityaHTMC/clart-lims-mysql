@@ -114,6 +114,49 @@ export const StockProvider = ({ children }) => {
     }
   };
 
+
+  const editItemGr = async (id, formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/item-group/edit/${id}`,
+        { ...formDataToSend },
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getItemGrList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const deleteitemGr = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/item-group/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getItemGrList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
   const getIMList = async (dataToSend) => {
     try {
       const response = await axios.post(
@@ -277,12 +320,11 @@ export const StockProvider = ({ children }) => {
   const editVendor = async (id, formDataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/item/update/${id}`,
+        `${base_url}/admin/vendor/update/${id}`,
         { ...formDataToSend },
         {
           headers: {
             Authorization: AuthToken,
-            "Content-Type": "application/json",
           },
         }
       );
@@ -300,7 +342,7 @@ export const StockProvider = ({ children }) => {
   const deletevendor = async (id) => {
     try {
       const response = await axios.delete(
-        `${base_url}/admin/item/delete/${id}`,
+        `${base_url}/admin/vendor/delete/${id}`,
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -410,28 +452,7 @@ export const StockProvider = ({ children }) => {
     }
   };
 
-  const addStockissue = async (formDataToSend) => {
-    try {
-      const response = await axios.post(
-        `${base_url}/admin/stock-issue`,
-        formDataToSend ,
-        {
-          headers: {
-            Authorization: AuthToken,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (response.status === 200) {
-        toast.success(response.data.message);
-        // getPurchaseList();
-      } else {
-        toast.error("server errors");
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
-    }
-  };
+
 
 
   const getStockReportList = async (dataToSend) => {
@@ -454,6 +475,29 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setSrList({ data: [], loading: false });
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const addStockissue = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/stock-issue`,
+        formDataToSend ,
+        {
+          headers: {
+            Authorization: AuthToken,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getStockReportList();
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
     }
   };
@@ -507,7 +551,11 @@ export const StockProvider = ({ children }) => {
   };
 
 
-  const values = {getCmsList,cmsList,addCms,getItemGrList,itemgroup,addItemGr,getIMList, addIM,imList,imAllList,getallIMList,editIM,deleteIMList ,getvendorList , addVendor ,editVendor, deletevendor,vendorList,getPurchaseList, purchaseList, getStockreport , stockreport,getallvendorlist , allvendorList,addPurchase,addStockissue, getStockReportList ,srList,getStockHistoryList,stockhistory,getStockLQAList,stocklqa
+  const values = {getCmsList,cmsList,addCms,getItemGrList,itemgroup,addItemGr,getIMList, addIM,imList,imAllList,getallIMList,editIM,deleteIMList ,getvendorList , addVendor ,editVendor, deletevendor,vendorList,getPurchaseList, purchaseList, getStockreport , stockreport,getallvendorlist , allvendorList,addPurchase,addStockissue, getStockReportList ,srList,getStockHistoryList,stockhistory,getStockLQAList,stocklqa,editItemGr,deleteitemGr
+
+
+
+
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

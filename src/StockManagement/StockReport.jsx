@@ -205,7 +205,7 @@ const StockReport = () => {
     const updatedStock = [...formData.stock];
 
     if (name === "item_id") {
-      const selectedItem = allItemList?.data.find((item) => item._id === value);
+      const selectedItem = allItemList?.data.find((item) => item.id === value);
       if (selectedItem) {
         // Only update item_id and stock_quantity when item is selected
         updatedStock[index] = {
@@ -306,7 +306,7 @@ const StockReport = () => {
                         <th>Used Quantity</th>
                         <th>Purchased Quantity</th>
                         <th>Amount</th>
-                        <th>Issued_to</th>
+                        <th>Issued To</th>
                         <th>Date</th>
                       </tr>
                     </thead>
@@ -416,7 +416,7 @@ const StockReport = () => {
                 >
                   <option value="">Select Stock Issue</option>
                   {dropdownData?.data?.map((item) => (
-                    <option key={item._id} value={item._id}>
+                    <option key={item.id} value={item.id}>
                       {/* Display organization_name for Unit, Lab, and Collection Center */}
                       {selectedOption === "unit" ||
                       selectedOption === "lab" ||
@@ -441,7 +441,7 @@ const StockReport = () => {
                         {
                           target: {
                             name: "item_id",
-                            value: newValue?._id || "",
+                            value: newValue?.id || "",
                           },
                         },
                         index
@@ -455,7 +455,7 @@ const StockReport = () => {
                       />
                     )}
                     isOptionEqualToValue={(option, value) =>
-                      option._id === value._id
+                      option.id === value.id
                     }
                   />
                 </FormGroup>

@@ -265,7 +265,12 @@ export const AuthProvider = ({ children }) => {
         }
       };
     
-
+      useEffect(() => {
+        const token = localStorage.getItem('Authtoken')
+        if(!token && location.pathname !== '/login'){
+            navigate('/login')
+        }
+    }, [location.pathname])
 
 
     useEffect(() => {

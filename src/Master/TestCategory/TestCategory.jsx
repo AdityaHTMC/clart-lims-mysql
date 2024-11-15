@@ -30,7 +30,7 @@ import { Pagination, Stack } from "@mui/material";
 const TestCategory = () => {
   const navigate = useNavigate();
 
-  const { testCategory, gettestCategoryList, addtestCategory } =useMasterContext();
+  const { testCategory, gettestCategoryList, addtestCategory,deleteTestcate,editTestCategory } =useMasterContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemperPage = 8;
@@ -68,7 +68,7 @@ const TestCategory = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
-      // ProductDelete(id);
+      deleteTestcate(id);
     }
   };
 
@@ -99,7 +99,7 @@ const TestCategory = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    //   editpack(selectedvarity._id, selectedvarity);
+    editTestCategory(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -179,7 +179,7 @@ const TestCategory = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
