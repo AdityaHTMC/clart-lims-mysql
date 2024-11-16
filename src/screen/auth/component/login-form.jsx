@@ -41,10 +41,6 @@ const LoginForm = () => {
         <Input required onChange={handleUserValue} type="email" value={formValues.email} placeholder="Enter email" name="email" />
       </FormGroup>
       <FormGroup>
-        {/* <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
-          <Input required onChange={handleUserValue} type={showPassWord ? "text" : "password"} name="password"  value={formValues.password} placeholder="Password" />
-          <InputGroupText>{showPassWord ? <Eye /> : <EyeOff />}</InputGroupText>
-        </InputGroup> */}
         <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
           <Input required onChange={handleUserValue} type={showPassWord ? "password" : "text"} name="password"  value={formValues.password} placeholder="Password" />
           <InputGroupText>{showPassWord ? <EyeOff /> : <Eye />}</InputGroupText>
