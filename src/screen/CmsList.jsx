@@ -202,7 +202,7 @@ const CmsList = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product._id)}
+                                  onClick={() => handleDelete(product.id)}
                                 >
                                   <FaTrashAlt />
                                 </Button>
