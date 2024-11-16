@@ -226,44 +226,6 @@ import { Pagination, Stack } from "@mui/material";
         </Container>
   
         <Modal
-          isOpen={open}
-          toggle={onCloseModal}
-          className="modal-xg" // Increases the width
-        >
-          <ModalHeader toggle={onCloseModal}>
-            <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Add Species
-            </h5>
-          </ModalHeader>
-          <ModalBody>
-            {" "}
-            {/* Scroll in Y-axis */}
-            <Form>
-              <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
-                  Species Name :
-                </Label>
-                <Input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  id="title"
-                />
-              </FormGroup>
-            </Form>
-          </ModalBody>
-          <ModalFooter>
-            <Button color="primary" onClick={handleSubmit}>
-              Save
-            </Button>
-            <Button color="secondary" onClick={onCloseModal}>
-              Close
-            </Button>
-          </ModalFooter>
-        </Modal>
-  
-        <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
           className="modal-lg"
