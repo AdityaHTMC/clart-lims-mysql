@@ -147,12 +147,8 @@ import { Pagination, Stack } from "@mui/material";
           <Row>
             <Col sm="12">
               <Card>
-                {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
                   <div className="btn-popup pull-right">
-                    {/* <Button color="primary" onClick={onOpenModal}>
-                      Add Species
-                    </Button> */}
                   </div>
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
