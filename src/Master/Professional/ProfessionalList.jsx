@@ -169,14 +169,14 @@ const ProfessionalList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product._id)}
+                                    onClick={() => handleEdit(product.id)}
                                   >
                                     <FaEdit />
                                   </Button>
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
