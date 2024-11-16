@@ -91,6 +91,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     };
   
     const handleDelete = (id) => {
+      console.log('idssss: ' + id);
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
         DeleteParameterUnits(id);
@@ -167,7 +168,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>

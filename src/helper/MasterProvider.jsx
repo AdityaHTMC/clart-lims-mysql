@@ -1543,6 +1543,7 @@ export const MasterProvider = ({ children }) => {
 
   const DeleteParameterUnits = async (id) => {
     try {
+      console.log('id: ' + id);
       const response = await axios.delete(
         `${base_url}/admin/test/parameter/unit/delete/${id}`,
         
