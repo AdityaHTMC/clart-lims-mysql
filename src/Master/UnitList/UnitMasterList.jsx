@@ -37,7 +37,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   const UnitMasterList = () => {
     const navigate = useNavigate();
   
-    const {  getunitMasterList, unitMasterList,addUnitMasterList } = useMasterContext();
+    const {  getunitMasterList, unitMasterList,addUnitMasterList, editParameterUnitMasterList } = useMasterContext();
   
     const [formData, setFormData] = useState({
       title: "",
@@ -86,7 +86,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      editParameterUnitMasterList(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
