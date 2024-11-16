@@ -37,7 +37,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   const UnitMasterList = () => {
     const navigate = useNavigate();
   
-    const {  getunitMasterList, unitMasterList,addUnitMasterList, editParameterUnitMasterList } = useMasterContext();
+    const {  getunitMasterList, unitMasterList,addUnitMasterList, editParameterUnitMasterList, DeleteParameterUnits } = useMasterContext();
   
     const [formData, setFormData] = useState({
       title: "",
@@ -93,7 +93,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
-        // deleteCms(id);
+        DeleteParameterUnits(id);
       }
     };
   
