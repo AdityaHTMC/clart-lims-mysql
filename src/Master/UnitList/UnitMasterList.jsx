@@ -117,7 +117,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     return (
       <>
-        <CommonBreadcrumb title="Unit Master List"  />
+        <CommonBreadcrumb title="Parameter Units List"  />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -126,7 +126,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                 <CardBody>
                   <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add Unit Master
+                      Add Parameter Unit
                     </Button>
                   </div>
                   <div className="clearfix"></div>
