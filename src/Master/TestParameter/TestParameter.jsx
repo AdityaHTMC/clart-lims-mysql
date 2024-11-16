@@ -60,7 +60,7 @@ import { Pagination, Stack } from "@mui/material";
   
     return (
       <>
-        <CommonBreadcrumb title="Test parameter List" />
+        <CommonBreadcrumb title="Test Parameter List" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -69,7 +69,7 @@ import { Pagination, Stack } from "@mui/material";
                 <CardBody>
                   <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add Test parameter
+                      Add Test Parameter
                     </Button>
                   </div>
                   <div className="clearfix"></div>
@@ -97,7 +97,7 @@ import { Pagination, Stack } from "@mui/material";
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No test Parameter Found
+                                No Test Parameter Found
                               </td>
                             </tr>
                           ) : (
