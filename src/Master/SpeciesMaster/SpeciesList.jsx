@@ -256,14 +256,14 @@ import { Pagination, Stack } from "@mui/material";
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Edit Unit
+              Edit Species
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
-                  Unit:
+                  Species
                 </Label>
                 <Input
                   type="text"
