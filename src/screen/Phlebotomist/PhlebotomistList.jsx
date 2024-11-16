@@ -21,7 +21,7 @@ import SearchIcon from "@mui/icons-material/Search";
   const PhlebotomistList = () => {
     const navigate = useNavigate();
   
-    const { getAllphlebotomist,phlebotomistList } = useCategoryContext();
+    const { getAllphlebotomist,phlebotomistList, DeletePhlebotomist } = useCategoryContext();
   
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
@@ -54,6 +54,7 @@ import SearchIcon from "@mui/icons-material/Search";
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
         // ProductDelete(id);
+        DeletePhlebotomist(id)
       }
     };
   
@@ -147,14 +148,14 @@ import SearchIcon from "@mui/icons-material/Search";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product?._id)}
+                                      onClick={() => handleEdit(product?.id)}
                                     >
                                       <FaEdit />
                                     </Button>
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleDelete(product?._id)}
+                                      onClick={() => handleDelete(product?.id)}
                                     >
                                       <FaTrashAlt />
                                     </Button>
