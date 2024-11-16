@@ -41,9 +41,13 @@ const LoginForm = () => {
         <Input required onChange={handleUserValue} type="email" value={formValues.email} placeholder="Enter email" name="email" />
       </FormGroup>
       <FormGroup>
-        <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
+        {/* <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
           <Input required onChange={handleUserValue} type={showPassWord ? "text" : "password"} name="password"  value={formValues.password} placeholder="Password" />
           <InputGroupText>{showPassWord ? <Eye /> : <EyeOff />}</InputGroupText>
+        </InputGroup> */}
+        <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
+          <Input required onChange={handleUserValue} type={showPassWord ? "password" : "text"} name="password"  value={formValues.password} placeholder="Password" />
+          <InputGroupText>{showPassWord ? <EyeOff /> : <Eye />}</InputGroupText>
         </InputGroup>
       </FormGroup>
 
@@ -51,10 +55,10 @@ const LoginForm = () => {
         <div className="custom-control custom-checkbox me-sm-2">
           <Label className="d-block">
             <Input className="checkbox_animated" id="chk-ani2" type="checkbox" />
-            Reminder Me
+            Remember Me
             <span className="pull-right">
               <Button color="transparent" className="forgot-pass p-0">
-                lost your password
+                Forgot Password
               </Button>
             </span>
           </Label>
