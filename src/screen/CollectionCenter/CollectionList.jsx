@@ -59,10 +59,10 @@ const CollectionList = () => {
 
 
   const onOpenModal = () => {
-    navigate("/add-connection");
+    navigate("/add-collection");
   };
   const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+    navigate(`/edit-collection/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -134,14 +134,14 @@ const CollectionList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product._id)}
+                                    onClick={() => handleEdit(product.id)}
                                   >
                                     <FaEdit />
                                   </Button>
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>

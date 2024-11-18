@@ -105,6 +105,10 @@ import PetList from "./screen/Customers/PetList";
 import OrderDetailspage from "./OrderMenu/OrderDetailspage";
 import B2BUsersList from "./screen/B2BUsersList/B2BUsersList";
 import AddB2b from "./screen/B2BUsersList/AddB2b";
+import EditLab from "./screen/LabCenter/EditLab";
+import EditCollectionList from "./screen/CollectionCenter/EditCollectionList";
+import EditB2bList from "./screen/B2BUsersList/EditB2bList";
+import EditPhelbotomist from "./screen/Phlebotomist/EditPhelbotomist";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -139,13 +143,16 @@ function App() {
           <Route path="/city-list/:id" element={<CityList />} />
           <Route path="/customer" element={<UserList />} />
           <Route path="/lab-list" element={<LabList />} />
+          <Route path="/edit-lab-list/:id" element={<EditLab />} />
           <Route path="/add-lab" element={<AddLab />} />
           <Route path="/collection-center-list" element={<CollectionList />} />
-          <Route path="/add-connection" element={<AddCollectionList />} />
-          
+          <Route path="/add-collection" element={<AddCollectionList />} />
+          <Route path="/edit-collection/:id" element={<EditCollectionList />} />
           <Route path="/phlebotomist-list" element={<PhlebotomistList />} />
+          <Route path="/editphlebotomist/:id" element={<EditPhelbotomist />} />
 
           <Route path="/b2b-users" element={<B2BUsersList />} />
+          <Route path="/edit-b2b-edit/:id" element={<EditB2bList />} />
           <Route path="/add-b2b-users" element={<AddB2b />} />
           <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
 

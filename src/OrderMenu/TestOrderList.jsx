@@ -155,7 +155,7 @@ const TestOrderList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => navigatOrderDetails(order?.order_id)}
+                                    onClick={() => navigatOrderDetails(order?.id)}
                                   >
                                     <FaEye />
                                   </Button>

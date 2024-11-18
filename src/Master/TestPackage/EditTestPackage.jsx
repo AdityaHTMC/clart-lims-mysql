@@ -84,7 +84,7 @@ const EditTestPackage = () => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product._id)
+      ...selectedProducts.map(product => product.id)
     ];
     
     const formDataToSend = new FormData();
@@ -291,7 +291,7 @@ const EditTestPackage = () => {
           </div>
 
           <Button type="submit" color="primary">
-            Add Test Package
+            Edit Test Package
           </Button>
         </form>
       </div>

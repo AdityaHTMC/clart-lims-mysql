@@ -60,7 +60,7 @@ const LabList = () => {
     navigate("/add-lab");
   };
   const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+    navigate(`/edit-lab-list/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -132,7 +132,7 @@ const LabList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product?._id)}
+                                    onClick={() => handleEdit(product?.id)}
                                   >
                                     <FaEdit />
                                   </Button>

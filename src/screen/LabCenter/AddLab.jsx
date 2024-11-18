@@ -103,7 +103,6 @@ const AddLab = () => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
 
-    // Append associated_labs with array index
     allSelectedProduct2Ids.forEach((id, index) => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
@@ -230,7 +229,7 @@ const AddLab = () => {
             </div>
           </div>
 
-          {/* Add the remaining inputs similarly, organizing them into rows as needed */}
+
           <div className="row">
             <div className="col-md-6">
               <FormGroup>

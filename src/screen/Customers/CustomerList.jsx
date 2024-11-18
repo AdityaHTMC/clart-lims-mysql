@@ -150,7 +150,19 @@ const CustomerList = () => {
                               <td>{product?.name}</td>
                               <td>{product?.email}</td>
                               <td>{product?.mobile}</td>
-                              <td>{product?.address}</td>
+                              <td id={`addressTooltip-${index}`}>
+                                {product?.address
+                                  ?.split(" ")
+                                  .slice(0, 5)
+                                  .join(" ")}
+                                ...
+                                <UncontrolledTooltip
+                                  placement="top"
+                                  target={`addressTooltip-${index}`}
+                                >
+                                  {product?.address}
+                                </UncontrolledTooltip>
+                              </td>
                               <td>{product?.district}</td>
                               {/* <td>{product.pincode}</td> */}
 

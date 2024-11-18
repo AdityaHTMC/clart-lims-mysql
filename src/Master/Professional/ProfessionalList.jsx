@@ -35,7 +35,7 @@ const ProfessionalList = () => {
     addProfessional,
     getAllItemList,
     allItemList,
-    DeleteProfessionalFees
+    DeleteProfessionalFees,editProfessionalFees
   } = useMasterContext();
 
   const [open, setOpen] = useState(false);
@@ -101,7 +101,7 @@ const ProfessionalList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    //   editpack(selectedvarity._id, selectedvarity);
+    editProfessionalFees(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
@@ -171,7 +171,7 @@ const ProfessionalList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product.id)}
+                                    onClick={() => onOpenModal2(product)}
                                   >
                                     <FaEdit />
                                   </Button>

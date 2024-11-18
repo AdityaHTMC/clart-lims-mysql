@@ -8,29 +8,42 @@ import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 
-const EditLab = () => {
+const EditB2bList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
-  const { getLabDetails, labDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown, } = useCategoryContext();
+  const {
+    getallstateList,
+    getallDistrictList,
+    allstateList,
+    alldistrictList,
+    getAllCollection,
+    collectionDropdown,
+    getAllUnit,
+    unitDropdown,
+    getAllLabs,
+    labDropdown,
+    getB2bDetails,
+    b2bDetails,
+  } = useCategoryContext();
 
   useEffect(() => {
-    getAllCollection()
-    getAllUnit()
+    getAllCollection();
+    getAllUnit();
     getallstateList();
+    getAllLabs();
   }, []);
 
   useEffect(() => {
     if (id) {
-      getLabDetails(id);
+      getB2bDetails(id);
     }
   }, [id]);
 
   const [inputData, setInputData] = useState({
     organization_name: "",
     associated_unit_details: [],
-    associated_collection_centers_details: [],
+    associated_lab_details: [],
     contact_person: "",
     country: "",
     district: "",
@@ -43,33 +56,39 @@ const EditLab = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [selectedProducts3, setSelectedProducts3] = useState([]);
 
   useEffect(() => {
-    if (labDetails) {
+    if (b2bDetails) {
       setInputData({
-        organization_name: labDetails.data.organization_name || "",
-        contact_person: labDetails.data.contact_person || "",
-        tests: labDetails.data.tests || [],
-        country: labDetails.data.country || "",
-        email: labDetails.data.email || "",
-        mobile: labDetails.data.mobile || "",
-        state: labDetails.data.state || "",
-        district: labDetails.data.district || "",
-        pincode: labDetails.data.pincode || "",
-        address: labDetails.data.address || "",
+        organization_name: b2bDetails.data.organization_name || "",
+        contact_person: b2bDetails.data.contact_person || "",
+        tests: b2bDetails.data.tests || [],
+        country: b2bDetails.data.country || "",
+        email: b2bDetails.data.email || "",
+        mobile: b2bDetails.data.mobile || "",
+        state: b2bDetails.data.state || "",
+        district: b2bDetails.data.district || "",
+        pincode: b2bDetails.data.pincode || "",
+        address: b2bDetails.data.address || "",
       });
-      if(allstateList?.data?.length > 0){
-        const selectedState = allstateList?.data?.find((state) => state.state === labDetails.data.state);
-      
+      if (allstateList?.data?.length > 0) {
+        const selectedState = allstateList?.data?.find(
+          (state) => state.state === b2bDetails.data.state
+        );
+
         if (selectedState) {
           // Pass the selected state's _id to get the district list
           getallDistrictList(selectedState.id);
         }
       }
-      setSelectedProducts(labDetails.data.associated_collection_centers_details || []);
-      setSelectedProducts2(labDetails.data.associated_unit_details || []);
+      setSelectedProducts(b2bDetails.data.associated_lab_details || []);
+      setSelectedProducts2(b2bDetails.data.associated_unit_details || []);
+      setSelectedProducts3(
+        b2bDetails.data.associated_collection_center_details || []
+      );
     }
-  }, [labDetails, allstateList]);
+  }, [b2bDetails]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -81,11 +100,13 @@ const EditLab = () => {
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
+    setInputData({ ...inputData, state: selectedStateName, district: "" }); // Update state and reset district
 
     // Find the selected state object based on the state name
-    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+    const selectedState = allstateList?.data?.find(
+      (state) => state.state === selectedStateName
+    );
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -95,7 +116,6 @@ const EditLab = () => {
   const handleDistrictChange = (e) => {
     setInputData({ ...inputData, district: e.target.value });
   };
-
 
   const handleTestRemove = (testToRemove) => {
     setSelectedProducts((prev) =>
@@ -128,7 +148,7 @@ const EditLab = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Lab" />
+      <CommonBreadcrumb title="Edit Collection" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -268,7 +288,6 @@ const EditLab = () => {
                   value={inputData.district}
                   onChange={handleDistrictChange}
                   id="district"
-                 
                 >
                   <option value="">Select District</option>
                   {alldistrictList?.data?.map((district) => (
@@ -284,11 +303,11 @@ const EditLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Associated Collection Centers</Label>
+                <Label for="New">Associated Lab Centers</Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
-                  options={collectionDropdown?.data || []}
+                  options={labDropdown?.data || []}
                   getOptionLabel={(option) => option?.organization_name || ""}
                   value={selectedProducts}
                   onChange={(event, newValue) => setSelectedProducts(newValue)}
@@ -328,6 +347,31 @@ const EditLab = () => {
             </div>
           </div>
 
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Associated Collection Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={collectionDropdown?.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts3}
+                  onChange={(event, newValue) => setSelectedProducts3(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Test"
+                      placeholder="Select Test"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+          </div>
+
           <Button type="submit" color="primary">
             Add Test Package
           </Button>
@@ -337,4 +381,4 @@ const EditLab = () => {
   );
 };
 
-export default EditLab;
+export default EditB2bList;

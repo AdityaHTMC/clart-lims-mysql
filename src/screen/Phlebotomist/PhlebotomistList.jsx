@@ -47,7 +47,7 @@ import SearchIcon from "@mui/icons-material/Search";
       navigate("/add-phlebotomist");
     };
     const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
+      navigate(`/editphlebotomist/${id}`);
     };
   
     const handleDelete = (id) => {

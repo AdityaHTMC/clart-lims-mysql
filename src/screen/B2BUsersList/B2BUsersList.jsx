@@ -60,7 +60,7 @@ import {
       navigate("/add-b2b-users");
     };
     const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
+      navigate(`/edit-b2b-edit/${id}`);
     };
   
     const handleDelete = (id) => {
@@ -131,7 +131,7 @@ import {
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product?._id)}
+                                      onClick={() => handleEdit(product?.id)}
                                     >
                                       <FaEdit />
                                     </Button>

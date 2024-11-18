@@ -61,7 +61,7 @@ const AddTestPackage = () => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product._id)
+      ...selectedProducts.map(product => product.id)
     ];
     
 

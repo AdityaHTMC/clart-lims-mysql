@@ -7,30 +7,48 @@ import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
-
-const EditLab = () => {
+import CancelIcon from "@mui/icons-material/Cancel";
+import AddLocationIcon from "@mui/icons-material/AddLocation";
+const EditPhelbotomist = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
-  const { getLabDetails, labDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown, } = useCategoryContext();
+  const {
+    getallstateList,
+    getallDistrictList,
+    allstateList,
+    alldistrictList,
+    getAllCollection,
+    collectionDropdown,
+    getAllUnit,
+    unitDropdown,
+    getAllLabs,
+    labDropdown,
+    getphelboDetails,
+    phelboDetails,
+    editPhelbo,
+  } = useCategoryContext();
 
   useEffect(() => {
-    getAllCollection()
-    getAllUnit()
+    getAllCollection();
+    getAllUnit();
     getallstateList();
+    getAllLabs();
   }, []);
 
   useEffect(() => {
     if (id) {
-      getLabDetails(id);
+      getphelboDetails(id);
     }
   }, [id]);
 
+  const [pincode, setPincode] = useState("");
+  const [pincodes, setPincodes] = useState([]);
+
   const [inputData, setInputData] = useState({
-    organization_name: "",
+    name: "",
     associated_unit_details: [],
-    associated_collection_centers_details: [],
+    associated_lab_details: [],
     contact_person: "",
     country: "",
     district: "",
@@ -43,33 +61,55 @@ const EditLab = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [selectedProducts3, setSelectedProducts3] = useState([]);
 
   useEffect(() => {
-    if (labDetails) {
+    if (phelboDetails) {
       setInputData({
-        organization_name: labDetails.data.organization_name || "",
-        contact_person: labDetails.data.contact_person || "",
-        tests: labDetails.data.tests || [],
-        country: labDetails.data.country || "",
-        email: labDetails.data.email || "",
-        mobile: labDetails.data.mobile || "",
-        state: labDetails.data.state || "",
-        district: labDetails.data.district || "",
-        pincode: labDetails.data.pincode || "",
-        address: labDetails.data.address || "",
+        name: phelboDetails.data.name || "",
+        contact_person: phelboDetails.data.contact_person || "",
+        tests: phelboDetails.data.tests || [],
+        country: phelboDetails.data.country || "",
+        email: phelboDetails.data.email || "",
+        mobile: phelboDetails.data.mobile || "",
+        state: phelboDetails.data.state || "",
+        district: phelboDetails.data.district || "",
+        pincode: phelboDetails.data.pincode || "",
+        address: phelboDetails.data.address || "",
       });
-      if(allstateList?.data?.length > 0){
-        const selectedState = allstateList?.data?.find((state) => state.state === labDetails.data.state);
-      
+      if (allstateList?.data?.length > 0) {
+        const selectedState = allstateList?.data?.find(
+          (state) => state.state === phelboDetails.data.state
+        );
+
         if (selectedState) {
           // Pass the selected state's _id to get the district list
           getallDistrictList(selectedState.id);
         }
       }
-      setSelectedProducts(labDetails.data.associated_collection_centers_details || []);
-      setSelectedProducts2(labDetails.data.associated_unit_details || []);
+      setSelectedProducts(phelboDetails.data.associated_lab_details || []);
+      setSelectedProducts2(phelboDetails.data.associated_unit_details || []);
+      setSelectedProducts3(
+        phelboDetails.data.associated_collection_centers_details || []
+      );
+      setPincodes(phelboDetails.data.serviceable_pincodes || []);
     }
-  }, [labDetails, allstateList]);
+  }, [phelboDetails]);
+
+  const handleAddPincode = () => {
+    if (pincode) {
+      setPincodes([...pincodes, pincode]);
+      setPincode(""); // Clear the input field
+    }
+  };
+
+  console.log(pincode, "pi");
+  console.log(pincodes, "pis");
+
+  // Function to remove a pincode from the array
+  const handleRemovePincode = (indexToRemove) => {
+    setPincodes(pincodes.filter((_, index) => index !== indexToRemove));
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -81,11 +121,13 @@ const EditLab = () => {
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
+    setInputData({ ...inputData, state: selectedStateName, district: "" }); // Update state and reset district
 
     // Find the selected state object based on the state name
-    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+    const selectedState = allstateList?.data?.find(
+      (state) => state.state === selectedStateName
+    );
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -95,7 +137,6 @@ const EditLab = () => {
   const handleDistrictChange = (e) => {
     setInputData({ ...inputData, district: e.target.value });
   };
-
 
   const handleTestRemove = (testToRemove) => {
     setSelectedProducts((prev) =>
@@ -107,28 +148,48 @@ const EditLab = () => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-      ...selectedProducts.map((product) => product._id),
+      ...selectedProducts.map((product) => product.id),
+    ];
+
+    const allSelectedProduct2Ids = [
+      ...selectedProducts2.map((product) => product.id),
+    ];
+
+    const allSelectedProduct3Ids = [
+      ...selectedProducts3.map((product) => product.id),
     ];
 
     const formDataToSend = new FormData();
 
-    formDataToSend.append("package_name", inputData.package_name);
-    formDataToSend.append("description", inputData.description);
-    formDataToSend.append("sample_type", inputData.sample_type);
-    formDataToSend.append("turn_around_time", inputData.turn_around_time);
-    formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price);
-    formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("name", inputData.name);
+    formDataToSend.append("email", inputData.email);
+    formDataToSend.append("mobile", inputData.mobile);
+    formDataToSend.append("pincode", inputData.pincode);
+    formDataToSend.append("address", inputData.address);
+    formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
     allSelectedProductIds.forEach((id, index) => {
-      formDataToSend.append(`tests[${index}]`, id);
+      formDataToSend.append(`associated_labs[${index}]`, id);
     });
 
-    // editTestPackage(formDataToSend, id);
+    allSelectedProduct2Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_units[${index}]`, id);
+    });
+
+    allSelectedProduct3Ids.forEach((id, index) => {
+      formDataToSend.append(`associated_collection_centers[${index}]`, id);
+    });
+    
+    pincodes.forEach((pin, index) => {
+        formDataToSend.append(`serviceable_pincode[${index}]`, pin);
+      });
+
+    editPhelbo(id,formDataToSend);
   };
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Lab" />
+      <CommonBreadcrumb title="Edit Phelbotomist" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -143,13 +204,13 @@ const EditLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="organization_name">organization Name </Label>
+                <Label for="name"> Name </Label>
                 <Input
                   type="text"
-                  name="organization_name"
-                  value={inputData.organization_name}
+                  name="name"
+                  value={inputData.name}
                   onChange={handleInputChange}
-                  id="organization_name"
+                  id="name"
                 />
               </FormGroup>
             </div>
@@ -268,7 +329,6 @@ const EditLab = () => {
                   value={inputData.district}
                   onChange={handleDistrictChange}
                   id="district"
-                 
                 >
                   <option value="">Select District</option>
                   {alldistrictList?.data?.map((district) => (
@@ -284,11 +344,11 @@ const EditLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Associated Collection Centers</Label>
+                <Label for="New">Associated Lab Centers</Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
-                  options={collectionDropdown?.data || []}
+                  options={labDropdown?.data || []}
                   getOptionLabel={(option) => option?.organization_name || ""}
                   value={selectedProducts}
                   onChange={(event, newValue) => setSelectedProducts(newValue)}
@@ -328,8 +388,73 @@ const EditLab = () => {
             </div>
           </div>
 
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Associated Collection Center</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={collectionDropdown?.data || []}
+                  getOptionLabel={(option) => option?.organization_name || ""}
+                  value={selectedProducts3}
+                  onChange={(event, newValue) => setSelectedProducts3(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Test"
+                      placeholder="Select Test"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="pincode" className="col-form-label">
+                  serviceable Pincode:
+                </Label>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <TextField
+                    type="text"
+                    name="pincode"
+                    value={pincode}
+                    onChange={(e) => setPincode(e.target.value)}
+                    id="pincode"
+                    placeholder="Enter pincode"
+                    fullWidth
+                  />
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={handleAddPincode}
+                    style={{ marginLeft: "5px" }}
+                  >
+                    <AddLocationIcon />
+                  </Button>
+                </div>
+
+                {/* Display Chips for each pincode */}
+                <div style={{ marginTop: "10px" }}>
+                  {pincodes.map((code, index) => (
+                    <Chip
+                      key={index}
+                      label={code}
+                      onDelete={() => handleRemovePincode(index)}
+                      deleteIcon={<CancelIcon />}
+                      style={{ margin: "5px" }}
+                    />
+                  ))}
+                </div>
+              </FormGroup>
+            </div>
+          </div>
+
           <Button type="submit" color="primary">
-            Add Test Package
+            edit
           </Button>
         </form>
       </div>
@@ -337,4 +462,4 @@ const EditLab = () => {
   );
 };
 
-export default EditLab;
+export default EditPhelbotomist;

@@ -8,29 +8,30 @@ import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 
-const EditLab = () => {
+const EditCollectionList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
 
-  const { getLabDetails, labDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown, } = useCategoryContext();
+  const { getCCDetails,CCDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown,getAllLabs,labDropdown } = useCategoryContext();
 
   useEffect(() => {
     getAllCollection()
     getAllUnit()
     getallstateList();
+    getAllLabs()
   }, []);
 
   useEffect(() => {
     if (id) {
-      getLabDetails(id);
+        getCCDetails(id);
     }
   }, [id]);
 
   const [inputData, setInputData] = useState({
     organization_name: "",
     associated_unit_details: [],
-    associated_collection_centers_details: [],
+    associated_lab_details: [],
     contact_person: "",
     country: "",
     district: "",
@@ -45,31 +46,32 @@ const EditLab = () => {
   const [selectedProducts2, setSelectedProducts2] = useState([]);
 
   useEffect(() => {
-    if (labDetails) {
+    if (CCDetails) {
       setInputData({
-        organization_name: labDetails.data.organization_name || "",
-        contact_person: labDetails.data.contact_person || "",
-        tests: labDetails.data.tests || [],
-        country: labDetails.data.country || "",
-        email: labDetails.data.email || "",
-        mobile: labDetails.data.mobile || "",
-        state: labDetails.data.state || "",
-        district: labDetails.data.district || "",
-        pincode: labDetails.data.pincode || "",
-        address: labDetails.data.address || "",
+        organization_name: CCDetails.data.organization_name || "",
+        contact_person: CCDetails.data.contact_person || "",
+        tests: CCDetails.data.tests || [],
+        country: CCDetails.data.country || "",
+        email: CCDetails.data.email || "",
+        mobile: CCDetails.data.mobile || "",
+        state: CCDetails.data.state || "",
+        district: CCDetails.data.district || "",
+        
+        pincode: CCDetails.data.pincode || "",
+        address: CCDetails.data.address || "",
       });
       if(allstateList?.data?.length > 0){
-        const selectedState = allstateList?.data?.find((state) => state.state === labDetails.data.state);
+        const selectedState = allstateList?.data?.find((state) => state.state === CCDetails.data.state);
       
         if (selectedState) {
           // Pass the selected state's _id to get the district list
           getallDistrictList(selectedState.id);
         }
       }
-      setSelectedProducts(labDetails.data.associated_collection_centers_details || []);
-      setSelectedProducts2(labDetails.data.associated_unit_details || []);
+      setSelectedProducts(CCDetails.data.associated_lab_details || []);
+      setSelectedProducts2(CCDetails.data.associated_unit_details || []);
     }
-  }, [labDetails, allstateList]);
+  }, [CCDetails]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -128,7 +130,7 @@ const EditLab = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Lab" />
+      <CommonBreadcrumb title="Edit Collection" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -284,11 +286,11 @@ const EditLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Associated Collection Centers</Label>
+                <Label for="New">Associated Lab Centers</Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
-                  options={collectionDropdown?.data || []}
+                  options={labDropdown?.data || []}
                   getOptionLabel={(option) => option?.organization_name || ""}
                   value={selectedProducts}
                   onChange={(event, newValue) => setSelectedProducts(newValue)}
@@ -337,4 +339,4 @@ const EditLab = () => {
   );
 };
 
-export default EditLab;
+export default EditCollectionList;
