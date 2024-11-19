@@ -85,7 +85,7 @@ const AddPet = () => {
     };
   
     addPet(id, formData);
-    console.log("Form Data:", inputData);
+
   };
   
 

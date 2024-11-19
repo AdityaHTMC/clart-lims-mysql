@@ -218,7 +218,8 @@ const CustomerList = () => {
                           ))
                         )}
                       </tbody>
-                      <Stack className="rightPagination mt10" spacing={2}>
+                    </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
                         <Pagination
                           color="primary"
                           count={totalPages}
@@ -227,7 +228,6 @@ const CustomerList = () => {
                           onChange={(event, value) => handlepagechange(value)}
                         />
                       </Stack>
-                    </Table>
                   </div>
                 </div>
               </CardBody>

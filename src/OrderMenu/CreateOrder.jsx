@@ -227,7 +227,7 @@ const CreateOrder = () => {
     bodyData.append("collection_type", formData.type);
     bodyData.append("pet_id", formData.pet);
     selectedTest.forEach((el, i) => {
-      bodyData.append(`tests[${i}][test]`, el._id);
+      bodyData.append(`tests[${i}][test]`, el.id);
       bodyData.append(`tests[${i}][price]`, el.sell_price);
     });
     selectedFees?.forEach((el, i) => {

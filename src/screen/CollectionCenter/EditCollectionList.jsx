@@ -13,7 +13,7 @@ const EditCollectionList = () => {
   const { id } = useParams();
 
 
-  const { getCCDetails,CCDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown,getAllLabs,labDropdown } = useCategoryContext();
+  const { getCCDetails,CCDetails,getallstateList,getallDistrictList,allstateList,alldistrictList, getAllCollection,collectionDropdown,getAllUnit,unitDropdown,getAllLabs,labDropdown,editCC } = useCategoryContext();
 
   useEffect(() => {
     getAllCollection()
@@ -40,6 +40,8 @@ const EditCollectionList = () => {
     state: "",
     pincode: "",
     address: "",
+    geofencing_km: "",
+    serviceable_pin_code:"",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -56,7 +58,8 @@ const EditCollectionList = () => {
         mobile: CCDetails.data.mobile || "",
         state: CCDetails.data.state || "",
         district: CCDetails.data.district || "",
-        
+        geofencing_km: CCDetails.data.geofencing_km || "",
+        serviceable_pin_code: CCDetails.data.serviceable_pin_code || "",
         pincode: CCDetails.data.pincode || "",
         address: CCDetails.data.address || "",
       });
@@ -108,24 +111,36 @@ const EditCollectionList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const allSelectedProductIds = [
-      ...selectedProducts.map((product) => product._id),
+    const SelectedProductIdsLL = [
+      ...selectedProducts.map((product) => product.id),
     ];
+
+    const SelectedProduct2IdsUl = [
+        ...selectedProducts2.map((product) => product.id),
+      ];
 
     const formDataToSend = new FormData();
 
-    formDataToSend.append("package_name", inputData.package_name);
-    formDataToSend.append("description", inputData.description);
-    formDataToSend.append("sample_type", inputData.sample_type);
-    formDataToSend.append("turn_around_time", inputData.turn_around_time);
-    formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price);
-    formDataToSend.append("is_popular", inputData.is_popular);
-    allSelectedProductIds.forEach((id, index) => {
-      formDataToSend.append(`tests[${index}]`, id);
+    formDataToSend.append("organization_name", inputData.organization_name);
+    formDataToSend.append("contact_person", inputData.contact_person);
+    formDataToSend.append("mobile", inputData.mobile);
+    formDataToSend.append("email", inputData.email);
+    formDataToSend.append("address", inputData.address);
+    formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
+    formDataToSend.append("pincode", inputData.pincode);
+    formDataToSend.append("geofencing_km", inputData.geofencing_km);
+    formDataToSend.append("serviceable_pin_code", inputData.serviceable_pin_code);
+
+    SelectedProductIdsLL.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
     });
 
-    // editTestPackage(formDataToSend, id);
+    SelectedProduct2IdsUl.forEach((id, index) => {
+      formDataToSend.append(`associated_units[${index}]`, id);
+    });
+
+    editCC(id,formDataToSend);
   };
 
   return (
@@ -171,7 +186,7 @@ const EditCollectionList = () => {
             </div>
           </div>
 
-          {/* First row with two col-md-6 */}
+   
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -203,9 +218,38 @@ const EditCollectionList = () => {
             </div>
           </div>
 
-          {/* Second row with two col-md-6 */}
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="geofencing_km" className="col-form-label">
+                 Geofencing km:
+                </Label>
+                <Input
+                  type="number"
+                  name="geofencing_km"
+                  value={inputData.geofencing_km}
+                  onChange={handleInputChange}
+                  id="geofencing_km"
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="serviceable_pin_code" className="col-form-label">
+                Serviceable Pin Code:
+                </Label>
+                <Input
+                  type="number"
+                  name="mobile"
+                  value={inputData.serviceable_pin_code}
+                  onChange={handleInputChange}
+                  id="serviceable_pin_code"
+                />
+              </FormGroup>
+            </div>
+          </div>
 
-          {/* Continue adding pairs in rows */}
+      
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -331,7 +375,7 @@ const EditCollectionList = () => {
           </div>
 
           <Button type="submit" color="primary">
-            Add Test Package
+            Edit
           </Button>
         </form>
       </div>

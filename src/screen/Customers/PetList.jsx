@@ -81,10 +81,9 @@ const PetList = () => {
     }));
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (petid) => {
     if (window.confirm("Are you sure you wish to delete this ?")) {
-      deletePetList(id);
-      getCustomerPetList(id);
+      deletePetList(petid,id);
     }
   };
 

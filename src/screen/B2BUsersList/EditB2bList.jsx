@@ -24,7 +24,7 @@ const EditB2bList = () => {
     getAllLabs,
     labDropdown,
     getB2bDetails,
-    b2bDetails,
+    b2bDetails,editb2b
   } = useCategoryContext();
 
   useEffect(() => {
@@ -52,6 +52,7 @@ const EditB2bList = () => {
     state: "",
     pincode: "",
     address: "",
+    GSTIN: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -71,6 +72,7 @@ const EditB2bList = () => {
         district: b2bDetails.data.district || "",
         pincode: b2bDetails.data.pincode || "",
         address: b2bDetails.data.address || "",
+        GSTIN: b2bDetails.data.GSTIN || "",
       });
       if (allstateList?.data?.length > 0) {
         const selectedState = allstateList?.data?.find(
@@ -126,29 +128,49 @@ const EditB2bList = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const allSelectedProductIds = [
-      ...selectedProducts.map((product) => product._id),
+    const SelectedProductIdsCC = [
+      ...selectedProducts3.map((product) => product.id),
     ];
+
+    const SelectedProduct2IdsUl = [
+        ...selectedProducts2.map((product) => product.id),
+      ];
+
+      const SelectedProduct3IdsLL = [
+        ...selectedProducts.map((product) => product.id),
+      ];
 
     const formDataToSend = new FormData();
 
-    formDataToSend.append("package_name", inputData.package_name);
-    formDataToSend.append("description", inputData.description);
-    formDataToSend.append("sample_type", inputData.sample_type);
-    formDataToSend.append("turn_around_time", inputData.turn_around_time);
-    formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price);
-    formDataToSend.append("is_popular", inputData.is_popular);
-    allSelectedProductIds.forEach((id, index) => {
-      formDataToSend.append(`tests[${index}]`, id);
+    formDataToSend.append("organization_name", inputData.organization_name);
+    formDataToSend.append("contact_person", inputData.contact_person);
+    formDataToSend.append("mobile", inputData.mobile);
+    formDataToSend.append("email", inputData.email);
+    formDataToSend.append("address", inputData.address);
+    formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
+    formDataToSend.append("pincode", inputData.pincode);
+    formDataToSend.append("GSTIN", inputData.GSTIN);
+    SelectedProductIdsCC.forEach((id, index) => {
+      formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
 
-    // editTestPackage(formDataToSend, id);
+    SelectedProduct2IdsUl.forEach((id, index) => {
+      formDataToSend.append(`associated_units[${index}]`, id);
+    });
+
+    SelectedProduct3IdsLL.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
+    });
+
+
+
+    editb2b(id,formDataToSend);
   };
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Collection" />
+      <CommonBreadcrumb title="Edit B2B" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -370,10 +392,25 @@ const EditB2bList = () => {
                 />
               </FormGroup>
             </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="GSTIN" className="col-form-label">
+                 GSTIN
+                </Label>
+                <Input
+                  type="text"
+                  name="GSTIN"
+                  value={inputData.GSTIN}
+                  onChange={handleInputChange}
+                  id="GSTIN"
+                />
+              </FormGroup>
+            </div>
           </div>
 
           <Button type="submit" color="primary">
-            Add Test Package
+          Edit
           </Button>
         </form>
       </div>

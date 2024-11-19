@@ -109,6 +109,9 @@ import EditLab from "./screen/LabCenter/EditLab";
 import EditCollectionList from "./screen/CollectionCenter/EditCollectionList";
 import EditB2bList from "./screen/B2BUsersList/EditB2bList";
 import EditPhelbotomist from "./screen/Phlebotomist/EditPhelbotomist";
+import EditUnitList from "./screen/EditUnitList";
+import NewsLetter from "./screen/NewsLetter/NewsLetter";
+import EnquiryList from "./screen/Enquiry/EnquiryList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -125,6 +128,7 @@ function App() {
           <Route path="/categories" element={<Categories />} />
           <Route path="/product/sub-category" element={<SubCategoryPage />} />
           <Route path="/unit-list" element={<UnitList />} />
+          <Route path="/edit-unit-list/:id" element={<EditUnitList />} />
           <Route path="/product-edit/:id" element={<ProductEdit />} />
           <Route path="/banner-management" element={<BannerList />} />
           <Route path="/brand-master" element={<BrandList />} />
@@ -159,6 +163,9 @@ function App() {
           <Route path="/customers-list" element={<CustomerList />} />
 
           <Route path="/add-customer" element={<AddCustomer />} />
+
+          <Route path="/newsletter-management" element={<NewsLetter />} />
+          <Route path="/enquiry-list" element={<EnquiryList />} />
 
           {/* master */}
 

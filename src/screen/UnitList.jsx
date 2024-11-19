@@ -60,7 +60,7 @@ const UnitList = () => {
     navigate("/add-products");
   };
   const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`); 
+    navigate(`/edit-unit-list/${id}`); 
   };
 
   const handleDelete = (id) => {
@@ -130,14 +130,14 @@ const UnitList = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleEdit(product._id)}
+                                  onClick={() => handleEdit(product.id)}
                                 >
                                   <FaEdit />
                                 </Button>
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product._id)}
+                                  onClick={() => handleDelete(product.id)}
                                 >
                                   <FaTrashAlt />
                                 </Button>

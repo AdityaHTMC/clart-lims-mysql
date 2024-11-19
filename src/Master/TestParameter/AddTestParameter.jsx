@@ -164,11 +164,10 @@ const AddTestParameter = () => {
                   id="test"
                   value={selectedTestId}
                   onChange={handleTestSelect}
-                  required
                 >
                   <option value="">Select Test</option>
                   {alltest?.data?.map((test) => (
-                    <option key={test._id} value={test._id}>
+                    <option key={test._id} value={test.id}>
                       {test.test_name}
                     </option>
                   ))}
@@ -188,7 +187,7 @@ const AddTestParameter = () => {
                   >
                     <option value="">Select Parent</option>
                     {allPPL?.data?.map((parent) => (
-                      <option key={parent._id} value={parent._id}>
+                      <option key={parent._id} value={parent.id}>
                         {parent.parameter}
                       </option>
                     ))}

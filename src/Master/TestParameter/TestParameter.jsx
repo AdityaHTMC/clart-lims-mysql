@@ -22,7 +22,7 @@ import { Pagination, Stack } from "@mui/material";
   const TestParameter = () => {
     const navigate = useNavigate();
   
-    const { getTPList , testParameter } = useMasterContext();
+    const { getTPList , testParameter,deleteTPList } = useMasterContext();
     const [currentPage, setCurrentPage] = useState(1);
     const itemperPage = 10;
 
@@ -47,8 +47,7 @@ import { Pagination, Stack } from "@mui/material";
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // ProductDelete(id);
+        deleteTPList(id);
       }
     };
 
@@ -127,7 +126,7 @@ import { Pagination, Stack } from "@mui/material";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleDelete(product?._id)}
+                                      onClick={() => handleDelete(product?.id)}
                                     >
                                       <FaTrashAlt />
                                     </Button>
