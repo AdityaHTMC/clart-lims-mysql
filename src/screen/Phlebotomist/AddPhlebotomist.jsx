@@ -309,6 +309,7 @@ const AddPhlebotomist = () => {
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="address"
+                  required
                 />
               </FormGroup>
             </div>

@@ -30,7 +30,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { HexColorPicker } from "react-colorful";
 // Register the necessary Chart.js components
 
-
 import { FaTrashAlt } from "react-icons/fa";
 
 const BannerList = () => {
@@ -46,7 +45,6 @@ const BannerList = () => {
   } = useCategoryContext();
 
   const [formData, setFormData] = useState({
-    category_id: "",
     title: "",
     description: "",
     image: null,
@@ -73,7 +71,6 @@ const BannerList = () => {
   const onOpenModal = () => {
     setOpen(true);
   };
-
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
@@ -157,12 +154,12 @@ const BannerList = () => {
     const formData = new FormData();
 
     // Append title and brand ID
-    formData.append("title", selectedBanner.title || '');
-    formData.append("description", selectedBanner.description || '');
-    formData.append("primary_color", selectedBanner.primary_color || '');
-    formData.append("secondary_color", selectedBanner.secondary_color ||'');
-    formData.append("target_url", selectedBanner.target_url || '');
-    formData.append("type", selectedBanner.type || '');
+    formData.append("title", selectedBanner.title || "");
+    formData.append("description", selectedBanner.description || "");
+    formData.append("primary_color", selectedBanner.primary_color || "");
+    formData.append("secondary_color", selectedBanner.secondary_color || "");
+    formData.append("target_url", selectedBanner.target_url || "");
+    formData.append("type", selectedBanner.type || "");
 
     // Append image only if a new image is selected, otherwise keep the existing one
     if (newImage) {
@@ -178,7 +175,7 @@ const BannerList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Banner List"  />
+      <CommonBreadcrumb title="Banner List" />
       <Container fluid>
         <Row>
           <Col sm="12">
@@ -271,19 +268,22 @@ const BannerList = () => {
                               />
                             </td> */}
                             <td>
-                              <FaEdit
-                                size={20}
-                                onClick={() => onOpenModal2(product)}
-                                style={{
-                                  marginRight: "10px",
-                                  cursor: "pointer",
-                                }}
-                              />
-                              <AiOutlineDelete
-                                size={20}
-                                onClick={() => handleDelete(product.id)}
-                                style={{ cursor: "pointer" }}
-                              />
+                              <div className="circelBtnBx">
+                                <Button
+                                  className="btn"
+                                  color="link"
+                                  onClick={() => onOpenModal2(product)}
+                                >
+                                  <FaEdit />
+                                </Button>
+                                <Button
+                                  className="btn"
+                                  color="link"
+                                  onClick={() => handleDelete(product.id)}
+                                >
+                                  <FaTrashAlt />
+                                </Button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -312,8 +312,6 @@ const BannerList = () => {
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-         
-
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
                 target url :
@@ -475,8 +473,6 @@ const BannerList = () => {
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-        
-
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
                 target url :
@@ -517,7 +513,6 @@ const BannerList = () => {
                     Popup
                   </Label>
                 </FormGroup>
-               
               </div>
             </FormGroup>
 
@@ -605,7 +600,7 @@ const BannerList = () => {
 
             <FormGroup>
               <Label htmlFor="image" className="col-form-label">
-               existing Branner Image:
+                existing Branner Image:
               </Label>
               {selectedBanner.image && (
                 <div>

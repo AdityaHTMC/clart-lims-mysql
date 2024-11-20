@@ -135,7 +135,6 @@ export const OrderProvider = ({ children }) => {
             toast.error(response?.data?.message)
           }
         } catch (error) {
-          console.error("Error:", error);
           toast.error(error.response?.data?.message || 'Server error');
         }
       };

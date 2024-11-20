@@ -30,7 +30,7 @@ const BarcodeList = () => {
   const [selectedBarcodes, setSelectedBarcodes] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [loading, setLoading] = useState(false);
-  const itemperPage = 30;
+  const itemperPage = 24;
 
   const totalPages = barcode?.total && Math.ceil(barcode?.total / itemperPage);
 
@@ -49,7 +49,7 @@ const BarcodeList = () => {
     setLoading(true); // Start loading
 
     const dataToSend = {
-      quantity: 30,
+      quantity: 24,
     };
 
     try {
@@ -133,7 +133,7 @@ const BarcodeList = () => {
     const dataToSend = {
       bar_code_ids: barcode.data
         .filter((product) => selectedBarcodes.includes(product.code))
-        .map((product) => product._id),
+        .map((product) => product.id),
     };
   
     // Call the Barcodeprint API function with the payload
@@ -293,12 +293,12 @@ const BarcodeList = () => {
                                 <td>{product.code}</td>
                                 <td>{product.isUsed ? "Yes" : "No"}</td>
                                 <td>{product.isPrinted ? "Yes" : "No"}</td>
-                                <td>
+                                {/* <td>
                                   <div className="circelBtnBx">
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product._id)}
+                                      onClick={() => handleEdit(product.id)}
                                     >
                                       <FaEdit />
                                     </Button>
@@ -310,7 +310,7 @@ const BarcodeList = () => {
                                       <FaTrashAlt />
                                     </Button>
                                   </div>
-                                </td>
+                                </td> */}
                               </tr>
                             ))
                           )}

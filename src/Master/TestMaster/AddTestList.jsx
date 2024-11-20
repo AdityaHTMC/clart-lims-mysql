@@ -44,9 +44,30 @@ const AddTestList = () => {
     test_preparation: "",
     why_the_test: "",
     image: null,
+    observation: [""],
   });
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
+
+  const handleObseravition = (index, value) => {
+    const updatedObservations = [...inputData.observation];
+    updatedObservations[index] = value;
+    setInputData({ ...inputData, observation: updatedObservations });
+  };
+
+  const addObservationField = () => {
+    setInputData((prevState) => ({
+      ...prevState,
+      observation: [...prevState.observation, ""],
+    }));
+  };
+
+  const removeObservationField = (index) => {
+    setInputData((prevState) => ({
+      ...prevState,
+      observation: prevState.observation.filter((_, i) => i !== index),
+    }));
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -108,11 +129,14 @@ const AddTestList = () => {
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`species[${index}]`, parseInt(id, 10));
     });
-    
+
     allSelectedfeesIds.forEach((id, index) => {
       formDataToSend.append(`professional_fees[${index}]`, parseInt(id, 10));
     });
-    
+
+    inputData.observation.forEach((obs, index) => {
+      formDataToSend.append(`observations[${index}]`, obs);
+    });
 
     addTest(formDataToSend);
 
@@ -155,6 +179,7 @@ const AddTestList = () => {
                 <Input
                   type="number"
                   name="price"
+                  min={0}
                   value={inputData.price}
                   onChange={handleInputChange}
                   id="price"
@@ -172,6 +197,7 @@ const AddTestList = () => {
                 <Input
                   type="number"
                   name="sell_price"
+                  min={0}
                   value={inputData.sell_price}
                   onChange={handleInputChange}
                   id="sell_price"
@@ -186,6 +212,7 @@ const AddTestList = () => {
                 <Input
                   type="number"
                   name="collection_fee"
+                  min={0}
                   value={inputData.collection_fee}
                   onChange={handleInputChange}
                   id="collection_fee"
@@ -260,6 +287,7 @@ const AddTestList = () => {
                 <Input
                   type="number"
                   name="duration"
+                  min={0}
                   value={inputData.duration}
                   onChange={handleInputChange}
                   id="duration"
@@ -407,6 +435,68 @@ const AddTestList = () => {
                   onChange={handleFileChange}
                 />
               </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+            {inputData.observation.map((obs, index) => (
+              <div className="col-md-6 mb-2" key={index}>
+                <FormGroup>
+                  <Label
+                    htmlFor={`observations-${index}`}
+                    className="col-form-label"
+                  >
+                    Observation {index + 1}
+                  </Label>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    <Input
+                      type="textarea"
+                      name={`observation-${index}`}
+                      value={obs}
+                      onChange={(e) => handleObseravition(index, e.target.value)}
+                      rows="2"
+                      style={{
+                        borderRadius: "5px",
+                        padding: "10px",
+                      }}
+                      id={`observation-${index}`}
+                    />
+                    <Button
+                      type="button"
+                      color="primary"
+                      onClick={() => removeObservationField(index)}
+                      style={{
+                        marginLeft: "10px",
+                        color: "white",
+                        backgroundColor: "red",
+                        border: "none",
+                        borderRadius: "5px",
+                        padding: "5px 10px",
+                      }}
+                      
+                    >
+                      <FaTrash/>
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            ))}
+
+            <div className="col-md-12">
+              <Button
+                type="button"
+                color="primary"
+                onClick={addObservationField}
+                style={{
+                  marginTop: "20px",
+                  padding: "10px 20px",
+                  borderRadius: "5px",
+                  fontWeight: "bold",
+                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                }}
+              >
+               +
+              </Button>
             </div>
           </div>
 

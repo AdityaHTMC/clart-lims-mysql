@@ -112,6 +112,11 @@ import EditPhelbotomist from "./screen/Phlebotomist/EditPhelbotomist";
 import EditUnitList from "./screen/EditUnitList";
 import NewsLetter from "./screen/NewsLetter/NewsLetter";
 import EnquiryList from "./screen/Enquiry/EnquiryList";
+import TranspoterList from "./screen/Transpoter/TransporterList";
+import AddTransporter from "./screen/Transpoter/AddTransporter";
+import TransporterList from "./screen/Transpoter/TransporterList";
+import EditTestParameter from "./Master/TestParameter/EditTestParameter";
+import EditTestList from "./Master/TestMaster/EditTestList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -153,13 +158,15 @@ function App() {
           <Route path="/add-collection" element={<AddCollectionList />} />
           <Route path="/edit-collection/:id" element={<EditCollectionList />} />
           <Route path="/phlebotomist-list" element={<PhlebotomistList />} />
+          <Route path="/transporters-list" element={<TransporterList />} />
           <Route path="/editphlebotomist/:id" element={<EditPhelbotomist />} />
+          <Route path="/edit-transporters-list/:id" element={<EditTestParameter />} />
 
           <Route path="/b2b-users" element={<B2BUsersList />} />
           <Route path="/edit-b2b-edit/:id" element={<EditB2bList />} />
           <Route path="/add-b2b-users" element={<AddB2b />} />
           <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
-
+          <Route path="/add-transporters" element={<AddTransporter />} />
           <Route path="/customers-list" element={<CustomerList />} />
 
           <Route path="/add-customer" element={<AddCustomer />} />
@@ -172,6 +179,7 @@ function App() {
           <Route path="/breed-management" element={<BreadList />} />
           <Route path="/add-breed" element={<AddBread />} />
           <Route path="/test-list" element={<TestList />} />
+          <Route path="/edit-test/:id" element={<EditTestList />} />
           <Route path="/professional-fees" element={<ProfessionalList />} />
 
           <Route path="/test-packages" element={<TestPackageList />} />

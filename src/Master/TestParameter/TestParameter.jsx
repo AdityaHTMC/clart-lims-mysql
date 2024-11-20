@@ -42,7 +42,7 @@ import { Pagination, Stack } from "@mui/material";
       navigate("/add-test-parameters");
     };
     const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
+      navigate(`/edit-transporters-list/${id}`);
     };
   
     const handleDelete = (id) => {
@@ -119,7 +119,7 @@ import { Pagination, Stack } from "@mui/material";
                                     <Button
                                       className="btn"
                                       color="link"
-                                      onClick={() => handleEdit(product?._id)}
+                                      onClick={() => handleEdit(product?.id)}
                                     >
                                       <FaEdit />
                                     </Button>

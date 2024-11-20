@@ -40,6 +40,7 @@ export const MasterProvider = ({ children }) => {
   const [petList, setPetList] = useState({loading: true,data: [],total: ""});
   const [petDetails, setPetDetails] = useState({loading: true,data: []});
   const [orderDetails, setOrderDetails] = useState({ loading: true, data: [] }) 
+  const [testDetails, setTestDetails] = useState({ loading: true, data: [] }) 
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -456,6 +457,9 @@ export const MasterProvider = ({ children }) => {
       toast.error("Failed to fetch test category list");
     }
   };
+
+
+ 
 
   const getProfessionalList = async (data) => {
     try {
@@ -1564,6 +1568,48 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const getTestDetails = async (id) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/test/details/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setTestDetails({ data: response?.data?.data || [], loading: false });
+      } else {
+        toast.error(response?.data?.message);
+        setTestDetails({ data: [], loading: false });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+      setTestDetails({ data: [], loading: false });
+    }
+  };
+
+
+  const editTest = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/test/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        navigate('/test-list')
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   const editParameterUnitMasterList = async (id,dataToSend) => {
     try {
       const response = await axios.post(
@@ -1639,7 +1685,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
