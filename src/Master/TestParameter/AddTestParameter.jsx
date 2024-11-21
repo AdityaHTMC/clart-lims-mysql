@@ -129,6 +129,7 @@ const AddTestParameter = () => {
                 <Input
                   type="number"
                   name="lower_range"
+                  min={0}
                   value={inputData.lower_range}
                   onChange={handleInputChange}
                   id="lower_range"
@@ -144,6 +145,7 @@ const AddTestParameter = () => {
                 <Input
                   type="number"
                   name="upper_range"
+                  min={0}
                   value={inputData.upper_range}
                   onChange={handleInputChange}
                   id="upper_range"

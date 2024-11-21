@@ -51,7 +51,7 @@ const CustomerList = () => {
     navigate("/add-customer");
   };
   const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+    navigate(`/edit-customers/${id}`);
   };
 
   const handleaddPet = (id) => {
@@ -121,7 +121,7 @@ const CustomerList = () => {
                     <Table hover responsive>
                       <thead>
                         <tr>
-                          <th>Name </th>
+                          <th>Name</th>
                           <th>Email</th>
                           <th>Mobile</th>
                           <th>Address</th>
@@ -147,29 +147,43 @@ const CustomerList = () => {
                         ) : (
                           customerLists?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.name}</td>
-                              <td>{product?.email}</td>
-                              <td>{product?.mobile}</td>
-                              <td id={`addressTooltip-${index}`}>
-                                {product?.address
-                                  ?.split(" ")
-                                  .slice(0, 5)
-                                  .join(" ")}
-                                ...
-                                <UncontrolledTooltip
-                                  placement="top"
-                                  target={`addressTooltip-${index}`}
-                                >
-                                  {product?.address}
-                                </UncontrolledTooltip>
+                              <td>{product?.name || "NA"}</td>
+                              <td id={`email-${index}`}>
+                                {product?.email
+                                  ? product.email.length > 20
+                                    ? `${product.email.slice(0, 20)}...`
+                                    : product.email
+                                  : "NA"}
+                                {product?.email && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`email-${index}`}
+                                  >
+                                    {product?.email}
+                                  </UncontrolledTooltip>
+                                )}
                               </td>
-                              <td>{product?.district}</td>
-                              {/* <td>{product.pincode}</td> */}
-
+                              <td>{product?.mobile || "NA"}</td>
+                              <td id={`address-${index}`}>
+                                {product?.address
+                                  ? product.address.length > 15
+                                    ? `${product.address.slice(0, 15)}...`
+                                    : product.address
+                                  : "NA"}
+                                {product?.address && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`address-${index}`}
+                                  >
+                                    {product?.address}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+                              <td>{product?.district || "NA"}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
-                                    id="editButton"
+                                    id={`editButton-${index}`}
                                     className="btn"
                                     color="link"
                                     onClick={() => handleEdit(product?.id)}
@@ -178,13 +192,13 @@ const CustomerList = () => {
                                   </Button>
                                   <UncontrolledTooltip
                                     placement="top"
-                                    target="editButton"
+                                    target={`editButton-${index}`}
                                   >
                                     Edit Product
                                   </UncontrolledTooltip>
 
                                   <Button
-                                    id="deleteButton"
+                                    id={`deleteButton-${index}`}
                                     className="btn"
                                     color="link"
                                     onClick={() => handleDelete(product?.id)}
@@ -193,13 +207,13 @@ const CustomerList = () => {
                                   </Button>
                                   <UncontrolledTooltip
                                     placement="top"
-                                    target="deleteButton"
+                                    target={`deleteButton-${index}`}
                                   >
                                     Delete Product
                                   </UncontrolledTooltip>
 
                                   <Button
-                                    id="addPetButton"
+                                    id={`addPetButton-${index}`}
                                     className="btn"
                                     color="link"
                                     onClick={() => handleaddPet(product?.id)}
@@ -208,7 +222,7 @@ const CustomerList = () => {
                                   </Button>
                                   <UncontrolledTooltip
                                     placement="top"
-                                    target="addPetButton"
+                                    target={`addPetButton-${index}`}
                                   >
                                     Pet List
                                   </UncontrolledTooltip>
@@ -219,15 +233,16 @@ const CustomerList = () => {
                         )}
                       </tbody>
                     </Table>
+
                     <Stack className="rightPagination mt10" spacing={2}>
-                        <Pagination
-                          color="primary"
-                          count={totalPages}
-                          page={currentPage}
-                          shape="rounded"
-                          onChange={(event, value) => handlepagechange(value)}
-                        />
-                      </Stack>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

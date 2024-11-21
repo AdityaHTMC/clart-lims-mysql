@@ -195,7 +195,7 @@ const TimeSlotsList = () => {
       <Modal
         isOpen={open}
         toggle={onCloseModal}
-        className="modal-lg" // Increases the width
+        className="modal-xg" 
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -249,7 +249,7 @@ const TimeSlotsList = () => {
       <Modal
         isOpen={modalOpen}
         toggle={onCloseModal2}
-        className="modal-lg"
+        className="modal-xg"
         style={{ maxWidth: "800px" }}
       >
         <ModalHeader toggle={onCloseModal2}>

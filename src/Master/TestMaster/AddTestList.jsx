@@ -44,6 +44,7 @@ const AddTestList = () => {
     test_preparation: "",
     why_the_test: "",
     image: null,
+    method: "",
     observation: [""],
   });
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -121,6 +122,7 @@ const AddTestList = () => {
     formDataToSend.append("duration", inputData.duration);
     formDataToSend.append("test_preparation", inputData.test_preparation);
     formDataToSend.append("why_the_test", inputData.why_the_test);
+    formDataToSend.append("method", inputData.method);
     formDataToSend.append("is_popular", inputData.is_popular);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
@@ -436,6 +438,25 @@ const AddTestList = () => {
                 />
               </FormGroup>
             </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="method" className="col-form-label">
+                  Test Method:
+                </Label>
+                <Input
+                  type="textarea"
+                  name="method"
+                  value={inputData.method}
+                  onChange={handleInputChange}
+                  id="method"
+                  rows="3"
+                  style={{
+                    borderRadius: "5px",
+                    padding: "10px",
+                  }}
+                />
+              </FormGroup>
+            </div>
           </div>
 
           <div className="row">
@@ -453,7 +474,9 @@ const AddTestList = () => {
                       type="textarea"
                       name={`observation-${index}`}
                       value={obs}
-                      onChange={(e) => handleObseravition(index, e.target.value)}
+                      onChange={(e) =>
+                        handleObseravition(index, e.target.value)
+                      }
                       rows="2"
                       style={{
                         borderRadius: "5px",
@@ -461,22 +484,19 @@ const AddTestList = () => {
                       }}
                       id={`observation-${index}`}
                     />
-                    <Button
-                      type="button"
-                      color="primary"
-                      onClick={() => removeObservationField(index)}
-                      style={{
-                        marginLeft: "10px",
-                        color: "white",
-                        backgroundColor: "red",
-                        border: "none",
-                        borderRadius: "5px",
-                        padding: "5px 10px",
-                      }}
-                      
-                    >
-                      <FaTrash/>
-                    </Button>
+                    <div className="circelBtnBx">
+                      <Button
+                        type="button"
+                        className="btn"
+                        color="primary"
+                        onClick={() => removeObservationField(index)}
+                        style={{
+                          color: "white",
+                        }}
+                      >
+                        <FaTrash />
+                      </Button>
+                    </div>
                   </div>
                 </FormGroup>
               </div>
@@ -486,16 +506,12 @@ const AddTestList = () => {
               <Button
                 type="button"
                 color="primary"
+                outline
                 onClick={addObservationField}
-                style={{
-                  marginTop: "20px",
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  fontWeight: "bold",
-                  boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                }}
+                size="sm"
+                style={{ marginTop: "10px" }}
               >
-               +
+                Add Observation
               </Button>
             </div>
           </div>
@@ -511,7 +527,7 @@ const AddTestList = () => {
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
             }}
           >
-            Add Test
+            Edit Test
           </Button>
         </form>
       </div>

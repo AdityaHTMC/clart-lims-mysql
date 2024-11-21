@@ -210,7 +210,7 @@ const TestCategory = () => {
       <Modal
         isOpen={open}
         toggle={onCloseModal}
-        className="modal-lg" // Increases the width
+        className="modal-xg" 
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -257,7 +257,7 @@ const TestCategory = () => {
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalOpen} toggle={onCloseModal2}>
+      <Modal isOpen={modalOpen} toggle={onCloseModal2}  className="modal-xg">
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             Edit Test Category Master

@@ -364,6 +364,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                   <Input
                     type="number"
                     name="quantity"
+                    min={0}
                     value={item.quantity}
                     onChange={(e) => handleInputChange(e, index)}
                     id={`quantity_${index}`}
@@ -375,6 +376,7 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                   <Input
                     type="number"
                     name="amount"
+                    min={0}
                     value={item.amount}
                     onChange={(e) => handleInputChange(e, index)}
                     id={`amount_${index}`}

@@ -248,7 +248,7 @@ const VendorManagement = () => {
             Email:
           </Label>
           <Input
-            type="text"
+            type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
@@ -262,6 +262,7 @@ const VendorManagement = () => {
           <Input
             type="number"
             name="mobile"
+            min={0}
             value={formData.mobile}
             onChange={handleInputChange}
             id="mobile"
@@ -381,7 +382,7 @@ const VendorManagement = () => {
             Email:
           </Label>
           <Input
-            type="text"
+            type="email"
             name="email"
             value={selectedvarity.email}
             onChange={handleInputChanges}
@@ -395,6 +396,7 @@ const VendorManagement = () => {
           <Input
             type="number"
             name="mobile"
+            min={0}
             value={selectedvarity.mobile}
             onChange={handleInputChanges}
             id="mobile"
@@ -449,6 +451,7 @@ const VendorManagement = () => {
           <Input
             type="number"
             name="pincode"
+            min={0}
             value={selectedvarity.pincode}
             onChange={handleInputChanges}
             id="pincode"

@@ -153,6 +153,7 @@ const AddTestPackage = () => {
                 <Input
                   type="number"
                   name="turn_around_time"
+                  min={0}
                   value={inputData.turn_around_time}
                   onChange={handleInputChange}
                   id="turn_around_time"
@@ -173,6 +174,7 @@ const AddTestPackage = () => {
                 <Input
                   type="number"
                   name="price"
+                  min={0}
                   value={inputData.price}
                   onChange={handleInputChange}
                   id="price"
@@ -187,6 +189,7 @@ const AddTestPackage = () => {
                 <Input
                   type="number"
                   name="sell_price"
+                  min={0}
                   value={inputData.sell_price}
                   onChange={handleInputChange}
                   id="sell_price"

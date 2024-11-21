@@ -27,7 +27,7 @@ const DashboardContainer = () => {
                 <Row>
                     <TopDashboardCards />
                     <OrderAnalytics/>
-                    <MarketValue />
+                    {/* <MarketValue /> */}
                     {/* <LatestOrders /> */}
                     {/* <TopProducts/> */}
                     {/* <TotalSales /> */}

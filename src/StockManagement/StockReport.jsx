@@ -474,8 +474,9 @@ const StockReport = () => {
                 <FormGroup className="col-md-2">
                   <Label htmlFor={`amount_${index}`}>Quantity</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="quantity"
+                    min={0}
                     value={item.quantity}
                     onChange={(e) => handleInputChange(e, index)}
                     id={`quantity_${index}`}
@@ -484,8 +485,9 @@ const StockReport = () => {
                 <FormGroup className="col-md-2">
                   <Label htmlFor={`amount_${index}`}>Amount</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="amount"
+                    min={0}
                     value={item.amount}
                     onChange={(e) => handleInputChange(e, index)}
                     id={`amount_${index}`}

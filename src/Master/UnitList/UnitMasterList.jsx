@@ -189,7 +189,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -227,8 +227,8 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
+
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">

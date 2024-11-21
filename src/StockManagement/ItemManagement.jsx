@@ -335,6 +335,7 @@ const ItemManagement = () => {
                 <Input
                   type="number"
                   name="amount"
+                  min={0}
                   value={formData.amount}
                   onChange={handleInputChange}
                   id="amount"
@@ -351,6 +352,7 @@ const ItemManagement = () => {
                 <Input
                   type="number"
                   name="low_quantity_alert"
+                  min={0}
                   value={formData.low_quantity_alert}
                   onChange={handleInputChange}
                   id="low_quantity_alert"
@@ -365,6 +367,7 @@ const ItemManagement = () => {
                 <Input
                   type="number"
                   name="stock_quantity"
+                  min={0}
                   value={formData.stock_quantity}
                   onChange={handleInputChange}
                   id="stock_quantity"

@@ -230,6 +230,7 @@ const ProfessionalList = () => {
               <Input
                 type="number"
                 name="expected_charges"
+                min={0}
                 value={formData.expected_charges}
                 onChange={handleInputChange}
                 id="expected_charges"

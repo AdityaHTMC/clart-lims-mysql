@@ -22,14 +22,16 @@ const AddB2b = () => {
     getallDistrictList,
     allstateList,
     alldistrictList,
-    getAllLabs,labDropdown ,addB2b
+    getAllLabs,
+    labDropdown,
+    addB2b,
   } = useCategoryContext();
 
   useEffect(() => {
     getAllCollection();
     getAllUnit();
     getallstateList();
-    getAllLabs()
+    getAllLabs();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -42,35 +44,71 @@ const AddB2b = () => {
     district: "",
     state: "",
     pincode: "",
-    GSTIN:"",
+    GSTIN: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
   const [error, setError] = useState("");
+  const [gsterror, setgsterror] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    // Mobile validation (existing logic)
     if (name === "mobile" && value.length > 10) {
       setError("Mobile number cannot exceed 10 digits"); // Set error message
       return;
-    } else {
-      setError(""); // Clear error message if valid
     }
+
+    // GSTIN validation
+    if (name === "GSTIN") {
+      // Validation: GSTIN must not exceed 15 characters
+      if (value.length > 15) {
+        setgsterror("GSTIN cannot exceed 15 characters");
+        return;
+      }
+
+      // Validation: First two characters must be numbers
+      const firstTwoChars = value.slice(0, 2);
+      if (value.length >= 2 && !/^\d{2}$/.test(firstTwoChars)) {
+        setgsterror("First two characters of GSTIN must be numbers");
+        return;
+      }
+
+      // Validation: All characters must be uppercase letters or digits
+      if (!/^[A-Z0-9]*$/.test(value)) {
+        setgsterror("GSTIN can only contain uppercase letters and numbers");
+        return;
+      }
+    }
+
+    // Clear errors if valid
+    setError("");
+    setgsterror("");
+
+    // Update state (unchanged logic)
     setInputData((prevData) => ({
       ...prevData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]:
+        type === "checkbox"
+          ? checked
+          : name === "GSTIN"
+          ? value.toUpperCase()
+          : value, // Ensure GSTIN is uppercase
     }));
   };
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
+    setInputData({ ...inputData, state: selectedStateName, district: "" }); // Update state and reset district
 
     // Find the selected state object based on the state name
-    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+    const selectedState = allstateList?.data?.find(
+      (state) => state.state === selectedStateName
+    );
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -121,7 +159,6 @@ const AddB2b = () => {
       formDataToSend.append(`associated_labs[${index}]`, id);
     });
 
-
     // inputData.images.forEach((image, index) => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
@@ -146,7 +183,9 @@ const AddB2b = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="title" className="col-form-label">Organization Name *</Label>
+                <Label for="title" className="col-form-label">
+                  Organization Name *
+                </Label>
                 <Input
                   type="text"
                   name="organization_name"
@@ -184,12 +223,13 @@ const AddB2b = () => {
                 <Input
                   type="number"
                   name="mobile"
+                  min={0}
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
                   required
                 />
-                {error && <FormText color="danger">{error}</FormText>} 
+                {error && <FormText color="danger">{error}</FormText>}
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -200,6 +240,7 @@ const AddB2b = () => {
                 <Input
                   type="number"
                   name="pincode"
+                  min={0}
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
@@ -339,7 +380,7 @@ const AddB2b = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Add New Lab Center</Label>
                 <Autocomplete
@@ -363,9 +404,9 @@ const AddB2b = () => {
             </div>
 
             <div className="col-md-6">
-            <FormGroup>
+              <FormGroup>
                 <Label htmlFor="GSTIN" className="col-form-label">
-                GSTIN:
+                  GSTIN:
                 </Label>
                 <Input
                   type="text"
@@ -374,6 +415,7 @@ const AddB2b = () => {
                   onChange={handleInputChange}
                   id="GSTIN"
                 />
+                {gsterror && <p style={{ color: "red" }}>{gsterror}</p>}
               </FormGroup>
             </div>
           </div>

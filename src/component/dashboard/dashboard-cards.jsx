@@ -5,6 +5,7 @@ import { TopDashboardCardsData } from "../../Data/Dashboard";
 import { useDashboardContext } from "../../helper/DashboardProvider";
 import { useEffect } from "react";
 import { Box, MessageSquare, Navigation, Users } from "react-feather";
+import { Link } from "react-router-dom";
 const TopDashboardCards = () => {
  
   const { getDashboardCount,orderCount } = useDashboardContext();
@@ -20,6 +21,7 @@ const TopDashboardCards = () => {
     
         <Col  xl="3 xl-50" md="6">
           <Card className=" o-hidden widget-cards">
+            <Link to='/unit-list' style={{textDecoration:'none'}}>
             <CardBody className="bg-warning">
               <Media className="static-top-widget row">
                 <div className="icons-widgets col-4">
@@ -37,11 +39,13 @@ const TopDashboardCards = () => {
                 </Media>
               </Media>
             </CardBody>
+            </Link>
           </Card>
         </Col>
 
         <Col  xl="3 xl-50" md="6">
           <Card className=" o-hidden widget-cards">
+            <Link to='/lab-list' style={{textDecoration:'none'}}>
             <CardBody className="bg-secondary">
               <Media className="static-top-widget row">
                 <div className="icons-widgets col-4">
@@ -59,12 +63,14 @@ const TopDashboardCards = () => {
                 </Media>
               </Media>
             </CardBody>
+            </Link>
           </Card>
         </Col>
 
 
         <Col  xl="3 xl-50" md="6">
           <Card className=" o-hidden widget-cards">
+            <Link to='/collection-center-list' style={{textDecoration:'none'}}>
             <CardBody className="bg-primary">
               <Media className="static-top-widget row">
                 <div className="icons-widgets col-4">
@@ -82,6 +88,7 @@ const TopDashboardCards = () => {
                 </Media>
               </Media>
             </CardBody>
+            </Link>
           </Card>
         </Col>
 
@@ -89,6 +96,7 @@ const TopDashboardCards = () => {
 
         <Col  xl="3 xl-50" md="6">
           <Card className=" o-hidden widget-cards">
+            <Link to='/phlebotomist-list' style={{textDecoration:'none'}}>
             <CardBody className="bg-danger">
               <Media className="static-top-widget row">
                 <div className="icons-widgets col-4">
@@ -106,6 +114,7 @@ const TopDashboardCards = () => {
                 </Media>
               </Media>
             </CardBody>
+            </Link>
           </Card>
         </Col>
         

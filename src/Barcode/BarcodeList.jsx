@@ -38,12 +38,12 @@ const BarcodeList = () => {
     const dataToSend = {
       page: currentPage,
       limit: itemperPage,
-      ...selectedStatus, // Pass selected status in the payload
+      ...selectedStatus, 
     };
     getbarcode(dataToSend);
   }, [currentPage, selectedStatus]);
 
-  console.log(barcode, "barcode");
+
 
   const generatebar = async () => {
     setLoading(true); // Start loading
@@ -126,6 +126,11 @@ const BarcodeList = () => {
 
   // Generate PDF
   const generatePDF = async () => {
+    const newdataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      ...selectedStatus, 
+    };
     if (selectedBarcodes.length === 0) {
       return;
     }
@@ -171,6 +176,8 @@ const BarcodeList = () => {
     }
   
     pdf.save("barcodes.pdf");
+
+    getbarcode(newdataToSend);
   };
   
 
@@ -251,7 +258,7 @@ const BarcodeList = () => {
                             <th>Code</th>
                             <th>Is Used?</th>
                             <th>Is Printed?</th>
-                            <th>Action</th>
+                         
                           </tr>
                         </thead>
                         <tbody>

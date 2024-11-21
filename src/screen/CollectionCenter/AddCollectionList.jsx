@@ -175,6 +175,7 @@ const AddCollectionList = () => {
               <Input
                 type="number"
                 name="mobile"
+                min={0}
                 value={inputData.mobile}
                 onChange={handleInputChange}
                 id="mobile"
@@ -191,6 +192,7 @@ const AddCollectionList = () => {
               <Input
                 type="number"
                 name="pincode"
+                min={0}
                 value={inputData.pincode}
                 onChange={handleInputChange}
                 id="pincode"
@@ -305,6 +307,7 @@ const AddCollectionList = () => {
               <Input
                 type="number"
                 name="geofencing_km"
+                min={0}
                 value={inputData.geofencing_km}
                 onChange={handleInputChange}
                 id="geofencing_km"

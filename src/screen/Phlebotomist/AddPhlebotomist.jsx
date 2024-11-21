@@ -15,11 +15,18 @@ import { useMasterContext } from "../../helper/MasterProvider";
 const AddPhlebotomist = () => {
   const navigate = useNavigate();
 
-  const {addphlebotomist,getAllCollection,collectionDropdown,getAllUnit,unitDropdown,getAllLabs,labDropdown} = useCategoryContext();
+  const {
+    addphlebotomist,
+    getAllCollection,
+    collectionDropdown,
+    getAllUnit,
+    unitDropdown,
+    getAllLabs,
+    labDropdown,
+  } = useCategoryContext();
 
-  const { getAlldistrictList, allDistrictList, getAllStateList, allStateList } =useMasterContext();
-
-
+  const { getAlldistrictList, allDistrictList, getAllStateList, allStateList } =
+    useMasterContext();
 
   const [inputData, setInputData] = useState({
     name: "",
@@ -27,9 +34,10 @@ const AddPhlebotomist = () => {
     email: "",
     address: "",
     pincode: "",
-    stateId:"",
-    districtId:"",
+    stateId: "",
+    districtId: "",
     image: "",
+    aadhaar_id:"",
   });
 
   useEffect(() => {
@@ -37,7 +45,7 @@ const AddPhlebotomist = () => {
     getAllUnit();
     getAllStateList();
     getAllLabs();
-    if (inputData.stateId){
+    if (inputData.stateId) {
       getAlldistrictList(inputData.stateId);
     }
   }, [inputData.stateId]);
@@ -73,10 +81,10 @@ const AddPhlebotomist = () => {
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
-      // If state is selected, fetch districts for the selected state
-  // if (name === 'stateId') {
-  //   getAlldistrictList(value); // Call the API with the selected state's _id
-  // }
+    // If state is selected, fetch districts for the selected state
+    // if (name === 'stateId') {
+    //   getAlldistrictList(value); // Call the API with the selected state's _id
+    // }
   };
 
   const handleFileChange = (e) => {
@@ -86,8 +94,6 @@ const AddPhlebotomist = () => {
     }));
   };
 
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -95,13 +101,9 @@ const AddPhlebotomist = () => {
       ...selectedProducts.map((product) => product.id),
     ];
 
-    const allselectedlab = [
-      ...selectedProducts2.map((product) => product.id),
-    ];
+    const allselectedlab = [...selectedProducts2.map((product) => product.id)];
 
-    const allselectedunit = [
-      ...selectedProducts3.map((product) => product.id),
-    ];
+    const allselectedunit = [...selectedProducts3.map((product) => product.id)];
 
     const selectedState = allStateList?.data?.find(
       (state) => state.id === Number(inputData.stateId)
@@ -109,8 +111,6 @@ const AddPhlebotomist = () => {
     const selectedDistrict = allDistrictList?.data?.find(
       (district) => district.id === Number(inputData.districtId)
     );
-
-
 
     const formDataToSend = new FormData();
 
@@ -121,6 +121,7 @@ const AddPhlebotomist = () => {
     formDataToSend.append("pincode", inputData.pincode);
     formDataToSend.append("state", selectedState?.state);
     formDataToSend.append("district", selectedDistrict?.district);
+    formDataToSend.append("aadhaar_id", inputData?.aadhaar_id);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
@@ -165,7 +166,9 @@ const AddPhlebotomist = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="title" className="col-form-label">Phlebotomist Name *</Label>
+                <Label for="title" className="col-form-label">
+                  Phlebotomist Name *
+                </Label>
                 <Input
                   type="text"
                   name="name"
@@ -184,6 +187,7 @@ const AddPhlebotomist = () => {
                 <Input
                   type="number"
                   name="mobile"
+                  min={0}
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
@@ -299,13 +303,14 @@ const AddPhlebotomist = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-            <FormGroup>
+              <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
                   PinCode:
                 </Label>
                 <Input
                   type="number"
                   name="pincode"
+                  min={0}
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="address"
@@ -316,7 +321,7 @@ const AddPhlebotomist = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Add New Lab Center</Label>
                 <Autocomplete
@@ -405,22 +410,39 @@ const AddPhlebotomist = () => {
             </div>
 
             <div className="col-md-6">
-            <FormGroup>
-              <Label htmlFor="banner-image" className="col-form-label">
-                Upload Image :
-              </Label>
-              <Input
-                id="banner-image"
-                type="file"
-                name="image"
-                onChange={handleFileChange}
-              />
-            </FormGroup>
+              <FormGroup>
+                <Label htmlFor="banner-image" className="col-form-label">
+                  Upload Image :
+                </Label>
+                <Input
+                  id="banner-image"
+                  type="file"
+                  name="image"
+                  onChange={handleFileChange}
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="address" className="col-form-label">
+                  Aadhaar Id:
+                </Label>
+                <Input
+                  type="number"
+                  name="aadhaar_id"
+                  value={inputData.aadhaar_id}
+                  onChange={handleInputChange}
+                  id="address"
+                />
+              </FormGroup>
             </div>
           </div>
 
           {/* Image previews */}
-      
+
           <Button type="submit" color="primary">
             Add Phlebotomist
           </Button>

@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, Col, FormGroup, Input, Label, Row } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
@@ -15,14 +15,16 @@ const EditTestList = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
   const {
     addlab,
     getAllTestCategory,
     addTest,
     alltestCategory,
     getAllSpeciesList,
-    allspecies,getTestDetails,testDetails,editTest
+    allspecies,
+    getTestDetails,
+    testDetails,
+    editTest,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -35,7 +37,7 @@ const EditTestList = () => {
 
   useEffect(() => {
     if (id) {
-    getTestDetails(id);
+      getTestDetails(id);
     }
   }, [id]);
 
@@ -52,10 +54,12 @@ const EditTestList = () => {
     test_preparation: "",
     why_the_test: "",
     image: null,
+    method: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
+  const [observationsList, setObservations] = useState([""]);
   const [preview, setPreview] = useState(null);
   const [priImages, setPriImages] = useState([]);
   useEffect(() => {
@@ -72,10 +76,12 @@ const EditTestList = () => {
         duration: testDetails.data.duration || "",
         test_preparation: testDetails.data.test_preparation || "",
         why_the_test: testDetails.data.why_the_test || "",
+        method: testDetails.data.method || "",
         image: testDetails.data.address || "",
       });
       setSelectedProducts(testDetails.data.test_species || []);
       setSelectedFees(testDetails.data.professional_fees || []);
+      setObservations(testDetails.data.observations || []);
     }
   }, [testDetails]);
 
@@ -117,7 +123,6 @@ const EditTestList = () => {
     setSelectedFees(data);
   };
 
-
   const handlePopularChange = (e) => {
     setInputData((prevState) => ({
       ...prevState,
@@ -125,17 +130,30 @@ const EditTestList = () => {
     }));
   };
 
+  const handleObservationChange = (index, value) => {
+    const updatedObservations = [...observationsList];
+    updatedObservations[index] = value;
+    setObservations(updatedObservations);
+  };
 
+  const addObservationField = () => {
+    setObservations((prevState) => [...prevState, ""]);
+  };
 
+  const removeObservationField = (index) => {
+    setObservations((prevState) => prevState.filter((_, i) => i !== index));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
-        ...selectedProducts.map((product) => product.id),
-      ];
-  
-      const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
+      ...selectedProducts.map((product) => product.id),
+    ];
+
+    const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
+
+    const combinedObservations = [...observationsList];
 
     const formDataToSend = new FormData();
 
@@ -150,6 +168,7 @@ const EditTestList = () => {
     formDataToSend.append("test_preparation", inputData.test_preparation);
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("method", inputData.method);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
     }
@@ -157,21 +176,23 @@ const EditTestList = () => {
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`species[${index}]`, parseInt(id, 10));
     });
-    
+
     allSelectedfeesIds.forEach((id, index) => {
       formDataToSend.append(`professional_fees[${index}]`, parseInt(id, 10));
     });
- 
 
+    combinedObservations.forEach((obs, index) => {
+      formDataToSend.append(`observations[${index}]`, obs);
+    });
 
-    editTest(id,formDataToSend);
+    editTest(id, formDataToSend);
   };
 
   return (
     <>
       <CommonBreadcrumb title="Edit Test" />
       <div className="product-form-container" style={{ padding: "2px" }}>
-      <form
+        <form
           onSubmit={handleSubmit}
           style={{
             backgroundColor: "#ffffff",
@@ -344,9 +365,7 @@ const EditTestList = () => {
                 <Autocomplete
                   multiple
                   options={professionalFees?.data || []}
-                  getOptionLabel={(option) =>
-                    `${option?.name}` || ""
-                  }
+                  getOptionLabel={(option) => `${option?.name}` || ""}
                   value={selectedFees}
                   onChange={(event, newValue) => setSelectedFees(newValue)}
                   renderInput={(params) => (
@@ -383,7 +402,7 @@ const EditTestList = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Species</Label>
                 <Autocomplete
@@ -443,60 +462,128 @@ const EditTestList = () => {
           </div>
 
           <div className="row">
-          <FormGroup>
-            <Label htmlFor="image" className="col-form-label font-weight-bold">
-              Add New Test Image:
-            </Label>
-            <Input
-              type="file"
-              name="image"
-              id="image"
-              onChange={handleSingleImageChange}
-              accept="image/*"
-              style={{ borderRadius: "5px", padding: "5px" }}
-            />
-          </FormGroup>
-
-          <div>
-            {preview && (
-              <div
-                style={{
-                  position: "relative",
-                  margin: "5px",
-                  marginBottom: "10px",
-                }}
-              >
-                <img
-                  src={preview}
-                  alt="Preview"
+            <div className="col-md-6">
+              <FormGroup>
+                <Label
+                  htmlFor="image"
+                  className="col-form-label font-weight-bold"
+                >
+                  Add New Test Image:
+                </Label>
+                <Input
+                  type="file"
+                  name="image"
+                  id="image"
+                  onChange={handleSingleImageChange}
+                  accept="image/*"
+                  style={{ borderRadius: "5px", padding: "5px" }}
+                />
+              </FormGroup>
+              <div>
+                {preview && (
+                  <div
+                    style={{
+                      position: "relative",
+                      margin: "5px",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <img
+                      src={preview}
+                      alt="Preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                        marginRight: "10px",
+                        borderRadius: "5px",
+                        boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        background: "none",
+                        border: "none",
+                        cursor: "pointer",
+                      }}
+                      title="Remove Image"
+                    >
+                      <FaTrashAlt style={{ color: "red", fontSize: "18px" }} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="method" className="col-form-label">
+                  Test Method:
+                </Label>
+                <Input
+                  type="textarea"
+                  name="method"
+                  value={inputData.method}
+                  onChange={handleInputChange}
+                  id="method"
+                  rows="3"
                   style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                    marginRight: "10px",
                     borderRadius: "5px",
-                    boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
+                    padding: "10px",
                   }}
                 />
-                <button
-                  type="button"
-                  onClick={removeImage}
-                  style={{
-                    position: "absolute",
-                    top: "5px",
-                    right: "5px",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                  }}
-                  title="Remove Image"
-                >
-                  <FaTrashAlt style={{ color: "red", fontSize: "18px" }} />
-                </button>
-              </div>
+              </FormGroup>
+            </div>
+          </div>
+
+          <FormGroup>
+            <label className="mb-3 mt-3">Observations:</label>
+
+            {observationsList.length === 0 ? (
+              <>
+                <p>No observations found.</p>
+              </>
+            ) : (
+              observationsList.map((obs, index) => (
+                <Row key={index} style={{ marginBottom: "10px" }}>
+                  <Col md={10}>
+                    <Input
+                      type="textarea"
+                      value={obs}
+                      onChange={(e) =>
+                        handleObservationChange(index, e.target.value)
+                      }
+                      rows="2"
+                    />
+                  </Col>
+                  <Col md={2} className="d-flex align-items-center">
+                    <Button
+                      color="danger"
+                      outline
+                      size="sm"
+                      onClick={() => removeObservationField(index)}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </Col>
+                </Row>
+              ))
             )}
-          </div>
-          </div>
+
+            <Button
+              color="primary"
+              outline
+              onClick={addObservationField}
+              size="sm"
+              style={{ marginTop: "10px" }}
+            >
+              Add Observation
+            </Button>
+          </FormGroup>
 
           <Button
             type="submit"
@@ -509,7 +596,7 @@ const EditTestList = () => {
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
             }}
           >
-            Add Test
+            edit Test
           </Button>
         </form>
       </div>

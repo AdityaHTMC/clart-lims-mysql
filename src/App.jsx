@@ -117,6 +117,7 @@ import AddTransporter from "./screen/Transpoter/AddTransporter";
 import TransporterList from "./screen/Transpoter/TransporterList";
 import EditTestParameter from "./Master/TestParameter/EditTestParameter";
 import EditTestList from "./Master/TestMaster/EditTestList";
+import EditCustomer from "./screen/Customers/EditCustomer";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -168,7 +169,7 @@ function App() {
           <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
           <Route path="/add-transporters" element={<AddTransporter />} />
           <Route path="/customers-list" element={<CustomerList />} />
-
+          <Route path="/edit-customers/:id" element={<EditCustomer />} />
           <Route path="/add-customer" element={<AddCustomer />} />
 
           <Route path="/newsletter-management" element={<NewsLetter />} />

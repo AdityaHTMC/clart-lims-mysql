@@ -37,7 +37,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   const OrderStatusList = () => {
     const navigate = useNavigate();
   
-    const {  getOrderMasterList, addOrderMasterList , orderMasterList } = useMasterContext();
+    const {  getOrderMasterList, addOrderMasterList , orderMasterList,editOrderStatus,DeleteOrderStatus } = useMasterContext();
   
     const [formData, setFormData] = useState({
       title: "",
@@ -48,7 +48,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     const [selectedvarity, setSelectedvarity] = useState({
       title: "",
-      _id: "",
+      id: "",
     });
   
     useEffect(() => {
@@ -86,14 +86,13 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      editOrderStatus(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // deleteCms(id);
+        DeleteOrderStatus(id);
       }
     };
   
@@ -167,7 +166,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -226,8 +225,8 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
+     
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">

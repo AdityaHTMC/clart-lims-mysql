@@ -20,6 +20,7 @@ export const CategoryProvider = ({ children }) => {
   const [ allstateList , setallStateList] = useState({ loading: true, data: []  })
   const [ alldistrictList , setallDristrictList] = useState({ loading: true, data: []  })
   const [ labDetails , setlabDetails] = useState({ loading: true, data: []  })
+  const [ customerDetails , setCustomerDetails] = useState({ loading: true, data: []  })
   const [ CCDetails , setCCDetails] = useState({ loading: true, data: []  })
   const [ b2bDetails , setb2bDetails] = useState({ loading: true, data: []  })
   const [ unitDetails , setUnitDetails] = useState({ loading: true, data: []  })
@@ -330,6 +331,28 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+  const getCustomerDetails = async (id) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/customer/details/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setCustomerDetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setCustomerDetails({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setCustomerDetails({ data: [], total: "", loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   
   const getphelboDetails = async (id) => {
     try {
@@ -353,7 +376,27 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
-
+  const editCustomer = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/customer/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        navigate('/customers-list');
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
 
   const editPhelbo = async (id,formDataToSend) => {
     try {
@@ -636,14 +679,13 @@ export const CategoryProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("phlebotomist added successfully");
+        toast.success(response?.data?.message);
         navigate("/phlebotomist-list");
       } else {
-        toast.error("Failed to add phlebotomist ");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
-      
-      toast.error("An error occurred while adding the phlebotomist ");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -941,7 +983,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

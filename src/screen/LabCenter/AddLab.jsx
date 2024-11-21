@@ -169,6 +169,7 @@ const AddLab = () => {
                 <Input
                   type="number"
                   name="mobile"
+                  min={0}
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
@@ -185,6 +186,7 @@ const AddLab = () => {
                 <Input
                   type="number"
                   name="pincode"
+                  min={0}
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"

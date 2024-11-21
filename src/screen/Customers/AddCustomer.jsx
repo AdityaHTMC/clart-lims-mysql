@@ -38,6 +38,7 @@ const AddCustomer = () => {
     city: "",
     state: "",
     district: "",
+
   });
 
   const [error, setError] = useState("");
@@ -55,6 +56,14 @@ const AddCustomer = () => {
       [name]: value,
     }));
   };
+
+  const handleFileChange = (e) => {
+    setInputData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0], // Store file object
+    }));
+  };
+
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
@@ -87,6 +96,11 @@ const AddCustomer = () => {
     formDataToSend.append("city", inputData.city);
     formDataToSend.append("district", inputData.district);
     formDataToSend.append("state", inputData.state);
+
+    if (inputData.image) {
+      formDataToSend.append("image", inputData.image); // Append the file as binary
+    }
+
 
     // inputData.pet.forEach((pet, index) => {
     //   formDataToSend.append(`pet[${index}][date_of_birth]`, pet.date_of_birth);
@@ -160,6 +174,7 @@ const AddCustomer = () => {
                 <Input
                   type="number"
                   name="mobile"
+                  min={0}
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
@@ -192,6 +207,7 @@ const AddCustomer = () => {
                 <Input
                   type="number"
                   name="pincode"
+                  min={0}
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
@@ -260,111 +276,23 @@ const AddCustomer = () => {
             </div>
           </div>
 
-          {/* <div className="row">
-        
-            <div className="d-flex justify-content-between align-items-center mt-4 mb-3">
-              <h5 className="mb-0">Pets</h5>
-              <Button color="primary" onClick={handleAddPet} className="mr-3">
-                <FaPlus /> Add Pet
-              </Button>
-            </div>
+          <div className="row">
+         <div className="col-md-6">
+         <FormGroup>
+              <Label htmlFor="banner-image" className="col-form-label">
+                Upload Image :
+              </Label>
+              <Input
+                id="banner-image"
+                type="file"
+                name="image"
+                onChange={handleFileChange}
+              />
+            </FormGroup>
+         </div>
+          </div>
 
-            {inputData.pet.map((pet, index) => (
-              <Card className="mb-3" key={index}>
-                <CardBody>
-                  <div className="row">
-                    <div className="col-md-2">
-                      <FormGroup>
-                        <Label for={`date_of_birth_${index}`}>
-                          Date of Birth
-                        </Label>
-                        <Input
-                          type="date"
-                          id={`date_of_birth_${index}`}
-                          name="date_of_birth"
-                          value={pet.date_of_birth}
-                          onChange={(e) => handlePetChange(e, index)}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-2">
-                      <FormGroup>
-                        <Label for={`sex_${index}`}>Sex</Label>
-                        <Input
-                          type="text"
-                          id={`sex_${index}`}
-                          name="sex"
-                          value={pet.sex}
-                          onChange={(e) => handlePetChange(e, index)}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-2">
-                      <FormGroup>
-                        <Label for={`color_${index}`}>Color</Label>
-                        <Input
-                          type="text"
-                          id={`color_${index}`}
-                          name="color"
-                          value={pet.color}
-                          onChange={(e) => handlePetChange(e, index)}
-                        />
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-2">
-                      <FormGroup>
-                        <Label for={`breed-${index}`}>Breed</Label>
-                        <Input
-                          type="select"
-                          name="breed"
-                          id={`breed-${index}`}
-                          value={pet.breed}
-                          onChange={(e) => handleBreedChange(e, index)}
-                        >
-                          <option value="">Select Breed</option>
-                          {allbreed?.data?.map((breed) => (
-                            <option key={breed._id} value={breed.name}>
-                              {breed.name}
-                            </option>
-                          ))}
-                        </Input>
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-2">
-                      <FormGroup>
-                        <Label for={`species-${index}`}>Species</Label>
-                        <Input
-                          type="select"
-                          name="species"
-                          id={`species-${index}`}
-                          value={pet.species}
-                          onChange={(e) => handleSpeciesChange(e, index)}
-                        >
-                          <option value="">Select Species</option>
-                          {speciesMasterList?.data?.map((breed) => (
-                            <option key={breed._id} value={breed.title}>
-                              {breed.title}
-                            </option>
-                          ))}
-                        </Input>
-                      </FormGroup>
-                    </div>
-                    <div className="col-md-12 text-right">
-                      <ButtonGroup>
-                        <Button
-                          color="danger"
-                          onClick={() => handleRemovePet(index)}
-                          className="ml-2"
-                        >
-                          <FaTrash />
-                        </Button>
-                      </ButtonGroup>
-                    </div>
-                  </div>
-                </CardBody>
-              </Card>
-            ))}
-          </div> */}
+        
 
           <Button type="submit" color="primary">
             Add Customer
