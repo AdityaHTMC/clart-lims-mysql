@@ -26,6 +26,7 @@ export const CategoryProvider = ({ children }) => {
   const [ unitDetails , setUnitDetails] = useState({ loading: true, data: []  })
   const [ tpDetails , setTpDetails] = useState({ loading: true, data: []  })
   const [ phelboDetails , setphelboDetails] = useState({ loading: true, data: []  })
+  const [ taskdetails , setTaskDetails] = useState({ loading: true, data: []  })
   const [ FaqList , setFaqList] = useState({ loading: true, data: [] })
   const [ b2busers, setb2busers] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
@@ -641,6 +642,9 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+
+
+
   const DeletePhlebotomist = async (id) => {
     try {
       // console.log('id: ' + id);
@@ -711,6 +715,9 @@ export const CategoryProvider = ({ children }) => {
       toast.error(error.response?.data?.message || 'Server error');
     }
   };
+
+
+
 
 
   const getFaqList = async (data) => {
@@ -979,11 +986,59 @@ export const CategoryProvider = ({ children }) => {
       toast.error(error.response?.data?.message || "Server error");
     }
   };
+
+
+  const getTaskDetails = async (id) => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/task/details/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTaskDetails({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setTaskDetails({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setTaskDetails({ data: [], total: "", loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
+  const editTask = async (id, formData) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/task/edit/${id}`,
+        formData,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer,getTaskDetails,taskdetails,editTask
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

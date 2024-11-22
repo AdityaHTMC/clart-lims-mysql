@@ -17,20 +17,31 @@
   import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
   
 
   const TestPackageList = () => {
     const navigate = useNavigate();
   
     const { getAllTestPackage , testpackageList,tpDelete } = useMasterContext();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const itemperPage = 8;
   
-  
+    const totalPages =
+    testpackageList?.total && Math.ceil(testpackageList?.total / itemperPage);
+
+
     useEffect(() => {
-        getAllTestPackage();
-    }, []);
+      const dataToSend = {
+        page: currentPage,
+        limit: itemperPage,
+      };
+        getAllTestPackage(dataToSend);
+    }, [currentPage]);
   
-    console.log(testpackageList, "testList");
-  
+ 
     const onOpenModal = () => {
       navigate("/add-test-packages");
     };
@@ -45,7 +56,9 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
       }
     };
   
-
+    const handlepagechange = (newpage) => {
+      setCurrentPage(newpage);
+    };
   
     return (
       <>
@@ -119,6 +132,15 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                           )}
                         </tbody>
                       </Table>
+                      <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                     </div>
                   </div>
                 </CardBody>

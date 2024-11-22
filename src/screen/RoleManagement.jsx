@@ -49,11 +49,10 @@ const RoleManagement = () => {
   const actions = ["view", "create", "update", "delete"];
 
   useEffect(() => {
-    if (rolesList.data.length === 0) {
+    if (rolesList.loading === true) {
       getRolesList();
     }
-    console.log(rolesList,'role')
-  }, [rolesList.data]);
+  }, [rolesList.loading]);
 
   useEffect(() => {
     const fetchDetail = async () => {

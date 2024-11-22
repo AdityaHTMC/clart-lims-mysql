@@ -86,23 +86,35 @@ const OrderDetailspage = () => {
     0
   );
 
-  const handleSubmit = () => {
-    if (selectedDeliveryBoy) {
-      const dataToSend = {
-        phlebotomist_id: selectedDeliveryBoy,
-        id: parseInt(id, 10)
-      };
-      updateOrderStatus(dataToSend);
-    }
-    if (orderStatusUpdates) {
-      const dataToSend = {
-        id: parseInt(id, 10),
-        status: orderStatusUpdates,
-      };
-
-      updateOrderStatus(dataToSend);
+  const handleSubmit = async () => {
+    try {
+      if (selectedDeliveryBoy) {
+        const dataToSend = {
+          phlebotomist_id: selectedDeliveryBoy,
+          id: parseInt(id, 10)
+        };
+  
+        await updateOrderStatus(dataToSend);
+      }
+  
+      if (orderStatusUpdates) {
+        const dataToSend = {
+          id: parseInt(id, 10),
+          status: orderStatusUpdates,
+        };
+  
+        await updateOrderStatus(dataToSend);
+      }
+  
+      // After successful update, fetch order details again
+      getOrderDetails(id);
+  
+    } catch (error) {
+      console.error("Failed to update order status", error);
+      // Handle the error if needed
     }
   };
+  
 
   // console.log(orderDetails, "orderDetails");
 
@@ -259,7 +271,7 @@ const OrderDetailspage = () => {
                 </tbody>
               </Table>
               <div style={{ textAlign: "right", marginTop: "20px" }}>
-                {orderDetails?.data?.discount_price && (
+                {orderDetails?.data?.discount_price > 0 && (
                   <p>Discount: ₹{orderDetails?.data?.discount_price}</p>
                 )}
                 {orderDetails?.data?.professional_fees && (
@@ -362,12 +374,12 @@ const OrderDetailspage = () => {
                   </>
                 )}
 
-                {orderDetails?.data?.phlebotomist_name && (
+               
                   <div className="d-flex align-items-center">
                     Phlebotomist Name:{" "}
                     <span style={{ fontWeight: "bold" }}>
                       {" "}
-                      {orderDetails?.data?.phlebotomist_name}{" "}
+                      {orderDetails?.data?.phlebotomist_name || "NA"}
                     </span>
                     <div className="circelBtnBx mx-2">
                       <Button
@@ -379,7 +391,7 @@ const OrderDetailspage = () => {
                       </Button>
                     </div>
                   </div>
-                )}
+             
               </div>
 
               {isEditingStatus && (
@@ -431,133 +443,7 @@ const OrderDetailspage = () => {
               )}
             </Card>
 
-            {/* <Card
-              style={{
-                padding: "20px",
-                marginBottom: "20px",
-                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.1)",
-                borderRadius: "10px",
-                border: "none",
-              }}
-            >
-              <Nav tabs style={{ marginBottom: "20px" }}>
-                <NavItem>
-                  <NavLink
-                    className={activeTab === "1" ? "active-tab" : ""}
-                    onClick={() => toggleTab("1")}
-                    style={{
-                      cursor: "pointer",
-                      padding: "8px 8px",
-                      marginRight: "10px",
-                      borderRadius: "5px",
-                      backgroundColor:
-                        activeTab === "1" ? "#007bff" : "#f8f9fa",
-                      color: activeTab === "1" ? "#fff" : "#007bff",
-                      fontWeight: activeTab === "1" ? "bold" : "normal",
-                      transition: "background-color 0.3s ease",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Shipping Address
-                  </NavLink>
-                </NavItem>
-                <NavItem>
-                  <NavLink
-                    className={activeTab === "2" ? "active-tab" : ""}
-                    onClick={() => toggleTab("2")}
-                    style={{
-                      cursor: "pointer",
-                      padding: "8px 8px",
-                      borderRadius: "5px",
-                      backgroundColor:
-                        activeTab === "2" ? "#007bff" : "#f8f9fa",
-                      color: activeTab === "2" ? "#fff" : "#007bff",
-                      fontWeight: activeTab === "2" ? "bold" : "normal",
-                      transition: "background-color 0.3s ease",
-                      fontSize: "14px",
-                    }}
-                  >
-                    Billing Address
-                  </NavLink>
-                </NavItem>
-              </Nav>
-
-              <TabContent activeTab={activeTab} style={{ marginTop: "20px" }}>
-         
-                <TabPane tabId="1">
-                  <h5 style={{ fontWeight: "bold", marginBottom: "15px" }}>
-                    Shipping Address
-                  </h5>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Name:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.first_name}{" "}
-                    {orderDetails?.data?.shipping_address?.last_name}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Phone:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.phone_number}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>State:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.state}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>city:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.city}
-                  </p>
-
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Post Code:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.postal_code}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Address Line:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.address_line_1}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Address Line 2:</strong>{" "}
-                    {orderDetails?.data?.shipping_address?.address_line_2}
-                  </p>
-                </TabPane>
-
-
-                <TabPane tabId="2">
-                  <h5 style={{ fontWeight: "bold", marginBottom: "15px" }}>
-                    Billing Address
-                  </h5>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Name:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.first_name}{" "}
-                    {orderDetails?.data?.billing_address?.last_name}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Phone:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.phone_number}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>State:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.state}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>city:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.city}
-                  </p>
-
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Post Code:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.postal_code}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Address Line:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.address_line_1}
-                  </p>
-                  <p style={{ marginBottom: "8px", fontSize: "14px" }}>
-                    <strong>Address Line 2:</strong>{" "}
-                    {orderDetails?.data?.billing_address?.address_line_2}
-                  </p>
-                </TabPane>
-              </TabContent>
-            </Card> */}
+          
 
             <Card
               body

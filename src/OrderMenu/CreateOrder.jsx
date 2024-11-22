@@ -66,8 +66,6 @@ const CreateOrder = () => {
     booking_date: "",
   });
 
-
-  
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -77,7 +75,6 @@ const CreateOrder = () => {
     setSelectedSlot(slot);
   };
 
-
   // console.log(selectedSlot, "selectedSlot");
   // console.log(formData.booking_date, "booking_date");
   // console.log(selectedPhelbo, "phelobmist");
@@ -85,14 +82,16 @@ const CreateOrder = () => {
   useEffect(() => {
     getAllTest();
     getProfessionalFees();
-    getAllTimeList();
     getTestPackageList();
     getAllPhelboList();
     getAllLabs();
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
     }
-  }, [selectedCustomer]);
+    if (formData.booking_date) {
+      getAllTimeList(formData.booking_date);
+    }
+  }, [selectedCustomer, formData.booking_date]);
 
   useEffect(() => {
     if (search && search.length > 2) {
@@ -218,7 +217,7 @@ const CreateOrder = () => {
     bodyData.append("state", selectedCustomer.state);
     bodyData.append("district", selectedCustomer.district);
     bodyData.append("address", selectedCustomer.address);
-    bodyData.append("lab_id",selectedLab );
+    bodyData.append("lab_id", selectedLab);
     bodyData.append("pincode", selectedCustomer.pincode);
     if (selectedPhelbo) {
       bodyData.append("phlebotomist_id", selectedPhelbo.id);
@@ -238,11 +237,10 @@ const CreateOrder = () => {
     if (formData.test_package) {
       bodyData.append("package_id", parseInt(test_package.data[0]._id, 10));
     }
-    
 
     if (formData.images.length > 0) {
       formData.images.forEach((image, index) => {
-        bodyData.append(`prescription[${index}]`, image); 
+        bodyData.append(`prescription[${index}]`, image);
       });
     }
 
@@ -365,7 +363,7 @@ const CreateOrder = () => {
                                           textDecoration: "underline",
                                           fontWeight: 600,
                                           cursor: "pointer",
-                                        }} 
+                                        }}
                                         to="/add-customer"
                                       >
                                         Create New Customer
@@ -379,247 +377,254 @@ const CreateOrder = () => {
                         </div>
                       )}
 
-                      {selectedCustomer && selectedCustomer?.id && (
-                        <div className="mt-4">
-                          <FormGroup>
-                            <Label for="selectPet" className="fw-bold">
-                              Select Pet
-                            </Label>
-                            <Input
-                              type="select"
-                              value={formData.pet}
-                              name="pet"
-                              id="selectPet"
-                              className="form-select"
-                              disabled={isProcessing}
-                              onChange={onChange}
-                            >
-                              <option value="">--Select--</option>
-                              {petList?.data?.map((el, i) => (
-                                <option key={i} value={el.id}>
-                                  {el?.breed} ({el.name})
-                                </option>
-                              ))}
-                            </Input>
-                          </FormGroup>
-                          <FormGroup className="mt-3">
-                            <Label for="prescription" className="fw-bold">
-                              Add Prescription
-                            </Label>
-                            <Input
-                              type="file"
-                              id="prescription"
-                              multiple
-                              disabled={isProcessing}
-                              onChange={handleImageChange}
-                            />
-                          </FormGroup>
-                          <FormGroup className="mt-4 d-flex align-items-center">
-                            <Label className="me-3 fw-bold">
-                              Collection Type
-                            </Label>
-                            <div className="form-check me-4">
-                              <Input
-                                className="form-check-input"
-                                type="radio"
-                                name="type"
-                                value="Home Visit"
-                                onChange={onChange}
-                                disabled={isProcessing}
-                                checked={formData.type === "Home Visit"}
-                              />
-                              <Label className="form-check-label">
-                                Home Collection
-                              </Label>
-                            </div>
-                            <div className="form-check">
-                              <Input
-                                className="form-check-input"
-                                type="radio"
-                                name="type"
-                                value="Lab"
-                                onChange={onChange}
-                                disabled={isProcessing}
-                                checked={formData.type === "Lab"}
-                              />
-                              <Label className="form-check-label">Lab</Label>
-                            </div>
-                          </FormGroup>
-                          {formData.type === "Lab" && (
-                            <FormGroup className="mt-3">
-                              <Label for="labSelect" className="fw-bold">
-                                Select Lab
+                      {selectedCustomer &&
+                        selectedCustomer?.id &&
+                        petList?.data?.length > 0 && (
+                          <div className="mt-4">
+                            <FormGroup>
+                              <Label for="selectPet" className="fw-bold">
+                                Select Pet
                               </Label>
                               <Input
                                 type="select"
-                                id="labSelect"
-                                name="lab"
+                                value={formData.pet}
+                                name="pet"
+                                id="selectPet"
                                 className="form-select"
-                                value={selectedLab || ""}
-                                onChange={(e) =>
-                                  handleLabSelect(e.target.value)
-                                }
+                                disabled={isProcessing}
+                                onChange={onChange}
                               >
-                                <option value="" disabled>
-                                  Select Lab
-                                </option>
-                                {labDropdown.data.map((lab) => (
-                                  <option key={lab.id} value={lab.id}>
-                                    {lab.organization_name}
+                                <option value="">--Select--</option>
+                                {petList?.data?.map((el, i) => (
+                                  <option key={i} value={el.id}>
+                                    {el?.breed} ({el.name})
                                   </option>
                                 ))}
                               </Input>
                             </FormGroup>
-                          )}
-                          <FormGroup className="mt-3">
-                            <Label for="bookingDate" className="fw-bold">
-                              Booking Date
-                            </Label>
-                            <Input
-                              type="date"
-                              id="bookingDate"
-                              name="booking_date"
-                              className="form-control"
-                              disabled={isProcessing}
-                              value={getFormattedDate(formData.booking_date)}
-                              onChange={handleDateChange}
-                            />
-                          </FormGroup>
-                          {formData.booking_date && (
-                            <div className="mt-3">
-                              <h6>Choose Time Slots</h6>
-                              <div className="d-flex flex-wrap gap-2">
-                                {timeList.data.map((slot, index) => (
-                                  <Chip
-                                    key={index}
-                                    label={`${slot.start_time} - ${slot.end_time}`}
-                                    clickable
-                                    color={
-                                      selectedSlot === slot
-                                        ? "primary"
-                                        : "default"
-                                    }
-                                    onClick={() => handleSelect(slot)}
-                                    className="p-2 border rounded"
-                                  />
-                                ))}
+                            <FormGroup className="mt-3">
+                              <Label for="prescription" className="fw-bold">
+                                Add Prescription
+                              </Label>
+                              <Input
+                                type="file"
+                                id="prescription"
+                                multiple
+                                disabled={isProcessing}
+                                onChange={handleImageChange}
+                              />
+                            </FormGroup>
+                            <FormGroup className="mt-4 d-flex align-items-center">
+                              <Label className="me-3 fw-bold">
+                                Collection Type
+                              </Label>
+                              <div className="form-check me-4">
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="type"
+                                  value="Home Visit"
+                                  onChange={onChange}
+                                  disabled={isProcessing}
+                                  checked={formData.type === "Home Visit"}
+                                />
+                                <Label className="form-check-label">
+                                  Home Collection
+                                </Label>
                               </div>
-                            </div>
-                          )}
-                          <FormGroup className="mt-3">
-                            <Label for="selectTest" className="fw-bold">
-                              Select Test
-                            </Label>
-                            <Autocomplete
-                              multiple
-                              options={allTest.data || []}
-                              getOptionLabel={(option) =>
-                                `${option?.test_name} (${option?.sell_price})` ||
-                                ""
-                              }
-                              value={selectedTest}
-                              disabled={isProcessing}
-                              onChange={(event, newValue) =>
-                                onTestSelect(newValue)
-                              }
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  variant="outlined"
-                                  label="Select Test"
-                                  placeholder="Select Test"
+                              <div className="form-check">
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="type"
+                                  value="Lab"
+                                  onChange={onChange}
+                                  disabled={isProcessing}
+                                  checked={formData.type === "Lab"}
                                 />
-                              )}
-                            />
-                          </FormGroup>
-                          <FormGroup className="mt-3">
-                            <Label for="selectPackage" className="fw-bold">
-                              Select Health Package
-                            </Label>
-                            <Input
-                              type="select"
-                              value={formData.test_package}
-                              name="test_package"
-                              className="form-select"
-                              disabled={isProcessing}
-                              onChange={(e) => onPackageSelect(e)}
-                            >
-                              <option value="">--Select--</option>
-                              {test_package?.data?.map((el, i) => (
-                                <option key={i} value={el.id}>
-                                  {el?.package_name} ({el?.sell_price})
-                                </option>
-                              ))}
-                            </Input>
-                          </FormGroup>
-                          <FormGroup className="mt-3">
-                            <Label for="selectFees" className="fw-bold">
-                              Select Professional Fees
-                            </Label>
-                            <Autocomplete
-                              multiple
-                              options={professionalFees?.data || []}
-                              getOptionLabel={(option) =>
-                                `${option?.name} (${option?.expected_charges})` ||
-                                ""
-                              }
-                              value={selectedFees}
-                              disabled={isProcessing}
-                              onChange={(event, newValue) =>
-                                onFeesSelect(newValue)
-                              }
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  variant="outlined"
-                                  label="Select Professional Fees"
-                                  placeholder="Select Professional Fees"
-                                />
-                              )}
-                            />
-                          </FormGroup>
-                          <FormGroup className="mt-3">
-                            <Autocomplete
-                              options={allphelboList.data}
-                              getOptionLabel={(option) => option.name}
-                              value={selectedPhelbo} 
-                              onChange={(event, newValue) =>
-                                setSelectedPhelbo(newValue)
-                              }
-                              isOptionEqualToValue={(option, value) =>
-                                option.id === value.id
-                              } 
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  label="Select Phlebotomist"
-                                  variant="outlined"
-                                  fullWidth
-                                />
-                              )}
-                            />
-                          </FormGroup>
-                          
-                          {totalAmount > 0 && (
-                            <>
-                              <FormGroup className="mt-4">
-                                <Label className="fw-bold">Payment Mode</Label>
-                                <div className="d-flex gap-4">
-                                  <div className="form-check">
-                                    <Input
-                                      className="form-check-input"
-                                      type="radio"
-                                      name="payment_mode"
-                                      value="Cash"
-                                      onChange={onChange}
-                                      disabled={isProcessing}
-                                      checked={formData.payment_mode === "Cash"}
+                                <Label className="form-check-label">Lab</Label>
+                              </div>
+                            </FormGroup>
+                            {formData.type === "Lab" && (
+                              <FormGroup className="mt-3">
+                                <Label for="labSelect" className="fw-bold">
+                                  Select Lab
+                                </Label>
+                                <Input
+                                  type="select"
+                                  id="labSelect"
+                                  name="lab"
+                                  className="form-select"
+                                  value={selectedLab || ""}
+                                  onChange={(e) =>
+                                    handleLabSelect(e.target.value)
+                                  }
+                                >
+                                  <option value="" disabled>
+                                    Select Lab
+                                  </option>
+                                  {labDropdown.data.map((lab) => (
+                                    <option key={lab.id} value={lab.id}>
+                                      {lab.organization_name}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </FormGroup>
+                            )}
+                            <FormGroup className="mt-3">
+                              <Label for="bookingDate" className="fw-bold">
+                                Booking Date
+                              </Label>
+                              <Input
+                                type="date"
+                                id="bookingDate"
+                                name="booking_date"
+                                className="form-control"
+                                disabled={isProcessing}
+                                value={getFormattedDate(formData.booking_date)}
+                                onChange={handleDateChange}
+                              />
+                            </FormGroup>
+                            {formData.booking_date && (
+                              <div className="mt-3">
+                                <h6>Choose Time Slots</h6>
+                                <div className="d-flex flex-wrap gap-2">
+                                  {timeList.data.map((slot, index) => (
+                                    <Chip
+                                      key={index}
+                                      label={`${slot.start_time} - ${slot.end_time}`}
+                                      clickable
+                                      color={
+                                        selectedSlot === slot
+                                          ? "primary"
+                                          : "default"
+                                      }
+                                      onClick={() => handleSelect(slot)}
+                                      className="p-2 border rounded"
                                     />
-                                    <Label className="form-check-label">
-                                      CASH
-                                    </Label>
-                                  </div>
-                                  {/* <div className="form-check">
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                            <FormGroup className="mt-3">
+                              <Label for="selectTest" className="fw-bold">
+                                Select Test
+                              </Label>
+                              <Autocomplete
+                                multiple
+                                options={allTest.data || []}
+                                getOptionLabel={(option) =>
+                                  `${option?.test_name} (${option?.sell_price})` ||
+                                  ""
+                                }
+                                value={selectedTest}
+                                disabled={isProcessing}
+                                onChange={(event, newValue) =>
+                                  onTestSelect(newValue)
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Select Test"
+                                    placeholder="Select Test"
+                                  />
+                                )}
+                              />
+                            </FormGroup>
+                            <FormGroup className="mt-3">
+                              <Label for="selectPackage" className="fw-bold">
+                                Select Health Package
+                              </Label>
+                              <Input
+                                type="select"
+                                value={formData.test_package}
+                                name="test_package"
+                                className="form-select"
+                                disabled={isProcessing}
+                                onChange={(e) => onPackageSelect(e)}
+                              >
+                                <option value="">--Select--</option>
+                                {test_package?.data?.map((el, i) => (
+                                  <option key={i} value={el.id}>
+                                    {el?.package_name} ({el?.sell_price})
+                                  </option>
+                                ))}
+                              </Input>
+                            </FormGroup>
+                            <FormGroup className="mt-3">
+                              <Label for="selectFees" className="fw-bold">
+                                Select Professional Fees
+                              </Label>
+                              <Autocomplete
+                                multiple
+                                options={professionalFees?.data || []}
+                                getOptionLabel={(option) =>
+                                  `${option?.name} (${option?.expected_charges})` ||
+                                  ""
+                                }
+                                value={selectedFees}
+                                disabled={isProcessing}
+                                onChange={(event, newValue) =>
+                                  onFeesSelect(newValue)
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Select Professional Fees"
+                                    placeholder="Select Professional Fees"
+                                  />
+                                )}
+                              />
+                            </FormGroup>
+                            <FormGroup className="mt-3">
+                              <Autocomplete
+                                options={allphelboList.data}
+                                getOptionLabel={(option) => option.name || ""}
+                                value={selectedPhelbo || null} // Ensure value is null if not selected
+                                onChange={(event, newValue) =>
+                                  setSelectedPhelbo(newValue)
+                                }
+                                isOptionEqualToValue={
+                                  (option, value) => option.id === value?.id // Safely handle null/undefined value
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    label="Select Phlebotomist"
+                                    placeholder="Select Phlebotomist" // Add placeholder
+                                    variant="outlined"
+                                    fullWidth
+                                  />
+                                )}
+                              />
+                            </FormGroup>
+
+                            {totalAmount > 0 && (
+                              <>
+                                <FormGroup className="mt-4">
+                                  <Label className="fw-bold">
+                                    Payment Mode
+                                  </Label>
+                                  <div className="d-flex gap-4">
+                                    <div className="form-check">
+                                      <Input
+                                        className="form-check-input"
+                                        type="radio"
+                                        name="payment_mode"
+                                        value="Cash"
+                                        onChange={onChange}
+                                        disabled={isProcessing}
+                                        checked={
+                                          formData.payment_mode === "Cash"
+                                        }
+                                      />
+                                      <Label className="form-check-label">
+                                        CASH
+                                      </Label>
+                                    </div>
+                                    {/* <div className="form-check">
                                     <Input
                                       className="form-check-input"
                                       type="radio"
@@ -649,43 +654,57 @@ const CreateOrder = () => {
                                       Pay Online
                                     </Label>
                                   </div> */}
-                                </div>
-                              </FormGroup>
-                            </>
-                          )}
-                          <hr className="mt-4" />
-                          <div className="d-flex justify-content-between align-items-center mt-3">
-                            <div>
-                              {collectionFees > 0 && (
-                                <>
-                                  <p className="mb-0">
-                                    Collection Fees : ₹ {collectionFees}
-                                  </p>
-                                  <p className="fw-bold fs-5">
-                                    Total Amount : ₹ {totalAmount}
-                                  </p>
-                                </>
-                              )}
+                                  </div>
+                                </FormGroup>
+                              </>
+                            )}
+                            <hr className="mt-4" />
+                            <div className="d-flex justify-content-between align-items-center mt-3">
+                              <div>
+                                {collectionFees > 0 && (
+                                  <>
+                                    <p className="mb-0">
+                                      Collection Fees : ₹ {collectionFees}
+                                    </p>
+                                    <p className="fw-bold fs-5">
+                                      Total Amount : ₹ {totalAmount}
+                                    </p>
+                                  </>
+                                )}
+                              </div>
+                              <Button
+                                color="primary"
+                                disabled={
+                                  totalAmount === 0 ||
+                                  !formData.payment_mode ||
+                                  !formData.pet ||
+                                  isProcessing
+                                }
+                                onClick={createOrder}
+                              >
+                                {isProcessing ? (
+                                  <Spinner size="sm" />
+                                ) : (
+                                  "Create Order"
+                                )}
+                              </Button>
                             </div>
-                            <Button
-                              color="primary"
-                              disabled={
-                                totalAmount === 0 ||
-                                !formData.payment_mode ||
-                                !formData.pet ||
-                                isProcessing
-                              }
-                              onClick={createOrder}
-                            >
-                              {isProcessing ? (
-                                <Spinner size="sm" />
-                              ) : (
-                                "Create Order"
-                              )}
-                            </Button>
                           </div>
-                        </div>
-                      )}
+                        )}
+
+                      {selectedCustomer &&
+                        selectedCustomer?.id &&
+                        petList?.data?.length === 0 && (
+                          <div className="text-center text-muted">
+                            No Pets found. Please add a pet first.
+                            <Link
+                              to="/customers-list"
+                              style={{ marginLeft: "8px" }}
+                            >
+                              Add Pet
+                            </Link>
+                          </div>
+                        )}
                     </div>
                   </div>
                 </div>

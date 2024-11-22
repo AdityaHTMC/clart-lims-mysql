@@ -118,6 +118,7 @@ import TransporterList from "./screen/Transpoter/TransporterList";
 import EditTestParameter from "./Master/TestParameter/EditTestParameter";
 import EditTestList from "./Master/TestMaster/EditTestList";
 import EditCustomer from "./screen/Customers/EditCustomer";
+import EditTask from "./screen/TaskManagement/EditTask";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -223,6 +224,7 @@ function App() {
 
           <Route path="/task-management" element={<TaskList />} />
           <Route path="/add-task" element={<AddTask />} />
+          <Route path="/edit-task/:id" element={<EditTask />} />
           <Route path="/test-categories" element={<TestCategory />} />
           <Route path="/add-test" element={<AddTestList />} />
           <Route path="/all-orders" element={<OrderList status="" />} />

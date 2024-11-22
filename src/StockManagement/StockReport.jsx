@@ -33,7 +33,7 @@ import { useStockContext } from "../helper/StockManagement";
 import { IoCloseSharp } from "react-icons/io5";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useCategoryContext } from "../helper/CategoryProvider";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Pagination, Stack, TextField } from "@mui/material";
 const StockReport = () => {
   const navigate = useNavigate();
   const {
@@ -56,12 +56,26 @@ const StockReport = () => {
     phlebotomistList,
   } = useCategoryContext();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 10;
+
+  const totalPages =
+  srList?.total && Math.ceil(srList?.total / itemperPage);
+
   useEffect(() => {
     getPurchaseList();
     getAllItemList();
     getallvendorlist();
-    getStockReportList()
   }, []);
+
+  useEffect(()=>{
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getStockReportList(dataToSend)
+  },[currentPage])
 
   const [selectedOption, setSelectedOption] = useState(""); // For storing which radio is selected
   const [dropdownData, setDropdownData] = useState([]); // For storing dropdown data
@@ -281,6 +295,10 @@ const StockReport = () => {
     onCloseModal();
   };
 
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
+
   return (
     <>
       <CommonBreadcrumb title="Stock Report" />
@@ -347,6 +365,15 @@ const StockReport = () => {
                       )}
                     </tbody>
                   </Table>
+                  <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                 </div>
               </CardBody>
             </Card>

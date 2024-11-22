@@ -24,6 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { Pagination, Stack } from "@mui/material";
 
 // Register the necessary Chart.js components
 
@@ -32,6 +33,13 @@ const BreadList = () => {
 
   const { breedLists, getBreedList, getAllSpeciesList, allspecies,editBreed,deleteBreed } =
     useMasterContext();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const itemperPage = 8;
+
+    const totalPages =
+    breedLists?.total && Math.ceil(breedLists?.total / itemperPage);
 
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -44,9 +52,13 @@ const BreadList = () => {
   });
 
   useEffect(() => {
-    getBreedList();
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getBreedList(dataToSend);
     getAllSpeciesList();
-  }, []);
+  }, [currentPage]);
 
   const onOpenModal = () => {
     navigate("/add-breed");
@@ -81,6 +93,10 @@ const BreadList = () => {
   const onCloseModal2 = () => {
     setModalOpen(false);
     setSelectedvarity({ name: "" });
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -153,6 +169,15 @@ const BreadList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

@@ -66,13 +66,12 @@ export const AuthProvider = ({ children }) => {
             }else {
                 navigate('/login', {replace: true})
                 setAuthtoken(null)
-                toast.error(response?.data?.message)
+                toast.error('Token expired please Login again')
             }
-        // eslint-disable-next-line no-unused-vars
         } catch (error) {
             navigate('/login', {replace: true})
             setAuthtoken(null)
-            toast.error('Server error');
+            toast.error('Token expired please Login again');
         } finally {
             setInitialLoading(false)
         }
@@ -156,6 +155,7 @@ export const AuthProvider = ({ children }) => {
 
     const getRolesList = async (body) => {
         try {
+            setRolesList({...rolesList, loading: true})
             const {data} = await axios.post(`${base_url}/role/list`, body || {}, {
                 headers: {
                     'Authorization': Authtoken
@@ -269,6 +269,9 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem('Authtoken')
         if(!token && location.pathname !== '/login'){
             navigate('/login')
+        }
+        if( location.pathname == '/'){
+            navigate('/dashboard')
         }
     }, [location.pathname])
 

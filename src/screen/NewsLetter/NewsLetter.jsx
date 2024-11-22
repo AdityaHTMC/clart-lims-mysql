@@ -17,15 +17,27 @@ import { FaEdit, FaTrashAlt } from "react-icons/fa";
 
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCommonContext } from "../../helper/CommonProvider";
+import { Pagination, Stack } from "@mui/material";
 
 const NewsLetter = () => {
   const navigate = useNavigate();
 
   const { getNewLetterList, newsletterlist } = useCommonContext();
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages =
+  newsletterlist?.total && Math.ceil(newsletterlist?.total / itemperPage);
+
   useEffect(() => {
-    getNewLetterList();
-  }, []);
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getNewLetterList(dataToSend);
+  }, [currentPage]);
 
   console.log(newsletterlist, "newsletterlist");
 
@@ -41,6 +53,10 @@ const NewsLetter = () => {
       // delete product logic here
       // ProductDelete(id);
     }
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -119,6 +135,15 @@ const NewsLetter = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

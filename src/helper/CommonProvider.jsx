@@ -688,7 +688,7 @@ const updateOrderStatus = async (dataToSend) => {
     );
     if (response.status === 200) {
       toast.success("Order status updated successfully");
-      getOrderDetails(id);
+      // getOrderDetails(id);
     } else {
       toast.error(response?.data?.message);
     }
@@ -715,9 +715,9 @@ const getallPhelboList = async () => {
 
 
 
-const getNewLetterList = async () => {
+const getNewLetterList = async (dataToSend) => {
   try {
-    const response = await axios.post(`${base_url}/admin/newsletter/list`,{},
+    const response = await axios.post(`${base_url}/admin/newsletter/list`,{...dataToSend},
     { headers: { 'Authorization': Authtoken }});
     if (response.status === 200) {
       setnewsletters({ data: response?.data?.data || [], total: response.data.total,  loading: false })

@@ -62,6 +62,9 @@ const PurchaseList = () => {
 
   const [formData, setFormData] = useState({
     vendor_id: "",
+    order_id: "",
+    invoice_number: "",
+    invoice_date: "",
     stock: [
       {
         item_id: "",
@@ -121,11 +124,22 @@ const PurchaseList = () => {
     onCloseModal2();
   };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      // deletevendor(id);
-    }
+  const handleDateChange = (e) => {
+    const selectedDate = new Date(e.target.value); // Create a Date object from the selected date
+    const formattedDate = selectedDate.toISOString(); // Convert to ISO string format
+
+    setFormData((prevData) => ({
+      ...prevData,
+      booking_date: formattedDate, // Update booking_date in formData
+    }));
+  };
+
+  const getFormattedDate = (date) => {
+    if (!date) return ""; // If no date, return an empty string
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate.getTime())
+      ? ""
+      : parsedDate.toISOString().split("T")[0]; // Only return the date part
   };
 
   // Handle input changes
@@ -191,13 +205,13 @@ const PurchaseList = () => {
     // Append each stock item to FormData
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
-      formDataToSend.append(`stock[${index}][quantity]`, Number(item.quantity)); 
+      formDataToSend.append(`stock[${index}][quantity]`, Number(item.quantity));
       formDataToSend.append(`stock[${index}][amount]`, Number(item.amount));
     });
 
     addPurchase(formDataToSend);
     console.log("Quantity Type:", typeof Number(formData.stock[0].quantity)); // should be 'number'
-console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should be 'number'
+    console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should be 'number'
 
     onCloseModal();
   };
@@ -316,9 +330,56 @@ console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should 
                   }
                 />
               </FormGroup>
+
+              <FormGroup className="col-md-6">
+                <Label htmlFor="order_id" className="col-form-label">
+                  Order ID :
+                </Label>
+                <Input
+                  type="number"
+                  name="GSTIN"
+                  value={formData.GSTIN}
+                  onChange={handleInputChange}
+                  id="GSTIN"
+                />
+              </FormGroup>
             </div>
+
+            <div className="row">
+              <FormGroup className="col-md-6">
+                <Label htmlFor="PAN" className="col-form-label">
+                  Invoice Number :
+                </Label>
+                <Input
+                  type="number"
+                  name="PAN"
+                  value={formData.PAN}
+                  onChange={handleInputChange}
+                  id="PAN"
+                />
+              </FormGroup>
+
+              <FormGroup className="col-md-6">
+                <Label for="bookingDate" className="fw-bold">
+                 Invoice Date
+                </Label>
+                <Input
+                  type="date"
+                  id="bookingDate"
+                  name="booking_date"
+                  className="form-control"
+                  value={getFormattedDate(formData.booking_date)}
+                  onChange={handleDateChange}
+                />
+              </FormGroup>
+            </div>
+
             {formData.stock.map((item, index) => (
-              <div className="row align-items-center mb-3 p-3 border rounded" key={index} style={{ backgroundColor: "#f8f9fa" }}>
+              <div
+                className="row align-items-center mb-3 p-3 border rounded"
+                key={index}
+                style={{ backgroundColor: "#f8f9fa" }}
+              >
                 <FormGroup className="col-md-3">
                   <Label htmlFor={`item_id_${index}`}>Item</Label>
                   <Autocomplete

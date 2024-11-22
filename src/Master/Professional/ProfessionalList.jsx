@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, Pagination, Stack, TextField } from "@mui/material";
 
 const ProfessionalList = () => {
   const navigate = useNavigate();
@@ -41,7 +41,14 @@ const ProfessionalList = () => {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
-  console.log(allItemList, "allItemList");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages =
+  professionalList?.total && Math.ceil(professionalList?.total / itemperPage);
+
+
 
   const [formData, setFormData] = useState({
     name: "",
@@ -56,9 +63,13 @@ const ProfessionalList = () => {
   });
 
   useEffect(() => {
-    getProfessionalList();
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getProfessionalList(dataToSend);
     getAllItemList();
-  }, []);
+  }, [currentPage]);
 
   const handleEdit = (id) => {
     // navigate(`/product-edit/${id}`);
@@ -119,6 +130,11 @@ const ProfessionalList = () => {
     // Send formData to the backend
     addProfessional(formData);
     onCloseModal(); // Close modal after saving
+  };
+
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -189,6 +205,15 @@ const ProfessionalList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

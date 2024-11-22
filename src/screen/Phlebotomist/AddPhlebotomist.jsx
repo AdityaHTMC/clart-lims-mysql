@@ -56,7 +56,7 @@ const AddPhlebotomist = () => {
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
   const [error, setError] = useState("");
-
+  const [aadhaarError, setAadhaarError] = React.useState("");
   const handleAddPincode = () => {
     if (pincode) {
       setPincodes([...pincodes, pincode]);
@@ -71,21 +71,31 @@ const AddPhlebotomist = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+  
     if (name === "mobile" && value.length > 10) {
       setError("Mobile number cannot exceed 10 digits"); // Set error message
       return;
     } else {
       setError(""); // Clear error message if valid
     }
+  
+    if (name === "aadhaar_id") {
+      if (value.length > 12) {
+        setAadhaarError("Aadhaar ID must be exactly 12 digits");
+        return;
+      } else if (value.length < 12 && value.length > 0) {
+        setAadhaarError("Aadhaar ID must be exactly 12 digits");
+      } else {
+        setAadhaarError(""); // Clear error message if valid
+      }
+    }
+  
     setInputData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
-    // If state is selected, fetch districts for the selected state
-    // if (name === 'stateId') {
-    //   getAlldistrictList(value); // Call the API with the selected state's _id
-    // }
   };
+  
 
   const handleFileChange = (e) => {
     setInputData((prevData) => ({
@@ -436,7 +446,9 @@ const AddPhlebotomist = () => {
                   value={inputData.aadhaar_id}
                   onChange={handleInputChange}
                   id="address"
+                  required
                 />
+                {aadhaarError && <p style={{ color: "red", fontSize: "0.9rem" }}>{aadhaarError}</p>}
               </FormGroup>
             </div>
           </div>

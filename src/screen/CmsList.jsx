@@ -34,6 +34,7 @@ import { Spinner } from "reactstrap";
 import { useCmsContext } from "../helper/CmsProvider";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import { Pagination, Stack } from "@mui/material";
 const CmsList = () => {
   const navigate = useNavigate();
 
@@ -47,6 +48,13 @@ const CmsList = () => {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages =
+  cmsList?.total && Math.ceil(cmsList?.total / itemperPage);
+
   const [selectedvarity, setSelectedvarity] = useState({
     title: "",
     description: "",
@@ -55,8 +63,12 @@ const CmsList = () => {
   });
 
   useEffect(() => {
-    getCmsList();
-  }, []);
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getCmsList(dataToSend);
+  }, [currentPage]);
 
   const onOpenModal = () => {
     setOpen(true);
@@ -125,6 +137,10 @@ const CmsList = () => {
     // Send formData to the backend
     addCms(formData);
     onCloseModal(); // Close modal after saving
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -213,6 +229,15 @@ const CmsList = () => {
                       )}
                     </tbody>
                   </Table>
+                  <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                 </div>
               </CardBody>
             </Card>

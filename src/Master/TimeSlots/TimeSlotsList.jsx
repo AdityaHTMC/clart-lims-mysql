@@ -27,15 +27,26 @@ import { FaEdit } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 
 import { Spinner } from "reactstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
+
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import dayjs from "dayjs";
 
 const TimeSlotsList = () => {
   const navigate = useNavigate();
 
-  const { getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList } = useMasterContext();
+  const {
+    getTimeList,
+    timeListdata,
+    addTimeMaster,
+    editTimeMaster,
+    timeDelete,
+  } = useMasterContext();
 
   const [formData, setFormData] = useState({
     start_time: "",
@@ -46,6 +57,13 @@ const TimeSlotsList = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [errors, setErrors] = useState({});
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages =
+    timeListdata?.total && Math.ceil(timeListdata?.total / itemperPage);
+
   const [selectedvarity, setSelectedvarity] = useState({
     start_time: "",
     end_time: "",
@@ -53,8 +71,12 @@ const TimeSlotsList = () => {
   });
 
   useEffect(() => {
-    getAllTimeList();
-  }, []);
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getTimeList(dataToSend);
+  }, [currentPage]);
 
   const onOpenModal = () => {
     setOpen(true);
@@ -107,19 +129,37 @@ const TimeSlotsList = () => {
     setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
+  const handleTimeChange = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value ? value.format("hh:mm A") : "", // Format time as hh:mm AM/PM
+    }));
+  };
+
+  const handleEditTimeChange = (field, value) => {
+    setSelectedvarity((prev) => ({
+      ...prev,
+      [field]: value ? value.format("hh:mm A") : "",
+    }));
+  };
+
   // Handle form submission
   const handleSubmit = () => {
-    // Send formData to the backend
-     const newErrors = {};
+    const newErrors = {};
     if (!formData.start_time) newErrors.start_time = "Start Time is required.";
     if (!formData.end_time) newErrors.end_time = "End Time is required.";
-   
+
     if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors); // Set errors to display
-      return; // Stop form submission
+      setErrors(newErrors);
+      return;
     }
-    addTimeMaster(formData);
-    onCloseModal(); // Close modal after saving
+
+    addTimeMaster(formData); // Pass formData to the API
+    onCloseModal(); // Close modal after submission
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -146,22 +186,24 @@ const TimeSlotsList = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {timeList?.loading ? (
+                      {timeListdata?.loading ? (
                         <tr>
                           <td colSpan="4" className="text-center">
                             <Spinner color="secondary" className="my-4" />
                           </td>
                         </tr>
-                      ) : timeList?.data?.length === 0 ? (
+                      ) : timeListdata?.data?.length === 0 ? (
                         <tr>
                           <td colSpan="4" className="text-center">
                             No Data Found
                           </td>
                         </tr>
                       ) : (
-                        timeList?.data?.map((product, index) => (
+                        timeListdata?.data?.map((product, index) => (
                           <tr key={index}>
-                            <td>{product.start_time} - {product.end_time} </td>
+                            <td>
+                              {product.start_time} - {product.end_time}{" "}
+                            </td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
@@ -185,6 +227,15 @@ const TimeSlotsList = () => {
                       )}
                     </tbody>
                   </Table>
+                  <Stack className="rightPagination mt10" spacing={2}>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                 </div>
               </CardBody>
             </Card>
@@ -192,11 +243,7 @@ const TimeSlotsList = () => {
         </Row>
       </Container>
 
-      <Modal
-        isOpen={open}
-        toggle={onCloseModal}
-        className="modal-xg" 
-      >
+      <Modal isOpen={open} toggle={onCloseModal} className="modal-lg">
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             Add Time Slots
@@ -206,7 +253,7 @@ const TimeSlotsList = () => {
           {" "}
           {/* Scroll in Y-axis */}
           <Form>
-            <FormGroup>
+            {/* <FormGroup>
               <Label htmlFor="start_time" className="col-form-label">
                 Start Time :
               </Label>
@@ -233,7 +280,52 @@ const TimeSlotsList = () => {
                 required
               />
               {errors.end_time && <span className="text-danger">{errors.end_time}</span>}
-            </FormGroup>
+            </FormGroup> */}
+
+            <div className="row">
+              <div className="col-md-6">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Start Time"
+                    value={
+                      formData.start_time
+                        ? dayjs(formData.start_time, "hh:mm A")
+                        : null
+                    }
+                    onChange={(value) => handleTimeChange("start_time", value)}
+                    renderInput={(params) => (
+                      <div>
+                        <input {...params.inputProps} />
+                        {errors.start_time && (
+                          <span className="error">{errors.start_time}</span>
+                        )}
+                      </div>
+                    )}
+                  />
+                </LocalizationProvider>
+              </div>
+              <div className="col-md-6">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="End Time"
+                    value={
+                      formData.end_time
+                        ? dayjs(formData.end_time, "hh:mm A")
+                        : null
+                    }
+                    onChange={(value) => handleTimeChange("end_time", value)}
+                    renderInput={(params) => (
+                      <div>
+                        <input {...params.inputProps} />
+                        {errors.end_time && (
+                          <span className="error">{errors.end_time}</span>
+                        )}
+                      </div>
+                    )}
+                  />
+                </LocalizationProvider>
+              </div>
+            </div>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -246,12 +338,7 @@ const TimeSlotsList = () => {
         </ModalFooter>
       </Modal>
 
-      <Modal
-        isOpen={modalOpen}
-        toggle={onCloseModal2}
-        className="modal-xg"
-        style={{ maxWidth: "800px" }}
-      >
+      <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-xg">
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             Edit Time Slots
@@ -259,7 +346,7 @@ const TimeSlotsList = () => {
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
           <Form>
-            <FormGroup>
+            {/* <FormGroup>
               <Label htmlFor="start_time" className="col-form-label">
                 Start Time :
               </Label>
@@ -282,7 +369,54 @@ const TimeSlotsList = () => {
                 onChange={handleInputChanges}
                 id="end_time"
               />
-            </FormGroup>
+            </FormGroup> */}
+
+            <div className="row">
+              <div className="col-md-6">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="Start Time"
+                    value={
+                      selectedvarity.start_time
+                        ? dayjs(selectedvarity.start_time, "hh:mm A")
+                        : null
+                    }
+                    onChange={(value) => handleEditTimeChange("start_time", value)}
+                    renderInput={(params) => (
+                      <div>
+                        <input {...params.inputProps} />
+                        {errors.start_time && (
+                          <span className="text-danger">
+                            {errors.start_time}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  />
+                </LocalizationProvider>
+              </div>
+              <div className="col-md-6">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    label="End Time"
+                    value={
+                      selectedvarity.end_time
+                        ? dayjs(selectedvarity.end_time, "hh:mm A")
+                        : null
+                    }
+                    onChange={(value) => handleEditTimeChange("end_time", value)}
+                    renderInput={(params) => (
+                      <div>
+                        <input {...params.inputProps} />
+                        {errors.end_time && (
+                          <span className="text-danger">{errors.end_time}</span>
+                        )}
+                      </div>
+                    )}
+                  />
+                </LocalizationProvider>
+              </div>
+            </div>
           </Form>
         </ModalBody>
         <ModalFooter>

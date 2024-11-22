@@ -33,7 +33,8 @@ export const MasterProvider = ({ children }) => {
   const [allStateList, setallStateList] = useState({loading: true,data: []});
   const [allItemList, setallItemList] = useState({loading: true,data: []});
   const [tpdetails, setTpdetails] = useState({loading: true,data: []});
-  const [timeList, settimeList] = useState({loading: true,data: [],total: ""});
+  const [timeList, settimeList] = useState({loading: true,data: []});
+  const [timeListdata, setTimeListdata] = useState({loading: true,data: [],total: ""});
   const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
   const [designationMasterList, setdesignationMasterList] = useState({loading: true,data: [],total: ""});
   const [emailSettingsList, setEmailSettingsList] = useState({loading: true,data: [],total: ""});
@@ -116,11 +117,11 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const getBreedList = async (data) => {
+  const getBreedList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/breed/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -132,11 +133,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setbreedLists({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch product list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setbreedLists({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch product list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -461,11 +462,11 @@ export const MasterProvider = ({ children }) => {
 
  
 
-  const getProfessionalList = async (data) => {
+  const getProfessionalList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/professional-fee/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -477,11 +478,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setprofessionalList({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test category list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setprofessionalList({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test category list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -602,26 +603,27 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const getAllTestPackage = async (data) => {
+  const getAllTestPackage = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/test-package/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         settestpackageList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
         settestpackageList({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       settestpackageList({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -695,26 +697,27 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const getTaskList = async (data) => {
+  const getTaskList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/task/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         setTaskList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
         setTaskList({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test list");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setTaskList({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -836,25 +839,26 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const getunitMasterList = async (testId) => {
+  const getunitMasterList = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/test/parameter/units/list`,{},
+        `${base_url}/test/parameter/units/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         setUnitMasterList({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
-        setUnitMasterList({ data: [], loading: false });
-        toast.error("Failed to fetch unit list");
+        setUnitMasterList({ data: [], total:'', loading: false });
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       setUnitMasterList({ data: [], loading: false });
-      toast.error("Failed to fetch unit list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -1189,17 +1193,18 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const getAllTimeList = async () => {
+  const getAllTimeList = async (booking_date ) => {
     try {
-      const response = await axios.get(
-        `${base_url}/admin/time-slot/getAll`,
+      const response = await axios.post(
+        `${base_url}/admin/time-slot/getAll`,{
+          booking_date :booking_date 
+        },
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         settimeList({
           data: response?.data?.data || [],
-          total: response.data.total,
           loading: false,
         });
       } else {
@@ -1211,6 +1216,30 @@ export const MasterProvider = ({ children }) => {
       toast.error(error.response?.data?.message || 'Server error');
     }
   };
+
+  const getTimeList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/time-slots/list`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTimeListdata({
+          data: response?.data?.data || [],
+          total: response.data.total,
+          loading: false,
+        });
+      } else {
+        setTimeListdata({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setTimeListdata({ data: [], loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
 
 
   const addTimeMaster = async (formDataToSend) => {
@@ -1227,7 +1256,7 @@ export const MasterProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success(response?.data?.message);
-        getAllTimeList()
+        getTimeList()
       } else {
         toast.error(response?.data?.message)
       }
@@ -1252,7 +1281,7 @@ export const MasterProvider = ({ children }) => {
       );
       if (response.status === 200) {
         toast.success(response?.data?.message);
-        getAllTimeList()
+        getTimeList()
       } else {
         toast.error(response?.data?.message)
       }
@@ -1272,7 +1301,7 @@ export const MasterProvider = ({ children }) => {
       
       if (response.status === 200) {
         toast.success(response?.data?.message);
-        getAllTimeList(); 
+        getTimeList(); 
       } else {
         toast.error(response?.data?.message)
       }
@@ -1733,7 +1762,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

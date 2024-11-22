@@ -31,11 +31,11 @@ export const CMsProvider = ({ children }) => {
         }
     }
 
-    const getCmsList = async (data) => {
+    const getCmsList = async (dataToSend) => {
         try {
           const response = await axios.post(
             `${base_url}/cms/list`,
-            {},
+            {...dataToSend},
             { headers: { 'Authorization': Authtoken } }
           );
           const data = response.data;

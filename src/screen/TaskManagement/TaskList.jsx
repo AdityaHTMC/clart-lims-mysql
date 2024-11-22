@@ -16,23 +16,36 @@ import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
 const TaskList = () => {
   const navigate = useNavigate();
 
   const { getTaskList, taskList } = useMasterContext();
 
-  useEffect(() => {
-    getTaskList();
-  }, []);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
 
-  console.log(taskList, "testList");
+
+  const totalPages =
+  taskList?.total && Math.ceil(taskList?.total / itemperPage);
+
+  useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getTaskList(dataToSend);
+  }, [currentPage]);
+
+
 
   const onOpenModal = () => {
     navigate("/add-task");
   };
   const handleEdit = (id) => {
-    // navigate(`/product-edit/${id}`);
+    navigate(`/edit-task/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -40,6 +53,10 @@ const TaskList = () => {
       // delete product logic here
       // ProductDelete(id);
     }
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
   };
 
   return (
@@ -100,14 +117,14 @@ const TaskList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleEdit(product?._id)}
+                                    onClick={() => handleEdit(product?.id)}
                                   >
                                     <FaEdit />
                                   </Button>
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -118,6 +135,15 @@ const TaskList = () => {
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

@@ -18,15 +18,27 @@ import {
   
   import CommonBreadcrumb from "../../component/common/bread-crumb";
   import { useCommonContext } from "../../helper/CommonProvider";
+import { Pagination, Stack } from "@mui/material";
   
   const EnquiryList = () => {
     const navigate = useNavigate();
   
     const { getEnquiryList,enquirylist } = useCommonContext();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const itemperPage = 8;
+
+    const totalPages =
+    enquirylist?.total && Math.ceil(enquirylist?.total / itemperPage);
   
     useEffect(() => {
-        getEnquiryList();
-    }, []);
+      const dataToSend = {
+        page: currentPage,
+        limit: itemperPage,
+      };
+        getEnquiryList(dataToSend);
+    }, [currentPage]);
   
     console.log(enquirylist, "enquirylist");
   
@@ -43,6 +55,12 @@ import {
         // ProductDelete(id);
       }
     };
+
+
+    const handlepagechange = (newpage) => {
+      setCurrentPage(newpage);
+    };
+  
   
     return (
       <>
@@ -141,6 +159,15 @@ import {
                           )}
                         </tbody>
                       </Table>
+                      <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                     </div>
                   </div>
                 </CardBody>

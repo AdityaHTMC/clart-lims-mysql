@@ -270,11 +270,11 @@ export const StockProvider = ({ children }) => {
   };
 
 
-  const getvendorList = async () => {
+  const getvendorList = async (dataToSend) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/vendors/list`,
-        {},
+        {...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
