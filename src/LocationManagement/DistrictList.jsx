@@ -20,27 +20,29 @@
     Table,
   } from "reactstrap";
   import { useEffect, useState } from "react";
-
-  import { useNavigate } from "react-router-dom";
+  import { useNavigate, useParams } from "react-router-dom";
   import { FaEdit } from "react-icons/fa";
-
   import { FaTrashAlt } from "react-icons/fa";
-
-
+  import { FaArrowLeft } from "react-icons/fa";
   import { Spinner } from "reactstrap";
   import ReactQuill from "react-quill";
   import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
 
   const DistrictList = () => {
     const navigate = useNavigate();
+
+    const {id} = useParams();
   
-    const {  getdistrictList,districtList } = useMasterContext();
+    const {  getdistrictList,districtList,addDistrict ,editDistrict,DistrictDelete} = useMasterContext();
+
+    
   
     const [formData, setFormData] = useState({
-      title: "",
+      district: "",
     });
   
     const [open, setOpen] = useState(false);
@@ -52,13 +54,20 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
     const totalPages = districtList?.total && Math.ceil(districtList?.total / itemperPage);
   
     const [selectedvarity, setSelectedvarity] = useState({
-      title: "",
-      _id: "",
+      district: "",
+      id: "",
     });
   
     useEffect(() => {
-     getdistrictList();
-    }, []);
+      if(id){
+        const dataTosend ={
+          state_id: id,
+          page: currentPage,
+          limit: itemperPage,
+        }
+        getdistrictList(dataTosend);
+      }
+    }, [currentPage]);
   
     const onOpenModal = () => {
       setOpen(true);
@@ -91,14 +100,22 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      const dataToSend ={
+        state_id: id,
+        district:selectedvarity.district,
+        district_id: selectedvarity.id,
+      }
+      editDistrict(dataToSend);
       onCloseModal2();
     };
   
-    const handleDelete = (id) => {
+    const handleDelete = (districtId) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // deleteCms(id);
+        const dataToDelete = {
+          state_id: id,
+          district_id: districtId,
+        }
+        DistrictDelete(dataToDelete);
       }
     };
   
@@ -115,10 +132,18 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle form submission
     const handleSubmit = () => {
-      // Send formData to the backend
-    //   addOrderMasterList(formData);
-      onCloseModal(); // Close modal after saving
+      const dataToSend ={
+        state_id: id,
+        district:formData.district
+      }
+      addDistrict(dataToSend);
+      onCloseModal(); 
     };
+
+    const handlepagechange = (newpage) => {
+      setCurrentPage(newpage);
+    };
+  
   
     return (
       <>
@@ -129,11 +154,36 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
               <Card>
                 {/* <CommonCardHeader title="Product Sub Categoty" /> */}
                 <CardBody>
-                  <div className="btn-popup pull-right">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "10px",
+                  }}
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => navigate(-1)} // Navigate to the previous page
+                  >
+                    <FaArrowLeft size={20} color="#007bff" />
+                    <span style={{ marginLeft: "5px", color: "#007bff" }}>
+                      Back
+                    </span>
+                  </div>
+
+                  <div className="mb-2">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add 
+                    Add District
                     </Button>
                   </div>
+                </div>
+                  
+                  
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
                     <Table striped responsive>
@@ -172,7 +222,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -183,6 +233,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </CardBody>
               </Card>
@@ -193,11 +252,11 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-             Add Order Status
+             Add District
             </h5>
           </ModalHeader>
           <ModalBody>
@@ -205,15 +264,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
             {/* Scroll in Y-axis */}
             <Form>
               <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
-                  Order Status
+                <Label htmlFor="district" className="col-form-label">
+                District
                 </Label>
                 <Input
                   type="text"
-                  name="title"
-                  value={formData.title}
+                  name="district"
+                  value={formData.district}
                   onChange={handleInputChange}
-                  id="title"
+                  id="district"
                 />
               </FormGroup>
             </Form>
@@ -231,26 +290,26 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
+
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Edit order status
+              Edit District
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
-                  order status:
+                <Label htmlFor="district" className="col-form-label">
+                 District:
                 </Label>
                 <Input
                   type="text"
-                  name="title"
-                  value={selectedvarity.title}
+                  name="district"
+                  value={selectedvarity.district}
                   onChange={handleInputChanges}
-                  id="title"
+                  id="district"
                 />
               </FormGroup>
             </Form>

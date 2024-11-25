@@ -194,7 +194,7 @@ function App() {
           <Route path="/order-status" element={<OrderStatusList />} />
           <Route path="/add-test-parameters" element={<AddTestParameter />} />
 
-          <Route path="/district-management" element={<DistrictList />} />
+          <Route path="/district-management/:id" element={<DistrictList />} />
 
           <Route path="/state-management" element={<StateList />} />
           <Route path="/timeslots-management" element={<TimeSlotsList />} />

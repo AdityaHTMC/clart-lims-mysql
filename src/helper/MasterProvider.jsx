@@ -1100,20 +1100,21 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const getdistrictList = async () => {
+  const getdistrictList = async (dataTosend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/district/list`,{},
+        `${base_url}/admin/district/list`,{...dataTosend},
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
       if (response.status === 200) {
         setdistrictList({
           data: response?.data?.data || [],
+          total: response?.data?.total,
           loading: false,
         });
       } else {
-        setdistrictList({ data: [], loading: false });
+        setdistrictList({ data: [],total:'', loading: false });
         toast.error("Failed to fetch district list");
       }
     } catch (error) {
@@ -1191,6 +1192,140 @@ export const MasterProvider = ({ children }) => {
       toast.error("Failed to fetch state list");
     }
   };
+
+
+  const addState = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/state/add`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getStateList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const addDistrict = async (formDataToSend) => {
+    try {
+      const { state_id} = formDataToSend
+      const response = await axios.post(
+        `${base_url}/admin/district/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getdistrictList(state_id)
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const editDistrict = async (formDataToSend) => {
+    try {
+      const { state_id ,district_id} = formDataToSend
+      const response = await axios.post(
+        `${base_url}/admin/district/edit/${district_id}`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getdistrictList(state_id)
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const editState = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/state/edit/${id}`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getStateList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const DistrictDelete = async (dataToDelete) => { 
+    try {
+      const { district_id,state_id } = dataToDelete;
+      const response = await axios.delete(
+        `${base_url}/admin/district/delete/${district_id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getdistrictList(state_id); 
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  }
+
+  const StateDelete = async (id) => { 
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/state/delete/${id}`,
+        { headers: { Authorization: AuthToken } }
+      );
+      
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getStateList(); 
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  }
 
 
   const getAllTimeList = async (booking_date ) => {
@@ -1762,7 +1897,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

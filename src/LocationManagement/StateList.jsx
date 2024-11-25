@@ -1,20 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
-import {
-    ArcElement,
-    BarController,
-    BarElement,
-    CategoryScale,
-    Chart as ChartJS,
-    Filler,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    RadialLinearScale,
-    Title,
-    Tooltip,
-  } from "chart.js";
+
 
   import {
     Badge,
@@ -38,27 +24,11 @@ import {
 
   import { useNavigate } from "react-router-dom";
   import { FaEdit } from "react-icons/fa";
-
+  import { BsFillEyeFill } from "react-icons/bs";
   import { FaTrashAlt } from "react-icons/fa";
 
-  // Register the necessary Chart.js components
-  ChartJS.register(
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-    BarController,
-    BarElement,
-    ArcElement,
-    Filler,
-    RadialLinearScale
-  );
   import { Spinner } from "reactstrap";
-  import ReactQuill from "react-quill";
-  import "react-quill/dist/quill.snow.css";
+
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 
@@ -67,18 +37,18 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   const StateList = () => {
     const navigate = useNavigate();
   
-    const {  getStateList,stateList } = useMasterContext();
+    const {  getStateList,stateList,addState,editState,StateDelete } = useMasterContext();
   
     const [formData, setFormData] = useState({
-      title: "",
+      state: "",
     });
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
   
     const [selectedvarity, setSelectedvarity] = useState({
-      title: "",
-      _id: "",
+      state: "",
+      id: "",
     });
   
     useEffect(() => {
@@ -88,9 +58,14 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
     const onOpenModal = () => {
       setOpen(true);
     };
-    const onOpenModal2 = (product) => {
-      setSelectedvarity(product);
-      setModalOpen(true);
+
+    const onOpenModal1 = (product) => {
+       setModalOpen(true);
+       setSelectedvarity(product);
+    };
+
+    const handledistrict = (id) => {
+      navigate(`/district-management/${id}`); 
     };
   
     // Close the modal
@@ -116,14 +91,13 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      // editcms(selectedvarity._id, selectedvarity);
+      editState(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // deleteCms(id);
+      if (window.confirm("Are you sure you wish to delete this ?")) {
+        StateDelete(id);
       }
     };
   
@@ -140,9 +114,8 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle form submission
     const handleSubmit = () => {
-      // Send formData to the backend
-    //   addOrderMasterList(formData);
-      onCloseModal(); // Close modal after saving
+      addState(formData);
+      onCloseModal(); 
     };
   
     return (
@@ -165,6 +138,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                       <thead>
                         <tr>
                           <th>State List</th>
+                          <th>View District</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -185,12 +159,21 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                             stateList?.data?.map((product, index) => (
                             <tr key={index}>
                               <td>{product.state}</td>
+                              <td>   <div className="circelBtnBx">
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handledistrict(product.id)}
+                                  >
+                                    <BsFillEyeFill />
+                                  </Button>
+                                </div></td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => onOpenModal2(product)}
+                                    onClick={() => onOpenModal1(product)}
                                   >
                                     <FaEdit />
                                   </Button>
@@ -218,7 +201,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -230,15 +213,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
             {/* Scroll in Y-axis */}
             <Form>
               <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
+                <Label htmlFor="state" className="col-form-label">
                  state
                 </Label>
                 <Input
                   type="text"
-                  name="title"
-                  value={formData.title}
+                  name="state"
+                  value={formData.state}
                   onChange={handleInputChange}
-                  id="title"
+                  id="state"
                 />
               </FormGroup>
             </Form>
@@ -256,8 +239,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={modalOpen}
           toggle={onCloseModal2}
-          className="modal-lg"
-          style={{ maxWidth: "800px" }}
+          className="modal-xg"
         >
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -267,15 +249,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
+                <Label htmlFor="state" className="col-form-label">
                   state
                 </Label>
                 <Input
                   type="text"
-                  name="title"
-                  value={selectedvarity.title}
+                  name="state"
+                  value={selectedvarity.state}
                   onChange={handleInputChanges}
-                  id="title"
+                  id="state"
                 />
               </FormGroup>
             </Form>
