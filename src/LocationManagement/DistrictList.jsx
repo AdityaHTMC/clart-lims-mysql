@@ -168,7 +168,7 @@ import { Pagination, Stack } from "@mui/material";
                       alignItems: "center",
                       cursor: "pointer",
                     }}
-                    onClick={() => navigate(-1)} // Navigate to the previous page
+                    onClick={() => navigate(-1)} 
                   >
                     <FaArrowLeft size={20} color="#007bff" />
                     <span style={{ marginLeft: "5px", color: "#007bff" }}>
@@ -183,7 +183,7 @@ import { Pagination, Stack } from "@mui/material";
                   </div>
                 </div>
                   
-                  
+                   
                   <div className="clearfix"></div>
                   <div id="basicScenario" className="product-physical">
                     <Table striped responsive>

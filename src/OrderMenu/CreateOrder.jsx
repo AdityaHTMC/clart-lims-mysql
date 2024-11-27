@@ -66,6 +66,10 @@ const CreateOrder = () => {
     booking_date: "",
   });
 
+  console.log(selectedCustomer,'selectedCustomer ')
+
+
+
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -136,7 +140,7 @@ const CreateOrder = () => {
     setCollectionFees(amount2);
   }, [selectedTest, formData.test_package, selectedFees, formData.type]);
 
-  console.log(collectionFees, "collection fee");
+ 
 
   const onChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -182,8 +186,8 @@ const CreateOrder = () => {
   };
 
   const handleDateChange = (e) => {
-    const selectedDate = new Date(e.target.value); // Create a Date object from the selected date
-    const formattedDate = selectedDate.toISOString(); // Convert to ISO string format
+    const selectedDate = new Date(e.target.value); 
+    const formattedDate = selectedDate.toISOString(); 
 
     setFormData((prevData) => ({
       ...prevData,
