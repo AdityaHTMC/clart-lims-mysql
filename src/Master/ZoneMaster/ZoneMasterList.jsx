@@ -1,8 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/rules-of-hooks */
 
-
-  import {
+import {
     Badge,
     Button,
     Card,
@@ -21,69 +20,67 @@
     Table,
   } from "reactstrap";
   import { useEffect, useState } from "react";
-
+  
   import { useNavigate } from "react-router-dom";
   import { FaEdit } from "react-icons/fa";
-  import { BsFillEyeFill } from "react-icons/bs";
+  
   import { FaTrashAlt } from "react-icons/fa";
-
+  
   import { Spinner } from "reactstrap";
-
-import { useMasterContext } from "../helper/MasterProvider";
-import CommonBreadcrumb from "../component/common/bread-crumb";
-
-
-
-  const StateList = () => {
+  import ReactQuill from "react-quill";
+  import "react-quill/dist/quill.snow.css";
+  import { useMasterContext } from "../../helper/MasterProvider";
+  import CommonBreadcrumb from "../../component/common/bread-crumb";
+  
+  const ZoneMasterList = () => {
     const navigate = useNavigate();
   
-    const {  getStateList,stateList,addState,editState,StateDelete } = useMasterContext();
+    const { getDocList, docList, addDocMaster, getallSahcList, allsahcList } =
+      useMasterContext();
   
     const [formData, setFormData] = useState({
-      state: "",
+      name: "",
+      sahc_id: "",
+      registration_number: "",
     });
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
   
     const [selectedvarity, setSelectedvarity] = useState({
-      state: "",
+      name: "",
+      sahc_id: "",
+      registration_number: "",
       id: "",
     });
-
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const itemperPage = 8;
-    
   
     useEffect(() => {
-     getStateList();
+      getDocList();
+      getallSahcList();
     }, []);
   
     const onOpenModal = () => {
       setOpen(true);
     };
-
-    const onOpenModal1 = (product) => {
-       setModalOpen(true);
-       setSelectedvarity(product);
-    };
-
-    const handledistrict = (id) => {
-      navigate(`/district-management/${id}`); 
+    const onOpenModal2 = (product) => {
+      setSelectedvarity(product);
+      setModalOpen(true);
     };
   
     // Close the modal
     const onCloseModal2 = () => {
       setModalOpen(false);
-      setSelectedvarity({ title: "", image: "", _id: "" });
+      setSelectedvarity({
+        name: "",
+        sahc_id: "",
+        registration_number: "",
+        id: "",
+      });
     };
   
     const onCloseModal = () => {
       setOpen(false);
     };
-  
-
   
     // Handle form input change
     const handleInputChanges = (e) => {
@@ -96,13 +93,13 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      editState(selectedvarity.id, selectedvarity);
+      //   editOrderStatus(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this ?")) {
-        StateDelete(id);
+      if (window.confirm("Are you sure you wish to delete this item?")) {
+        // DeleteOrderStatus(id);
       }
     };
   
@@ -115,17 +112,15 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
       }));
     };
   
-
-  
     // Handle form submission
     const handleSubmit = () => {
-      addState(formData);
-      onCloseModal(); 
+      addDocMaster(formData);
+      onCloseModal();
     };
   
     return (
       <>
-        <CommonBreadcrumb title="State List"  />
+        <CommonBreadcrumb title="Doctor Master List" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -134,7 +129,7 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                 <CardBody>
                   <div className="btn-popup pull-right">
                     <Button color="primary" onClick={onOpenModal}>
-                      Add State
+                      Add
                     </Button>
                   </div>
                   <div className="clearfix"></div>
@@ -142,50 +137,40 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
                     <Table striped responsive>
                       <thead>
                         <tr>
-                          <th>State List</th>
-                          <th>View District</th>
+                          <th>Name </th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {stateList?.loading ? (
+                        {docList?.loading ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : stateList?.data?.length === 0 ? (
+                        ) : docList?.data?.length === 0 ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               No Data Found
                             </td>
                           </tr>
                         ) : (
-                            stateList?.data?.map((product, index) => (
+                          docList?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.state}</td>
-                              <td>   <div className="circelBtnBx">
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handledistrict(product.id)}
-                                  >
-                                    <BsFillEyeFill />
-                                  </Button>
-                                </div></td>
+                              <td>{product.name}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => onOpenModal1(product)}
+                                    onClick={() => onOpenModal2(product)}
                                   >
                                     <FaEdit />
                                   </Button>
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product._id)}
+                                    onClick={() => handleDelete(product.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>
@@ -206,11 +191,11 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-xg" // Increases the width
+          className="modal-lg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-             Add State
+              Add
             </h5>
           </ModalHeader>
           <ModalBody>
@@ -218,16 +203,47 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
             {/* Scroll in Y-axis */}
             <Form>
               <FormGroup>
-                <Label htmlFor="state" className="col-form-label">
-                 state
+                <Label htmlFor="name" className="col-form-label">
+                  Name
                 </Label>
                 <Input
                   type="text"
-                  name="state"
-                  value={formData.state}
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
-                  id="state"
+                  id="name"
                 />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="registration_number" className="col-form-label">
+                  Registration Number
+                </Label>
+                <Input
+                  type="number"
+                  name="registration_number"
+                  value={formData.registration_number}
+                  onChange={handleInputChange}
+                  id="registration_number"
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label htmlFor="sahc_id" className="col-form-label">
+                  Sahc:
+                </Label>
+                <Input
+                  type="select"
+                  name="sahc_id"
+                  value={formData.sahc_id}
+                  onChange={handleInputChange}
+                  id="sahc_id"
+                >
+                  <option value="">Select sahc</option>
+                  {allsahcList?.data?.map((variety) => (
+                    <option key={variety._id} value={variety.id}>
+                      {variety.name}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </Form>
           </ModalBody>
@@ -241,28 +257,24 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
           </ModalFooter>
         </Modal>
   
-        <Modal
-          isOpen={modalOpen}
-          toggle={onCloseModal2}
-          className="modal-xg"
-        >
+        <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-xg">
           <ModalHeader toggle={onCloseModal2}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-              Edit state
+              Edit
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
-                <Label htmlFor="state" className="col-form-label">
-                  state
+                <Label htmlFor="title" className="col-form-label">
+                  Name:
                 </Label>
                 <Input
                   type="text"
-                  name="state"
-                  value={selectedvarity.state}
+                  name="title"
+                  value={selectedvarity.name}
                   onChange={handleInputChanges}
-                  id="state"
+                  id="title"
                 />
               </FormGroup>
             </Form>
@@ -280,5 +292,5 @@ import CommonBreadcrumb from "../component/common/bread-crumb";
     );
   };
   
-  export default StateList;
+  export default ZoneMasterList;
   

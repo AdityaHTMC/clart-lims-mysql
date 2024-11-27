@@ -194,7 +194,7 @@ const CustomerList = () => {
                                     placement="top"
                                     target={`editButton-${index}`}
                                   >
-                                    Edit Product
+                                    Edit Customer
                                   </UncontrolledTooltip>
 
                                   <Button

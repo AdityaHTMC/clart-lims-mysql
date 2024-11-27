@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             setPermissionList({...permissionList, loading: false})
-            toast.error(error.response?.data?.message || 'Server error');
+            // toast.error(error.response?.data?.message || 'Server error');
         }
     }
 
@@ -257,11 +257,11 @@ export const AuthProvider = ({ children }) => {
             });
           } else {
             setallMenuList({ data: [], loading: false });
-            toast.error("Failed to fetch menu list");
+            // toast.error("Failed to fetch menu list");
           }
         } catch (error) {
             setallMenuList({ data: [], loading: false });
-          toast.error("Failed to fetch menu list");
+        //   toast.error("Failed to fetch menu list");
         }
       };
     

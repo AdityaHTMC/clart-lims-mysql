@@ -119,6 +119,8 @@ import EditTestParameter from "./Master/TestParameter/EditTestParameter";
 import EditTestList from "./Master/TestMaster/EditTestList";
 import EditCustomer from "./screen/Customers/EditCustomer";
 import EditTask from "./screen/TaskManagement/EditTask";
+import SahcMaster from "./Master/SahcMaster/SahcMaster";
+import DoctorList from "./Master/DoctorMaster/DoctorList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -200,6 +202,8 @@ function App() {
           <Route path="/timeslots-management" element={<TimeSlotsList />} />
           <Route path="/designation-management" element={<DesignationList />} />
           <Route path="/email-setting" element={<EmailSettings />} />
+          <Route path="/sahc-master" element={<SahcMaster />} />
+          <Route path="/doctor-list" element={<DoctorList />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />

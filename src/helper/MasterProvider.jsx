@@ -42,6 +42,9 @@ export const MasterProvider = ({ children }) => {
   const [petDetails, setPetDetails] = useState({loading: true,data: []});
   const [orderDetails, setOrderDetails] = useState({ loading: true, data: [] }) 
   const [testDetails, setTestDetails] = useState({ loading: true, data: [] }) 
+  const [sahcList, setsahcList] = useState({loading: true,data: [],total: ""});
+  const [allsahcList, setallsahcList] = useState({loading: true,data: []});
+  const [docList, setdocList] = useState({loading: true,data: [],total: ""});
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
   const base_url = import.meta.env.VITE_API_URL;
@@ -1896,8 +1899,118 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getsahcList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/sahc-master/list `,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setsahcList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        toast.error(response?.data?.message);
+        setsahcList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+      setsahcList({ data: [], loading: false });
+    }
+  };
+
+  const getallSahcList = async () => {
+    try {
+      const response = await axios.get(
+        `${base_url}/admin/sahc-master/getAll`,
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setallsahcList({ data: response?.data?.data || [],   loading: false });
+      } else {
+        toast.error(response?.data?.message);
+        setallsahcList({ data: [],  loading: false });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+      setallsahcList({ data: [], loading: false });
+    }
+  };
+
+
+
+  const addSahc = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/sahc-master/add `,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getsahcList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
+  const getDocList = async () => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/doctor/list`,{},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setdocList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        toast.error(response?.data?.message);
+        setdocList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+      setdocList({ data: [], loading: false });
+    }
+  };
+
+
+  const addDocMaster = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/sahc-master/add `,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getsahcList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
+
+
+
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
