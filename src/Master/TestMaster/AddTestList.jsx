@@ -21,6 +21,8 @@ const AddTestList = () => {
     alltestCategory,
     getAllSpeciesList,
     allspecies,
+    getAllItemList,
+    allItemList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -29,6 +31,7 @@ const AddTestList = () => {
     getAllTestCategory();
     getAllSpeciesList();
     getProfessionalFees();
+    getAllItemList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -47,7 +50,10 @@ const AddTestList = () => {
     method: "",
     observation: [""],
   });
+
+  const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedProducts1, setSelectedProducts1] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
 
   const handleObseravition = (index, value) => {
@@ -68,6 +74,22 @@ const AddTestList = () => {
       ...prevState,
       observation: prevState.observation.filter((_, i) => i !== index),
     }));
+  };
+
+  const handleItemChange = (index, key, value) => {
+    const updatedItems = [...itemsData];
+    updatedItems[index][key] = value; // Update the specific key (item or quantity)
+    setItemsData(updatedItems);
+  };
+
+  // Add new item with quantity
+  const addItemField = () => {
+    setItemsData([...itemsData, { item: "", quantity: "" }]); // Add a new blank row
+  };
+
+  // Remove item field
+  const removeItemField = (index) => {
+    setItemsData(itemsData.filter((_, i) => i !== index)); // Remove the row at the specified index
   };
 
   const handleInputChange = (e) => {
@@ -138,6 +160,11 @@ const AddTestList = () => {
 
     inputData.observation.forEach((obs, index) => {
       formDataToSend.append(`observations[${index}]`, obs);
+    });
+
+    itemsData.forEach((el, i) => {
+      formDataToSend.append(`items[${i}][item_id]`, el.item); 
+      formDataToSend.append(`items[${i}][quantity]`, el.quantity);
     });
 
     addTest(formDataToSend);
@@ -459,6 +486,75 @@ const AddTestList = () => {
             </div>
           </div>
 
+          <div className="row">   
+            {itemsData.map((itemData, index) => (
+              <div className="col-md-6 mb-2" key={index}>
+                <FormGroup>
+                  <Label htmlFor={`item-${index}`} className="col-form-label">
+                    Item {index + 1}
+                  </Label>
+                  <div style={{ display: "flex", alignItems: "center" }}>
+                    {/* Dropdown for selecting item */}
+                    <Input
+                      type="select"
+                      name={`item-${index}`}
+                      id={`item-${index}`}
+                      value={itemData.item}
+                      onChange={(e) =>
+                        handleItemChange(index, "item", e.target.value)
+                      }
+                      style={{ marginRight: "10px" }}
+                    >
+                      <option value="">Select Item</option>
+                      {/* Replace with dynamic mapping of your item list */}
+                      {allItemList?.data?.map((item) => (
+                        <option key={item._id} value={item._id}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </Input>
+
+                    {/* Input for quantity */}
+                    <Input
+                      type="number"
+                      name={`quantity-${index}`}
+                      id={`quantity-${index}`}
+                      value={itemData.quantity}
+                      onChange={(e) =>
+                        handleItemChange(index, "quantity", e.target.value)
+                      }
+                      placeholder="Quantity"
+                      style={{ marginRight: "10px", maxWidth: "150px" }}
+                    />
+
+                    {/* Remove button */}
+                    <Button
+                      type="button"
+                      color="primary"
+                      onClick={() => removeItemField(index)}
+                      style={{ color: "white" }}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            ))}
+
+            <div className="col-md-12">
+              <Button
+                type="button"
+                color="primary"
+                outline
+                onClick={addItemField}
+                size="sm"
+                style={{ marginTop: "10px" }}
+              >
+                Add Item
+              </Button>
+            </div>
+          </div>
+
           <div className="row">
             {inputData.observation.map((obs, index) => (
               <div className="col-md-6 mb-2" key={index}>
@@ -527,7 +623,7 @@ const AddTestList = () => {
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
             }}
           >
-            Edit Test
+            add Test
           </Button>
         </form>
       </div>

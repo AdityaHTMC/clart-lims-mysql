@@ -31,6 +31,7 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
 const DoctorList = () => {
   const navigate = useNavigate();
@@ -44,6 +45,12 @@ const DoctorList = () => {
     registration_number: "",
   });
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
+
+  const totalPages = docList?.total && Math.ceil(docList?.total / itemperPage);
+
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -55,9 +62,13 @@ const DoctorList = () => {
   });
 
   useEffect(() => {
-    getDocList();
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+    };
+    getDocList(dataToSend);
     getallSahcList();
-  }, []);
+  }, [currentPage]);
 
   const onOpenModal = () => {
     setOpen(true);
@@ -118,6 +129,10 @@ const DoctorList = () => {
     onCloseModal();
   };
 
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
+
   return (
     <>
       <CommonBreadcrumb title="Doctor Master List" />
@@ -138,6 +153,7 @@ const DoctorList = () => {
                     <thead>
                       <tr>
                         <th>Name </th>
+                        <th>Registration Number</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -158,6 +174,7 @@ const DoctorList = () => {
                         docList?.data?.map((product, index) => (
                           <tr key={index}>
                             <td>{product.name}</td>
+                            <td>{product.registration_number}</td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
@@ -181,6 +198,15 @@ const DoctorList = () => {
                       )}
                     </tbody>
                   </Table>
+                  <Stack className="rightPagination mt10" spacing={2}>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                 </div>
               </CardBody>
             </Card>

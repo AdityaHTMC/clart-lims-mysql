@@ -33,6 +33,7 @@ import {
   import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { Pagination, Stack } from "@mui/material";
 
   const SahcMaster = () => {
     const navigate = useNavigate();
@@ -45,6 +46,12 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [searchTerm, setSearchTerm] = useState("");
+    const itemperPage = 8;
+  
+    const totalPages = sahcList?.total && Math.ceil(sahcList?.total / itemperPage);
   
     const [selectedvarity, setSelectedvarity] = useState({
       name: "",
@@ -52,8 +59,12 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     });
   
     useEffect(() => {
-     getsahcList();
-    }, []);
+      const dataToSend = {
+        page: currentPage,
+        limit: itemperPage,
+      };
+     getsahcList(dataToSend);
+    }, [currentPage]);
   
     const onOpenModal = () => {
       setOpen(true);
@@ -111,6 +122,10 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
     const handleSubmit = () => {
       addSahc(formData);
       onCloseModal(); 
+    };
+
+    const handlepagechange = (newpage) => {
+      setCurrentPage(newpage);
     };
   
     return (
@@ -176,6 +191,15 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                         )}
                       </tbody>
                     </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                   </div>
                 </CardBody>
               </Card>

@@ -48,6 +48,8 @@ const ItemManagement = () => {
     deleteIMList,
   } = useStockContext();
 
+  const {getDDunitList,allUnitList} = useMasterContext();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const itemperPage = 8;
@@ -62,6 +64,7 @@ const ItemManagement = () => {
     };
     getItemGrList();
     getIMList(dataToSend);
+    getDDunitList()
   }, [currentPage]);
 
 
@@ -72,6 +75,7 @@ const ItemManagement = () => {
     amount: "",
     low_quantity_alert: "",
     stock_quantity: "",
+    unit: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -376,7 +380,8 @@ const ItemManagement = () => {
                 {errors.stock_quantity && <span className="text-danger">{errors.stock_quantity}</span>}
               </FormGroup>
             </div>
-            <FormGroup>
+            <div className="row">
+            <FormGroup className="col-md-6">
               <Label htmlFor="item_group_id" className="col-form-label">
                 Item Group:
               </Label>
@@ -397,6 +402,29 @@ const ItemManagement = () => {
               </Input>
               {errors.item_group_id && <span className="text-danger">{errors.item_group_id}</span>}
             </FormGroup>
+            <FormGroup className="col-md-6">
+              <Label htmlFor="unit" className="col-form-label">
+                Item Unit:
+              </Label>
+              <Input
+                type="select"
+                name="unit"
+                value={formData.unit}
+                onChange={handleInputChange}
+                id="unit"
+                required
+              >
+                <option value="">Select Item Group</option>
+                {allUnitList.data.map((group) => (
+                  <option key={group._id} value={group.id}>
+                    {group.title}
+                  </option>
+                ))}
+              </Input>
+              {errors.item_group_id && <span className="text-danger">{errors.item_group_id}</span>}
+            </FormGroup>
+            </div>
+           
           </Form>
         </ModalBody>
         <ModalFooter>

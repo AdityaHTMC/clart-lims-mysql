@@ -121,6 +121,7 @@ import EditCustomer from "./screen/Customers/EditCustomer";
 import EditTask from "./screen/TaskManagement/EditTask";
 import SahcMaster from "./Master/SahcMaster/SahcMaster";
 import DoctorList from "./Master/DoctorMaster/DoctorList";
+import ZoneMasterList from "./Master/ZoneMaster/ZoneMasterList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -204,6 +205,7 @@ function App() {
           <Route path="/email-setting" element={<EmailSettings />} />
           <Route path="/sahc-master" element={<SahcMaster />} />
           <Route path="/doctor-list" element={<DoctorList />} />
+          <Route path="/zone-list" element={<ZoneMasterList />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />
