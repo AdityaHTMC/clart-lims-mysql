@@ -122,7 +122,7 @@ const CustomerList = () => {
                       <thead>
                         <tr>
                           <th>Name</th>
-                          <th>Email</th>
+                          <th>Pincode</th>
                           <th>Mobile</th>
                           <th>Address</th>
                           <th>District</th>
@@ -148,21 +148,7 @@ const CustomerList = () => {
                           customerLists?.data?.map((product, index) => (
                             <tr key={index}>
                               <td>{product?.name || "NA"}</td>
-                              <td id={`email-${index}`}>
-                                {product?.email
-                                  ? product.email.length > 20
-                                    ? `${product.email.slice(0, 20)}...`
-                                    : product.email
-                                  : "NA"}
-                                {product?.email && (
-                                  <UncontrolledTooltip
-                                    placement="top"
-                                    target={`email-${index}`}
-                                  >
-                                    {product?.email}
-                                  </UncontrolledTooltip>
-                                )}
-                              </td>
+                              <td>{product?.pincode || "NA"}</td>
                               <td>{product?.mobile || "NA"}</td>
                               <td id={`address-${index}`}>
                                 {product?.address

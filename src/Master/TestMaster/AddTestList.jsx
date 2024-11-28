@@ -163,7 +163,7 @@ const AddTestList = () => {
     });
 
     itemsData.forEach((el, i) => {
-      formDataToSend.append(`items[${i}][item_id]`, el.item); 
+      formDataToSend.append(`items[${i}][item_id]`, el.item);
       formDataToSend.append(`items[${i}][quantity]`, el.quantity);
     });
 
@@ -186,41 +186,54 @@ const AddTestList = () => {
             border: "1px solid #e0e0e0",
           }}
         >
-          <div className="row">
+          <div className="row mb-4">
+            {/* Test Name Field */}
             <div className="col-md-6">
-              <FormGroup>
-                <Label for="test_name">Test Name *</Label>
+              <FormGroup className="mb-3">
+                <Label for="test_name" className="form-label">
+                  Test Name <span className="text-danger">*</span>
+                </Label>
                 <Input
                   type="text"
                   name="test_name"
+                  className="form-control shadow-sm"
                   value={inputData.test_name}
                   onChange={handleInputChange}
                   id="test_name"
+                  placeholder="Enter Test Name"
                   required
                 />
               </FormGroup>
             </div>
+
+            {/* Price Field */}
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="price" className="col-form-label">
-                  price:
+              <FormGroup className="mb-3">
+                <Label for="price" className="form-label">
+                  Price <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
                   name="price"
+                  className="form-control shadow-sm"
                   min={0}
                   value={inputData.price}
                   onChange={handleInputChange}
                   id="price"
+                  placeholder="Enter Price"
+                  required
                 />
               </FormGroup>
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginBottom: "15px" }}>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="sell_price" className="col-form-label">
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label
+                  htmlFor="sell_price"
+                
+                >
                   Sell Price:
                 </Label>
                 <Input
@@ -230,30 +243,41 @@ const AddTestList = () => {
                   value={inputData.sell_price}
                   onChange={handleInputChange}
                   id="sell_price"
+                 
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="collection_fee" className="col-form-label">
-                  Collection Fee:
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label
+                  htmlFor="test_preparation"
+                  
+                >
+                  Test Preparation:
                 </Label>
                 <Input
-                  type="number"
-                  name="collection_fee"
-                  min={0}
-                  value={inputData.collection_fee}
+                  type="textarea"
+                  name="test_preparation"
+                  value={inputData.test_preparation}
                   onChange={handleInputChange}
-                  id="collection_fee"
+                  id="test_preparation"
+                  rows="3"
+              
                 />
               </FormGroup>
             </div>
           </div>
 
-          <div className="row">
+          <div
+            className="row"
+            style={{ marginBottom: "15px", marginTop: "20px" }}
+          >
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="testcode" className="col-form-label">
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label
+                  htmlFor="testcode"
+                
+                >
                   Testcode:
                 </Label>
                 <Input
@@ -262,12 +286,15 @@ const AddTestList = () => {
                   value={inputData.testcode}
                   onChange={handleInputChange}
                   id="testcode"
+                 
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="advice" className="col-form-label">
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label
+                  htmlFor="advice"
+                >
                   Advice:
                 </Label>
                 <Input
@@ -276,11 +303,8 @@ const AddTestList = () => {
                   value={inputData.advice}
                   onChange={handleInputChange}
                   rows="2"
-                  style={{
-                    borderRadius: "5px",
-                    padding: "10px",
-                  }}
                   id="advice"
+              
                 />
               </FormGroup>
             </div>
@@ -320,28 +344,6 @@ const AddTestList = () => {
                   value={inputData.duration}
                   onChange={handleInputChange}
                   id="duration"
-                />
-              </FormGroup>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12">
-              <FormGroup>
-                <Label htmlFor="test_preparation" className="col-form-label">
-                  Test Preparation:
-                </Label>
-                <Input
-                  type="textarea"
-                  name="test_preparation"
-                  value={inputData.test_preparation}
-                  onChange={handleInputChange}
-                  id="test_preparation"
-                  rows="3"
-                  style={{
-                    borderRadius: "5px",
-                    padding: "10px",
-                  }}
                 />
               </FormGroup>
             </div>
@@ -486,7 +488,7 @@ const AddTestList = () => {
             </div>
           </div>
 
-          <div className="row">   
+          <div className="row">
             {itemsData.map((itemData, index) => (
               <div className="col-md-6 mb-2" key={index}>
                 <FormGroup>
@@ -508,7 +510,7 @@ const AddTestList = () => {
                       <option value="">Select Item</option>
                       {/* Replace with dynamic mapping of your item list */}
                       {allItemList?.data?.map((item) => (
-                        <option key={item._id} value={item._id}>
+                        <option key={item.id} value={item.id}>
                           {item.name}
                         </option>
                       ))}

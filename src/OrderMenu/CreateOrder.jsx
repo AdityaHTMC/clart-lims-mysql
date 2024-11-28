@@ -46,7 +46,7 @@ const CreateOrder = () => {
     getAllPhelboList,
     allphelboList,
     getCustomerPetList,
-    petList,
+    petList,getZonePrice,zoneprice
   } = useMasterContext();
   const { getAllLabs, labDropdown } = useCategoryContext();
   const Navigate = useNavigate();
@@ -91,6 +91,7 @@ const CreateOrder = () => {
     getAllLabs();
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
+      getZonePrice(selectedCustomer.pincode)
     }
     if (formData.booking_date) {
       getAllTimeList(formData.booking_date);
@@ -108,15 +109,8 @@ const CreateOrder = () => {
 
   useEffect(() => {
     let amount = 0;
-    let amount2 = 0;
     selectedTest.forEach((el) => {
       amount += el.sell_price;
-
-      // If formData.type is 'Home Visit', add collection_fee
-      if (formData.type === "Home Visit") {
-        amount += el.collection_fee || 0;
-        amount2 += el.collection_fee;
-      }
     });
 
     if (formData.test_package) {
@@ -127,18 +121,21 @@ const CreateOrder = () => {
       if (packageDetail) {
         amount = amount + packageDetail?.sell_price || 0;
       }
-      // If formData.type is 'Home Visit', add collection_fee for the package
-      if (formData.type === "Home Visit") {
-        amount2 += packageDetail?.total_collection_fees || 0;
-      }
     }
 
     selectedFees.forEach((el) => {
       amount += el.expected_charges;
     });
     setTotalAmount(amount);
-    setCollectionFees(amount2);
   }, [selectedTest, formData.test_package, selectedFees, formData.type]);
+
+  useEffect(() => {
+    if(formData.type === 'Home Visit') {
+      setCollectionFees(zoneprice?.data?.charge || 350)
+    } else {
+      setCollectionFees(0)
+    }
+  }, [formData.type, zoneprice])
 
  
 
@@ -252,7 +249,7 @@ const CreateOrder = () => {
     bodyData.append("end_time", selectedSlot.end_time);
 
     bodyData.append("payment_mode", formData.payment_mode);
-    bodyData.append("total_amount", totalAmount);
+    bodyData.append("total_amount", totalAmount + collectionFees);
     setIsProcessing(true);
     const res = await createNewOrder(bodyData);
     setIsProcessing(false);
@@ -489,7 +486,7 @@ const CreateOrder = () => {
                                 onChange={handleDateChange}
                               />
                             </FormGroup>
-                            {formData.booking_date && (
+                            {formData.booking_date &&  (
                               <div className="mt-3">
                                 <h6>Choose Time Slots</h6>
                                 <div className="d-flex flex-wrap gap-2">
@@ -665,23 +662,23 @@ const CreateOrder = () => {
                             <hr className="mt-4" />
                             <div className="d-flex justify-content-between align-items-center mt-3">
                               <div>
-                                {collectionFees > 0 && (
+                                
                                   <>
                                     <p className="mb-0">
                                       Collection Fees : ₹ {collectionFees}
                                     </p>
                                     <p className="fw-bold fs-5">
-                                      Total Amount : ₹ {totalAmount}
+                                      Total Amount : ₹ {totalAmount + collectionFees}
                                     </p>
                                   </>
-                                )}
+                              
                               </div>
                               <Button
                                 color="primary"
                                 disabled={
                                   totalAmount === 0 ||
                                   !formData.payment_mode ||
-                                  !formData.pet ||
+                                  !formData.pet || !formData.booking_date ||
                                   isProcessing
                                 }
                                 onClick={createOrder}

@@ -25,6 +25,8 @@ const EditTestList = () => {
     getTestDetails,
     testDetails,
     editTest,
+    getAllItemList,
+    allItemList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -33,6 +35,7 @@ const EditTestList = () => {
     getAllTestCategory();
     getAllSpeciesList();
     getProfessionalFees();
+    getAllItemList();
   }, []);
 
   useEffect(() => {
@@ -60,6 +63,7 @@ const EditTestList = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [observationsList, setObservations] = useState([""]);
+  const [itemDataList, setItemDataList] = useState([""]);
   const [preview, setPreview] = useState(null);
   const [priImages, setPriImages] = useState([]);
   useEffect(() => {
@@ -82,6 +86,7 @@ const EditTestList = () => {
       setSelectedProducts(testDetails.data.test_species || []);
       setSelectedFees(testDetails.data.professional_fees || []);
       setObservations(testDetails.data.observations || []);
+      setItemDataList(testDetails.data.items || []);
     }
   }, [testDetails]);
 
@@ -144,6 +149,27 @@ const EditTestList = () => {
     setObservations((prevState) => prevState.filter((_, i) => i !== index));
   };
 
+  // item handling
+
+  const handleItemChange = (index, key, value) => {
+    const updatedItems = [...itemDataList];
+    updatedItems[index][key] = value;
+    setItemDataList(updatedItems);
+  };
+
+  // Add a new item field
+  const addItemField = () => {
+    setItemDataList((prevState) => [
+      ...prevState,
+      { id: "", name: "", quantity: "" },
+    ]);
+  };
+
+  // Remove an item field by index
+  const removeItemField = (index) => {
+    setItemDataList((prevState) => prevState.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -183,6 +209,11 @@ const EditTestList = () => {
 
     combinedObservations.forEach((obs, index) => {
       formDataToSend.append(`observations[${index}]`, obs);
+    });
+
+    itemDataList.forEach((item, index) => {
+      formDataToSend.append(`items[${index}][item_id]`, item.id); // Send only the ID
+      formDataToSend.append(`items[${index}][quantity]`, item.quantity);
     });
 
     editTest(id, formDataToSend);
@@ -582,6 +613,67 @@ const EditTestList = () => {
               style={{ marginTop: "10px" }}
             >
               Add Observation
+            </Button>
+          </FormGroup>
+
+          <FormGroup>
+            <label className="mb-3 mt-3">Items:</label>
+            {itemDataList.length === 0 ? (
+              <p>No items found.</p>
+            ) : (
+              itemDataList.map((item, index) => (
+                <Row key={index} style={{ marginBottom: "10px" }}>
+                  {/* Item Dropdown */}
+                  <Col md={5}>
+                    <Input
+                      type="select"
+                      value={item.id} // Use `id` as the value to store the selected item ID
+                      onChange={(e) =>
+                        handleItemChange(index, "id", e.target.value)
+                      } // Update item ID on change
+                    >
+                      <option value="">Select Item</option>
+                      {allItemList?.data?.map((dropdownItem) => (
+                        <option key={dropdownItem.id} value={dropdownItem.id}>
+                          {dropdownItem.name}{" "}
+                          {/* Display the item name in the dropdown */}
+                        </option>
+                      ))}
+                    </Input>
+                  </Col>
+                  {/* Item Quantity */}
+                  <Col md={3}>
+                    <Input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) =>
+                        handleItemChange(index, "quantity", e.target.value)
+                      }
+                      placeholder="Quantity"
+                    />
+                  </Col>
+                  {/* Remove Button */}
+                  <Col md={2} className="d-flex align-items-center">
+                    <Button
+                      color="danger"
+                      outline
+                      size="sm"
+                      onClick={() => removeItemField(index)}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </Col>
+                </Row>
+              ))
+            )}
+            <Button
+              color="primary"
+              outline
+              onClick={addItemField}
+              size="sm"
+              style={{ marginTop: "10px" }}
+            >
+              Add Item
             </Button>
           </FormGroup>
 
