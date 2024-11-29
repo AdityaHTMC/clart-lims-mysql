@@ -46,7 +46,11 @@ const CreateOrder = () => {
     getAllPhelboList,
     allphelboList,
     getCustomerPetList,
-    petList,getZonePrice,zoneprice
+    petList,
+    getZonePrice,
+    zoneprice,
+    getallSahcList,
+    allsahcList,getSahcwiseDoc,sahcDoc
   } = useMasterContext();
   const { getAllLabs, labDropdown } = useCategoryContext();
   const Navigate = useNavigate();
@@ -55,6 +59,8 @@ const CreateOrder = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedLab, setSelectedLab] = useState("");
+  const [selectedsahc, setSelectedsahc] = useState("");
+  const [selectedDoc, setSelectedDoc] = useState("");
   const [selectedTest, setSelectedTest] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [formData, setFormData] = useState({
@@ -64,11 +70,10 @@ const CreateOrder = () => {
     images: [],
     payment_mode: "Cash",
     booking_date: "",
+    referred_from :'',
   });
 
-  console.log(selectedCustomer,'selectedCustomer ')
-
-
+  console.log(selectedCustomer, "selectedCustomer ");
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
@@ -91,12 +96,16 @@ const CreateOrder = () => {
     getAllLabs();
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
-      getZonePrice(selectedCustomer.pincode)
+      getZonePrice(selectedCustomer.pincode);
+      getallSahcList();
     }
     if (formData.booking_date) {
       getAllTimeList(formData.booking_date);
     }
-  }, [selectedCustomer, formData.booking_date]);
+    if(selectedsahc){
+      getSahcwiseDoc(selectedsahc);
+    }
+  }, [selectedCustomer, formData.booking_date,selectedsahc]);
 
   useEffect(() => {
     if (search && search.length > 2) {
@@ -130,19 +139,17 @@ const CreateOrder = () => {
   }, [selectedTest, formData.test_package, selectedFees, formData.type]);
 
   useEffect(() => {
-    if(formData.type === 'Home Visit') {
-      setCollectionFees(zoneprice?.data?.charge || 350)
+    if (formData.type === "Home Visit") {
+      setCollectionFees(zoneprice?.data?.charge || 350);
     } else {
-      setCollectionFees(0)
+      setCollectionFees(0);
     }
-  }, [formData.type, zoneprice])
-
- 
+  }, [formData.type, zoneprice]);
 
   const onChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
-
   const resetForm = () => {
     setFormData({
       pet: "",
@@ -173,6 +180,15 @@ const CreateOrder = () => {
     setSelectedLab(lab);
   };
 
+  const handleSahcSelect = (sahc) => {
+    setSelectedsahc(sahc);
+    setSelectedDoc("");
+  };
+
+  const handleDocSelect = (doc) => {
+    setSelectedDoc(doc);
+  };
+
   const handleImageChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     console.log(selectedFiles);
@@ -183,8 +199,8 @@ const CreateOrder = () => {
   };
 
   const handleDateChange = (e) => {
-    const selectedDate = new Date(e.target.value); 
-    const formattedDate = selectedDate.toISOString(); 
+    const selectedDate = new Date(e.target.value);
+    const formattedDate = selectedDate.toISOString();
 
     setFormData((prevData) => ({
       ...prevData,
@@ -472,6 +488,89 @@ const CreateOrder = () => {
                                 </Input>
                               </FormGroup>
                             )}
+
+<FormGroup className="mt-4 d-flex align-items-center">
+  <Label className="me-3 fw-bold">Referred Type</Label>
+  <div className="form-check me-4">
+    <Input
+      className="form-check-input"
+      type="radio"
+      name="referred_from" // Make sure the name matches
+      value="self"
+      onChange={onChange}
+      disabled={isProcessing}
+      checked={formData.referred_from === "self"}
+    />
+    <Label className="form-check-label">Self</Label>
+  </div>
+  <div className="form-check">
+    <Input
+      className="form-check-input"
+      type="radio"
+      name="referred_from" // Same name to update referred_from
+      value="doctor"
+      onChange={onChange}
+      disabled={isProcessing}
+      checked={formData.referred_from === "doctor"}
+    />
+    <Label className="form-check-label">Doctor</Label>
+  </div>
+</FormGroup>
+
+                           
+{formData.referred_from === "doctor" && (
+  <FormGroup className="mt-3">
+    <Label for="sahc" className="fw-bold">Select SAHC</Label>
+    <Input
+      type="select"
+      id="sahc"
+      name="sahc"
+      className="form-select"
+      value={selectedsahc || ""}
+      onChange={(e) => handleSahcSelect(e.target.value)}
+    >
+      <option value="" disabled>Select SAHC</option>
+      {allsahcList?.data?.map((sahc) => (
+        <option key={sahc.id} value={sahc.id}>
+          {sahc.name}
+        </option>
+      ))}
+    </Input>
+  </FormGroup>
+)}
+
+
+                           {
+                            selectedsahc && (
+                              <FormGroup className="mt-3">
+                                <Label for="doctor" className="fw-bold">
+                                  Select Doctor
+                                </Label>
+                                <Input
+                                  type="select"
+                                  id="doctor"
+                                  name="doctor"
+                                  className="form-select"
+                                  value={selectedDoc || ""}
+                                  onChange={(e) =>
+                                    handleDocSelect(e.target.value)
+                                  }
+                                  
+                                >
+                                  <option value="" disabled>
+                                    Select Doctor
+                                  </option>
+                                  {sahcDoc.data.map((doctor) => (
+                                    <option key={doctor.id} value={doctor.id}>
+                                      {doctor.name}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </FormGroup>
+                            )
+                           }
+
+
                             <FormGroup className="mt-3">
                               <Label for="bookingDate" className="fw-bold">
                                 Booking Date
@@ -486,7 +585,7 @@ const CreateOrder = () => {
                                 onChange={handleDateChange}
                               />
                             </FormGroup>
-                            {formData.booking_date &&  (
+                            {formData.booking_date && (
                               <div className="mt-3">
                                 <h6>Choose Time Slots</h6>
                                 <div className="d-flex flex-wrap gap-2">
@@ -502,7 +601,7 @@ const CreateOrder = () => {
                                       }
                                       onClick={() => handleSelect(slot)}
                                       className="p-2 border rounded"
-                                    /> 
+                                    />
                                   ))}
                                 </div>
                               </div>
@@ -662,23 +761,23 @@ const CreateOrder = () => {
                             <hr className="mt-4" />
                             <div className="d-flex justify-content-between align-items-center mt-3">
                               <div>
-                                
-                                  <>
-                                    <p className="mb-0">
-                                      Collection Fees : ₹ {collectionFees}
-                                    </p>
-                                    <p className="fw-bold fs-5">
-                                      Total Amount : ₹ {totalAmount + collectionFees}
-                                    </p>
-                                  </>
-                              
+                                <>
+                                  <p className="mb-0">
+                                    Collection Fees : ₹ {collectionFees}
+                                  </p>
+                                  <p className="fw-bold fs-5">
+                                    Total Amount : ₹{" "}
+                                    {totalAmount + collectionFees}
+                                  </p>
+                                </>
                               </div>
                               <Button
                                 color="primary"
                                 disabled={
                                   totalAmount === 0 ||
                                   !formData.payment_mode ||
-                                  !formData.pet || !formData.booking_date ||
+                                  !formData.pet ||
+                                  !formData.booking_date ||
                                   isProcessing
                                 }
                                 onClick={createOrder}
