@@ -36,18 +36,20 @@ import { Chip, TextField } from "@mui/material";
 const ZoneMasterList = () => {
   const navigate = useNavigate();
 
-  const { getZoneList, zoneList,addZoneMaster } = useMasterContext();
+  const { getZoneList, zoneList, addZoneMaster,editZonePincodeList,DeleteZoneFees } = useMasterContext();
 
   const [formData, setFormData] = useState({
     zone_name: "",
-    charge : "",
+    charge: "",
   });
-
 
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
+
+  const [allPincodes, setAllPincodes] = useState([]); // To manage all pincodes
+  const [currentPincode, setCurrentPincode] = useState("");
 
   const handleAddPincode = () => {
     if (pincode) {
@@ -60,11 +62,10 @@ const ZoneMasterList = () => {
     setPincodes(pincodes.filter((_, index) => index !== indexToRemove));
   };
 
-
   const [selectedvarity, setSelectedvarity] = useState({
-    name: "",
-    sahc_id: "",
-    registration_number: "",
+    zone_name: "",
+    charge: "",
+    pincode: "",
     id: "",
   });
 
@@ -77,16 +78,35 @@ const ZoneMasterList = () => {
   };
   const onOpenModal2 = (product) => {
     setSelectedvarity(product);
+    // Ensure pincode is an array
+    const pincodeArray = Array.isArray(product.pincode)
+      ? product.pincode
+      : product.pincode?.split(",").map((code) => code.trim()) || [];
+
+    setAllPincodes(pincodeArray); // Set the pincode array
     setModalOpen(true);
+  };
+
+  console.log(allPincodes, " allPincodes");
+
+  const handleeditPincode = () => {
+    if (currentPincode.trim() && !allPincodes.includes(currentPincode.trim())) {
+      setAllPincodes((prev) => [...prev, currentPincode.trim()]);
+      setCurrentPincode("");
+    }
+  };
+
+  const RemovePincode = (index) => {
+    setAllPincodes((prev) => prev.filter((_, i) => i !== index));
   };
 
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
     setSelectedvarity({
-      name: "",
-      sahc_id: "",
-      registration_number: "",
+      zone_name: "",
+      charge: "",
+      pincode: "",
       id: "",
     });
   };
@@ -106,13 +126,19 @@ const ZoneMasterList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    //   editOrderStatus(selectedvarity.id, selectedvarity);
+    const dataToSend = {
+      pincode: allPincodes.join(','), 
+      id: selectedvarity.id,
+      zone_name: selectedvarity.zone_name,
+      charge : selectedvarity.charge
+    };
+    editZonePincodeList(dataToSend);
     onCloseModal2();
   };
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      // DeleteOrderStatus(id);
+      DeleteZoneFees(id);
     }
   };
 
@@ -127,11 +153,11 @@ const ZoneMasterList = () => {
 
   // Handle form submission
   const handleSubmit = () => {
-    const dataToSend ={
+    const dataToSend = {
       zone_name: formData.zone_name,
       charge: formData.charge,
       pincode: pincodes.join(","),
-    }
+    };
     addZoneMaster(dataToSend);
     onCloseModal();
   };
@@ -157,6 +183,7 @@ const ZoneMasterList = () => {
                       <tr>
                         <th>Zone Name </th>
                         <th>pincodes </th>
+                        <th>Charge</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -178,6 +205,7 @@ const ZoneMasterList = () => {
                           <tr key={index}>
                             <td>{product.zone_name}</td>
                             <td>{product.pincode}</td>
+                            <td>{product.charge}</td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
@@ -224,7 +252,7 @@ const ZoneMasterList = () => {
           <Form>
             <FormGroup>
               <Label htmlFor="zone_name" className="col-form-label">
-               Zone Name
+                Zone Name
               </Label>
               <Input
                 type="text"
@@ -236,7 +264,7 @@ const ZoneMasterList = () => {
             </FormGroup>
             <FormGroup>
               <Label htmlFor="charge" className="col-form-label">
-               Charge
+                Charge
               </Label>
               <Input
                 type="number"
@@ -304,16 +332,63 @@ const ZoneMasterList = () => {
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
           <Form>
             <FormGroup>
-              <Label htmlFor="title" className="col-form-label">
-                Name:
+              <Label htmlFor="zone_name" className="col-form-label">
+                Zone Name:
               </Label>
               <Input
                 type="text"
-                name="title"
-                value={selectedvarity.name}
+                name="zone_name"
+                value={selectedvarity.zone_name}
                 onChange={handleInputChanges}
-                id="title"
+                id="zone_name"
               />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="charge" className="col-form-label">
+               Charge:
+              </Label>
+              <Input
+                type="text"
+                name="charge"
+                value={selectedvarity.charge}
+                onChange={handleInputChanges}
+                id="charge"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="pincode" className="col-form-label">
+                Serviceable Pincode:
+              </Label>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Input
+                  type="text"
+                  name="pincode"
+                  value={currentPincode}
+                  onChange={(e) => setCurrentPincode(e.target.value)}
+                  id="pincode"
+                  placeholder="Enter pincode"
+                />
+                <Button
+                  color="primary"
+                  onClick={handleeditPincode}
+                  style={{ marginLeft: "5px" }}
+                >
+                  <AddLocationIcon />
+                </Button>
+              </div>
+
+              {/* Display Chips for existing and newly added pincodes */}
+              <div style={{ marginTop: "10px" }}>
+                {allPincodes?.map((code, index) => (
+                  <Chip
+                    key={index}
+                    label={code}
+                    onDelete={() => RemovePincode(index)}
+                    deleteIcon={<CancelIcon />}
+                    style={{ margin: "5px" }}
+                  />
+                ))}
+              </div>
             </FormGroup>
           </Form>
         </ModalBody>

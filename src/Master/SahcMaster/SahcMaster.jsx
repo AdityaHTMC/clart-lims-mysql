@@ -38,7 +38,7 @@ import { Pagination, Stack } from "@mui/material";
   const SahcMaster = () => {
     const navigate = useNavigate();
   
-    const {  getOrderMasterList, addOrderMasterList , orderMasterList,editOrderStatus,DeleteOrderStatus,getsahcList,sahcList,addSahc } = useMasterContext();
+    const { editOrderStatus,DeleteOrderStatus,getsahcList,sahcList,addSahc,editSahcList,DeleteSahcFees } = useMasterContext();
   
     const [formData, setFormData] = useState({
       name: "",
@@ -97,13 +97,13 @@ import { Pagination, Stack } from "@mui/material";
   
     // Handle submit for updating the brand
     const handleSubmits = () => {
-      editOrderStatus(selectedvarity.id, selectedvarity);
+      editSahcList(selectedvarity.id, selectedvarity);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        DeleteOrderStatus(id);
+        DeleteSahcFees(id);
       }
     };
   
@@ -210,7 +210,7 @@ import { Pagination, Stack } from "@mui/material";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -259,15 +259,15 @@ import { Pagination, Stack } from "@mui/material";
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
-                <Label htmlFor="title" className="col-form-label">
+                <Label htmlFor="name" className="col-form-label">
                   Name:
                 </Label>
                 <Input
                   type="text"
-                  name="title"
+                  name="name"
                   value={selectedvarity.name}
                   onChange={handleInputChanges}
-                  id="title"
+                  id="name"
                 />
               </FormGroup>
             </Form>

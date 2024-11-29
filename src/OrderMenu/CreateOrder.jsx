@@ -502,7 +502,7 @@ const CreateOrder = () => {
                                       }
                                       onClick={() => handleSelect(slot)}
                                       className="p-2 border rounded"
-                                    />
+                                    /> 
                                   ))}
                                 </div>
                               </div>

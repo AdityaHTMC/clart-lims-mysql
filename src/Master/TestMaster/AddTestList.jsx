@@ -138,7 +138,6 @@ const AddTestList = () => {
     formDataToSend.append("group_id", inputData.group);
     formDataToSend.append("price", inputData.price);
     formDataToSend.append("sell_price", inputData.sell_price);
-    formDataToSend.append("collection_fee", inputData.collection_fee);
     formDataToSend.append("testcode", inputData.testcode);
     formDataToSend.append("advice", inputData.advice);
     formDataToSend.append("duration", inputData.duration);
@@ -230,39 +229,34 @@ const AddTestList = () => {
           <div className="row" style={{ marginBottom: "15px" }}>
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
-                <Label
-                  htmlFor="sell_price"
-                
-                >
-                  Sell Price:
+                <Label htmlFor="sell_price">
+                  Sell Price <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
                   name="sell_price"
+                  className="form-control shadow-sm"
                   min={0}
                   value={inputData.sell_price}
                   onChange={handleInputChange}
                   id="sell_price"
-                 
+                  placeholder="Enter Sell Price"
+                  required
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
-                <Label
-                  htmlFor="test_preparation"
-                  
-                >
-                  Test Preparation:
-                </Label>
+                <Label htmlFor="test_preparation">Test Preparation:</Label>
                 <Input
                   type="textarea"
                   name="test_preparation"
+                  className="form-control shadow-sm"
                   value={inputData.test_preparation}
                   onChange={handleInputChange}
                   id="test_preparation"
                   rows="3"
-              
+                  placeholder="Enter Test Preparation"
                 />
               </FormGroup>
             </div>
@@ -274,37 +268,32 @@ const AddTestList = () => {
           >
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
-                <Label
-                  htmlFor="testcode"
-                
-                >
-                  Testcode:
+                <Label htmlFor="testcode">
+                  Testcode <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="text"
                   name="testcode"
+                  className="form-control shadow-sm"
                   value={inputData.testcode}
                   onChange={handleInputChange}
                   id="testcode"
-                 
+                  placeholder="Enter Testcode"
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
-                <Label
-                  htmlFor="advice"
-                >
-                  Advice:
-                </Label>
+                <Label htmlFor="advice">Advice:</Label>
                 <Input
                   type="textarea"
                   name="advice"
                   value={inputData.advice}
+                  className="form-control shadow-sm"
                   onChange={handleInputChange}
                   rows="2"
                   id="advice"
-              
+                  placeholder="Enter Advice"
                 />
               </FormGroup>
             </div>
@@ -314,16 +303,17 @@ const AddTestList = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="group" className="col-form-label">
-                  Group:
+                  Test Group:
                 </Label>
                 <Input
                   type="select"
                   name="group"
+                  className="form-control shadow-sm"
                   value={inputData.group}
                   onChange={handleInputChange}
                   id="group"
                 >
-                  <option value="">Select Group</option>
+                  <option value="">Select Test Group</option>
                   {alltestCategory?.data?.map((variety) => (
                     <option key={variety._id} value={variety.id}>
                       {variety.name}
@@ -341,9 +331,11 @@ const AddTestList = () => {
                   type="number"
                   name="duration"
                   min={0}
+                  className="form-control shadow-sm"
                   value={inputData.duration}
                   onChange={handleInputChange}
                   id="duration"
+                  placeholder="Enter Duration"
                 />
               </FormGroup>
             </div>
@@ -352,6 +344,17 @@ const AddTestList = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup className="mt-3">
+                <Label
+                  for="New"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Professional Fees
+                </Label>
                 <Autocomplete
                   multiple
                   options={professionalFees?.data || []}
@@ -380,6 +383,7 @@ const AddTestList = () => {
                 <Input
                   type="textarea"
                   name="why_the_test"
+                  className="form-control shadow-sm"
                   value={inputData.why_the_test}
                   onChange={handleInputChange}
                   rows="2"
@@ -388,15 +392,26 @@ const AddTestList = () => {
                     padding: "10px",
                   }}
                   id="why_the_test"
+                  placeholder="Enter Why The Test Requires"
                 />
               </FormGroup>
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginBottom: "20px" }}>
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Species</Label>
+                <Label
+                  for="New"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Species
+                </Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
@@ -411,6 +426,11 @@ const AddTestList = () => {
                       variant="outlined"
                       label="Select Species"
                       placeholder="Select Species"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "5px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      }}
                     />
                   )}
                 />
@@ -418,9 +438,32 @@ const AddTestList = () => {
             </div>
             <div className="col-md-6">
               <FormGroup>
-                <Label className="col-form-label">Is Popular:</Label>
-                <div className="d-flex align-items-center">
-                  <div className="form-check me-3">
+                <Label
+                  className="col-form-label"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Is It Popular Test ?:
+                </Label>
+                <div
+                  className="d-flex align-items-center"
+                  style={{
+                    border: "1px solid #ced4da",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    backgroundColor: "#f8f9fa",
+                  }}
+                >
+                  <div
+                    className="form-check me-3"
+                    style={{
+                      marginRight: "20px",
+                    }}
+                  >
                     <Input
                       type="radio"
                       name="is_popular"
@@ -429,8 +472,15 @@ const AddTestList = () => {
                       id="radioYes"
                       checked={inputData.is_popular === "Yes"}
                       onChange={handlePopularChange}
+                      style={{
+                        marginRight: "5px",
+                      }}
                     />
-                    <Label className="form-check-label" htmlFor="radioYes">
+                    <Label
+                      className="form-check-label"
+                      htmlFor="radioYes"
+                      style={{ fontSize: "14px", color: "#495057" }}
+                    >
                       Yes
                     </Label>
                   </div>
@@ -443,8 +493,15 @@ const AddTestList = () => {
                       id="radioNo"
                       checked={inputData.is_popular === "No"}
                       onChange={handlePopularChange}
+                      style={{
+                        marginRight: "5px",
+                      }}
                     />
-                    <Label className="form-check-label" htmlFor="radioNo">
+                    <Label
+                      className="form-check-label"
+                      htmlFor="radioNo"
+                      style={{ fontSize: "14px", color: "#495057" }}
+                    >
                       No
                     </Label>
                   </div>
@@ -453,23 +510,49 @@ const AddTestList = () => {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginBottom: "20px" }}>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="image" className="col-form-label">
-                  Test Image :
+              <FormGroup style={{ marginBottom: "15px" }}>
+                <Label
+                  htmlFor="image"
+                  className="col-form-label"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Test Image:
                 </Label>
                 <Input
                   id="image"
                   type="file"
                   name="image"
                   onChange={handleFileChange}
+                  style={{
+                    border: "1px solid #ced4da",
+                    borderRadius: "5px",
+                    padding: "5px 10px",
+                    backgroundColor: "#fff",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    cursor: "pointer",
+                  }}
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="method" className="col-form-label">
+                <Label
+                  htmlFor="method"
+                  className="col-form-label"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
                   Test Method:
                 </Label>
                 <Input
@@ -480,22 +563,45 @@ const AddTestList = () => {
                   id="method"
                   rows="3"
                   style={{
+                    border: "1px solid #ced4da",
                     borderRadius: "5px",
                     padding: "10px",
+                    backgroundColor: "#f8f9fa",
+                    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    resize: "none",
                   }}
                 />
               </FormGroup>
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginBottom: "20px" }}>
             {itemsData.map((itemData, index) => (
               <div className="col-md-6 mb-2" key={index}>
-                <FormGroup>
-                  <Label htmlFor={`item-${index}`} className="col-form-label">
+                <FormGroup style={{ marginBottom: "15px" }}>
+                  <Label
+                    htmlFor={`item-${index}`}
+                    className="col-form-label"
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      color: "#495057",
+                      marginBottom: "5px",
+                      display: "block",
+                    }}
+                  >
                     Item {index + 1}
                   </Label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#f8f9fa",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
                     {/* Dropdown for selecting item */}
                     <Input
                       type="select"
@@ -505,10 +611,16 @@ const AddTestList = () => {
                       onChange={(e) =>
                         handleItemChange(index, "item", e.target.value)
                       }
-                      style={{ marginRight: "10px" }}
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
                     >
                       <option value="">Select Item</option>
-                      {/* Replace with dynamic mapping of your item list */}
                       {allItemList?.data?.map((item) => (
                         <option key={item.id} value={item.id}>
                           {item.name}
@@ -526,7 +638,15 @@ const AddTestList = () => {
                         handleItemChange(index, "quantity", e.target.value)
                       }
                       placeholder="Quantity"
-                      style={{ marginRight: "10px", maxWidth: "150px" }}
+                      style={{
+                        marginRight: "10px",
+                        maxWidth: "120px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
                     />
 
                     {/* Remove button */}
@@ -534,7 +654,14 @@ const AddTestList = () => {
                       type="button"
                       color="primary"
                       onClick={() => removeItemField(index)}
-                      style={{ color: "white" }}
+                      style={{
+                        color: "white",
+                        backgroundColor: "#dc3545",
+                        borderColor: "#dc3545",
+                        padding: "8px 12px",
+                        borderRadius: "5px",
+                        fontSize: "14px",
+                      }}
                     >
                       <FaTrash />
                     </Button>
@@ -550,24 +677,50 @@ const AddTestList = () => {
                 outline
                 onClick={addItemField}
                 size="sm"
-                style={{ marginTop: "10px" }}
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 20px",
+                  borderRadius: "5px",
+                  fontSize: "14px",
+                  border: "1px solid #007bff",
+                  color: "#007bff",
+                  backgroundColor: "white",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.2s ease-in-out",
+                }}
               >
                 Add Item
               </Button>
             </div>
           </div>
 
-          <div className="row">
+          <div className="row" style={{ marginBottom: "20px" }}>
             {inputData.observation.map((obs, index) => (
               <div className="col-md-6 mb-2" key={index}>
-                <FormGroup>
+                <FormGroup style={{ marginBottom: "15px" }}>
                   <Label
                     htmlFor={`observations-${index}`}
                     className="col-form-label"
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      color: "#495057",
+                      marginBottom: "5px",
+                      display: "block",
+                    }}
                   >
                     Observation {index + 1}
                   </Label>
-                  <div style={{ display: "flex", alignItems: "center" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#f8f9fa",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
                     <Input
                       type="textarea"
                       name={`observation-${index}`}
@@ -576,20 +729,31 @@ const AddTestList = () => {
                         handleObseravition(index, e.target.value)
                       }
                       rows="2"
+                      id={`observation-${index}`}
                       style={{
+                        flex: "1",
                         borderRadius: "5px",
                         padding: "10px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "inset 0 1px 2px rgba(0, 0, 0, 0.1)",
+                        marginRight: "10px",
                       }}
-                      id={`observation-${index}`}
                     />
-                    <div className="circelBtnBx">
+                    <div
+                  
+                    >
                       <Button
                         type="button"
-                        className="btn"
                         color="primary"
                         onClick={() => removeObservationField(index)}
                         style={{
                           color: "white",
+                          backgroundColor: "#dc3545",
+                          borderColor: "#dc3545",
+                          padding: "8px 12px",
+                          borderRadius: "5px",
+                          fontSize: "14px",
                         }}
                       >
                         <FaTrash />
@@ -607,7 +771,17 @@ const AddTestList = () => {
                 outline
                 onClick={addObservationField}
                 size="sm"
-                style={{ marginTop: "10px" }}
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 20px",
+                  borderRadius: "5px",
+                  fontSize: "14px",
+                  border: "1px solid #007bff",
+                  color: "#007bff",
+                  backgroundColor: "white",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.2s ease-in-out",
+                }}
               >
                 Add Observation
               </Button>

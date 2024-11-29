@@ -279,16 +279,21 @@ const EditTestList = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="collection_fee" className="col-form-label">
-                  Collection Fee:
+            <FormGroup>
+                <Label htmlFor="test_preparation" className="col-form-label">
+                  Test Preparation:
                 </Label>
                 <Input
-                  type="number"
-                  name="collection_fee"
-                  value={inputData.collection_fee}
+                  type="textarea"
+                  name="test_preparation"
+                  value={inputData.test_preparation}
                   onChange={handleInputChange}
-                  id="collection_fee"
+                  id="test_preparation"
+                  rows="3"
+                  style={{
+                    borderRadius: "5px",
+                    padding: "10px",
+                  }}
                 />
               </FormGroup>
             </div>
@@ -363,28 +368,6 @@ const EditTestList = () => {
                   value={inputData.duration}
                   onChange={handleInputChange}
                   id="duration"
-                />
-              </FormGroup>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-12">
-              <FormGroup>
-                <Label htmlFor="test_preparation" className="col-form-label">
-                  Test Preparation:
-                </Label>
-                <Input
-                  type="textarea"
-                  name="test_preparation"
-                  value={inputData.test_preparation}
-                  onChange={handleInputChange}
-                  id="test_preparation"
-                  rows="3"
-                  style={{
-                    borderRadius: "5px",
-                    padding: "10px",
-                  }}
                 />
               </FormGroup>
             </div>

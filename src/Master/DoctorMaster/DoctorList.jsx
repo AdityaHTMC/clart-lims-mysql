@@ -36,7 +36,7 @@ import { Pagination, Stack } from "@mui/material";
 const DoctorList = () => {
   const navigate = useNavigate();
 
-  const { getDocList, docList, addDocMaster, getallSahcList, allsahcList } =
+  const { getDocList, docList, addDocMaster, getallSahcList, allsahcList,editDocList, DeleteDoc} =
     useMasterContext();
 
   const [formData, setFormData] = useState({
@@ -104,13 +104,13 @@ const DoctorList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    //   editOrderStatus(selectedvarity.id, selectedvarity);
+    editDocList(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      // DeleteOrderStatus(id);
+      DeleteDoc(id);
     }
   };
 
@@ -154,6 +154,7 @@ const DoctorList = () => {
                       <tr>
                         <th>Name </th>
                         <th>Registration Number</th>
+                        <th>Sahc Name</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -175,6 +176,7 @@ const DoctorList = () => {
                           <tr key={index}>
                             <td>{product.name}</td>
                             <td>{product.registration_number}</td>
+                            <td>{product.sahc_name}</td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
@@ -217,7 +219,7 @@ const DoctorList = () => {
       <Modal
         isOpen={open}
         toggle={onCloseModal}
-        className="modal-lg" // Increases the width
+        className="modal-xg" 
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -292,16 +294,47 @@ const DoctorList = () => {
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
           <Form>
             <FormGroup>
-              <Label htmlFor="title" className="col-form-label">
+              <Label htmlFor="name" className="col-form-label">
                 Name:
               </Label>
               <Input
                 type="text"
-                name="title"
+                name="name"
                 value={selectedvarity.name}
                 onChange={handleInputChanges}
-                id="title"
+                id="name"
               />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="registration_number" className="col-form-label">
+                Registration Number
+              </Label>
+              <Input
+                type="number"
+                name="registration_number"
+                value={selectedvarity.registration_number}
+                onChange={handleInputChanges}
+                id="registration_number"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="sahc_id" className="col-form-label">
+                Sahc:
+              </Label>
+              <Input
+                type="select"
+                name="sahc_id"
+                value={selectedvarity.sahc_id}
+                onChange={handleInputChanges}
+                id="sahc_id"
+              >
+                <option value="">Select sahc</option>
+                {allsahcList?.data?.map((variety) => (
+                  <option key={variety._id} value={variety.id}>
+                    {variety.name}
+                  </option>
+                ))}
+              </Input>
             </FormGroup>
           </Form>
         </ModalBody>

@@ -2066,11 +2066,149 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const editZonePincodeList = async (dataToSend) => {
+    try {
+      const {id} = dataToSend
+      const response = await axios.put(
+        `${base_url}/admin/zone-master/update/${id}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+            // 'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getZoneList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const editDocList = async (id,dataToSend) => {
+    try {
+     
+      const response = await axios.put(
+        `${base_url}/admin/doctor/update/${id}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getDocList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+  const editSahcList = async (id,dataToSend) => {
+    try {
+     
+      const response = await axios.put(
+        `${base_url}/admin/sahc-master/update/${id}`,
+        dataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getsahcList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const DeleteSahcFees = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/sahc-master/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+            // 'Content-Type': 'application/json' ,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getsahcList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const DeleteDoc = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/doctor/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getDocList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const DeleteZoneFees = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/zone-master/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getZoneList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
 
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
