@@ -2209,7 +2209,7 @@ export const MasterProvider = ({ children }) => {
   const getSahcwiseDoc = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/doctor/getAll`,{...dataToSend},
+        `${base_url}/admin/doctor/getAll`,{sahc_id:dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       if (response.status === 200) {

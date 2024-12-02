@@ -36,7 +36,13 @@ import { Chip, TextField } from "@mui/material";
 const ZoneMasterList = () => {
   const navigate = useNavigate();
 
-  const { getZoneList, zoneList, addZoneMaster,editZonePincodeList,DeleteZoneFees } = useMasterContext();
+  const {
+    getZoneList,
+    zoneList,
+    addZoneMaster,
+    editZonePincodeList,
+    DeleteZoneFees,
+  } = useMasterContext();
 
   const [formData, setFormData] = useState({
     zone_name: "",
@@ -127,10 +133,10 @@ const ZoneMasterList = () => {
   // Handle submit for updating the brand
   const handleSubmits = () => {
     const dataToSend = {
-      pincode: allPincodes.join(','), 
+      pincode: allPincodes.join(","),
       id: selectedvarity.id,
       zone_name: selectedvarity.zone_name,
-      charge : selectedvarity.charge
+      charge: selectedvarity.charge,
     };
     editZonePincodeList(dataToSend);
     onCloseModal2();
@@ -182,9 +188,9 @@ const ZoneMasterList = () => {
                     <thead>
                       <tr>
                         <th>Zone Name </th>
-                        <th>pincodes </th>
+                        <th style={{textAlign:'center'}}>pincodes </th>
                         <th>Charge</th>
-                        <th>Action</th>
+                        <th style={{textAlign:'center'}}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -204,7 +210,35 @@ const ZoneMasterList = () => {
                         zoneList?.data?.map((product, index) => (
                           <tr key={index}>
                             <td>{product.zone_name}</td>
-                            <td>{product.pincode}</td>
+                            <td style={{width:'70%'}}>
+                              <div
+                                style={{
+                                  maxHeight: "100px",
+                                  overflowY: "auto",
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "5px",
+                                  padding: "5px",
+                                  border: "1px solid #ddd",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                {product.pincode.split(",").map((code, idx) => (
+                                  <span
+                                    key={idx}
+                                    style={{
+                                      backgroundColor: "#f1f1f1",
+                                      borderRadius: "4px",
+                                      padding: "2px 6px",
+                                      fontSize: "12px",
+                                      margin: "2px",
+                                    }}
+                                  >
+                                    {code}
+                                  </span>
+                                ))}
+                              </div>
+                            </td>
                             <td>{product.charge}</td>
                             <td>
                               <div className="circelBtnBx">
@@ -345,7 +379,7 @@ const ZoneMasterList = () => {
             </FormGroup>
             <FormGroup>
               <Label htmlFor="charge" className="col-form-label">
-               Charge:
+                Charge:
               </Label>
               <Input
                 type="text"

@@ -50,7 +50,9 @@ const CreateOrder = () => {
     getZonePrice,
     zoneprice,
     getallSahcList,
-    allsahcList,getSahcwiseDoc,sahcDoc
+    allsahcList,
+    getSahcwiseDoc,
+    sahcDoc,
   } = useMasterContext();
   const { getAllLabs, labDropdown } = useCategoryContext();
   const Navigate = useNavigate();
@@ -70,7 +72,7 @@ const CreateOrder = () => {
     images: [],
     payment_mode: "Cash",
     booking_date: "",
-    referred_from :'',
+    referred_from: "",
   });
 
   console.log(selectedCustomer, "selectedCustomer ");
@@ -89,11 +91,6 @@ const CreateOrder = () => {
   // console.log(selectedPhelbo, "phelobmist");
 
   useEffect(() => {
-    getAllTest();
-    getProfessionalFees();
-    getTestPackageList();
-    getAllPhelboList();
-    getAllLabs();
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
       getZonePrice(selectedCustomer.pincode);
@@ -102,10 +99,21 @@ const CreateOrder = () => {
     if (formData.booking_date) {
       getAllTimeList(formData.booking_date);
     }
-    if(selectedsahc){
+  }, [selectedCustomer, formData.booking_date]);
+
+  useEffect(() => {
+    getAllTest();
+    getProfessionalFees();
+    getTestPackageList();
+    getAllPhelboList();
+    getAllLabs();
+  }, []);
+
+  useEffect(() => {
+    if (selectedsahc) {
       getSahcwiseDoc(selectedsahc);
     }
-  }, [selectedCustomer, formData.booking_date,selectedsahc]);
+  }, [selectedsahc]);
 
   useEffect(() => {
     if (search && search.length > 2) {
@@ -260,7 +268,9 @@ const CreateOrder = () => {
         bodyData.append(`prescription[${index}]`, image);
       });
     }
-
+    
+    bodyData.append("doctor_id", selectedDoc);
+    bodyData.append("referred_from ", formData.referred_from);
     bodyData.append("start_time", selectedSlot.start_time);
     bodyData.append("end_time", selectedSlot.end_time);
 
@@ -489,59 +499,66 @@ const CreateOrder = () => {
                               </FormGroup>
                             )}
 
-<FormGroup className="mt-4 d-flex align-items-center">
-  <Label className="me-3 fw-bold">Referred Type</Label>
-  <div className="form-check me-4">
-    <Input
-      className="form-check-input"
-      type="radio"
-      name="referred_from" // Make sure the name matches
-      value="self"
-      onChange={onChange}
-      disabled={isProcessing}
-      checked={formData.referred_from === "self"}
-    />
-    <Label className="form-check-label">Self</Label>
-  </div>
-  <div className="form-check">
-    <Input
-      className="form-check-input"
-      type="radio"
-      name="referred_from" // Same name to update referred_from
-      value="doctor"
-      onChange={onChange}
-      disabled={isProcessing}
-      checked={formData.referred_from === "doctor"}
-    />
-    <Label className="form-check-label">Doctor</Label>
-  </div>
-</FormGroup>
+                            <FormGroup className="mt-4 d-flex align-items-center">
+                              <Label className="me-3 fw-bold">
+                                Referred Type
+                              </Label>
+                              <div className="form-check me-4">
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="referred_from" // Make sure the name matches
+                                  value="self"
+                                  onChange={onChange}
+                                  disabled={isProcessing}
+                                  checked={formData.referred_from === "self"}
+                                />
+                                <Label className="form-check-label">Self</Label>
+                              </div>
+                              <div className="form-check">
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="referred_from" // Same name to update referred_from
+                                  value="doctor"
+                                  onChange={onChange}
+                                  disabled={isProcessing}
+                                  checked={formData.referred_from === "doctor"}
+                                />
+                                <Label className="form-check-label">
+                                  Doctor
+                                </Label>
+                              </div>
+                            </FormGroup>
 
-                           
-{formData.referred_from === "doctor" && (
-  <FormGroup className="mt-3">
-    <Label for="sahc" className="fw-bold">Select SAHC</Label>
-    <Input
-      type="select"
-      id="sahc"
-      name="sahc"
-      className="form-select"
-      value={selectedsahc || ""}
-      onChange={(e) => handleSahcSelect(e.target.value)}
-    >
-      <option value="" disabled>Select SAHC</option>
-      {allsahcList?.data?.map((sahc) => (
-        <option key={sahc.id} value={sahc.id}>
-          {sahc.name}
-        </option>
-      ))}
-    </Input>
-  </FormGroup>
-)}
+                            {formData.referred_from === "doctor" && (
+                              <FormGroup className="mt-3">
+                                <Label for="sahc" className="fw-bold">
+                                  Select SAHC
+                                </Label>
+                                <Input
+                                  type="select"
+                                  id="sahc"
+                                  name="sahc"
+                                  className="form-select"
+                                  value={selectedsahc || ""}
+                                  onChange={(e) =>
+                                    handleSahcSelect(e.target.value)
+                                  }
+                                >
+                                  <option value="" disabled>
+                                    Select SAHC
+                                  </option>
+                                  {allsahcList?.data?.map((sahc) => (
+                                    <option key={sahc.id} value={sahc.id}>
+                                      {sahc.name}
+                                    </option>
+                                  ))}
+                                </Input>
+                              </FormGroup>
+                            )}
 
-
-                           {
-                            selectedsahc && (
+                            {selectedsahc && formData.referred_from === "doctor" && (
                               <FormGroup className="mt-3">
                                 <Label for="doctor" className="fw-bold">
                                   Select Doctor
@@ -555,7 +572,6 @@ const CreateOrder = () => {
                                   onChange={(e) =>
                                     handleDocSelect(e.target.value)
                                   }
-                                  
                                 >
                                   <option value="" disabled>
                                     Select Doctor
@@ -567,9 +583,7 @@ const CreateOrder = () => {
                                   ))}
                                 </Input>
                               </FormGroup>
-                            )
-                           }
-
+                            )}
 
                             <FormGroup className="mt-3">
                               <Label for="bookingDate" className="fw-bold">
