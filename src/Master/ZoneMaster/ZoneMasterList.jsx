@@ -357,7 +357,7 @@ const ZoneMasterList = () => {
         </ModalFooter>
       </Modal>
 
-      <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-xg">
+      <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-lg">
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             Edit

@@ -11,7 +11,7 @@ export const CMsProvider = ({ children }) => {
 
     const base_url = import.meta.env.VITE_API_URL
     const [menuList, setMenuList] = useState({ loading: true, data: [] })
-    const [cmsList, setCmsList] = useState({ loading: true, data: [] })
+    const [cmsList, setCmsList] = useState({ loading: true, data: [], total:'' })
     const [currencyList, setCurrencyList] = useState({ loading: true, data: [] })
     const { Authtoken } = useAuthContext()
     const AuthToken = localStorage.getItem('Authtoken')
@@ -40,13 +40,13 @@ export const CMsProvider = ({ children }) => {
           );
           const data = response.data;
           if (response.status === 200) {
-            setCmsList({ data: response?.data?.data || [], loading: false });
+            setCmsList({ data: response?.data?.data || [], total:response.data.total, loading: false });
           } else {
-            setCmsList({...cmsList, loading: false});
+            setCmsList({data: [],total:'', loading: false});
             toast.error("Failed to fetch Bag Type list");
           }
         } catch (error) {
-            setCmsList({...cmsList, loading: false});
+            setCmsList({data: [], loading: false});
           toast.error(error.response?.data?.message || 'Server error');
         }
       };
@@ -57,11 +57,10 @@ export const CMsProvider = ({ children }) => {
         try {
           const response = await axios.post(
             `${base_url}/cms/add`,
-            formDataToSend,  // Pass FormData directly without spreading
+            formDataToSend,  
             { 
               headers: { 
                 Authorization: AuthToken,
-                'Content-Type': 'application/json' 
               }
             }
           );
@@ -126,12 +125,11 @@ export const CMsProvider = ({ children }) => {
       const editcms = async (id, formData) => {
         try {
           const response = await axios.post(
-            `${base_url}/cms/update/${id}`,
+            `${base_url}/admin/cms/update/${id}`,
             formData,
             {
               headers: {
                 Authorization: AuthToken,
-                'Content-Type': 'application/json' 
               },
             }
           );

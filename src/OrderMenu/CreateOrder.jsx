@@ -64,6 +64,7 @@ const CreateOrder = () => {
   const [selectedsahc, setSelectedsahc] = useState("");
   const [selectedDoc, setSelectedDoc] = useState("");
   const [selectedTest, setSelectedTest] = useState([]);
+  const [selectedPackages, setSelectedPackages] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [formData, setFormData] = useState({
     pet: "",
@@ -73,9 +74,12 @@ const CreateOrder = () => {
     payment_mode: "Cash",
     booking_date: "",
     referred_from: "",
+    other_doctor: "",
   });
 
   console.log(selectedCustomer, "selectedCustomer ");
+
+  console.log(selectedPackages, "selectedPackages ");
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
@@ -126,25 +130,25 @@ const CreateOrder = () => {
 
   useEffect(() => {
     let amount = 0;
+  
+    // Calculate the total sell_price of selected tests
     selectedTest.forEach((el) => {
       amount += el.sell_price;
     });
-
-    if (formData.test_package) {
-      const packageDetail = test_package?.data?.find(
-        (el) => el._id?.toString() === formData.test_package
-      );
-      console.log(packageDetail, "package detail");
-      if (packageDetail) {
-        amount = amount + packageDetail?.sell_price || 0;
-      }
-    }
-
+  
+    // Calculate the total sell_price of selected packages
+    selectedPackages.forEach((packageDetail) => {
+      amount += packageDetail.sell_price;
+    });
+  
+    // Add charges from selectedFees
     selectedFees.forEach((el) => {
       amount += el.expected_charges;
     });
+  
     setTotalAmount(amount);
-  }, [selectedTest, formData.test_package, selectedFees, formData.type]);
+  }, [selectedTest, selectedPackages, selectedFees, formData.type]);
+  
 
   useEffect(() => {
     if (formData.type === "Home Visit") {
@@ -175,13 +179,10 @@ const CreateOrder = () => {
 
   const onTestSelect = (data) => {
     setSelectedTest(data);
-    // if (formData.test_package) {
-    //   setFormData({ ...formData, test_package: "" });
-    // }
   };
 
-  const onPackageSelect = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const onPackageSelect = (data) => {
+    setSelectedPackages(data);
   };
 
   const handleLabSelect = (lab) => {
@@ -239,40 +240,44 @@ const CreateOrder = () => {
     let bodyData = new FormData();
 
     bodyData.append("user_id", selectedCustomer.id);
-    bodyData.append("state", selectedCustomer.state);
-    bodyData.append("district", selectedCustomer.district);
-    bodyData.append("address", selectedCustomer.address);
-    bodyData.append("lab_id", selectedLab);
-    bodyData.append("pincode", selectedCustomer.pincode);
+    bodyData.append("state", selectedCustomer.state || '');
+    bodyData.append("district", selectedCustomer.district || '');
+    bodyData.append("address", selectedCustomer.address || '');
+    bodyData.append("lab_id", selectedLab || '');
+    bodyData.append("pincode", selectedCustomer.pincode || '');
     if (selectedPhelbo) {
-      bodyData.append("phlebotomist_id", selectedPhelbo.id);
+      bodyData.append("phlebotomist_id", selectedPhelbo.id || '');
     }
-    bodyData.append("booking_date", formData.booking_date);
-    bodyData.append("collection_type", formData.type);
+    bodyData.append("booking_date", formData.booking_date || '');
+    bodyData.append("collection_type", formData.type || '');
     bodyData.append("pet_id", formData.pet);
     selectedTest.forEach((el, i) => {
       bodyData.append(`tests[${i}][test]`, el.id);
       bodyData.append(`tests[${i}][price]`, el.sell_price);
+    });
+    selectedPackages.forEach((el, i) => {
+      bodyData.append(`packages[${i}][package]`, el._id);
+      bodyData.append(`packages[${i}][price]`, el.sell_price);
     });
     selectedFees?.forEach((el, i) => {
       bodyData.append(`professional_fees[${i}][professional_fee]`, el.id);
       bodyData.append(`professional_fees[${i}][price]`, el.expected_charges);
     });
 
-    if (formData.test_package) {
-      bodyData.append("package_id", parseInt(test_package.data[0]._id, 10));
-    }
+    // if (formData.test_package) {
+    //   bodyData.append("package_id", parseInt(test_package.data[0]._id, 10));
+    // }
 
     if (formData.images.length > 0) {
       formData.images.forEach((image, index) => {
         bodyData.append(`prescription[${index}]`, image);
       });
     }
-    
-    bodyData.append("doctor_id", selectedDoc);
-    bodyData.append("referred_from ", formData.referred_from);
+    bodyData.append("other_doctor ", formData.other_doctor || '');
+    bodyData.append("doctor_id", selectedDoc || '');
+    bodyData.append("referred_from ", formData.referred_from || '');
     bodyData.append("start_time", selectedSlot.start_time);
-    bodyData.append("end_time", selectedSlot.end_time);
+    bodyData.append("end_time", selectedSlot.end_time || "");
 
     bodyData.append("payment_mode", formData.payment_mode);
     bodyData.append("total_amount", totalAmount + collectionFees);
@@ -498,7 +503,6 @@ const CreateOrder = () => {
                                 </Input>
                               </FormGroup>
                             )}
-
                             <FormGroup className="mt-4 d-flex align-items-center">
                               <Label className="me-3 fw-bold">
                                 Referred Type
@@ -515,11 +519,11 @@ const CreateOrder = () => {
                                 />
                                 <Label className="form-check-label">Self</Label>
                               </div>
-                              <div className="form-check">
+                              <div className="form-check me-4">
                                 <Input
                                   className="form-check-input"
                                   type="radio"
-                                  name="referred_from" // Same name to update referred_from
+                                  name="referred_from" 
                                   value="doctor"
                                   onChange={onChange}
                                   disabled={isProcessing}
@@ -529,12 +533,45 @@ const CreateOrder = () => {
                                   Doctor
                                 </Label>
                               </div>
+                              <div className="form-check">
+                                <Input
+                                  className="form-check-input"
+                                  type="radio"
+                                  name="referred_from" 
+                                  value="other"
+                                  onChange={onChange}
+                                  disabled={isProcessing}
+                                  checked={formData.referred_from === "other"}
+                                />
+                                <Label className="form-check-label">
+                                  other
+                                </Label>
+                              </div>
                             </FormGroup>
+                           
+                           {
+                            formData.referred_from === "other" && (
+                              <FormGroup>
+                              <Label htmlFor="other_doctor" className="col-form-label">
+                               Doctor Name
+                              </Label>
+                              <Input
+                                type="text"
+                                name="other_doctor"
+                                placeholder="Type The Doctor Name"
+                                value={formData.other_doctor}
+                                onChange={onChange}
+                                id="other_doctor"
+                              />
+                            </FormGroup>
+                            )
+                           }
+
 
                             {formData.referred_from === "doctor" && (
                               <FormGroup className="mt-3">
                                 <Label for="sahc" className="fw-bold">
-                                  Select SAHC
+                                  Select Govt. Collection Center
                                 </Label>
                                 <Input
                                   type="select"
@@ -547,7 +584,7 @@ const CreateOrder = () => {
                                   }
                                 >
                                   <option value="" disabled>
-                                    Select SAHC
+                                    Select  Govt. Collection Center
                                   </option>
                                   {allsahcList?.data?.map((sahc) => (
                                     <option key={sahc.id} value={sahc.id}>
@@ -557,34 +594,33 @@ const CreateOrder = () => {
                                 </Input>
                               </FormGroup>
                             )}
-
-                            {selectedsahc && formData.referred_from === "doctor" && (
-                              <FormGroup className="mt-3">
-                                <Label for="doctor" className="fw-bold">
-                                  Select Doctor
-                                </Label>
-                                <Input
-                                  type="select"
-                                  id="doctor"
-                                  name="doctor"
-                                  className="form-select"
-                                  value={selectedDoc || ""}
-                                  onChange={(e) =>
-                                    handleDocSelect(e.target.value)
-                                  }
-                                >
-                                  <option value="" disabled>
+                            {selectedsahc &&
+                              formData.referred_from === "doctor" && (
+                                <FormGroup className="mt-3">
+                                  <Label for="doctor" className="fw-bold">
                                     Select Doctor
-                                  </option>
-                                  {sahcDoc.data.map((doctor) => (
-                                    <option key={doctor.id} value={doctor.id}>
-                                      {doctor.name}
+                                  </Label>
+                                  <Input
+                                    type="select"
+                                    id="doctor"
+                                    name="doctor"
+                                    className="form-select"
+                                    value={selectedDoc || ""}
+                                    onChange={(e) =>
+                                      handleDocSelect(e.target.value)
+                                    }
+                                  >
+                                    <option value="" disabled>
+                                      Select Doctor
                                     </option>
-                                  ))}
-                                </Input>
-                              </FormGroup>
-                            )}
-
+                                    {sahcDoc.data.map((doctor) => (
+                                      <option key={doctor.id} value={doctor.id}>
+                                        {doctor.name}
+                                      </option>
+                                    ))}
+                                  </Input>
+                                </FormGroup>
+                              )}
                             <FormGroup className="mt-3">
                               <Label for="bookingDate" className="fw-bold">
                                 Booking Date
@@ -646,7 +682,7 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                            <FormGroup className="mt-3">
+                            {/* <FormGroup className="mt-3">
                               <Label for="selectPackage" className="fw-bold">
                                 Select Health Package
                               </Label>
@@ -665,7 +701,34 @@ const CreateOrder = () => {
                                   </option>
                                 ))}
                               </Input>
+                            </FormGroup> */}
+                            <FormGroup className="mt-3">
+                              <Label for="selectPackage" className="fw-bold">
+                                Select Health Package
+                              </Label>
+                              <Autocomplete
+                                multiple
+                                options={test_package?.data || []}
+                                getOptionLabel={(option) =>
+                                  `${option?.package_name} (${option?.sell_price})` ||
+                                  ""
+                                }
+                                value={selectedPackages}
+                                disabled={isProcessing}
+                                onChange={(event, newValue) =>
+                                  onPackageSelect(newValue)
+                                }
+                                renderInput={(params) => (
+                                  <TextField
+                                    {...params}
+                                    variant="outlined"
+                                    label="Select Health Package"
+                                    placeholder="Select Health Package"
+                                  />
+                                )}
+                              />
                             </FormGroup>
+                            
                             <FormGroup className="mt-3">
                               <Label for="selectFees" className="fw-bold">
                                 Select Professional Fees
@@ -714,7 +777,6 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-
                             {totalAmount > 0 && (
                               <>
                                 <FormGroup className="mt-4">

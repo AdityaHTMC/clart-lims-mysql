@@ -29,7 +29,6 @@ import { FaTrashAlt } from "react-icons/fa";
 import { HexColorPicker } from "react-colorful";
 // Register the necessary Chart.js components
 
-
 import { Spinner } from "reactstrap";
 import { useCmsContext } from "../helper/CmsProvider";
 import ReactQuill from "react-quill";
@@ -43,6 +42,7 @@ const CmsList = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    images: "",
   });
 
   const [open, setOpen] = useState(false);
@@ -52,15 +52,17 @@ const CmsList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const itemperPage = 8;
 
-  const totalPages =
-  cmsList?.total && Math.ceil(cmsList?.total / itemperPage);
+  const totalPages = cmsList?.total && Math.ceil(cmsList?.total / itemperPage);
 
   const [selectedvarity, setSelectedvarity] = useState({
     title: "",
     description: "",
-    status: "",
-    _id: "",
+    id: "",
+    images: [],
   });
+
+  const [deletedImages, setDeletedImages] = useState([]); // For removed images
+  const [newImages, setNewImages] = useState([]); // For newly added images
 
   useEffect(() => {
     const dataToSend = {
@@ -74,24 +76,45 @@ const CmsList = () => {
     setOpen(true);
   };
   const onOpenModal2 = (product) => {
-    setSelectedvarity(product);
+    setSelectedvarity({
+      ...product,
+      images: product.images || [],
+    });
+    setDeletedImages([]);
+    setNewImages([]);
     setModalOpen(true);
+  };
+
+  const handleRemoveExistingImage = (image) => {
+    setDeletedImages((prev) => [...prev, image]);
+    setSelectedvarity((prev) => ({
+      ...prev,
+      images: prev.images.filter((img) => img !== image),
+    }));
+  };
+
+  const handleAddNewImages = (event) => {
+    const files = Array.from(event.target.files);
+    setNewImages((prev) => [...prev, ...files]);
   };
 
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
-    setSelectedvarity({ title: "", image: "", _id: "" });
+    setSelectedvarity({ title: "", image: "", id: "" });
   };
 
   const onCloseModal = () => {
     setOpen(false);
-    setFormData({ title: "", description: "" });
+    setFormData({ title: "", description: "",images: [] });
   };
 
-  const handleStatusToggle = async (product) => {
-    const newStatus = product.status === "Active" ? "Inactive" : "Active";
-    // await switchBagtype(product._id, newStatus); // Your API call here
+  const handleImageChange = (e) => {
+    const selectedFiles = Array.from(e.target.files);
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...selectedFiles],
+    }));
   };
 
   // Handle form input change
@@ -104,10 +127,37 @@ const CmsList = () => {
   };
 
   // Handle submit for updating the brand
-  const handleSubmits = () => {
-    editcms(selectedvarity._id, selectedvarity);
-    onCloseModal2();
+  // const handleSubmits = () => {
+  //   editcms(selectedvarity.id, selectedvarity);
+  //   onCloseModal2();
+  // };
+
+  console.log(newImages,'new images')
+
+  const handleSubmits = async () => {
+    const formData = new FormData();
+    formData.append("title", selectedvarity.title);
+    formData.append("description", selectedvarity.description);
+  
+    // Pass deleted images with indices
+    deletedImages.forEach((image, index) => {
+      formData.append(`deleted_images[${index}]`, image);
+    });
+  
+    // Pass new images with indices
+    newImages.forEach((image, index) => {
+      formData.append(`images[${index}]`, image);
+    });
+  
+    // Call your API function here
+    await editcms(selectedvarity.id,formData);
+  
+    // Close modal and refresh the list
+    setModalOpen(false);
   };
+  
+
+
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
@@ -135,7 +185,19 @@ const CmsList = () => {
   // Handle form submission
   const handleSubmit = () => {
     // Send formData to the backend
-    addCms(formData);
+
+    const dataToSend = new FormData();
+
+    dataToSend.append("title", formData.title);
+    dataToSend.append("description", formData.description);
+
+    if (formData.images) {
+      formData.images.forEach((image, index) => {
+        dataToSend.append(`images[${index}]`, image);
+      });
+    }
+
+    addCms(dataToSend);
     onCloseModal(); // Close modal after saving
   };
 
@@ -145,7 +207,7 @@ const CmsList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="CMS List"  />
+      <CommonBreadcrumb title="CMS List" />
       <Container fluid>
         <Row>
           <Col sm="12">
@@ -230,14 +292,14 @@ const CmsList = () => {
                     </tbody>
                   </Table>
                   <Stack className="rightPagination mt10" spacing={2}>
-                      <Pagination
-                        color="primary"
-                        count={totalPages}
-                        page={currentPage}
-                        shape="rounded"
-                        onChange={(event, value) => handlepagechange(value)}
-                      />
-                    </Stack>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                 </div>
               </CardBody>
             </Card>
@@ -271,6 +333,23 @@ const CmsList = () => {
                 id="title"
               />
             </FormGroup>
+
+            <div className="row">
+              <div className="col-md-6">
+                <FormGroup>
+                  <Label htmlFor="images" className="col-form-label">
+                    Upload Images:
+                  </Label>
+                  <Input
+                    type="file"
+                    name="images "
+                    id="images "
+                    onChange={handleImageChange}
+                    multiple
+                  />
+                </FormGroup>
+              </div>
+            </div>
 
             <FormGroup>
               <div className="mb-4">
@@ -363,34 +442,62 @@ const CmsList = () => {
             </FormGroup>
 
             <FormGroup>
-              <Label htmlFor="title" className="col-form-label">
-                Status:
-              </Label>
-              <div className="d-flex justify-content-start mt-2">
-                <FormGroup check className="me-3">
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="status"
-                      value="Active"
-                      checked={selectedvarity.status === "Active"} // Check if the value matches 'Active'
-                      onChange={handleInputChanges}
+              <Label htmlFor="images">Images:</Label>
+              <div className="d-flex flex-wrap">
+                {selectedvarity?.images?.map((image, index) => (
+                  <div key={index} className="position-relative m-2">
+                    <img
+                      src={image}
+                      alt="Preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
                     />
-                    Active
-                  </Label>
-                </FormGroup>
-                <FormGroup check className="me-3">
-                  <Label check>
-                    <Input
-                      type="radio"
-                      name="status"
-                      value="Inactive"
-                      checked={selectedvarity.status === "Inactive"}
-                      onChange={handleInputChanges}
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm position-absolute"
+                      style={{ top: 0, right: 0 }}
+                      onClick={() => handleRemoveExistingImage(image)}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <Input
+                type="file"
+                multiple
+                onChange={handleAddNewImages}
+                className="form-control mt-2"
+              />
+              <div className="d-flex flex-wrap">
+                {newImages?.map((image, index) => (
+                  <div key={index} className="position-relative m-2">
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="Preview"
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
                     />
-                    Inactive
-                  </Label>
-                </FormGroup>
+                    <button
+                      type="button"
+                      className="btn btn-danger btn-sm position-absolute"
+                      style={{ top: 0, right: 0 }}
+                      onClick={() =>
+                        setNewImages((prev) =>
+                          prev.filter((_, idx) => idx !== index)
+                        )
+                      }
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
               </div>
             </FormGroup>
           </Form>

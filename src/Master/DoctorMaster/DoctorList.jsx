@@ -91,6 +91,12 @@ const DoctorList = () => {
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({
+      name: "",
+      sahc_id: "",
+      registration_number: "",
+      id: "",
+    });
   };
 
   // Handle form input change
@@ -256,7 +262,7 @@ const DoctorList = () => {
             </FormGroup>
             <FormGroup>
               <Label htmlFor="sahc_id" className="col-form-label">
-                Sahc:
+                Govt. Collection Center:
               </Label>
               <Input
                 type="select"
@@ -265,7 +271,7 @@ const DoctorList = () => {
                 onChange={handleInputChange}
                 id="sahc_id"
               >
-                <option value="">Select sahc</option>
+                <option value="">Select  Govt. Collection Center</option>
                 {allsahcList?.data?.map((variety) => (
                   <option key={variety._id} value={variety.id}>
                     {variety.name}

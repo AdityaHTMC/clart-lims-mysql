@@ -134,7 +134,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                       <thead>
                         <tr>
                           <th>Order Status</th>
-                          <th>Action</th>
+                          {/* <th>Action</th> */}
                         </tr>
                       </thead>
                       <tbody>
@@ -154,7 +154,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                           orderMasterList?.data?.map((product, index) => (
                             <tr key={index}>
                               <td>{product.title}</td>
-                              <td>
+                              {/* <td>
                                 <div className="circelBtnBx">
                                   <Button
                                     className="btn"
@@ -171,7 +171,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                                     <FaTrashAlt />
                                   </Button>
                                 </div>
-                              </td>
+                              </td> */}
                             </tr>
                           ))
                         )}

@@ -178,6 +178,7 @@ const BarcodeList = () => {
     pdf.save("barcodes.pdf");
 
     getbarcode(newdataToSend);
+    setSelectedBarcodes([]);
   };
   
 
@@ -219,7 +220,7 @@ const BarcodeList = () => {
                   <Button
                     color={selectedStatus.isPrinted ? "primary" : "danger"}
                     style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus({ isPrinted: true })} // Pass isPrinted: true for "Printed"
+                    onClick={() => setSelectedStatus({ isPrinted: true })} 
                     size="sm"
                   >
                     Printed
@@ -227,7 +228,7 @@ const BarcodeList = () => {
                   <Button
                     color={selectedStatus.isUsed ? "primary" : "danger"}
                     style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus({ isUsed: true })} // Pass isUsed: true for "Used"
+                    onClick={() => setSelectedStatus({ isUsed: true, isPrinted: true })} 
                     size="sm"
                   >
                     Used

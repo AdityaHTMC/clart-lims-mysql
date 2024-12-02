@@ -130,7 +130,7 @@ import { Pagination, Stack } from "@mui/material";
   
     return (
       <>
-        <CommonBreadcrumb title="Sahc Master List"  />
+        <CommonBreadcrumb title="Govt. Collection Center"  />
         <Container fluid>
           <Row>
             <Col sm="12">

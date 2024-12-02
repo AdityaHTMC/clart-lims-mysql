@@ -187,7 +187,7 @@ const OrderDetailspage = () => {
                   <Table bordered hover style={{ marginTop: "10px" }}>
                     <thead>
                       <tr>
-                        <th>ID</th>
+                   
                         <th>Professional Service</th>
                         <th>Price</th>
                       </tr>
@@ -196,7 +196,7 @@ const OrderDetailspage = () => {
                       {orderDetails?.data?.professional_fees?.map((item) => (
                         <>
                           <tr>
-                            <td>{item._id}</td>
+                            
                             <td className="text-wrap">
                               {item.professional_service}
                             </td>
@@ -209,7 +209,7 @@ const OrderDetailspage = () => {
                 </>
               )}
 
-              {orderDetails.data.package_name && (
+              {orderDetails.data.test_packages && (
                 <>
                   <div className="mt-2 h6 fs-4">Test Package</div>
                   <Table bordered hover style={{ marginTop: "10px" }}>
@@ -220,12 +220,16 @@ const OrderDetailspage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="text-wrap">
-                          {orderDetails.data.package_name}
-                        </td>
-                        <td>₹{orderDetails.data.package_price}</td>
-                      </tr>
+                      {orderDetails?.data?.test_packages?.map((item) => (
+                        <>
+                          <tr>
+                            <td className="text-wrap">
+                              {item.package_name}
+                            </td>
+                            <td>₹{item.price}</td>
+                          </tr>
+                        </>
+                      ))}
                     </tbody>
                   </Table>
                 </>
