@@ -12,8 +12,7 @@ const EditTestParameter = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-
-  const { getTpDetails,tpDetails,editLab,editTp } = useCategoryContext();
+  const { getTpDetails, tpDetails, editLab, editTp } = useCategoryContext();
 
   const {
     getAllTest,
@@ -24,7 +23,6 @@ const EditTestParameter = () => {
     getDDunitList,
     allUnitList,
   } = useMasterContext();
-
 
   useEffect(() => {
     if (id) {
@@ -45,7 +43,6 @@ const EditTestParameter = () => {
     parentId: "",
     test_id: "",
   });
-
 
   const [selectedTestId, setSelectedTestId] = useState("");
   useEffect(() => {
@@ -80,13 +77,8 @@ const EditTestParameter = () => {
     }
   };
 
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
-
 
     const formDataToSend = new FormData();
 
@@ -94,18 +86,17 @@ const EditTestParameter = () => {
     formDataToSend.append("parameter_unit_id", inputData.unit);
     formDataToSend.append("upper_range", inputData.upper_range);
     formDataToSend.append("lower_range", inputData.lower_range);
-    formDataToSend.append("parent_id", inputData.parentId || '');
+    formDataToSend.append("parent_id", inputData.parentId || "");
     formDataToSend.append("test_id", selectedTestId);
- 
 
-    editTp(id,formDataToSend);
+    editTp(id, formDataToSend);
   };
 
   return (
     <>
       <CommonBreadcrumb title="Edit Teat parameter" />
       <div className="product-form-container" style={{ padding: "2px" }}>
-      <form
+        <form
           onSubmit={handleSubmit}
           style={{
             backgroundColor: "#ffffff",
@@ -153,18 +144,17 @@ const EditTestParameter = () => {
 
           {/* First row with two col-md-6 */}
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="lower_range" className="col-form-label">
                   Lower Range:
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="lower_range"
                   value={inputData.lower_range}
                   onChange={handleInputChange}
                   id="lower_range"
-                  required
                 />
               </FormGroup>
             </div>
@@ -174,16 +164,14 @@ const EditTestParameter = () => {
                   Upper Range:
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="upper_range"
                   value={inputData.upper_range}
                   onChange={handleInputChange}
                   id="upper_range"
-                  required
                 />
               </FormGroup>
             </div>
-           
           </div>
 
           <div className="row">

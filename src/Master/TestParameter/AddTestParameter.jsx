@@ -24,8 +24,6 @@ const AddTestParameter = () => {
     getDDunitList();
   }, []);
 
-
-
   const [inputData, setInputData] = useState({
     parameter: "",
     unit: "",
@@ -63,7 +61,7 @@ const AddTestParameter = () => {
     formDataToSend.append("parameter_unit_id", inputData.unit);
     formDataToSend.append("upper_range", inputData.upper_range);
     formDataToSend.append("lower_range", inputData.lower_range);
-    formDataToSend.append("parent_id", inputData.parentId || '');
+    formDataToSend.append("parent_id", inputData.parentId || "");
     formDataToSend.append("test_id", selectedTestId);
 
     addTestParameter(formDataToSend);
@@ -121,19 +119,17 @@ const AddTestParameter = () => {
 
           {/* First row with two col-md-6 */}
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="lower_range" className="col-form-label">
                   Lower Range:
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="lower_range"
-                  min={0}
                   value={inputData.lower_range}
                   onChange={handleInputChange}
                   id="lower_range"
-                  required
                 />
               </FormGroup>
             </div>
@@ -143,17 +139,14 @@ const AddTestParameter = () => {
                   Upper Range:
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="upper_range"
-                  min={0}
                   value={inputData.upper_range}
                   onChange={handleInputChange}
                   id="upper_range"
-                  required
                 />
               </FormGroup>
             </div>
-           
           </div>
 
           <div className="row">
