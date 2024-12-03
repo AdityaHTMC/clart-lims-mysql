@@ -30,7 +30,7 @@ const TestOrderList = () => {
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
 
-  const { getAllOrderStatus, orderStatus } = useDashboardContext();
+  const { getTestOrderCount,testOrderCount } = useDashboardContext();
 
   const [selectedStatus, setSelectedStatus] = useState("");
 
@@ -52,7 +52,7 @@ const TestOrderList = () => {
 
   useEffect(() => {
     getOrderMasterList();
-    getAllOrderStatus();
+    getTestOrderCount();
   }, []);
 
   // useEffect(() => {
@@ -64,10 +64,9 @@ const TestOrderList = () => {
     setCurrentPage(newpage);
   };
 
-
-  const navigatOrderDetails =(id) => {
+  const navigatOrderDetails = (id) => {
     Navigate(`/order-details/${id}`);
-  }
+  };
 
   return (
     <>
@@ -85,17 +84,15 @@ const TestOrderList = () => {
                                 </div>
                                 <div className="clearfix"></div> */}
                 <div className="d-flex gap-2 flex-wrap mb-3">
-                  <Button
+                  {/* <Button
                     color={selectedStatus === "" ? "primary" : "danger"}
                     style={{ minWidth: "max-content" }}
                     onClick={() => setSelectedStatus("")}
                     size="sm"
                   >
                     All
-                  </Button>
-                  {orderStatus?.data
-                    ?.filter((el) => el.title !== "All") // Filter out the "All" status
-                    .map((el, i) => (
+                  </Button> */}
+                  {testOrderCount?.data?.map((el, i) => (
                       <Button
                         color={
                           selectedStatus === el.title ? "primary" : "danger"
@@ -155,7 +152,9 @@ const TestOrderList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => navigatOrderDetails(order?.id)}
+                                    onClick={() =>
+                                      navigatOrderDetails(order?.id)
+                                    }
                                   >
                                     <FaEye />
                                   </Button>

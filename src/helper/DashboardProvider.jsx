@@ -14,6 +14,8 @@ export const DashboardProvider = ({ children }) => {
     const [dashboardOrderList, setDashboardOrderList] = useState({ loading: true, data: [] })
     const [dashboardOrderCount, setDashboardOrderCount] = useState({ loading: true, data: [] })
     const [orderStatus, setOrderStatus] = useState({ loading: true, data: [] });
+    const [testOrderCount, setTestOrderCount] = useState({ loading: true, data: [] });
+    const [packageOrderCount, setPackageOrderCount] = useState({ loading: true, data: [] });
     const [orderCount, setOrderCount] = useState({ loading: true, data: [] });
     const [barcode, setbarcode] = useState({ loading: true, data: [], total:"" });
     const { Authtoken } = useAuthContext()
@@ -105,6 +107,46 @@ export const DashboardProvider = ({ children }) => {
         }
     };
 
+    const getTestOrderCount = async () => {
+      try {
+          const response = await axios.get(
+              `${base_url}/admin/test/orders/count`,
+              { headers: { Authorization: Authtoken } }
+          );
+          if (response.status === 200) {
+            setTestOrderCount({
+                  data: response?.data?.data || [],
+                  loading: false,
+              });
+          } else {
+            setTestOrderCount({ data: [], loading: false });
+          }
+      } catch (error) {
+        setTestOrderCount({ data: [], loading: false });
+          // toast.error("Failed to test list");
+      }
+  };
+
+  const getPackageOrderCount = async () => {
+    try {
+        const response = await axios.get(
+            `${base_url}/admin/test-package/orders/count`,
+            { headers: { Authorization: Authtoken } }
+        );
+        if (response.status === 200) {
+          setPackageOrderCount({
+                data: response?.data?.data || [],
+                loading: false,
+            });
+        } else {
+          setPackageOrderCount({ data: [], loading: false });
+        }
+    } catch (error) {
+      setPackageOrderCount({ data: [], loading: false });
+        // toast.error("Failed to test list");
+    }
+};
+
 
     const getbarcode = async (dataToSend) => {
       try {
@@ -122,7 +164,7 @@ export const DashboardProvider = ({ children }) => {
             setbarcode({ data: [], loading: false });
           }
       } catch (error) {
-          setOrderStatus({ data: [], loading: false });
+          setbarcode({ data: [], loading: false });
           toast.error("Failed to fetch barcode list");
       }
   };
@@ -198,7 +240,7 @@ export const DashboardProvider = ({ children }) => {
 
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount
     }
     return (
         <AppContext.Provider value={values} >

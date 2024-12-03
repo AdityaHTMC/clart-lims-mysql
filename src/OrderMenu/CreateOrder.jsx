@@ -159,6 +159,8 @@ const CreateOrder = () => {
     }
   }, [formData.type, zoneprice]);
 
+  console.log(collectionFees,'collectionFees')
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -245,6 +247,7 @@ const CreateOrder = () => {
     bodyData.append("district", selectedCustomer.district || '');
     bodyData.append("address", selectedCustomer.address || '');
     bodyData.append("lab_id", selectedLab || '');
+    bodyData.append("collection_fees", collectionFees || '');
     bodyData.append("pincode", selectedCustomer.pincode || '');
     if (selectedPhelbo) {
       bodyData.append("phlebotomist_id", selectedPhelbo.id || '');

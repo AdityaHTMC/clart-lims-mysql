@@ -221,7 +221,7 @@ const OrderDetailspage = () => {
                 </>
               )}
 
-              {orderDetails.data.test_packages && (
+              {orderDetails.data.test_packages?.length > 0 && (
                 <>
                   <div className="mt-2 h6 fs-4">Test Package</div>
                   <Table bordered hover style={{ marginTop: "10px" }}>
