@@ -29,10 +29,11 @@ import { useMasterContext } from "../helper/MasterProvider";
 import { FaEdit } from "react-icons/fa";
 const OrderDetailspage = () => {
   const { id } = useParams();
-  const { updateOrderStatus,getallPhelboList, phlebotomistList } = useCommonContext();
+  const { updateOrderStatus, getallPhelboList, phlebotomistList } =
+    useCommonContext();
 
-  const { getOrderMasterList, orderMasterList, orderDetails, getOrderDetails } = useMasterContext();
-
+  const { getOrderMasterList, orderMasterList, orderDetails, getOrderDetails } =
+    useMasterContext();
 
   const [activeTab, setActiveTab] = useState("1");
 
@@ -40,15 +41,31 @@ const OrderDetailspage = () => {
 
   const [selectedOption, setSelectedOption] = useState("Courier");
   const [selectedDeliveryBoy, setSelectedDeliveryBoy] = useState("");
+  const [selectedPaymentStatus, setSelectedPaymentStatus] = useState("");
   const [isEditingStatus, setIsEditingStatus] = useState(false);
   const [isEditingPhelbo, setIsEditingPhelbo] = useState(false);
+  const [isEditingPayment, setIsEditingPayment] = useState(false);
 
   const toggleEditStatus = () => {
     setIsEditingStatus(!isEditingStatus);
+    setIsEditingPayment(false)
+    setIsEditingPhelbo(false)
   };
 
   const toggleEditPhelbo = () => {
     setIsEditingPhelbo(!isEditingPhelbo);
+    setIsEditingPayment(false)
+    setIsEditingStatus(false)
+  };
+
+  const toggleEditPayment = () => {
+    setIsEditingPayment(!isEditingPayment);
+    setIsEditingStatus(false)
+    setIsEditingPhelbo(false)
+  };
+
+  const handlePaymentStatusChange = (status) => {
+    setSelectedPaymentStatus(status);
   };
 
   useEffect(() => {
@@ -91,30 +108,37 @@ const OrderDetailspage = () => {
       if (selectedDeliveryBoy) {
         const dataToSend = {
           phlebotomist_id: selectedDeliveryBoy,
-          id: parseInt(id, 10)
+          id: parseInt(id, 10),
         };
-  
+
         await updateOrderStatus(dataToSend);
       }
-  
+
       if (orderStatusUpdates) {
         const dataToSend = {
           id: parseInt(id, 10),
           status: orderStatusUpdates,
         };
-  
+
         await updateOrderStatus(dataToSend);
       }
-  
+
+      if (selectedPaymentStatus) {
+        const dataToSend = {
+          id: parseInt(id, 10),
+          payment_status: selectedPaymentStatus,
+        };
+
+        await updateOrderStatus(dataToSend);
+      }
+
       // After successful update, fetch order details again
       getOrderDetails(id);
-  
     } catch (error) {
       console.error("Failed to update order status", error);
       // Handle the error if needed
     }
   };
-  
 
   // console.log(orderDetails, "orderDetails");
 
@@ -199,7 +223,6 @@ const OrderDetailspage = () => {
                   <Table bordered hover style={{ marginTop: "10px" }}>
                     <thead>
                       <tr>
-                   
                         <th>Professional Service</th>
                         <th>Price</th>
                       </tr>
@@ -208,7 +231,6 @@ const OrderDetailspage = () => {
                       {orderDetails?.data?.professional_fees?.map((item) => (
                         <>
                           <tr>
-                            
                             <td className="text-wrap">
                               {item?.professional_service}
                             </td>
@@ -235,9 +257,7 @@ const OrderDetailspage = () => {
                       {orderDetails?.data?.test_packages?.map((item) => (
                         <>
                           <tr>
-                            <td className="text-wrap">
-                              {item?.package_name}
-                            </td>
+                            <td className="text-wrap">{item?.package_name}</td>
                             <td>₹{item?.price}</td>
                           </tr>
                         </>
@@ -293,6 +313,11 @@ const OrderDetailspage = () => {
                 {orderDetails?.data?.professional_fees && (
                   <p>Total Professional Fees: ₹{totalProfessionalFees || 0} </p>
                 )}
+                {orderDetails?.data?.collection_fees && (
+                  <p>
+                    Collection Fees: ₹{orderDetails?.data?.collection_fees || 0}{" "}
+                  </p>
+                )}
                 <h5 style={{ fontWeight: "bold" }}>
                   Grand Total: ₹ {orderDetails?.data?.total_amount}{" "}
                 </h5>
@@ -333,13 +358,21 @@ const OrderDetailspage = () => {
                 </div>
                 {orderDetails?.data.payment_status && (
                   <>
-                    <h5>
+                    <div className="d-flex align-items-center">
                       Payment Status:{" "}
-                      <span style={{ fontWeight: "bold" }}>
-                        {" "}
-                        {orderDetails?.data?.payment_status}{" "}
-                      </span>
-                    </h5>
+                      <Badge color="warning" className="mx-2">
+                        {orderDetails?.data?.payment_status}
+                      </Badge>
+                      <div className="circelBtnBx">
+                        <Button
+                          className="btn p-0"
+                          color="link"
+                          onClick={toggleEditPayment}
+                        >
+                          <FaEdit />
+                        </Button>
+                      </div>
+                    </div>
                   </>
                 )}
                 {orderDetails?.data.payment_mode && (
@@ -390,24 +423,22 @@ const OrderDetailspage = () => {
                   </>
                 )}
 
-               
-                  <div className="d-flex align-items-center">
-                    Phlebotomist Name:{" "}
-                    <span style={{ fontWeight: "bold" }}>
-                      {" "}
-                      {orderDetails?.data?.phlebotomist_name || "NA"}
-                    </span>
-                    <div className="circelBtnBx mx-2">
-                      <Button
-                        className="btn p-0"
-                        color="link"
-                        onClick={toggleEditPhelbo}
-                      >
-                        <FaEdit />
-                      </Button>
-                    </div>
+                <div className="d-flex align-items-center">
+                  Phlebotomist Name:{" "}
+                  <span style={{ fontWeight: "bold" }}>
+                    {" "}
+                    {orderDetails?.data?.phlebotomist_name || "NA"}
+                  </span>
+                  <div className="circelBtnBx mx-2">
+                    <Button
+                      className="btn p-0"
+                      color="link"
+                      onClick={toggleEditPhelbo}
+                    >
+                      <FaEdit />
+                    </Button>
                   </div>
-             
+                </div>
               </div>
 
               {isEditingStatus && (
@@ -452,14 +483,29 @@ const OrderDetailspage = () => {
                 </FormGroup>
               )}
 
-              {(isEditingPhelbo || isEditingStatus) && (
+              {isEditingPayment && (
+                <FormGroup>
+                  <Label for="paymentStatus">Change Payment Status</Label>
+                  <Input
+                    type="select"
+                    name="paymentStatus"
+                    id="paymentStatus"
+                    value={selectedPaymentStatus}
+                    onChange={(e) => handlePaymentStatusChange(e.target.value)}
+                  >
+                    <option value="">Select Payment Status</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Unpaid">Unpaid</option>
+                  </Input>
+                </FormGroup>
+              )}
+
+              {(isEditingPhelbo || isEditingStatus || isEditingPayment) && (
                 <Button color="primary" type="submit" onClick={handleSubmit}>
                   Submit
                 </Button>
               )}
             </Card>
-
-          
 
             <Card
               body
