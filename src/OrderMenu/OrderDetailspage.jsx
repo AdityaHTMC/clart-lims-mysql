@@ -148,6 +148,18 @@ const OrderDetailspage = () => {
                       day: "2-digit",
                       month: "short",
                       year: "numeric",
+                    }
+                  )}
+                </p>
+                <p style={{ color: "#777", margin: 0 }}>
+                  {" "}
+                  Order Placed Date : {""}
+                  {new Date(orderDetails.data?.createdAt).toLocaleString(
+                    "en-GB",
+                    {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
@@ -170,9 +182,9 @@ const OrderDetailspage = () => {
                       {orderDetails?.data?.tests?.map((item) => (
                         <>
                           <tr>
-                            <td>{item.sample_id}</td>
-                            <td className="text-break">{item.test_name}</td>
-                            <td>₹{item.price}</td>
+                            <td>{item?.sample_id}</td>
+                            <td className="text-break">{item?.test_name}</td>
+                            <td>₹{item?.price}</td>
                           </tr>
                         </>
                       ))}
@@ -198,9 +210,9 @@ const OrderDetailspage = () => {
                           <tr>
                             
                             <td className="text-wrap">
-                              {item.professional_service}
+                              {item?.professional_service}
                             </td>
-                            <td>₹{item.price}</td>
+                            <td>₹{item?.price}</td>
                           </tr>
                         </>
                       ))}
@@ -224,9 +236,9 @@ const OrderDetailspage = () => {
                         <>
                           <tr>
                             <td className="text-wrap">
-                              {item.package_name}
+                              {item?.package_name}
                             </td>
-                            <td>₹{item.price}</td>
+                            <td>₹{item?.price}</td>
                           </tr>
                         </>
                       ))}

@@ -485,7 +485,7 @@ export const CategoryProvider = ({ children }) => {
         toast.success(response.data.message);
         navigate("/b2b-users");
       } else {
-        toast.error("server errors");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");

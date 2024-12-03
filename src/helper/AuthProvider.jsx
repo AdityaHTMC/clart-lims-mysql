@@ -66,12 +66,12 @@ export const AuthProvider = ({ children }) => {
             }else {
                 navigate('/login', {replace: true})
                 setAuthtoken(null)
-                toast.error('Token expired please Login again')
+                toast.info('Token expired please Login again')
             }
         } catch (error) {
             navigate('/login', {replace: true})
             setAuthtoken(null)
-            toast.error('Token expired please Login again');
+            toast.info('Token expired please Login again');
         } finally {
             setInitialLoading(false)
         }
