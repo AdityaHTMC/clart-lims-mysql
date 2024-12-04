@@ -19,6 +19,7 @@ import {
   ModalHeader,
   Row,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
@@ -58,7 +59,7 @@ const StockReport = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const itemperPage = 10;
+  const itemperPage = 12;
 
   const totalPages =
   srList?.total && Math.ceil(srList?.total / itemperPage);
@@ -346,10 +347,27 @@ const StockReport = () => {
                       ) : (
                         srList?.data?.map((product, index) => (
                           <tr key={index}>
-                            <td>{product.item_name}</td>
-                            <td>{product.vendor_name}</td>
-                            <td>{product.quantity}</td>
-                            <td>{product.used_quantity}</td>
+                            
+
+                            <td id={`item_name-${index}`}>
+                                {product?.item_name
+                                  ? product.item_name.length > 15
+                                    ? `${product.item_name.slice(0, 15)}...`
+                                    : product.item_name
+                                  : "NA"}
+                                {product?.item_name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`item_name-${index}`}
+                                  >
+                                    {product?.item_name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                            <td>{product.vendor_name || "NA"}</td>
+                            <td>{product.quantity || 0}</td>
+                            <td>{product.used_quantity }</td>
                             <td>{product.purchased_quantity}</td>
                             <td>{product.amount}</td>
                             <td>{product.issued_to}</td>

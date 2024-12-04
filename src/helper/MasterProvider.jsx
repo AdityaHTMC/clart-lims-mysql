@@ -208,11 +208,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setallbreed({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch breed list");
+        // toast.error("Failed to fetch breed list");
       }
     } catch (error) {
         setallbreed({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch breed list");
+      // toast.error("Failed to fetch breed list");
     }
   };
 

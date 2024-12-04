@@ -457,8 +457,22 @@ const CmsList = () => {
                     />
                     <button
                       type="button"
-                      className="btn btn-danger btn-sm position-absolute"
-                      style={{ top: 0, right: 0 }}
+                    
+                      style={{
+                        position: "absolute",
+                        top: "5px",
+                        right: "5px",
+                        background: "rgba(255, 0, 0, 0.8)",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "50%",
+                        width: "24px",
+                        height: "24px",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        cursor: "pointer",
+                      }}
                       onClick={() => handleRemoveExistingImage(image)}
                     >
                       &times;

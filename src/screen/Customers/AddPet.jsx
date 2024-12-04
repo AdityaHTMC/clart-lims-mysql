@@ -12,10 +12,13 @@ const AddPet = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { allBreedList, allbreed, getSpeciesMasterList, speciesMasterList,addPet } =
-    useMasterContext();
-
-
+  const {
+    allBreedList,
+    allbreed,
+    getSpeciesMasterList,
+    speciesMasterList,
+    addPet,
+  } = useMasterContext();
 
   const [inputData, setInputData] = useState({
     date_of_birth: "",
@@ -24,7 +27,7 @@ const AddPet = () => {
     breed: "",
     species: "",
     name: "",
-    pet_images:"",
+    pet_images: "",
   });
 
   const handleInputChange = (e) => {
@@ -38,7 +41,7 @@ const AddPet = () => {
   useEffect(() => {
     const dataToSend = {
       species: inputData.species,
-    }
+    };
     allBreedList(dataToSend);
     getSpeciesMasterList();
   }, [inputData.species]);
@@ -67,7 +70,7 @@ const AddPet = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append("date_of_birth", inputData.date_of_birth);
     formData.append("sex", inputData.sex);
@@ -75,19 +78,15 @@ const AddPet = () => {
     formData.append("breed", inputData.breed);
     formData.append("species", inputData.species);
     formData.append("name", inputData.name);
-  
 
-
-    if(inputData.pet_images){
+    if (inputData.pet_images) {
       inputData.pet_images.forEach((image, index) => {
         formData.append(`pet_images[${index}]`, image);
-      })
-    };
-  
-    addPet(id, formData);
+      });
+    }
 
+    addPet(id, formData);
   };
-  
 
   return (
     <>
@@ -104,101 +103,113 @@ const AddPet = () => {
           }}
         >
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="name">Name:</Label>
+                <Label htmlFor="name">Name <span className="text-danger">*</span> </Label>
                 <Input
                   type="text"
                   name="name"
                   value={inputData.name}
                   onChange={handleInputChange}
                   id="name"
+                  required
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="date_of_birth">Date of Birth</Label>
+                <Label htmlFor="date_of_birth">Date of Birth <span className="text-danger">*</span></Label>
                 <Input
                   type="date"
                   name="date_of_birth"
                   value={inputData.date_of_birth}
                   onChange={handleInputChange}
                   id="date_of_birth"
+                  required
                 />
               </FormGroup>
             </div>
           </div>
-
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="species">Species</Label>
+                <Label htmlFor="species">Species <span className="text-danger">*</span></Label>
                 <Input
                   type="select"
                   name="species"
                   value={inputData.species}
                   onChange={handleInputChange}
+                  required
                 >
-                  <option value="">Select species</option>
-                  {speciesMasterList?.data?.map((breed) => (
-                    <option key={breed._id} value={breed.name}>
-                      {breed.title}
+                  <option value="">Select Species</option>
+                  {speciesMasterList?.data?.map((species) => (
+                    <option key={species._id} value={species.name}>
+                      {species.title}
                     </option>
                   ))}
                 </Input>
               </FormGroup>
             </div>
+
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="breed">Breed</Label>
-                <Input
-                  type="select"
-                  name="breed"
-                  value={inputData.breed}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Select Breed</option>
-                  {allbreed?.data?.map((breed) => (
-                    <option key={breed._id} value={breed.name}>
-                      {breed.name}
-                    </option>
-                  ))}
-                </Input>
+                {inputData.species === "Bird" ? (
+                  <Input
+                    type="text"
+                    name="breed"
+                    value={inputData.breed}
+                    placeholder="Enter breed"
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  <Input
+                    type="select"
+                    name="breed"
+                    value={inputData.breed}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Breed</option>
+                    {allbreed?.data?.map((breed) => (
+                      <option key={breed._id} value={breed.name}>
+                        {breed.name}
+                      </option>
+                    ))}
+                  </Input>
+                )}
               </FormGroup>
             </div>
           </div>
-
+          
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="color">Color:</Label>
+                <Label htmlFor="color">Color <span className="text-danger">*</span></Label>
                 <Input
                   type="text"
                   name="color"
                   value={inputData.color}
                   onChange={handleInputChange}
                   id="color"
+                  required
                 />
               </FormGroup>
             </div>
             <div className="col-md-6">
               <FormGroup>
-                <Label htmlFor="sex">Gender:</Label>
+                <Label htmlFor="sex">Gender <span className="text-danger">*</span></Label>
                 <Input
                   type="text"
                   name="sex"
                   value={inputData.sex}
                   onChange={handleInputChange}
                   id="sex"
+                  required
                 />
               </FormGroup>
             </div>
           </div>
-
-
-       
-           <div className="row">
+          <div className="row">
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="images" className="col-form-label">
@@ -214,9 +225,6 @@ const AddPet = () => {
               </FormGroup>
             </div>
           </div>
-          
-
-
           <div className="row">
             {inputData?.pet_images?.length > 0 && (
               <div className="col-md-12">
@@ -260,7 +268,6 @@ const AddPet = () => {
               </div>
             )}
           </div>
-
           <Button type="submit" color="primary">
             Add Pet
           </Button>

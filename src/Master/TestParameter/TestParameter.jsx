@@ -9,6 +9,7 @@
     Row,
     Spinner,
     Table,
+    UncontrolledTooltip,
   } from "reactstrap";
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
@@ -102,12 +103,25 @@ import { Pagination, Stack } from "@mui/material";
                           ) : (
                             testParameter?.data?.map((product, index) => (
                               <tr key={index}>
-                                {/* <td>{product?.test_name}</td> */}
-                                <td>
-                                {product?.test_name?.length > 20
-                                  ? `${product.test_name.slice(0, 20)}...`
-                                  : product.test_name}
-                              </td>
+                              
+
+                                 
+                              <td id={`test_name-${index}`}>
+                                {product?.test_name
+                                  ? product.test_name.length > 20
+                                    ? `${product.test_name.slice(0, 20)}...`
+                                    : product.test_name
+                                  : "NA"}
+                                {product?.test_name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`test_name-${index}`}
+                                  >
+                                    {product?.test_name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>   
+
                                 <td>{product?.parameter}</td>
                                 <td>
                                   {product?.lower_range} -{" "}

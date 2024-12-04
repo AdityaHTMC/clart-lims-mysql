@@ -19,7 +19,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
 import { IconButton, Pagination, Stack, TextField } from "@mui/material";
-
+import { PiDogFill } from "react-icons/pi";
 const CustomerList = () => {
   const navigate = useNavigate();
 
@@ -195,7 +195,7 @@ const CustomerList = () => {
                                     placement="top"
                                     target={`deleteButton-${index}`}
                                   >
-                                    Delete Product
+                                    Delete Customer
                                   </UncontrolledTooltip>
 
                                   <Button
@@ -204,7 +204,7 @@ const CustomerList = () => {
                                     color="link"
                                     onClick={() => handleaddPet(product?.id)}
                                   >
-                                    <IoAddCircle />
+                                    <PiDogFill />
                                   </Button>
                                   <UncontrolledTooltip
                                     placement="top"

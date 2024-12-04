@@ -136,7 +136,7 @@ const AddCustomer = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="name"> Name *</Label>
+                <Label for="name"> Name  <span className="text-danger">*</span></Label>
                 <Input
                   type="text"
                   name="name"
@@ -150,7 +150,7 @@ const AddCustomer = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="email" className="col-form-label">
-                  Email:
+                  Email <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="email"
@@ -169,7 +169,7 @@ const AddCustomer = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="mobile" className="col-form-label">
-                  Mobile:
+                  Mobile <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -178,6 +178,7 @@ const AddCustomer = () => {
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
+                  required
                 />
                 {error && <FormText color="danger">{error}</FormText>} 
               </FormGroup>
@@ -202,7 +203,7 @@ const AddCustomer = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
-                  Pincode:
+                  Pincode <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -211,6 +212,7 @@ const AddCustomer = () => {
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
+                  required
                 />
               </FormGroup>
             </div>

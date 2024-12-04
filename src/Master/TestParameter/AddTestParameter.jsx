@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { Autocomplete, TextField } from "@mui/material";
 
 const AddTestParameter = () => {
   const navigate = useNavigate();
@@ -43,13 +44,17 @@ const AddTestParameter = () => {
     }));
   };
 
-  const handleTestSelect = (e) => {
-    const testId = e.target.value;
-    setSelectedTestId(testId);
+  const handleTestSelect = (event, value) => {
+    if (value) {
+      const testId = value.id;
+      setSelectedTestId(testId);
 
-    // Fetch parentId list based on selected testId
-    if (testId) {
-      getPPL(testId);
+      // Fetch parentId list based on selected testId
+      if (testId) {
+        getPPL(testId);
+      }
+    } else {
+      setSelectedTestId("");
     }
   };
 
@@ -152,21 +157,26 @@ const AddTestParameter = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="test">Choose Test *</Label>
-                <Input
-                  type="select"
-                  name="test"
+                <Autocomplete
                   id="test"
-                  value={selectedTestId}
+                  options={alltest?.data || []}
+                  getOptionLabel={(option) => option.test_name || ""}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label="Select Test"
+                      variant="outlined"
+                    />
+                  )}
+                  value={
+                    alltest?.data?.find((test) => test.id === selectedTestId) ||
+                    null
+                  }
                   onChange={handleTestSelect}
-                >
-                  <option value="">Select Test</option>
-                  {alltest?.data?.map((test) => (
-                    <option key={test._id} value={test.id}>
-                      {test.test_name}
-                    </option>
-                  ))}
-                </Input>
+                  isOptionEqualToValue={(option, value) =>
+                    option.id === value.id
+                  }
+                />
               </FormGroup>
             </div>
             <div className="col-md-6">

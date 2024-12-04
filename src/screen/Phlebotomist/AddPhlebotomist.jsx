@@ -178,7 +178,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label for="title" className="col-form-label">
-                  Phlebotomist Name *
+                  Phlebotomist Name <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="text"
@@ -193,7 +193,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="mobile" className="col-form-label">
-                  Mobile:
+                  Mobile <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -216,7 +216,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="email" className="col-form-label">
-                  email:
+                  email <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="email"
@@ -224,6 +224,7 @@ const AddPhlebotomist = () => {
                   value={inputData.email}
                   onChange={handleInputChange}
                   id="email"
+                  required
                 />
               </FormGroup>
             </div>
@@ -316,7 +317,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
-                  PinCode:
+                  PinCode <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -383,7 +384,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="pincode" className="col-form-label">
-                  serviceable Pincode:
+                  serviceable Pincode <span className="text-danger">*</span>
                 </Label>
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <TextField
@@ -439,7 +440,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="address" className="col-form-label">
-                  Aadhaar Id:
+                  Aadhaar Id <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"

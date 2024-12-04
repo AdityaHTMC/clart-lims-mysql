@@ -231,7 +231,24 @@ const ItemManagement = () => {
                       ) : (
                         imList?.data?.map((product, index) => (
                           <tr key={index}>
-                            <td>{product?.name}</td>
+                            
+                            
+                            <td id={`name-${index}`}>
+                                {product?.name
+                                  ? product.name.length > 15
+                                    ? `${product.name.slice(0, 15)}...`
+                                    : product.name
+                                  : "NA"}
+                                {product?.name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`name-${index}`}
+                                  >
+                                    {product?.name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
                             <td>{product?.item_group_name}</td>
                             <td>{product?.amount}</td>
                             <td>{product?.stock_quantity}</td>

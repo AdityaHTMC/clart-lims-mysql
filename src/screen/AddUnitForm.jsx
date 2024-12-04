@@ -124,7 +124,7 @@ const AddUnitForm = () => {
         <div className="row">
           <div className="col-md-6">
             <FormGroup>
-              <Label for="title" className="col-form-label">Organization Name *</Label>
+              <Label for="title" className="col-form-label">Organization Name <span className="text-danger">*</span></Label>
               <Input
                 type="text"
                 name="organization_name"
@@ -139,7 +139,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="contact_person" className="col-form-label">
-              Contact Person:
+              Contact Person <span className="text-danger">*</span>
               </Label>
               <Input
                 type="text"
@@ -158,7 +158,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="mobile" className="col-form-label">
-                Mobile:
+                Mobile <span className="text-danger">*</span>
               </Label>
               <Input
                 type="number"
@@ -175,7 +175,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
           <FormGroup>
               <Label htmlFor="pincode" className="col-form-label">
-                Pincode:
+                Pincode <span className="text-danger">*</span>
               </Label>
               <Input
                 type="number"
@@ -197,7 +197,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="email" className="col-form-label">
-                email:
+                email <span className="text-danger">*</span>
               </Label>
               <Input
                 type="email"
@@ -212,7 +212,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="address" className="col-form-label">
-                Address:
+                Address 
               </Label>
               <Input
                 type="text"

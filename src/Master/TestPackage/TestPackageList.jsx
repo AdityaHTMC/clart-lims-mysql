@@ -11,6 +11,7 @@
     Row,
     Spinner,
     Table,
+    UncontrolledTooltip,
   } from "reactstrap";
   import { useEffect, useState } from "react";
   import { useNavigate } from "react-router-dom";
@@ -81,7 +82,7 @@ import { Pagination, Stack } from "@mui/material";
                         <thead>
                           <tr>
                             <th>Test Package </th>
-                            <th>Sample Type</th>
+                            {/* <th>Sample Type</th> */}
                             <th>Price</th>
                             <th>Sell Price</th>
                             <th>Action</th>
@@ -105,8 +106,25 @@ import { Pagination, Stack } from "@mui/material";
                           ) : (
                             testpackageList?.data?.map((product, index) => (
                               <tr key={index}>
-                                <td>{product.package_name}</td>
-                                <td>{product.sample_type}</td>
+                     
+
+                                <td id={`package_name-${index}`}>
+                                {product?.package_name
+                                  ? product.package_name.length > 20
+                                    ? `${product.package_name.slice(0, 20)}...`
+                                    : product.package_name
+                                  : "NA"}
+                                {product?.package_name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`package_name-${index}`}
+                                  >
+                                    {product?.package_name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                                {/* <td>{product.sample_type}</td> */}
                                 <td>{product.price}</td>
                                 <td>{product.sell_price}</td>
                                 <td>
