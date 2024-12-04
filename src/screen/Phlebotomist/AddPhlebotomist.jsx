@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -37,7 +37,7 @@ const AddPhlebotomist = () => {
     stateId: "",
     districtId: "",
     image: "",
-    aadhaar_id:"",
+    aadhaar_id: "",
   });
 
   useEffect(() => {
@@ -50,6 +50,7 @@ const AddPhlebotomist = () => {
     }
   }, [inputData.stateId]);
 
+  const [isProcessing, setIsProcessing] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
@@ -71,14 +72,14 @@ const AddPhlebotomist = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-  
+
     if (name === "mobile" && value.length > 10) {
       setError("Mobile number cannot exceed 10 digits"); // Set error message
       return;
     } else {
       setError(""); // Clear error message if valid
     }
-  
+
     if (name === "aadhaar_id") {
       if (value.length > 12) {
         setAadhaarError("Aadhaar ID must be exactly 12 digits");
@@ -89,13 +90,12 @@ const AddPhlebotomist = () => {
         setAadhaarError(""); // Clear error message if valid
       }
     }
-  
+
     setInputData((prevData) => ({
       ...prevData,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  
 
   const handleFileChange = (e) => {
     setInputData((prevData) => ({
@@ -104,7 +104,7 @@ const AddPhlebotomist = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
@@ -153,8 +153,9 @@ const AddPhlebotomist = () => {
     if (inputData.image) {
       formDataToSend.append("image", inputData.image); // Append the file as binary
     }
-
-    addphlebotomist(formDataToSend);
+    setIsProcessing(true);
+    const res = await addphlebotomist(formDataToSend);
+    setIsProcessing(false);
 
     console.log(formDataToSend);
   };
@@ -448,15 +449,19 @@ const AddPhlebotomist = () => {
                   id="address"
                   required
                 />
-                {aadhaarError && <p style={{ color: "red", fontSize: "0.9rem" }}>{aadhaarError}</p>}
+                {aadhaarError && (
+                  <p style={{ color: "red", fontSize: "0.9rem" }}>
+                    {aadhaarError}
+                  </p>
+                )}
               </FormGroup>
             </div>
           </div>
 
           {/* Image previews */}
 
-          <Button type="submit" color="primary">
-            Add Phlebotomist
+          <Button type="submit" color="primary" disabled={isProcessing}>
+            {isProcessing ? <Spinner size="sm" /> : "Add Phlebotomist"}
           </Button>
         </form>
       </div>

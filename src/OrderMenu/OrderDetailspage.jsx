@@ -191,7 +191,7 @@ const OrderDetailspage = () => {
                   )}
                 </p>
               </div>
-              {orderDetails?.data?.tests && (
+              {orderDetails?.data?.tests?.length > 0 && (
                 <>
                   <div className="mt-2 h6 fs-4">Test List </div>
                   <Table bordered hover style={{ marginTop: "10px" }}>
@@ -217,7 +217,7 @@ const OrderDetailspage = () => {
                 </>
               )}
 
-              {orderDetails.data.professional_fees && (
+              {orderDetails.data.professional_fees?.length > 0 && (
                 <>
                   <div className="mt-2 h6 fs-4">Professional Fees</div>
                   <Table bordered hover style={{ marginTop: "10px" }}>
@@ -310,10 +310,10 @@ const OrderDetailspage = () => {
                 {orderDetails?.data?.discount_price > 0 && (
                   <p>Discount: ₹{orderDetails?.data?.discount_price}</p>
                 )}
-                {orderDetails?.data?.professional_fees && (
+                {orderDetails?.data?.professional_fees?.length > 0 && (
                   <p>Total Professional Fees: ₹{totalProfessionalFees || 0} </p>
                 )}
-                {orderDetails?.data?.collection_fees && (
+                {orderDetails?.data?.collection_fees > 0 && (
                   <p>
                     Collection Fees: ₹{orderDetails?.data?.collection_fees || 0}{" "}
                   </p>

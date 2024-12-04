@@ -19,7 +19,7 @@ export const MasterProvider = ({ children }) => {
   const [taskList, setTaskList] = useState({loading: true,data: [],total: ""});
   const [allbreed, setallbreed] = useState({loading: true,data: []});
   const [alltestCategory, setalltestCategory] = useState({loading: true,data: []});
-  const [testParameter, setTestParameter] = useState({loading: true,data: []});
+  const [testParameter, setTestParameter] = useState({loading: true,data: [], total: ""});
   const [unitMasterList, setUnitMasterList] = useState({loading: true,data: [],total: ""});
   const [speciesMasterList, setSpeciesMasterList] = useState({loading: true,data: [],total: ""});
   const [orderMasterList, setorderMasterList] = useState({loading: true,data: [],total: ""});
@@ -739,6 +739,7 @@ export const MasterProvider = ({ children }) => {
       if (response.status === 200) {
         setTestParameter({
           data: response?.data?.data || [],
+          total: response.data.total,
           loading: false,
         });
       } else {
@@ -1726,7 +1727,6 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );

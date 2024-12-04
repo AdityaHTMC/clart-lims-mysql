@@ -27,7 +27,6 @@ import { useMasterContext } from "../helper/MasterProvider";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import profileImg from "../../src/assets/profile.png";
 
-
 const CreateOrder = () => {
   const {
     allTest,
@@ -131,25 +130,24 @@ const CreateOrder = () => {
 
   useEffect(() => {
     let amount = 0;
-  
+
     // Calculate the total sell_price of selected tests
     selectedTest.forEach((el) => {
       amount += el.sell_price;
     });
-  
+
     // Calculate the total sell_price of selected packages
     selectedPackages.forEach((packageDetail) => {
       amount += packageDetail.sell_price;
     });
-  
+
     // Add charges from selectedFees
     selectedFees.forEach((el) => {
       amount += el.expected_charges;
     });
-  
+
     setTotalAmount(amount);
   }, [selectedTest, selectedPackages, selectedFees, formData.type]);
-  
 
   useEffect(() => {
     if (formData.type === "Home Visit") {
@@ -159,7 +157,7 @@ const CreateOrder = () => {
     }
   }, [formData.type, zoneprice]);
 
-  console.log(collectionFees,'collectionFees')
+  console.log(collectionFees, "collectionFees");
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -243,17 +241,17 @@ const CreateOrder = () => {
     let bodyData = new FormData();
 
     bodyData.append("user_id", selectedCustomer.id);
-    bodyData.append("state", selectedCustomer.state || '');
-    bodyData.append("district", selectedCustomer.district || '');
-    bodyData.append("address", selectedCustomer.address || '');
-    bodyData.append("lab_id", selectedLab || '');
-    bodyData.append("collection_fees", collectionFees || '');
-    bodyData.append("pincode", selectedCustomer.pincode || '');
+    bodyData.append("state", selectedCustomer.state || "");
+    bodyData.append("district", selectedCustomer.district || "");
+    bodyData.append("address", selectedCustomer.address || "");
+    bodyData.append("lab_id", selectedLab || "");
+    bodyData.append("collection_fees", collectionFees || "");
+    bodyData.append("pincode", selectedCustomer.pincode || "");
     if (selectedPhelbo) {
-      bodyData.append("phlebotomist_id", selectedPhelbo.id || '');
+      bodyData.append("phlebotomist_id", selectedPhelbo.id || "");
     }
-    bodyData.append("booking_date", formData.booking_date || '');
-    bodyData.append("collection_type", formData.type || '');
+    bodyData.append("booking_date", formData.booking_date || "");
+    bodyData.append("collection_type", formData.type || "");
     bodyData.append("pet_id", formData.pet);
     selectedTest.forEach((el, i) => {
       bodyData.append(`tests[${i}][test]`, el.id);
@@ -277,9 +275,9 @@ const CreateOrder = () => {
         bodyData.append(`prescription[${index}]`, image);
       });
     }
-    bodyData.append("other_doctor ", formData.other_doctor || '');
-    bodyData.append("doctor_id", selectedDoc || '');
-    bodyData.append("referred_from ", formData.referred_from || '');
+    bodyData.append("other_doctor ", formData.other_doctor || "");
+    bodyData.append("doctor_id", selectedDoc || "");
+    bodyData.append("referred_from ", formData.referred_from || "");
     bodyData.append("start_time", selectedSlot.start_time);
     bodyData.append("end_time", selectedSlot.end_time || "");
 
@@ -495,6 +493,7 @@ const CreateOrder = () => {
                                   onChange={(e) =>
                                     handleLabSelect(e.target.value)
                                   }
+                                  required={formData.type === "Lab"}
                                 >
                                   <option value="" disabled>
                                     Select Lab
@@ -527,7 +526,7 @@ const CreateOrder = () => {
                                 <Input
                                   className="form-check-input"
                                   type="radio"
-                                  name="referred_from" 
+                                  name="referred_from"
                                   value="doctor"
                                   onChange={onChange}
                                   disabled={isProcessing}
@@ -541,7 +540,7 @@ const CreateOrder = () => {
                                 <Input
                                   className="form-check-input"
                                   type="radio"
-                                  name="referred_from" 
+                                  name="referred_from"
                                   value="other"
                                   onChange={onChange}
                                   disabled={isProcessing}
@@ -552,25 +551,25 @@ const CreateOrder = () => {
                                 </Label>
                               </div>
                             </FormGroup>
-                           
-                           {
-                            formData.referred_from === "other" && (
-                              <FormGroup>
-                              <Label htmlFor="other_doctor" className="col-form-label">
-                               Doctor Name
-                              </Label>
-                              <Input
-                                type="text"
-                                name="other_doctor"
-                                placeholder="Type The Doctor Name"
-                                value={formData.other_doctor}
-                                onChange={onChange}
-                                id="other_doctor"
-                              />
-                            </FormGroup>
-                            )
-                           }
 
+                            {formData.referred_from === "other" && (
+                              <FormGroup>
+                                <Label
+                                  htmlFor="other_doctor"
+                                  className="col-form-label"
+                                >
+                                  Doctor Name
+                                </Label>
+                                <Input
+                                  type="text"
+                                  name="other_doctor"
+                                  placeholder="Type The Doctor Name"
+                                  value={formData.other_doctor}
+                                  onChange={onChange}
+                                  id="other_doctor"
+                                />
+                              </FormGroup>
+                            )}
 
                             {formData.referred_from === "doctor" && (
                               <FormGroup className="mt-3">
@@ -588,7 +587,7 @@ const CreateOrder = () => {
                                   }
                                 >
                                   <option value="" disabled>
-                                    Select  Govt. Collection Center
+                                    Select Govt. Collection Center
                                   </option>
                                   {allsahcList?.data?.map((sahc) => (
                                     <option key={sahc.id} value={sahc.id}>
@@ -732,7 +731,7 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                            
+
                             <FormGroup className="mt-3">
                               <Label for="selectFees" className="fw-bold">
                                 Select Professional Fees
@@ -759,28 +758,31 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                            <FormGroup className="mt-3">
-                              <Autocomplete
-                                options={allphelboList.data}
-                                getOptionLabel={(option) => option.name || ""}
-                                value={selectedPhelbo || null} // Ensure value is null if not selected
-                                onChange={(event, newValue) =>
-                                  setSelectedPhelbo(newValue)
-                                }
-                                isOptionEqualToValue={
-                                  (option, value) => option.id === value?.id // Safely handle null/undefined value
-                                }
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    label="Select Phlebotomist"
-                                    placeholder="Select Phlebotomist" // Add placeholder
-                                    variant="outlined"
-                                    fullWidth
-                                  />
-                                )}
-                              />
-                            </FormGroup>
+                            {formData.type === "Home Visit" && (
+                              <FormGroup className="mt-3">
+                                <Autocomplete
+                                  options={allphelboList.data}
+                                  getOptionLabel={(option) => option.name || ""}
+                                  value={selectedPhelbo || null} // Ensure value is null if not selected
+                                  onChange={(event, newValue) =>
+                                    setSelectedPhelbo(newValue)
+                                  }
+                                  isOptionEqualToValue={
+                                    (option, value) => option.id === value?.id // Safely handle null/undefined value
+                                  }
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      label="Select Phlebotomist"
+                                      placeholder="Select Phlebotomist" // Add placeholder
+                                      variant="outlined"
+                                      fullWidth
+                                    />
+                                  )}
+                                />
+                              </FormGroup>
+                            )}
+
                             {totalAmount > 0 && (
                               <>
                                 <FormGroup className="mt-4">
@@ -854,11 +856,12 @@ const CreateOrder = () => {
                               <Button
                                 color="primary"
                                 disabled={
-                                  totalAmount === 0 ||
-                                  !formData.payment_mode ||
-                                  !formData.pet ||
-                                  !formData.booking_date ||
-                                  isProcessing
+                                  totalAmount === 0 || // Total amount should not be 0
+                                  !formData.payment_mode || // Payment mode must be selected
+                                  !formData.pet || // Pet must be selected
+                                  !formData.booking_date || // Booking date must be selected
+                                  (formData.type === "Lab" && !selectedLab) || // If Lab is selected, Lab dropdown must also be selected
+                                  isProcessing // Button should be disabled if processing
                                 }
                                 onClick={createOrder}
                               >

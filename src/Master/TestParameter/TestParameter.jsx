@@ -24,7 +24,7 @@ import { Pagination, Stack } from "@mui/material";
   
     const { getTPList , testParameter,deleteTPList } = useMasterContext();
     const [currentPage, setCurrentPage] = useState(1);
-    const itemperPage = 10;
+    const itemperPage = 12;
 
     const totalPages = testParameter?.total && Math.ceil(testParameter?.total / itemperPage);
   

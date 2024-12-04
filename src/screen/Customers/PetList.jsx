@@ -36,10 +36,15 @@ const PetList = () => {
     getCustomerPetList,
     petList,
     allBreedList,
-    allbreed,editPetList,deletePetList
+    allbreed,
+    editPetList,
+    deletePetList,
   } = useMasterContext();
 
   const [modalOpen, setModalOpen] = useState(false);
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
@@ -47,30 +52,46 @@ const PetList = () => {
     breed: "",
     id: "",
     color: "",
-    date_of_birth:"",
-    sex:"",
+    date_of_birth: "",
+    sex: "",
   });
-
-
 
   useEffect(() => {
     getCustomerPetList(id);
     getAllSpeciesList();
   }, [id]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const dataToSend = {
       species: selectedvarity.species,
-    }
+    };
     allBreedList(dataToSend);
-  },[selectedvarity.species])
+  }, [selectedvarity.species]);
 
   const addpetpage = () => {
     navigate(`/add-pet/${id}`);
   };
   const handleEdit = (product) => {
     setSelectedvarity(product);
+    setExistingImages(product.images || []); // Populate existing images
+    setNewImages([]); // Reset new images
     setModalOpen(true);
+  };
+
+  // Remove existing image
+  const removeExistingImage = (imageUrl) => {
+    setExistingImages((prev) => prev.filter((img) => img !== imageUrl));
+  };
+
+  // Remove new image
+  const removeNewImage = (index) => {
+    setNewImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Add new images
+  const addNewImages = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImages((prev) => [...prev, ...files]);
   };
 
   const handleInputChanges = (e) => {
@@ -83,12 +104,33 @@ const PetList = () => {
 
   const handleDelete = (petid) => {
     if (window.confirm("Are you sure you wish to delete this ?")) {
-      deletePetList(petid,id);
+      deletePetList(petid, id);
     }
   };
 
-  const handleSubmits = () => {
-    editPetList(selectedvarity.id,selectedvarity, id);
+  const handleSubmits = async () => {
+    const formData = new FormData();
+
+    // Add all images (existing and new) to the same "images" field, indexed sequentially
+    [...existingImages, ...newImages].forEach((imgOrFile, index) => {
+      if (typeof imgOrFile === "string") {
+        // Existing images as strings
+        formData.append(`images[${index}]`, imgOrFile);
+      } else {
+        // New images as binary
+        formData.append(`images[${index}]`, imgOrFile);
+      }
+    });
+
+    formData.append("date_of_birth", selectedvarity.date_of_birth);
+    formData.append("sex", selectedvarity.sex);
+    formData.append("color", selectedvarity.color);
+    formData.append("breed", selectedvarity.breed);
+    formData.append("species", selectedvarity.species);
+    formData.append("name", selectedvarity.name);
+    setIsProcessing(true);
+    const res = await  editPetList(selectedvarity.id, formData, id);
+    setIsProcessing(false);
     onCloseModal2();
   };
 
@@ -208,17 +250,17 @@ const PetList = () => {
               </FormGroup>
 
               <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="date_of_birth">Date of Birth</Label>
-                <Input
-                  type="date"
-                  name="date_of_birth"
-                  value={selectedvarity.date_of_birth}
-                  onChange={handleInputChanges}
-                  id="date_of_birth"
-                />
-              </FormGroup>
-            </div>
+                <FormGroup>
+                  <Label htmlFor="date_of_birth">Date of Birth</Label>
+                  <Input
+                    type="date"
+                    name="date_of_birth"
+                    value={selectedvarity.date_of_birth}
+                    onChange={handleInputChanges}
+                    id="date_of_birth"
+                  />
+                </FormGroup>
+              </div>
             </div>
 
             <div className="row">
@@ -264,39 +306,170 @@ const PetList = () => {
             </div>
 
             <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="color">Color:</Label>
-                <Input
-                  type="text"
-                  name="color"
-                  value={selectedvarity.color}
-                  onChange={handleInputChanges}
-                  id="color"
-                />
-              </FormGroup>
+              <div className="col-md-6">
+                <FormGroup>
+                  <Label htmlFor="color">Color:</Label>
+                  <Input
+                    type="text"
+                    name="color"
+                    value={selectedvarity.color}
+                    onChange={handleInputChanges}
+                    id="color"
+                  />
+                </FormGroup>
+              </div>
+              <div className="col-md-6">
+                <FormGroup>
+                  <Label htmlFor="sex">Gender:</Label>
+                  <Input
+                    type="text"
+                    name="sex"
+                    value={selectedvarity.sex}
+                    onChange={handleInputChanges}
+                    id="sex"
+                  />
+                </FormGroup>
+              </div>
             </div>
-            <div className="col-md-6">
+            <div className="row">
               <FormGroup>
-                <Label htmlFor="sex">Gender:</Label>
-                <Input
-                  type="text"
-                  name="sex"
-                  value={selectedvarity.sex}
-                  onChange={handleInputChanges}
-                  id="sex"
-                />
-              </FormGroup>
-            </div>
-          </div>
+                <Label
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  Images:
+                </Label>
+                <div
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "15px",
+                    marginBottom: "10px",
+                  }}
+                  className="image-preview-container"
+                >
+                  {/* Display existing images */}
+                  {existingImages.map((img, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        position: "relative",
+                        width: "120px",
+                        height: "120px",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                      }}
+                      className="image-preview"
+                    >
+                      <img
+                        src={img}
+                        alt="Existing"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        className="preview-img"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(img)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          background: "rgba(255, 0, 0, 0.8)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "24px",
+                          height: "24px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
 
+                  {/* Display new images */}
+                  {newImages.map((file, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        position: "relative",
+                        width: "120px",
+                        height: "120px",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                      }}
+                      className="image-preview"
+                    >
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt="New"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        className="preview-img"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeNewImage(index)}
+                        style={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          background: "rgba(255, 0, 0, 0.8)",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "24px",
+                          height: "24px",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          cursor: "pointer",
+                        }}
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* File input for adding new images */}
+                <Input
+                  type="file"
+                  multiple
+                  onChange={addNewImages}
+                  style={{
+                    border: "1px solid #ccc",
+                    borderRadius: "4px",
+                    padding: "10px",
+                    width: "100%",
+                    boxSizing: "border-box",
+                  }}
+                />
+              </FormGroup>
+            </div>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmits}>
+          <Button color="secondary" onClick={handleSubmits}>
             Save
           </Button>
-          <Button color="secondary" onClick={onCloseModal2}>
+          <Button color="primary" onClick={onCloseModal2}>
             Close
           </Button>
         </ModalFooter>
