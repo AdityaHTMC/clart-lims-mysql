@@ -147,7 +147,21 @@ const CustomerList = () => {
                         ) : (
                           customerLists?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.name || "NA"}</td>
+                               <td id={`name-${index}`}>
+                                {product?.name
+                                  ? product?.name?.length > 20
+                                    ? `${product?.name?.slice(0, 20)}...`
+                                    : product?.name
+                                  : "NA"}
+                                {product?.name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`name-${index}`}
+                                  >
+                                    {product?.name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
                               <td>{product?.pincode || "NA"}</td>
                               <td>{product?.mobile || "NA"}</td>
                               <td id={`address-${index}`}>

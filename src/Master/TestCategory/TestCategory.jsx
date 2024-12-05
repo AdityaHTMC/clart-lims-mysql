@@ -17,6 +17,7 @@ import {
   Row,
   Spinner,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -165,7 +166,21 @@ const TestCategory = () => {
                         ) : (
                           testCategory?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.name}</td>
+                               <td id={`name-${index}`}>
+                                {product?.name
+                                  ? product?.name?.length > 30
+                                    ? `${product?.name?.slice(0, 30)}...`
+                                    : product?.name
+                                  : "NA"}
+                                {product?.name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`name-${index}`}
+                                  >
+                                    {product?.name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
                               <td>{product?.discount_percentage}</td>
                               <td>
                                 <div className="circelBtnBx">

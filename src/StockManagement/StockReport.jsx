@@ -323,7 +323,7 @@ const StockReport = () => {
                         <th>Vendor Name</th>
                         <th>Quantity</th>
                         <th>Used Quantity</th>
-                        <th>Purchased Quantity</th>
+                        {/* <th>Purchased Quantity</th> */}
                         <th>Amount</th>
                         <th>Issued To</th>
                         <th>Date</th>
@@ -368,7 +368,7 @@ const StockReport = () => {
                             <td>{product.vendor_name || "NA"}</td>
                             <td>{product.quantity || 0}</td>
                             <td>{product.used_quantity }</td>
-                            <td>{product.purchased_quantity}</td>
+                            {/* <td>{product.purchased_quantity}</td> */}
                             <td>{product.amount}</td>
                             <td>{product.issued_to}</td>
                             <td>

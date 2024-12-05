@@ -748,10 +748,28 @@ const getEnquiryList = async () => {
 }
 }
 
+const updateItemStatus = async (dataToSend) => {
+  try {
+    const { item_id } = dataToSend;
+    const response = await axios.put(
+      `${base_url}/order/item/status/update/${item_id}`,
+      { ...dataToSend },
+      { headers: { Authorization: Authtoken } }
+    );
+    if (response.status === 200) {
+      toast.success(response.data.message);
+    } else {
+      toast.error(response?.data?.message);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Server error");
+  }
+};
+
 
     const values = {
         getMenuList, menuList , countryList , getCountryList , getStateList , stateList, getCityList, cityList,
-        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails,updateOrderStatus,getallPhelboList, phlebotomistList,getNewLetterList,newsletterlist,getEnquiryList,enquirylist
+        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails,updateOrderStatus,getallPhelboList, phlebotomistList,getNewLetterList,newsletterlist,getEnquiryList,enquirylist,updateItemStatus
     }
     return (
         <AppContext.Provider value={values} >

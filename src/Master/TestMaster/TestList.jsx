@@ -140,8 +140,8 @@ const TestList = () => {
 
                               <td id={`test_name-${index}`}>
                                 {product?.test_name
-                                  ? product.test_name.length > 20
-                                    ? `${product.test_name.slice(0, 20)}...`
+                                  ? product.test_name.length > 30
+                                    ? `${product.test_name.slice(0, 35)}...`
                                     : product.test_name
                                   : "NA"}
                                 {product?.test_name && (
@@ -153,10 +153,27 @@ const TestList = () => {
                                   </UncontrolledTooltip>
                                 )}
                               </td>
-                              <td>{product?.group_name}</td>
-                              <td>{product?.price}</td>
-                              <td>{product?.sell_price}</td>
-                              <td>{product?.testcode}</td>
+                              
+
+                              <td id={`group_name-${index}`}>
+                                {product?.group_name
+                                  ? product?.group_name.length > 20
+                                    ? `${product?.group_name.slice(0, 20)}...`
+                                    : product?.group_name
+                                  : "NA"}
+                                {product?.group_name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`group_name-${index}`}
+                                  >
+                                    {product?.group_name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                              <td>{product?.price || "NA"}</td>
+                              <td>{product?.sell_price || "NA"}</td>
+                              <td>{product?.testcode || "NA"}</td>
                               {/* <td>{product.pincode}</td> */}
 
                               <td>

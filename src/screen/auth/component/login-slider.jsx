@@ -2,7 +2,7 @@
 
 import Slider from "react-slick";
 import { Card, Col, Media } from "reactstrap";
-import companyLogo from '../../../assets/small-logo.jpg'
+import companyLogo from '../../../assets/WBLDCL_LOGO.png'
 
 const LoginSlider = () => {
   const settings = {
@@ -15,7 +15,7 @@ const LoginSlider = () => {
     <Col md="5" className="p-0 card-left">
       <Card className="bg-primary">
         <div className="svg-icon">
-          <Media height={78} width={150} alt="" src={companyLogo} className="Img-fluid" />
+          <Media style={{height:'100%'}} alt="" src={companyLogo} className="Img-fluid" />
         </div>
         <Slider className="single-item" {...settings}>
           {[...Array(3)].map((_, i) => (

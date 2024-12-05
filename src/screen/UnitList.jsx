@@ -19,6 +19,7 @@ import {
   Row,
   Spinner,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useCategoryContext } from "../helper/CategoryProvider";
@@ -119,25 +120,59 @@ const UnitList = () => {
                         ) : (
                           unitLists?.data?.map((product, index) => (
                             <tr key={index} >
-                              <td>{product.organization_name}</td>
-                              <td>{product.contact_person}</td>
-                              <td>{product.mobile}</td>
-                              <td>{product.district}</td>
-                              <td>{product.pincode}</td>
+                              
+                            
+                              <td id={`organization_name-${index}`}>
+                                {product?.organization_name
+                                  ? product?.organization_name?.length > 20
+                                    ? `${product?.organization_name?.slice(0, 20)}...`
+                                    : product?.organization_name
+                                  : "NA"}
+                                {product?.organization_name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`organization_name-${index}`}
+                                  >
+                                    {product?.organization_name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                          
+
+                              <td id={`contact_person-${index}`}>
+                                {product?.contact_person
+                                  ? product?.contact_person?.length > 20
+                                    ? `${product?.contact_person?.slice(0, 20)}...`
+                                    : product?.contact_person
+                                  : "NA"}
+                                {product?.contact_person && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`contact_person-${index}`}
+                                  >
+                                    {product?.contact_person}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                              <td>{product?.mobile || "NA"}</td>
+                              <td>{product?.district || "NA"}</td>
+                              <td>{product?.pincode || "NA"}</td>
                           
                               <td>
                               <div className="circelBtnBx">
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleEdit(product.id)}
+                                  onClick={() => handleEdit(product?.id)}
                                 >
                                   <FaEdit />
                                 </Button>
                                 <Button
                                   className="btn"
                                   color="link"
-                                  onClick={() => handleDelete(product.id)}
+                                  onClick={() => handleDelete(product?.id)}
                                 >
                                   <FaTrashAlt />
                                 </Button>

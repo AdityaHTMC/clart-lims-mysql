@@ -110,8 +110,8 @@ import { Pagination, Stack } from "@mui/material";
 
                                 <td id={`package_name-${index}`}>
                                 {product?.package_name
-                                  ? product.package_name.length > 20
-                                    ? `${product.package_name.slice(0, 20)}...`
+                                  ? product.package_name.length > 25
+                                    ? `${product.package_name.slice(0, 25)}...`
                                     : product.package_name
                                   : "NA"}
                                 {product?.package_name && (

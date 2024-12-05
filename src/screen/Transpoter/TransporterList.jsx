@@ -9,6 +9,7 @@ import {
   Row,
   Spinner,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -143,7 +144,21 @@ const TransporterList = () => {
                         ) : (
                           phlebotomistList?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.name}</td>
+                               <td id={`name-${index}`}>
+                                {product?.name
+                                  ? product?.name?.length > 20
+                                    ? `${product?.name?.slice(0, 20)}...`
+                                    : product?.name
+                                  : "NA"}
+                                {product?.name && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`name-${index}`}
+                                  >
+                                    {product?.name}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
                               <td>{product?.email}</td>
                               <td>{product?.mobile}</td>
                               <td>

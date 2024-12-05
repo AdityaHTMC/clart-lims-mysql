@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import {
@@ -27,10 +28,33 @@ import { useOrderContext } from "../helper/OrderProvider";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import { useMasterContext } from "../helper/MasterProvider";
 import { FaEdit } from "react-icons/fa";
+import Slider from "react-slick";
+
 const OrderDetailspage = () => {
   const { id } = useParams();
-  const { updateOrderStatus, getallPhelboList, phlebotomistList } =
-    useCommonContext();
+  const sliderRef = React.useRef(null);
+  const settings = {
+    dots: false, // Disable dots
+    infinite: true,
+    speed: 500,
+    arrows: false, // Disable default arrows
+  };
+
+  // Custom button handlers
+  const handlePrev = () => {
+    sliderRef.current.slickPrev(); // Move slider to the previous slide
+  };
+
+  const handleNext = () => {
+    sliderRef.current.slickNext(); // Move slider to the next slide
+  };
+
+  const {
+    updateOrderStatus,
+    getallPhelboList,
+    phlebotomistList,
+    updateItemStatus,
+  } = useCommonContext();
 
   const { getOrderMasterList, orderMasterList, orderDetails, getOrderDetails } =
     useMasterContext();
@@ -46,22 +70,30 @@ const OrderDetailspage = () => {
   const [isEditingPhelbo, setIsEditingPhelbo] = useState(false);
   const [isEditingPayment, setIsEditingPayment] = useState(false);
 
+  const handleStatusUpdate = (itemId, status) => {
+    const dataToSend = {
+      status,
+      item_id: itemId,
+    };
+    updateItemStatus(dataToSend);
+  };
+
   const toggleEditStatus = () => {
     setIsEditingStatus(!isEditingStatus);
-    setIsEditingPayment(false)
-    setIsEditingPhelbo(false)
+    setIsEditingPayment(false);
+    setIsEditingPhelbo(false);
   };
 
   const toggleEditPhelbo = () => {
     setIsEditingPhelbo(!isEditingPhelbo);
-    setIsEditingPayment(false)
-    setIsEditingStatus(false)
+    setIsEditingPayment(false);
+    setIsEditingStatus(false);
   };
 
   const toggleEditPayment = () => {
     setIsEditingPayment(!isEditingPayment);
-    setIsEditingStatus(false)
-    setIsEditingPhelbo(false)
+    setIsEditingStatus(false);
+    setIsEditingPhelbo(false);
   };
 
   const handlePaymentStatusChange = (status) => {
@@ -514,7 +546,7 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <h5>Customer Info</h5>
+              <h5 style={{fontWeight:'600'}}>Customer Info</h5>
               <p style={{ marginBottom: "5px" }}>
                 Name: {orderDetails?.data?.customer_name}{" "}
               </p>
@@ -528,6 +560,126 @@ const OrderDetailspage = () => {
                 District: {orderDetails?.data?.district}{" "}
               </p>
             </Card>
+
+            {orderDetails?.data?.item_requests?.length > 0 && (
+              <Card
+                style={{
+                  position: "relative",
+                  padding: "20px",
+                  boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
+                  height: "250px",
+                }}
+              >
+                <h5 style={{fontWeight:'600'}}>
+                  Item Request From : {orderDetails?.data?.lab_name || "NA"}
+                </h5>
+                <Slider ref={sliderRef} className="single-item" {...settings}>
+                  {orderDetails?.data?.item_requests?.map(
+                    (itemRequest, index) => (
+                      <div key={index}>
+                        <p style={{ marginBottom: "5px" }}>
+                          Item Name: {itemRequest?.item_name}
+                        </p>
+                        <p style={{ marginBottom: "5px" }}>
+                          Item Quantity: {itemRequest?.quantity}
+                        </p>
+                        <p style={{ marginBottom: "5px" }}>
+                          Reason: {itemRequest?.quantity}
+                        </p>
+                        <p style={{ marginBottom: "5px" }}>
+                          Status: {itemRequest?.status}
+                        </p>
+                        {itemRequest.status === "Pending" && (
+                          <div align="center" className="mt-5">
+                            <button
+                              style={{
+                                padding: "10px 20px",
+                                background: "green",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                                marginRight: "20px",
+                              }}
+                              onClick={() =>
+                                handleStatusUpdate(
+                                  itemRequest?.item_id,
+                                  "Approved"
+                                )
+                              }
+                            >
+                              Approve
+                            </button>
+                            <button
+                              style={{
+                                padding: "10px 20px",
+                                background: "red",
+                                color: "#fff",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleStatusUpdate(
+                                  itemRequest?.item_id,
+                                  "Rejected"
+                                )
+                              }
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )
+                  )}
+                </Slider>
+
+                {/* Left Button */}
+                <button
+                  style={{
+                    position: "absolute",
+                    top: "90%",
+                    left: "10px",
+                    transform: "translateY(-50%)",
+                    background: "#ccc",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "30px",
+                    height: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={handlePrev}
+                >
+                  ←
+                </button>
+
+                {/* Right Button */}
+                <button
+                  style={{
+                    position: "absolute",
+                    top: "90%",
+                    right: "10px",
+                    transform: "translateY(-50%)",
+                    background: "#ccc",
+                    border: "none",
+                    borderRadius: "50%",
+                    width: "30px",
+                    height: "30px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    cursor: "pointer",
+                  }}
+                  onClick={handleNext}
+                >
+                  →
+                </button>
+              </Card>
+            )}
           </Col>
         </Row>
       </Container>
