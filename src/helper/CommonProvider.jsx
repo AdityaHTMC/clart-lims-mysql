@@ -732,9 +732,9 @@ const getNewLetterList = async (dataToSend) => {
 }
 
 
-const getEnquiryList = async () => {
+const getEnquiryList = async (dataToSend) => {
   try {
-    const response = await axios.post(`${base_url}/admin/enquiry/list`,{},
+    const response = await axios.post(`${base_url}/admin/enquiry/list`,{...dataToSend},
     { headers: { 'Authorization': Authtoken }});
     if (response.status === 200) {
       setenquirylist({ data: response?.data?.data || [], total: response.data.total,  loading: false })

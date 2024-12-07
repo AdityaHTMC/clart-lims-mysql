@@ -208,7 +208,7 @@ const PetList = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => handleDelete(product.id)}
+                                    onClick={() => handleDelete(product?.id)}
                                   >
                                     <FaTrashAlt />
                                   </Button>

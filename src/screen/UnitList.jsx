@@ -29,7 +29,6 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { Pagination, Stack } from "@mui/material";
 // Register the necessary Chart.js components
 
-
 const UnitList = () => {
   const navigate = useNavigate();
 
@@ -41,7 +40,8 @@ const UnitList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const itemperPage = 15;
 
-  const totalPages = unitLists?.total && Math.ceil(unitLists?.total / itemperPage);
+  const totalPages =
+    unitLists?.total && Math.ceil(unitLists?.total / itemperPage);
 
   useEffect(() => {
     const dataToSend = {
@@ -52,7 +52,6 @@ const UnitList = () => {
     getunitList(dataToSend);
   }, [currentPage]);
 
-
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
   };
@@ -61,7 +60,7 @@ const UnitList = () => {
     navigate("/add-products");
   };
   const handleEdit = (id) => {
-    navigate(`/edit-unit-list/${id}`); 
+    navigate(`/edit-unit-list/${id}`);
   };
 
   const handleDelete = (id) => {
@@ -91,8 +90,8 @@ const UnitList = () => {
                 <div className="clearfix"></div>
                 <div id="basicScenario" className="product-physical">
                   <div className="promo-code-list">
-                    <Table  hover responsive >
-                      <thead >
+                    <Table hover responsive>
+                      <thead>
                         <tr>
                           <th>Unit Name </th>
                           <th>Contact Person Name</th>
@@ -119,13 +118,14 @@ const UnitList = () => {
                           </tr>
                         ) : (
                           unitLists?.data?.map((product, index) => (
-                            <tr key={index} >
-                              
-                            
+                            <tr key={index}>
                               <td id={`organization_name-${index}`}>
                                 {product?.organization_name
                                   ? product?.organization_name?.length > 20
-                                    ? `${product?.organization_name?.slice(0, 20)}...`
+                                    ? `${product?.organization_name?.slice(
+                                        0,
+                                        20
+                                      )}...`
                                     : product?.organization_name
                                   : "NA"}
                                 {product?.organization_name && (
@@ -138,12 +138,13 @@ const UnitList = () => {
                                 )}
                               </td>
 
-                          
-
                               <td id={`contact_person-${index}`}>
                                 {product?.contact_person
                                   ? product?.contact_person?.length > 20
-                                    ? `${product?.contact_person?.slice(0, 20)}...`
+                                    ? `${product?.contact_person?.slice(
+                                        0,
+                                        20
+                                      )}...`
                                     : product?.contact_person
                                   : "NA"}
                                 {product?.contact_person && (
@@ -159,39 +160,39 @@ const UnitList = () => {
                               <td>{product?.mobile || "NA"}</td>
                               <td>{product?.district || "NA"}</td>
                               <td>{product?.pincode || "NA"}</td>
-                          
+
                               <td>
-                              <div className="circelBtnBx">
-                                <Button
-                                  className="btn"
-                                  color="link"
-                                  onClick={() => handleEdit(product?.id)}
-                                >
-                                  <FaEdit />
-                                </Button>
-                                <Button
-                                  className="btn"
-                                  color="link"
-                                  onClick={() => handleDelete(product?.id)}
-                                >
-                                  <FaTrashAlt />
-                                </Button>
-                              </div>
-                            </td>
+                                <div className="circelBtnBx">
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleEdit(product?.id)}
+                                  >
+                                    <FaEdit />
+                                  </Button>
+                                  <Button
+                                    className="btn"
+                                    color="link"
+                                    onClick={() => handleDelete(product?.id)}
+                                  >
+                                    <FaTrashAlt />
+                                  </Button>
+                                </div>
+                              </td>
                             </tr>
                           ))
                         )}
                       </tbody>
                     </Table>
                     <Stack className="rightPagination mt10" spacing={2}>
-                        <Pagination
-                          color="primary"
-                          count={totalPages}
-                          page={currentPage}
-                          shape="rounded"
-                          onChange={(event, value) => handlepagechange(value)}
-                        />
-                      </Stack>
+                      <Pagination
+                        color="primary"
+                        count={totalPages}
+                        page={currentPage}
+                        shape="rounded"
+                        onChange={(event, value) => handlepagechange(value)}
+                      />
+                    </Stack>
                   </div>
                 </div>
               </CardBody>

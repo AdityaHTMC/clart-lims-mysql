@@ -264,13 +264,13 @@ const PurchaseList = () => {
                       ) : (
                         purchaseList?.data?.map((product, index) => (
                           <tr key={index}>
-                            <td>{product.item_name}</td>
-                            <td>{product.vendor_name}</td>
-                            <td>{product.quantity}</td>
-                            <td>{product.amount}</td>
+                            <td>{product?.item_name}</td>
+                            <td>{product?.vendor_name}</td>
+                            <td>{product?.quantity}</td>
+                            <td>{product?.amount}</td>
                             <td>
                               {product?.date
-                                ? new Date(product.date).toLocaleDateString(
+                                ? new Date(product?.date).toLocaleDateString(
                                     "en-GB"
                                   )
                                 : ""}

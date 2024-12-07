@@ -122,6 +122,7 @@ import EditTask from "./screen/TaskManagement/EditTask";
 import SahcMaster from "./Master/SahcMaster/SahcMaster";
 import DoctorList from "./Master/DoctorMaster/DoctorList";
 import ZoneMasterList from "./Master/ZoneMaster/ZoneMasterList";
+import Transaction from "./screen/Fiance/Transaction";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -178,6 +179,7 @@ function App() {
 
           <Route path="/newsletter-management" element={<NewsLetter />} />
           <Route path="/enquiry-list" element={<EnquiryList />} />
+          <Route path="/collection-report" element={<Transaction />} />
 
           {/* master */}
 

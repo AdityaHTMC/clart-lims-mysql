@@ -2,118 +2,116 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {
-    Button,
-    Card,
-    CardBody,
-    Col,
-    Container,
-    Row,
-    Spinner,
-    Table,
-    UncontrolledTooltip,
-  } from "reactstrap";
-  import { useEffect, useState } from "react";
-  import { useNavigate } from "react-router-dom";
-  import { FaEdit, FaTrashAlt } from "react-icons/fa";
-  
-  import CommonBreadcrumb from "../../component/common/bread-crumb";
-  import { useCommonContext } from "../../helper/CommonProvider";
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+  Spinner,
+  Table,
+  UncontrolledTooltip,
+} from "reactstrap";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaEdit, FaTrashAlt } from "react-icons/fa";
+
+import CommonBreadcrumb from "../../component/common/bread-crumb";
+import { useCommonContext } from "../../helper/CommonProvider";
 import { Pagination, Stack } from "@mui/material";
-  
-  const EnquiryList = () => {
-    const navigate = useNavigate();
-  
-    const { getEnquiryList,enquirylist } = useCommonContext();
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const itemperPage = 8;
+const EnquiryList = () => {
+  const navigate = useNavigate();
 
-    const totalPages =
+  const { getEnquiryList, enquirylist } = useCommonContext();
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 15;
+
+  const totalPages =
     enquirylist?.total && Math.ceil(enquirylist?.total / itemperPage);
-  
-    useEffect(() => {
-      const dataToSend = {
-        page: currentPage,
-        limit: itemperPage,
-      };
-        getEnquiryList(dataToSend);
-    }, [currentPage]);
-  
-    console.log(enquirylist, "enquirylist");
-  
-    const onOpenModal = () => {
-      navigate("/add-task");
-    };
-    const handleEdit = (id) => {
-      // navigate(`/product-edit/${id}`);
-    };
-  
-    const handleDelete = (id) => {
-      if (window.confirm("Are you sure you wish to delete this item?")) {
-        // delete product logic here
-        // ProductDelete(id);
-      }
-    };
 
-
-    const handlepagechange = (newpage) => {
-      setCurrentPage(newpage);
+  useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
     };
-  
-  
-    return (
-      <>
-        <CommonBreadcrumb title="Enquiry List" />
-        <Container fluid>
-          <Row>
-            <Col sm="12">
-              <Card>
-                {/* <CommonCardHeader title="Product Sub Categoty" /> */}
-                <CardBody>
-                  <div className="btn-popup pull-right">
-                    {/* <Button color="primary" onClick={onOpenModal}>
+    getEnquiryList(dataToSend);
+  }, [currentPage]);
+
+  console.log(enquirylist, "enquirylist");
+
+  const onOpenModal = () => {
+    navigate("/add-task");
+  };
+  const handleEdit = (id) => {
+    // navigate(`/product-edit/${id}`);
+  };
+
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure you wish to delete this item?")) {
+      // delete product logic here
+      // ProductDelete(id);
+    }
+  };
+
+  const handlepagechange = (newpage) => {
+    setCurrentPage(newpage);
+  };
+
+  return (
+    <>
+      <CommonBreadcrumb title="Enquiry List" />
+      <Container fluid>
+        <Row>
+          <Col sm="12">
+            <Card>
+              {/* <CommonCardHeader title="Product Sub Categoty" /> */}
+              <CardBody>
+                <div className="btn-popup pull-right">
+                  {/* <Button color="primary" onClick={onOpenModal}>
                         Add Task
                       </Button> */}
-                  </div>
-                  <div className="clearfix"></div>
-                  <div id="basicScenario" className="product-physical">
-                    <div className="promo-code-list">
-                      <Table hover responsive>
-                        <thead>
+                </div>
+                <div className="clearfix"></div>
+                <div id="basicScenario" className="product-physical">
+                  <div className="promo-code-list">
+                    <Table hover responsive>
+                      <thead>
+                        <tr>
+                          <th>Name </th>
+                          <th>message </th>
+                          <th>Email </th>
+                          <th>phone </th>
+                          <th>Date</th>
+                          {/* <th>status</th> */}
+                          {/* <th>Action</th> */}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {/* Show loading spinner */}
+                        {enquirylist?.loading ? (
                           <tr>
-                           <th>First Name </th>
-                           <th>Last Name </th>
-                            <th>message </th>
-                            <th>Email </th>
-                            <th>phone </th>
-                            <th>Date</th>
-                            {/* <th>status</th> */}
-                            {/* <th>Action</th> */}
+                            <td colSpan="7" className="text-center">
+                              <Spinner color="secondary" className="my-4" />
+                            </td>
                           </tr>
-                        </thead>
-                        <tbody>
-                          {/* Show loading spinner */}
-                          {enquirylist?.loading ? (
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                <Spinner color="secondary" className="my-4" />
+                        ) : enquirylist?.data?.length === 0 ? (
+                          // Show "No products found" when there's no data
+                          <tr>
+                            <td colSpan="7" className="text-center">
+                              No Data Found
+                            </td>
+                          </tr>
+                        ) : (
+                          enquirylist?.data?.map((product, index) => (
+                            <tr key={index}>
+                              <td>
+                                {product?.first_name} {product?.last_name}{" "}
                               </td>
-                            </tr>
-                          ) : enquirylist?.data?.length === 0 ? (
-                            // Show "No products found" when there's no data
-                            <tr>
-                              <td colSpan="7" className="text-center">
-                                No Data Found
-                              </td>
-                            </tr>
-                          ) : (
-                            enquirylist?.data?.map((product, index) => (
-                              <tr key={index}>
-                                <td>{product?.first_name}</td>
-                                <td>{product?.last_name}</td>
-                        
-                                <td id={`enquiryTooltip-${index}`}>
+
+                              <td id={`enquiryTooltip-${index}`}>
                                 {product?.message
                                   ?.split(" ")
                                   .slice(0, 5)
@@ -126,17 +124,18 @@ import { Pagination, Stack } from "@mui/material";
                                   {product?.message}
                                 </UncontrolledTooltip>
                               </td>
-                                <td>{product?.email}</td>
-                                <td>{product?.phone}</td>
-                                <td>
-                                  {product?.created_at
-                                    ? new Date(
-                                        product.created_at
-                                      ).toLocaleDateString("en-GB")
-                                    : ""}
-                                </td>
-                                {/* <td>{product?.status}</td> */}
-                                {/* <td>
+
+                              <td>{product?.email}</td>
+                              <td>{product?.phone}</td>
+                              <td>
+                                {product?.created_at
+                                  ? new Date(
+                                      product.created_at
+                                    ).toLocaleDateString("en-GB")
+                                  : ""}
+                              </td>
+                              {/* <td>{product?.status}</td> */}
+                              {/* <td>
                                   <div className="circelBtnBx">
                                     <Button
                                       className="btn"
@@ -154,12 +153,12 @@ import { Pagination, Stack } from "@mui/material";
                                     </Button>
                                   </div>
                                 </td> */}
-                              </tr>
-                            ))
-                          )}
-                        </tbody>
-                      </Table>
-                      <Stack className="rightPagination mt10" spacing={2}>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </Table>
+                    <Stack className="rightPagination mt10" spacing={2}>
                       <Pagination
                         color="primary"
                         count={totalPages}
@@ -168,16 +167,15 @@ import { Pagination, Stack } from "@mui/material";
                         onChange={(event, value) => handlepagechange(value)}
                       />
                     </Stack>
-                    </div>
                   </div>
-                </CardBody>
-              </Card>
-            </Col>
-          </Row>
-        </Container>
-      </>
-    );
-  };
-  
-  export default EnquiryList;
-  
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
+};
+
+export default EnquiryList;

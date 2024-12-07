@@ -50,7 +50,7 @@ const CmsList = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const itemperPage = 8;
+  const itemperPage = 12;
 
   const totalPages = cmsList?.total && Math.ceil(cmsList?.total / itemperPage);
 

@@ -63,7 +63,6 @@ const OrderDetailspage = () => {
 
   const [orderStatusUpdates, setOrderStatusUpdates] = useState();
 
-  const [selectedOption, setSelectedOption] = useState("Courier");
   const [selectedDeliveryBoy, setSelectedDeliveryBoy] = useState("");
   const [selectedPaymentStatus, setSelectedPaymentStatus] = useState("");
   const [isEditingStatus, setIsEditingStatus] = useState(false);
@@ -76,6 +75,20 @@ const OrderDetailspage = () => {
       item_id: itemId,
     };
     updateItemStatus(dataToSend);
+  };
+
+  const handleDownloadInvoice = () => {
+    const invoiceUrl = orderDetails?.data?.invoice;
+    if (invoiceUrl) {
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = invoiceUrl;
+      link.download = "Invoice.pdf"; // Set the file name
+      link.target = "_blank"; // Open in a new tab if required
+      link.click();
+    } else {
+      toast.error("Invoice is not available.");
+    }
   };
 
   const toggleEditStatus = () => {
@@ -192,7 +205,7 @@ const OrderDetailspage = () => {
                 <h5>
                   Order Id:{" "}
                   <span style={{ fontWeight: "bold" }}>
-                    {orderDetails?.data?.order_id}
+                    {orderDetails?.data?.orderId}
                   </span>
                 </h5>
                 <p style={{ color: "#777", margin: 0 }}>
@@ -366,12 +379,18 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <Button
-                color="primary"
-                style={{ marginBottom: "10px", float: "right" }}
-              >
-                <FaReceipt fontSize={12} /> Print Invoice
-              </Button>
+           
+           {orderDetails?.data?.invoice && (
+                <Button
+                  color="primary"
+                  style={{ marginBottom: "10px", float: "right" }}
+                  onClick={handleDownloadInvoice}
+                >
+                  <FaReceipt fontSize={12} /> Print Invoice
+                </Button>
+              )}
+              
+
               <div style={{ marginBottom: "10px", clear: "both" }}>
                 <div className="d-flex align-items-center">
                   Order Status:{" "}
@@ -546,7 +565,7 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <h5 style={{fontWeight:'600'}}>Customer Info</h5>
+              <h5 style={{ fontWeight: "600" }}>Customer Info</h5>
               <p style={{ marginBottom: "5px" }}>
                 Name: {orderDetails?.data?.customer_name}{" "}
               </p>
@@ -567,10 +586,10 @@ const OrderDetailspage = () => {
                   position: "relative",
                   padding: "20px",
                   boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
-                  height: "250px",
+                  height: "270px",
                 }}
               >
-                <h5 style={{fontWeight:'600'}}>
+                <h5 style={{ fontWeight: "600" }}>
                   Item Request From : {orderDetails?.data?.lab_name || "NA"}
                 </h5>
                 <Slider ref={sliderRef} className="single-item" {...settings}>

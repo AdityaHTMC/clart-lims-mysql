@@ -365,12 +365,12 @@ const StockReport = () => {
                                 )}
                               </td>
 
-                            <td>{product.vendor_name || "NA"}</td>
-                            <td>{product.quantity || 0}</td>
-                            <td>{product.used_quantity }</td>
+                            <td>{product?.vendor_name || "NA"}</td>
+                            <td>{product?.quantity || 0}</td>
+                            <td>{product?.used_quantity }</td>
                             {/* <td>{product.purchased_quantity}</td> */}
-                            <td>{product.amount}</td>
-                            <td>{product.issued_to}</td>
+                            <td>{product?.amount}</td>
+                            <td>{product?.issued_to}</td>
                             <td>
                               {product?.date
                                 ? new Date(product.date).toLocaleDateString(

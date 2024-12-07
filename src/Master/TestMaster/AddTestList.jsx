@@ -566,9 +566,8 @@ const AddTestList = () => {
                     border: "1px solid #ced4da",
                     borderRadius: "5px",
                     padding: "10px",
-                    backgroundColor: "#f8f9fa",
+                   
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
-                    resize: "none",
                   }}
                 />
               </FormGroup>

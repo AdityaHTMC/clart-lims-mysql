@@ -258,14 +258,14 @@ const ItemManagement = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  id={`editTooltip-${product._id}`}
+                                  id={`editTooltip-${product.id}`}
                                 >
                                   <FaEdit
                                     onClick={() => onOpenModal2(product)}
                                   />
                                 </Button>
                                 <UncontrolledTooltip
-                                  target={`editTooltip-${product._id}`}
+                                  target={`editTooltip-${product.id}`}
                                 >
                                   Edit
                                 </UncontrolledTooltip>
@@ -273,14 +273,14 @@ const ItemManagement = () => {
                                 <Button
                                   className="btn"
                                   color="link"
-                                  id={`deleteTooltip-${product._id}`}
+                                  id={`deleteTooltip-${product.id}`}
                                 >
                                   <FaTrashAlt
                                     onClick={() => handleDelete(product.id)}
                                   />
                                 </Button>
                                 <UncontrolledTooltip
-                                  target={`deleteTooltip-${product._id}`}
+                                  target={`deleteTooltip-${product.id}`}
                                 >
                                   Delete
                                 </UncontrolledTooltip>
