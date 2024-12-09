@@ -20,7 +20,7 @@ const TopDashboardCards = () => {
 
   return (
     <>
-      <Col xl="3 xl-50" md="6">
+      <Col  md="4">
         <Card className=" o-hidden widget-cards">
           <Link to="/unit-list" style={{ textDecoration: "none" }}>
             <CardBody className="bg-warning">
@@ -46,7 +46,7 @@ const TopDashboardCards = () => {
         </Card>
       </Col>
 
-      <Col xl="3 xl-50" md="6">
+      <Col  md="4">
         <Card className=" o-hidden widget-cards">
           <Link to="/lab-list" style={{ textDecoration: "none" }}>
             <CardBody className="bg-secondary">
@@ -72,7 +72,7 @@ const TopDashboardCards = () => {
         </Card>
       </Col>
 
-      <Col xl="3 xl-50" md="6">
+      <Col  md="4">
         <Card className=" o-hidden widget-cards">
           <Link to="/collection-center-list" style={{ textDecoration: "none" }}>
             <CardBody className="bg-primary">
@@ -98,10 +98,10 @@ const TopDashboardCards = () => {
         </Card>
       </Col>
 
-      <Col xl="3 xl-50" md="6">
+      <Col md="4">
         <Card className=" o-hidden widget-cards">
           <Link to="/phlebotomist-list" style={{ textDecoration: "none" }}>
-            <CardBody className="bg-danger">
+            <CardBody style={{backgroundColor:'#5c6bca'}}>
               <Media className="static-top-widget row">
                 <div className="icons-widgets col-4">
                   <div className="align-self-center text-center">
@@ -109,11 +109,64 @@ const TopDashboardCards = () => {
                   </div>
                 </div>
                 <Media body className="col-8">
-                  <span className="m-0">Total Phlebotomist</span>
+                  <span className="m-0" style={{color:'#fff'}}>Total Phlebotomist</span>
                   <h3 className="mb-0">
                     <CountUp
                       className="counter"
                       end={orderCount?.data?.phlebotomist_count}
+                    />
+                    <small> </small>
+                  </h3>
+                </Media>
+              </Media>
+            </CardBody>
+          </Link>
+        </Card>
+      </Col>
+
+
+      <Col md="4">
+        <Card className=" o-hidden widget-cards">
+          <Link to="/b2b-users" style={{ textDecoration: "none" }}>
+            <CardBody style={{backgroundColor:'#358fff'}}>
+              <Media className="static-top-widget row">
+                <div className="icons-widgets col-4">
+                  <div className="align-self-center text-center">
+                  <FontAwesomeIcon icon={faUsers} className="font-secondary" size="2x" />
+                  </div>
+                </div>
+                <Media body className="col-8">
+                  <span className="m-0" style={{color:'#fff'}}>Total B2B</span>
+                  <h3 className="mb-0">
+                    <CountUp
+                      className="counter"
+                      end={orderCount?.data?.b2b_user_count}
+                    />
+                    <small> </small>
+                  </h3>
+                </Media>
+              </Media>
+            </CardBody>
+          </Link>
+        </Card>
+      </Col>
+
+      <Col md="4">
+        <Card className=" o-hidden widget-cards">
+          <Link to="/pending-orders" style={{ textDecoration: "none" }}>
+            <CardBody style={{backgroundColor:'#008364'}}>
+              <Media className="static-top-widget row">
+                <div className="icons-widgets col-4">
+                  <div className="align-self-center text-center">
+                  <FontAwesomeIcon icon={faUsers} className="font-secondary" size="2x" />
+                  </div>
+                </div>
+                <Media body className="col-8">
+                  <span className="m-0" style={{color:'#fff'}}>Total Pending Order</span>
+                  <h3 className="mb-0">
+                    <CountUp
+                      className="counter"
+                      end={orderCount?.data?.pending_order_count}
                     />
                     <small> </small>
                   </h3>

@@ -1,65 +1,116 @@
+/* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 
 import { Button, Card, CardBody, Col, Spinner, Table } from "reactstrap";
 import CommonCardHeader from "../common/card-header";
 import { useDashboardContext } from "../../helper/DashboardProvider";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const LatestOrders = () => {
-  const { getDashboardOrderList, dashboardOrderList } = useDashboardContext();
+  const { getB2bReport, b2breportList, csvB2bReport, csvb2b } =
+    useDashboardContext();
+  const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   getDashboardOrderList();
-  // }, []);
+  useEffect(() => {
+    getB2bReport();
+    csvB2bReport();
+  }, []);
+
+  const handleDownload = async () => {
+    setLoading(true); // Start loading
+    try {
+
+    
+      console.log(csvb2b, 'csv2')
+      if (csvb2b) {
+        // Create a temporary link element
+        const link = document.createElement("a");
+        link.href = csvb2b;
+        link.target = "_blank"; // Opens in a new tab/blank page
+        link.download = "B2B_Report.csv"; // Suggest a filename for download
+        document.body.appendChild(link);
+        link.click(); // Programmatically click the link
+        document.body.removeChild(link); // Clean up the DOM
+      } else {
+        console.error("File URL not found");
+      }
+    } catch (error) {
+      console.error("Error downloading the file:", error);
+    } finally {
+      setLoading(false); // End loading
+    }
+  };
 
   return (
     <Col xl="6 xl-100">
       <Card>
-        <CommonCardHeader title="Latest Orders" />
-        <CardBody>
-          <div className="user-status table-responsive latest-order-table">
-            <Table borderless>
-              <thead>
-                <tr>
-                  <th scope="col">Order ID</th>
-                  <th scope="col">Order Total</th>
-                  <th scope="col">Customer</th>
-                  <th scope="col">Payment Method</th>
-                  <th scope="col">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dashboardOrderList.loading ? (
-                  <tr>
-                    <td colSpan="5" className="text-center">
-                      <Spinner color="secondary" className="my-4" />
-                    </td>
-                  </tr>
-                ) : dashboardOrderList?.data?.length === 0 ? (
-                  <tr>
-                    <td colSpan="5" className="text-center">
-                      No Orders found
-                    </td>
-                  </tr>
-                ) : (
-                  dashboardOrderList?.data?.slice(0, 5)?.map((order, index) => (
-                    <tr key={index}>
-                      <td>{order.order_id}</td>
-                      <td className="digits">₹{order.final_amount}</td>
-                      <td className="font-secondary">{order.user_name}</td>
-                      <td className="font-danger">{order.payment_mode}</td>
-                      <td className="digits">{order.status}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </Table>
-
-            <Link to="/all-orders">
-              <Button color="primary">View All Orders</Button>{" "}
-            </Link>
+        <div className="row" style={{ alignItems: "center" }}>
+          <div className="col-sm-6">
+            <CommonCardHeader title="B2B Report" />
           </div>
+          <div className="col-sm-6" align="right">
+            <div style={{ paddingRight: "30px" }}>
+              <Button
+                color="primary"
+                onClick={handleDownload}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <Spinner size="sm" /> Downloading...
+                  </>
+                ) : (
+                  "Download B2B CSV"
+                )}
+              </Button>
+            </div>
+          </div>
+        </div>
+        <CardBody>
+          <Table bordered>
+            <thead>
+              <tr>
+                <th>Sl. No</th>
+                <th>Name of Organisation</th>
+                <th>Category Name</th>
+                <th>No. of Tests under Category</th>
+                <th>Category Value (Rs)</th>
+                <th>Total No. of Tests</th>
+                <th>Total Value (Rs.)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {b2breportList.data?.map((org, index) => (
+                <>
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{org.organization_name}</td>
+                    <td colSpan="5"></td>
+                  </tr>
+                  {org.test_categories.map((category, catIndex) => (
+                    <tr key={`${index}-${catIndex}`}>
+                      <td></td>
+                      <td></td>
+                      <td>{category}</td>
+                      <td>{org.category_tests_count[catIndex]}</td>
+                      <td>{org.test_order_amount[catIndex]}</td>
+                      {catIndex === 0 && (
+                        <>
+                          <td rowSpan={org.test_categories.length}>
+                            {org.total_no_of_tests}
+                          </td>
+                          <td rowSpan={org.test_categories.length}>
+                            {org.total_test_order_amount}
+                          </td>
+                        </>
+                      )}
+                    </tr>
+                  ))}
+                </>
+              ))}
+            </tbody>
+          </Table>
         </CardBody>
       </Card>
     </Col>

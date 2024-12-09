@@ -20,7 +20,9 @@ export const OrderProvider = ({ children }) => {
     const [test_package, setTestPackage] = useState({ loading: true, data: [] });
     const [professionalFees, setProfessionalFees] = useState({ loading: true, data: [],total: "" });
     const [allOrder, setAllOrder] = useState({ loading: true, data: [] ,total: ""})
+    const [allOrderlist, setAllOrderlist] = useState({ loading: true, data: [] ,total: ""})
     const [packageOrder, setPackageOrder] = useState({ loading: true, data: [] ,total: ""})
+    const [pendingOrder, setPendingOrder] = useState({ loading: true, data: [] ,total: ""})
 
     const getAllTest = async (data) => {
         try {
@@ -139,8 +141,31 @@ export const OrderProvider = ({ children }) => {
         }
       };
 
+
+      const getAllOrderList = async (dataToSend) => {
+        try {
+            const response = await axios.post(
+                `${base_url}/admin/all/orders/list`,
+                {...dataToSend} ,
+                { headers: { Authorization: Authtoken } }
+            );
+            if (response.status === 200) {
+                setAllOrderlist({
+                    data: response?.data?.data || [],
+                    loading: false,
+                    total: response.data.total,
+                });
+            } else {
+                setAllOrderlist({ loading: false, data: [] });
+            }
+        } catch (error) {
+            setAllOrderlist({ loading: false, data: [] });
+            toast.error(error.response?.data?.message || "Server error");
+        }
+    };
+
     
-    const getAllOrderList = async (dataToSend) => {
+    const getTestOrderList = async (dataToSend) => {
         try {
             const response = await axios.post(
                 `${base_url}/admin/test/orders/list`,
@@ -158,7 +183,30 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setAllOrder({ loading: false, data: [] });
-            // toast.error("Failed to test list");
+            toast.error(error.response?.data?.message || "Server error");
+        }
+    };
+
+
+    const getPendingOrderList = async (dataToSend) => {
+        try {
+            const response = await axios.post(
+                `${base_url}/admin/pending/orders/list`,
+                {...dataToSend} ,
+                { headers: { Authorization: Authtoken } }
+            );
+            if (response.status === 200) {
+                setPendingOrder({
+                    data: response?.data?.data || [],
+                    loading: false,
+                    total: response.data.total,
+                });
+            } else {
+                setPendingOrder({ loading: false, data: [] });
+            }
+        } catch (error) {
+            setPendingOrder({ loading: false, data: [] });
+            toast.error(error.response?.data?.message || "Server error");
         }
     };
 
@@ -206,7 +254,7 @@ export const OrderProvider = ({ children }) => {
     };
 
     const values = {
-        getAllTest, allTest, getCustomerDetail, allCustomer, getTestPackageList, test_package, professionalFees, getProfessionalFees, createNewOrder, getAllOrderList, allOrder, getAllOrderStatus, orderStatus ,getpackageOrderList,packageOrder
+        getAllTest, allTest, getCustomerDetail, allCustomer, getTestPackageList, test_package, professionalFees, getProfessionalFees, createNewOrder, getTestOrderList, allOrder, getAllOrderStatus, orderStatus ,getpackageOrderList,packageOrder,getAllOrderList,allOrderlist,getPendingOrderList,pendingOrder
     }
 
     return (

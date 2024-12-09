@@ -49,7 +49,7 @@ const OrderAnalytics = () => {
           const Icon = data[i]?.icon;
           return (
             <Grid item xs={6} sm={4} md={3} key={i}>
-              <Link to="#" style={{ textDecoration: "none" }}>
+              <Link to={`/all-orders?status=${item?.title}`} style={{ textDecoration: "none" }}>
                 <Box
                   sx={{
                     display: "flex",

@@ -123,6 +123,8 @@ import SahcMaster from "./Master/SahcMaster/SahcMaster";
 import DoctorList from "./Master/DoctorMaster/DoctorList";
 import ZoneMasterList from "./Master/ZoneMaster/ZoneMasterList";
 import Transaction from "./screen/Fiance/Transaction";
+import AllOrderList from "./OrderMenu/AllOrderList";
+import PendingOrder from "./OrderMenu/PendingOrder";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -221,7 +223,9 @@ function App() {
 
           {/* order start */}
           <Route path="/test-order" element={<TestOrderList />} />
+          <Route path="/all-orders" element={<AllOrderList />} />
           <Route path="/package-orders" element={<PackageOrder />} />
+          <Route path="/pending-orders" element={<PendingOrder />} />
           <Route path="/add-order" element={<CreateOrder />} />
           <Route path="/order-details/:id" element={<OrderDetailspage />} />
           {/* order end */}

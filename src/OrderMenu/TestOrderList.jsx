@@ -26,7 +26,7 @@ import { useDashboardContext } from "../helper/DashboardProvider";
 
 const TestOrderList = () => {
   const Navigate = useNavigate();
-  const { allOrder, getAllOrderList } = useOrderContext();
+  const { allOrder, getTestOrderList } = useOrderContext();
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
 
@@ -47,7 +47,7 @@ const TestOrderList = () => {
       page: currentPage,
       limit: itemperPage,
     };
-    getAllOrderList(dataToSend);
+    getTestOrderList(dataToSend);
   }, [selectedStatus, currentPage, searchTerm]);
 
   useEffect(() => {
@@ -111,6 +111,7 @@ const TestOrderList = () => {
                     <thead>
                       <tr>
                         <th>Order Id</th>
+                        <th>Collection Date</th>
                         <th>Customer Info</th>
                         <th>Pet</th>
                         <th>Total Amount</th>

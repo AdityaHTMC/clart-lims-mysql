@@ -84,7 +84,7 @@ const Transaction = () => {
                         ) : (
                           transationList?.data?.map((transaction, index) => (
                             <tr key={index}>
-                              <td>{transaction.order_id}</td>
+                              <td>{transaction.orderId}</td>
                               <td>{transaction.debit_amount}</td>
                               <td>{transaction.credit_amount}</td>
                               <td>{transaction.closing_balance}</td>

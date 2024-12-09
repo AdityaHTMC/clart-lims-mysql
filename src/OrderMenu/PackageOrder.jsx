@@ -111,9 +111,9 @@ const PackageOrder = () => {
                     <thead>
                       <tr>
                         <th>Order Id</th>
+                        <th>Collection Date</th>
                         <th>Customer Info</th>
                         <th>Pet</th>
-                      
                         <th>Total Amount</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -127,6 +127,13 @@ const PackageOrder = () => {
                             <td>
                               <Badge color="danger">{order.order_id}</Badge>
                             </td>
+                            <td>
+                                {order?.booking_date
+                                  ? new Date(
+                                    order.booking_date
+                                    ).toLocaleDateString("en-GB")
+                                  : ""}
+                              </td>
                             <td>
                               <div className="d-flex align-items-center gap-3">
                                 <div>

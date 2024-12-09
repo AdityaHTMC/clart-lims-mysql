@@ -13,11 +13,13 @@ export const DashboardProvider = ({ children }) => {
     const [cmsList, setCmsList] = useState({ loading: true, data: [] })
     const [dashboardOrderList, setDashboardOrderList] = useState({ loading: true, data: [] })
     const [dashboardOrderCount, setDashboardOrderCount] = useState({ loading: true, data: [] })
-    const [orderStatus, setOrderStatus] = useState({ loading: true, data: [] });
+    const [orderStatus, setOrderStatus] = useState({ loading: true, data: [], total:'' });
     const [testOrderCount, setTestOrderCount] = useState({ loading: true, data: [] });
     const [packageOrderCount, setPackageOrderCount] = useState({ loading: true, data: [] });
     const [orderCount, setOrderCount] = useState({ loading: true, data: [] });
     const [barcode, setbarcode] = useState({ loading: true, data: [], total:"" });
+    const [b2breportList, setB2breportList] = useState({ loading: true, data: [], total:'' });
+    const [csvb2b, setCsvb2b] = useState('');
     const { Authtoken } = useAuthContext()
     const AuthToken = localStorage.getItem('Authtoken')
 
@@ -78,7 +80,7 @@ export const DashboardProvider = ({ children }) => {
             setDashboardOrderCount({ data: response?.data?.data || [], loading: false });
           } else {
             setDashboardOrderCount({data:[], loading: false});
-            toast.error("Failed to fetch Bag Type list");
+            toast.error("server errors");
           }
         } catch (error) {
           setDashboardOrderCount({data:[], loading: false});
@@ -239,8 +241,48 @@ export const DashboardProvider = ({ children }) => {
 };
 
 
+const getB2bReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/admin/b2b-user/data`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setB2breportList({
+              data: response?.data?.data || [],
+              total: response.data.total,
+              loading: false,
+          });
+      } else {
+        setB2breportList({ data: [],total:'', loading: false });
+      }
+  } catch (error) {
+    setB2breportList({ data: [],total:'', loading: false });
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+const csvB2bReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/b2b-user/convert-to-csv`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        console.log(response,'csv response')
+        setCsvb2b(response.data.fileUrl );
+      } else {
+        setCsvb2b('');
+      }
+  } catch (error) {
+    setCsvb2b('');
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount,getB2bReport,b2breportList,csvB2bReport,csvb2b
     }
     return (
         <AppContext.Provider value={values} >
