@@ -122,6 +122,7 @@ const PhlebotomistList = () => {
                           <th>Name </th>
                           <th>Email</th>
                           <th>Mobile</th>
+                          <th>Serviceable Pincodes</th>
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -161,6 +162,36 @@ const PhlebotomistList = () => {
 
                               <td>{product?.email}</td>
                               <td>{product?.mobile}</td>
+                              <td style={{width:'30%'}}>
+                              <div
+                                style={{
+                                  maxHeight: "100px",
+                                  overflowY: "auto",
+                                  display: "flex",
+                                  flexWrap: "wrap",
+                                  gap: "5px",
+                                  padding: "5px",
+                                  border: "1px solid #ddd",
+                                  borderRadius: "4px",
+                                }}
+                              >
+                                {product.serviceable_pincodes?.map((code, idx) => (
+                                  <span
+                                    key={idx}
+                                    style={{
+                                      backgroundColor: "#f1f1f1",
+                                      borderRadius: "4px",
+                                      padding: "2px 6px",
+                                      fontSize: "12px",
+                                      margin: "2px",
+                                    }}
+                                  >
+                                    {code}
+                                  </span>
+                                ))}
+                              </div>
+                            </td>
+
                               <td>
                                 <div className="circelBtnBx">
                                   <Button

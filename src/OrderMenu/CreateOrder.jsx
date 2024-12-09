@@ -100,8 +100,8 @@ const CreateOrder = () => {
       getZonePrice(selectedCustomer.pincode);
       getallSahcList();
     }
-    if (formData.booking_date) {
-      getAllTimeList(formData.booking_date);
+    if (formData.booking_date && selectedCustomer?.pincode) {
+      getAllTimeList(formData.booking_date, selectedCustomer?.pincode);
     }
   }, [selectedCustomer, formData.booking_date]);
 

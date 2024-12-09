@@ -1336,11 +1336,12 @@ export const MasterProvider = ({ children }) => {
   }
 
 
-  const getAllTimeList = async (booking_date ) => {
+  const getAllTimeList = async (booking_date, pincode ) => {
     try {
       const response = await axios.post(
         `${base_url}/admin/time-slot/getAll`,{
-          booking_date :booking_date 
+          booking_date :booking_date,
+          pincode
         },
         { headers: { Authorization: AuthToken } }
       );

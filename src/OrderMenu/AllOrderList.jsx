@@ -17,7 +17,8 @@ import {
   
   import { FaDeleteLeft, FaEye } from "react-icons/fa6";
   
-  import { FiEdit } from "react-icons/fi";
+  import DatePicker from "react-datepicker";
+  import "react-datepicker/dist/react-datepicker.css";
   import CommonBreadcrumb from "../component/common/bread-crumb";
   import { useOrderContext } from "../helper/OrderProvider";
   import { useMasterContext } from "../helper/MasterProvider";
@@ -40,19 +41,30 @@ import {
   
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
     const itemperPage = 15;
   
     const totalPages =
     allOrderlist?.total && Math.ceil(allOrderlist?.total / itemperPage);
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
   
     useEffect(() => {
       const dataToSend = {
         status: selectedStatus,
         page: currentPage,
         limit: itemperPage,
+        start_date: startDate ? formatDate(startDate) : null,
+        end_date: endDate ? formatDate(endDate) : null,
       };
       getAllOrderList(dataToSend);
-    }, [selectedStatus, currentPage, searchTerm]);
+    }, [selectedStatus, currentPage, searchTerm,startDate, endDate]);
   
     useEffect(() => {
       getOrderMasterList();
@@ -87,21 +99,31 @@ import {
               <Card>
                 {/* <CommonCardHeader title="Add Product" /> */}
                 <CardBody>
-                  {/* <div className="btn-popup pull-right">
-                                      <Button color="primary" size="sm" onClick={() => Navigate('/create-order')}>
-                                          Create New Order
-                                      </Button>
-                                  </div>
-                                  <div className="clearfix"></div> */}
+                <div className="d-flex gap-3 align-items-center mb-4">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    placeholderText="Start Date"
+                    className="form-control"
+                  />
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    placeholderText="End Date"
+                    className="form-control"
+                  />
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setStartDate(null);
+                      setEndDate(null);
+                    }}
+                  >
+                    Clear Dates
+                  </Button>
+                </div>
                   <div className="d-flex gap-2 flex-wrap mb-3">
-                    {/* <Button
-                      color={selectedStatus === "" ? "primary" : "danger"}
-                      style={{ minWidth: "max-content" }}
-                      onClick={() => setSelectedStatus("")}
-                      size="sm"
-                    >
-                      All
-                    </Button> */}
+                  
                     {dashboardOrderCount?.data?.map((el, i) => (
                         <Button
                           color={

@@ -10,6 +10,8 @@ import {
   Spinner,
   Table,
 } from "reactstrap";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { useNavigate } from "react-router-dom";
 
@@ -30,25 +32,36 @@ const TestOrderList = () => {
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
 
-  const { getTestOrderCount,testOrderCount } = useDashboardContext();
+  const { getTestOrderCount, testOrderCount } = useDashboardContext();
 
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const itemperPage = 15;
 
   const totalPages =
     allOrder?.total && Math.ceil(allOrder?.total / itemperPage);
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
 
   useEffect(() => {
     const dataToSend = {
       status: selectedStatus,
       page: currentPage,
       limit: itemperPage,
+      start_date: startDate ? formatDate(startDate) : null,
+      end_date: endDate ? formatDate(endDate) : null,
     };
     getTestOrderList(dataToSend);
-  }, [selectedStatus, currentPage, searchTerm]);
+  }, [selectedStatus, currentPage, searchTerm,startDate, endDate]);
 
   useEffect(() => {
     getOrderMasterList();
@@ -75,36 +88,43 @@ const TestOrderList = () => {
         <Row>
           <Col sm="12">
             <Card>
-              {/* <CommonCardHeader title="Add Product" /> */}
               <CardBody>
-                {/* <div className="btn-popup pull-right">
-                                    <Button color="primary" size="sm" onClick={() => Navigate('/create-order')}>
-                                        Create New Order
-                                    </Button>
-                                </div>
-                                <div className="clearfix"></div> */}
-                <div className="d-flex gap-2 flex-wrap mb-3">
-                  {/* <Button
-                    color={selectedStatus === "" ? "primary" : "danger"}
-                    style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus("")}
-                    size="sm"
+                <div className="d-flex gap-3 align-items-center mb-4">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    placeholderText="Start Date"
+                    className="form-control"
+                  />
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    placeholderText="End Date"
+                    className="form-control"
+                  />
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setStartDate(null);
+                      setEndDate(null);
+                    }}
                   >
-                    All
-                  </Button> */}
+                    Clear Dates
+                  </Button>
+                </div>
+
+                <div className="d-flex gap-2 flex-wrap mb-3">
                   {testOrderCount?.data?.map((el, i) => (
-                      <Button
-                        color={
-                          selectedStatus === el.title ? "primary" : "danger"
-                        }
-                        key={i}
-                        style={{ minWidth: "max-content" }}
-                        onClick={() => setSelectedStatus(el.title)}
-                        size="sm"
-                      >
-                        {el.title} ({el.total})
-                      </Button>
-                    ))}
+                    <Button
+                      color={selectedStatus === el.title ? "primary" : "danger"}
+                      key={i}
+                      style={{ minWidth: "max-content" }}
+                      onClick={() => setSelectedStatus(el.title)}
+                      size="sm"
+                    >
+                      {el.title} ({el.total})
+                    </Button>
+                  ))}
                 </div>
                 <div className="promo-code-list">
                   <Table hover responsive>
@@ -127,6 +147,13 @@ const TestOrderList = () => {
                             <td>
                               <Badge color="danger">{order.order_id}</Badge>
                             </td>
+                            <td>
+                                {order?.booking_date
+                                  ? new Date(
+                                    order.booking_date
+                                    ).toLocaleDateString("en-GB")
+                                  : ""}
+                              </td>
                             <td>
                               <div className="d-flex align-items-center gap-3">
                                 {/* <img className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src={order?.customer_image || `/assets/images/profile.png`} alt="header-user" /> */}

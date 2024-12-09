@@ -16,8 +16,9 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { FaDeleteLeft, FaEye } from "react-icons/fa6";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-import { FiEdit } from "react-icons/fi";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
@@ -30,34 +31,45 @@ const PackageOrder = () => {
   const { getOrderMasterList, addOrderMasterList, orderMasterList } =
     useMasterContext();
 
-  const { getPackageOrderCount,packageOrderCount } = useDashboardContext();
+  const { getPackageOrderCount, packageOrderCount } = useDashboardContext();
 
   const [selectedStatus, setSelectedStatus] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const itemperPage = 15;
 
   const totalPages =
     packageOrder?.total && Math.ceil(packageOrder?.total / itemperPage);
+
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
 
   useEffect(() => {
     const dataToSend = {
       status: selectedStatus,
       page: currentPage,
       limit: itemperPage,
+      start_date: startDate ? formatDate(startDate) : null,
+      end_date: endDate ? formatDate(endDate) : null,
     };
     getpackageOrderList(dataToSend);
-  }, [selectedStatus, currentPage, searchTerm]);
+  }, [selectedStatus, currentPage, searchTerm,startDate, endDate]);
 
   useEffect(() => {
     getOrderMasterList();
     getPackageOrderCount();
   }, []);
 
-  const navigatOrderDetails =(id) => {
+  const navigatOrderDetails = (id) => {
     Navigate(`/order-details/${id}`);
-  }
+  };
 
   // useEffect(() => {
   //     if(orderStatus?.data?.length > 0){
@@ -77,34 +89,41 @@ const PackageOrder = () => {
             <Card>
               {/* <CommonCardHeader title="Add Product" /> */}
               <CardBody>
-                {/* <div className="btn-popup pull-right">
-                                    <Button color="primary" size="sm" onClick={() => Navigate('/create-order')}>
-                                        Create New Order
-                                    </Button>
-                                </div>
-                                <div className="clearfix"></div> */}
-                <div className="d-flex gap-2 flex-wrap mb-3">
-                  {/* <Button
-                    color={selectedStatus === "" ? "primary" : "danger"}
-                    style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus("")}
-                    size="sm"
+              <div className="d-flex gap-3 align-items-center mb-4">
+                  <DatePicker
+                    selected={startDate}
+                    onChange={(date) => setStartDate(date)}
+                    placeholderText="Start Date"
+                    className="form-control"
+                  />
+                  <DatePicker
+                    selected={endDate}
+                    onChange={(date) => setEndDate(date)}
+                    placeholderText="End Date"
+                    className="form-control"
+                  />
+                  <Button
+                    color="primary"
+                    onClick={() => {
+                      setStartDate(null);
+                      setEndDate(null);
+                    }}
                   >
-                    All
-                  </Button> */}
+                    Clear Dates
+                  </Button>
+                </div>
+                <div className="d-flex gap-2 flex-wrap mb-3">
                   {packageOrderCount?.data?.map((el, i) => (
-                      <Button
-                        color={
-                          selectedStatus === el.title ? "primary" : "danger"
-                        }
-                        key={i}
-                        style={{ minWidth: "max-content" }}
-                        onClick={() => setSelectedStatus(el.title)}
-                        size="sm"
-                      >
-                        {el.title} ({el.total})
-                      </Button>
-                    ))}
+                    <Button
+                      color={selectedStatus === el.title ? "primary" : "danger"}
+                      key={i}
+                      style={{ minWidth: "max-content" }}
+                      onClick={() => setSelectedStatus(el.title)}
+                      size="sm"
+                    >
+                      {el.title} ({el.total})
+                    </Button>
+                  ))}
                 </div>
                 <div className="promo-code-list">
                   <Table hover responsive>
@@ -128,12 +147,12 @@ const PackageOrder = () => {
                               <Badge color="danger">{order.order_id}</Badge>
                             </td>
                             <td>
-                                {order?.booking_date
-                                  ? new Date(
+                              {order?.booking_date
+                                ? new Date(
                                     order.booking_date
-                                    ).toLocaleDateString("en-GB")
-                                  : ""}
-                              </td>
+                                  ).toLocaleDateString("en-GB")
+                                : ""}
+                            </td>
                             <td>
                               <div className="d-flex align-items-center gap-3">
                                 <div>
@@ -149,7 +168,7 @@ const PackageOrder = () => {
                               {order.pet_details?.breed} (
                               {order.pet_details?.sex})
                             </td>
-                          
+
                             <td>{order?.total_amount}</td>
                             <td>
                               <Badge>{order.status}</Badge>
@@ -160,12 +179,13 @@ const PackageOrder = () => {
                                   <Button
                                     className="btn"
                                     color="link"
-                                    onClick={() => navigatOrderDetails(order?.id)}
+                                    onClick={() =>
+                                      navigatOrderDetails(order?.id)
+                                    }
                                   >
                                     <FaEye />
                                   </Button>
                                 </div>
-                              
                               </div>
                             </td>
                           </tr>
