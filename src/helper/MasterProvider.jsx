@@ -36,6 +36,7 @@ export const MasterProvider = ({ children }) => {
   const [timeList, settimeList] = useState({loading: true,data: []});
   const [timeListdata, setTimeListdata] = useState({loading: true,data: [],total: ""});
   const [allphelboList, setPhelboList] = useState({loading: true,data: [],total: ""});
+  const [orderphelboList, setorderPhelboList] = useState({loading: true,data: [],total: ""});
   const [designationMasterList, setdesignationMasterList] = useState({loading: true,data: [],total: ""});
   const [emailSettingsList, setEmailSettingsList] = useState({loading: true,data: [],total: ""});
   const [petList, setPetList] = useState({loading: true,data: [],total: ""});
@@ -1336,13 +1337,10 @@ export const MasterProvider = ({ children }) => {
   }
 
 
-  const getAllTimeList = async (booking_date, pincode ) => {
+  const getAllTimeList = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/time-slot/getAll`,{
-          booking_date :booking_date,
-          pincode
-        },
+        `${base_url}/admin/time-slot/getAll`,{...dataToSend },
         { headers: { Authorization: AuthToken } }
       );
       const data = response.data;
@@ -1475,6 +1473,28 @@ export const MasterProvider = ({ children }) => {
     } catch (error) {
       setPhelboList({ data: [], loading: false });
       toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const getOrderPhelboList = async (dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomists/getAll`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setorderPhelboList({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setorderPhelboList({ data: [], loading: false });
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      setorderPhelboList({ data: [], loading: false });
+      // toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -2227,10 +2247,10 @@ export const MasterProvider = ({ children }) => {
   };
 
 
-  const getTransationList = async () => {
+  const getTransationList = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/transactions/list`,{},
+        `${base_url}/admin/transactions/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       if (response.status === 200) {
@@ -2249,7 +2269,7 @@ export const MasterProvider = ({ children }) => {
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

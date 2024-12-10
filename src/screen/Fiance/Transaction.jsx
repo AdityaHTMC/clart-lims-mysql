@@ -45,7 +45,7 @@ const Transaction = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Transation List" />
+      <CommonBreadcrumb title="Transaction List" />
       <Container fluid>
         <Row>
           <Col sm="12">
@@ -58,7 +58,7 @@ const Transaction = () => {
                     <Table hover responsive>
                       <thead>
                         <tr>
-                          <th>Order Id</th>
+                        
                           <th>Debit Amount</th>
                           <th>Credit Amount</th>
                           <th>Closing Balance</th>
@@ -84,13 +84,13 @@ const Transaction = () => {
                         ) : (
                           transationList?.data?.map((transaction, index) => (
                             <tr key={index}>
-                              <td>{transaction.orderId}</td>
+                            
                               <td>{transaction.debit_amount}</td>
                               <td>{transaction.credit_amount}</td>
                               <td>{transaction.closing_balance}</td>
                               <td>
                                 {transaction.transaction_from === "phlebotomist"
-                                  ? transaction.phlebotomist_name
+                                  ? transaction.phlebotomist_name 
                                   : transaction.transaction_from === "lab"
                                   ? transaction.lab_name
                                   : transaction.transaction_from === "unit"
@@ -101,7 +101,7 @@ const Transaction = () => {
                                   : transaction.transaction_from ===
                                     "transporter"
                                   ? transaction.transporter_name
-                                  : transaction.transaction_from}
+                                  : transaction.transaction_from} ({transaction.transaction_from})
                               </td>
                               <td>
                                 {transaction.transaction_to === "phlebotomist"
@@ -115,7 +115,7 @@ const Transaction = () => {
                                   ? transaction.collection_center_name
                                   : transaction.transaction_to === "transporter"
                                   ? transaction.transporter_name
-                                  : transaction.transaction_to}
+                                  : transaction.transaction_to} ({transaction.transaction_to})
                               </td>
                             </tr>
                           ))

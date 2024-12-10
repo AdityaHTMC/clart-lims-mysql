@@ -43,8 +43,7 @@ const CreateOrder = () => {
   const {
     getAllTimeList,
     timeList,
-    getAllPhelboList,
-    allphelboList,
+    getOrderPhelboList,orderphelboList,
     getCustomerPetList,
     petList,
     getZonePrice,
@@ -77,9 +76,7 @@ const CreateOrder = () => {
     other_doctor: "",
   });
 
-  console.log(selectedCustomer, "selectedCustomer ");
 
-  console.log(selectedPackages, "selectedPackages ");
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
@@ -95,21 +92,32 @@ const CreateOrder = () => {
   // console.log(selectedPhelbo, "phelobmist");
 
   useEffect(() => {
+   
+    if (formData.booking_date && selectedCustomer?.pincode  ) {
+      const dataToSend = {
+        booking_date: formData.booking_date,
+        pincode: selectedCustomer.pincode,
+        ...(formData.type === 'Lab' && { lab_id: selectedLab }),
+      }
+      getAllTimeList(dataToSend);
+    }
+  }, [selectedCustomer, formData.booking_date,selectedLab,formData.type]);
+
+  useEffect(()=>{
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
       getZonePrice(selectedCustomer.pincode);
       getallSahcList();
     }
-    if (formData.booking_date && selectedCustomer?.pincode) {
-      getAllTimeList(formData.booking_date, selectedCustomer?.pincode);
-    }
-  }, [selectedCustomer, formData.booking_date]);
+  },[selectedCustomer]);
+
+  console.log(selectedLab, 'selected lab')
 
   useEffect(() => {
     getAllTest();
     getProfessionalFees();
     getTestPackageList();
-    getAllPhelboList();
+   
     getAllLabs();
   }, []);
 
@@ -150,14 +158,40 @@ const CreateOrder = () => {
   }, [selectedTest, selectedPackages, selectedFees, formData.type]);
 
   useEffect(() => {
-    if (formData.type === "Home Visit") {
+    if (formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date ) {
       setCollectionFees(zoneprice?.data?.charge || 350);
+      
     } else {
       setCollectionFees(0);
     }
-  }, [formData.type, zoneprice]);
+  }, [formData.type, zoneprice  ]);
 
-  console.log(collectionFees, "collectionFees");
+  useEffect(()=>{
+   
+    if(formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date &&  selectedSlot){
+      const dataToSend = {
+        booking_date: formData.booking_date,
+        pincode: selectedCustomer?.pincode,
+        start_time:selectedSlot?.start_time,
+        end_time: selectedSlot?.end_time
+      }
+      getOrderPhelboList(dataToSend);
+    }
+
+    if(formData.type === "Lab" && selectedCustomer?.pincode && formData.booking_date && selectedSlot){
+      const dataToSend = {
+        booking_date: formData.booking_date,
+        pincode: selectedCustomer?.pincode,
+        start_time:selectedSlot?.start_time,
+        end_time: selectedSlot?.end_time,
+        lab_id: selectedLab
+      }
+      getOrderPhelboList(dataToSend);
+    }
+
+  },[selectedCustomer, formData.booking_date ,selectedSlot, selectedLab ])
+
+
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -758,10 +792,10 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                            {formData.type === "Home Visit" && (
+                            {formData.booking_date && selectedSlot && (
                               <FormGroup className="mt-3">
                                 <Autocomplete
-                                  options={allphelboList.data}
+                                  options={orderphelboList.data}
                                   getOptionLabel={(option) => option.name || ""}
                                   value={selectedPhelbo || null} // Ensure value is null if not selected
                                   onChange={(event, newValue) =>
