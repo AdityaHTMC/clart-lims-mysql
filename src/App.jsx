@@ -125,6 +125,7 @@ import ZoneMasterList from "./Master/ZoneMaster/ZoneMasterList";
 import Transaction from "./screen/Fiance/Transaction";
 import AllOrderList from "./OrderMenu/AllOrderList";
 import PendingOrder from "./OrderMenu/PendingOrder";
+import BankMaster from "./Master/BankMaster/BankMaster";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -210,6 +211,7 @@ function App() {
           <Route path="/sahc-master" element={<SahcMaster />} />
           <Route path="/doctor-list" element={<DoctorList />} />
           <Route path="/zone-list" element={<ZoneMasterList />} />
+          <Route path="/banks" element={<BankMaster />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />
