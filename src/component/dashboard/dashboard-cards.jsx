@@ -16,7 +16,7 @@ const TopDashboardCards = () => {
     getDashboardCount();
   }, []);
 
-  console.log(orderCount, "orderCount");
+ 
 
   return (
     <>

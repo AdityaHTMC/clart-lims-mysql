@@ -126,6 +126,7 @@ import Transaction from "./screen/Fiance/Transaction";
 import AllOrderList from "./OrderMenu/AllOrderList";
 import PendingOrder from "./OrderMenu/PendingOrder";
 import BankMaster from "./Master/BankMaster/BankMaster";
+import CashInHand from "./screen/Fiance/CashInHand";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -183,6 +184,7 @@ function App() {
           <Route path="/newsletter-management" element={<NewsLetter />} />
           <Route path="/enquiry-list" element={<EnquiryList />} />
           <Route path="/collection-report" element={<Transaction />} />
+          <Route path="/cash-in-hand-report" element={<CashInHand />} />
 
           {/* master */}
 

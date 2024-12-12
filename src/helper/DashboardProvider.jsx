@@ -19,7 +19,13 @@ export const DashboardProvider = ({ children }) => {
     const [orderCount, setOrderCount] = useState({ loading: true, data: [] });
     const [barcode, setbarcode] = useState({ loading: true, data: [], total:"" });
     const [b2breportList, setB2breportList] = useState({ loading: true, data: [], total:'' });
+    const [unitreportList, setUnitreportList] = useState({ loading: true, data: [], total:'' });
+    const [labreportList, setLabreportList] = useState({ loading: true, data: [], total:'' });
+    const [CCreportList, setCCreportList] = useState({ loading: true, data: [], total:'' });
     const [csvb2b, setCsvb2b] = useState('');
+    const [csvUnit, setCsvUnit] = useState('');
+    const [csvLab, setCsvLab] = useState('');
+    const [csvCC, setCsvCC] = useState('');
     const { Authtoken } = useAuthContext()
     const AuthToken = localStorage.getItem('Authtoken')
 
@@ -262,6 +268,72 @@ const getB2bReport = async () => {
   }
 };
 
+
+const getunitReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/admin/unit/data`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setUnitreportList({
+              data: response?.data?.data || [],
+              total: response.data.total,
+              loading: false,
+          });
+      } else {
+        setUnitreportList({ data: [],total:'', loading: false });
+      }
+  } catch (error) {
+    setUnitreportList({ data: [],total:'', loading: false });
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+const getLabReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/admin/lab/data`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setLabreportList({
+              data: response?.data?.data || [],
+              total: response.data.total,
+              loading: false,
+          });
+      } else {
+        setLabreportList({ data: [],total:'', loading: false });
+      }
+  } catch (error) {
+    setLabreportList({ data: [],total:'', loading: false });
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+const getCCReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/admin/lab/data`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setCCreportList({
+              data: response?.data?.data || [],
+              total: response.data.total,
+              loading: false,
+          });
+      } else {
+        setCCreportList({ data: [],total:'', loading: false });
+      }
+  } catch (error) {
+    setCCreportList({ data: [],total:'', loading: false });
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+
+
 const csvB2bReport = async () => {
   try {
       const response = await axios.post(
@@ -269,7 +341,7 @@ const csvB2bReport = async () => {
           { headers: { Authorization: Authtoken } }
       );
       if (response.status === 200) {
-        console.log(response,'csv response')
+  
         setCsvb2b(response.data.fileUrl );
       } else {
         setCsvb2b('');
@@ -280,9 +352,61 @@ const csvB2bReport = async () => {
   }
 };
 
+const csvUnitReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/unit/convert-to-csv`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setCsvUnit(response.data.fileUrl );
+      } else {
+        setCsvUnit('');
+      }
+  } catch (error) {
+    setCsvUnit('');
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+const csvLabReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/lab/convert-to-csv`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setCsvLab(response.data.fileUrl );
+      } else {
+        setCsvLab('');
+      }
+  } catch (error) {
+    setCsvLab('');
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+const csvCCReport = async () => {
+  try {
+      const response = await axios.post(
+          `${base_url}/lab/convert-to-csv`,{},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setCsvCC(response.data.fileUrl );
+      } else {
+        setCsvCC('');
+      }
+  } catch (error) {
+    setCsvCC('');
+    toast.error(error.response?.data?.message || 'Server error');
+  }
+};
+
+
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount,getB2bReport,b2breportList,csvB2bReport,csvb2b
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount,getB2bReport,b2breportList,csvB2bReport,csvb2b,getunitReport,unitreportList,csvUnitReport,csvUnit,getLabReport,labreportList,csvLabReport,csvLab,getCCReport,CCreportList,csvCCReport,csvCC
     }
     return (
         <AppContext.Provider value={values} >

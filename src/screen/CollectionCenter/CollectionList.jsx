@@ -48,9 +48,9 @@ const CollectionList = () => {
     const dataToSend = {
       page: currentPage,
       limit: itemperPage,
-      search: searchTerm,
+      keyword_search: searchTerm,
     };
-    getCollectionList();
+    getCollectionList(dataToSend);
   }, [currentPage]);
 
   

@@ -35,7 +35,7 @@ import { Pagination, Stack } from "@mui/material";
 const BankMaster = () => {
   const navigate = useNavigate();
 
-  const { getBankMasterList, bankList,addBankMaster } = useMasterContext();
+  const { getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank } = useMasterContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,7 +56,11 @@ const BankMaster = () => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedvarity, setSelectedvarity] = useState({
-    title: "",
+    beneficiary_name: "",
+    bank_name: "",
+    account_number: "",
+    branch: "",
+    ifsc: "",
     _id: "",
   });
 
@@ -79,11 +83,12 @@ const BankMaster = () => {
   // Close the modal
   const onCloseModal2 = () => {
     setModalOpen(false);
-    setSelectedvarity({ title: "", image: "", _id: "" });
+    setSelectedvarity({ account_number: "", beneficiary_name: "", bank_name: "", ifsc: "",branch:"", _id: "" });
   };
 
   const onCloseModal = () => {
     setOpen(false);
+    setFormData({ account_number: "", beneficiary_name: "", bank_name: "", ifsc: "",branch:""});
   };
 
   // Handle form input change
@@ -97,14 +102,14 @@ const BankMaster = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    //   editSpeciesMasterList(selectedvarity.id, selectedvarity);
+    editBankList(selectedvarity.id, selectedvarity);
     onCloseModal2();
   };
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
-      // DeleteSpecies(id);
+      DeleteBank(id);
     }
   };
 
@@ -264,6 +269,7 @@ const BankMaster = () => {
                 <Input
                   type="number"
                   name="account_number"
+                  min={0}
                   value={formData.account_number}
                   onChange={handleInputChange}
                   id="account_number"
@@ -310,21 +316,70 @@ const BankMaster = () => {
       <Modal isOpen={modalOpen} toggle={onCloseModal2} className="modal-xg">
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Species
+            Edit Bank
           </h5>
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
           <Form>
             <FormGroup>
-              <Label htmlFor="title" className="col-form-label">
-                Species
+              <Label htmlFor="bank_name" className="col-form-label">
+               Bank Name
               </Label>
               <Input
                 type="text"
-                name="title"
-                value={selectedvarity.title}
+                name="bank_name"
+                value={selectedvarity.bank_name}
                 onChange={handleInputChanges}
-                id="title"
+                id="bank_name"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="beneficiary_name" className="col-form-label">
+               Beneficiary Name
+              </Label>
+              <Input
+                type="text"
+                name="beneficiary_name"
+                value={selectedvarity.beneficiary_name}
+                onChange={handleInputChanges}
+                id="beneficiary_name"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="account_number" className="col-form-label">
+               Account Number
+              </Label>
+              <Input
+                type="number"
+                name="account_number"
+                min={0}
+                value={selectedvarity.account_number}
+                onChange={handleInputChanges}
+                id="account_number"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="ifsc" className="col-form-label">
+               ifsc
+              </Label>
+              <Input
+                type="text"
+                name="ifsc"
+                value={selectedvarity.ifsc}
+                onChange={handleInputChanges}
+                id="ifsc"
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor="branch" className="col-form-label">
+               Branch
+              </Label>
+              <Input
+                type="text"
+                name="branch"
+                value={selectedvarity.branch}
+                onChange={handleInputChanges}
+                id="branch"
               />
             </FormGroup>
           </Form>

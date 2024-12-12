@@ -1,118 +1,181 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
 
-import { Button, Card, CardBody, Col, Spinner, Table } from "reactstrap";
+import { Button, Card, CardBody, Col, Spinner, Table,  Dropdown, 
+  DropdownToggle, 
+  DropdownMenu, 
+  DropdownItem  } from "reactstrap";
 import CommonCardHeader from "../common/card-header";
 import { useDashboardContext } from "../../helper/DashboardProvider";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const LatestOrders = () => {
-  const { getB2bReport, b2breportList, csvB2bReport, csvb2b } =
-    useDashboardContext();
-  const [loading, setLoading] = useState(false);
+  const { getB2bReport, b2breportList, getunitReport,unitreportList,getLabReport,labreportList,getCCReport,CCreportList, csvB2bReport, csvb2b,csvUnitReport,csvUnit,csvLabReport,csvLab,csvCCReport,csvCC } = useDashboardContext();
+  
 
+  const [loading, setLoading] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState("B2B");
+  const [reportList, setReportList] = useState([]);
+  const [csvFile, setCsvFile] = useState(null);
+
+  // Fetch data when `selectedReport` changes
   useEffect(() => {
-    getB2bReport();
-    csvB2bReport();
-  }, []);
+    switch (selectedReport) {
+      case "B2B":
+        getB2bReport();
+        csvB2bReport();
+        break;
+      case "Unit":
+        getunitReport();
+        csvUnitReport();
+        break;
+      case "Lab":
+        getLabReport();
+        csvLabReport();
+        break;
+      case "Collection Center":
+        getCCReport();
+        csvCCReport();
+        break;
+      default:
+        break;
+    }
+  }, [selectedReport]);
+
+  // Update `reportList` and `csvFile` when context data changes
+  useEffect(() => {
+    switch (selectedReport) {
+      case "B2B":
+        setReportList(b2breportList);
+        setCsvFile(csvb2b);
+        break;
+      case "Unit":
+        setReportList(unitreportList);
+        setCsvFile(csvUnit);
+        break;
+      case "Lab":
+        setReportList(labreportList);
+        setCsvFile(csvLab);
+        break;
+      case "Collection Center":
+        setReportList(CCreportList);
+        setCsvFile(csvCC);
+        break;
+      default:
+        break;
+    }
+  }, [b2breportList, unitreportList, labreportList, CCreportList, selectedReport]);
+
+  const toggleDropdown = () => setDropdownOpen((prevState) => !prevState);
 
   const handleDownload = async () => {
-    setLoading(true); // Start loading
+    setLoading(true);
     try {
-
-    
-      console.log(csvb2b, 'csv2')
-      if (csvb2b) {
-        // Create a temporary link element
+      if (csvFile) {
         const link = document.createElement("a");
-        link.href = csvb2b;
-        link.target = "_blank"; // Opens in a new tab/blank page
-        link.download = "B2B_Report.csv"; // Suggest a filename for download
+        link.href = csvFile;
+        link.target = "_blank";
+        link.download = `${selectedReport}_Report.csv`;
         document.body.appendChild(link);
-        link.click(); // Programmatically click the link
-        document.body.removeChild(link); // Clean up the DOM
+        link.click();
+        document.body.removeChild(link);
       } else {
         console.error("File URL not found");
       }
     } catch (error) {
       console.error("Error downloading the file:", error);
     } finally {
-      setLoading(false); // End loading
+      setLoading(false);
     }
   };
 
   return (
     <Col xl="6 xl-100">
       <Card>
-        <div className="row" style={{ alignItems: "center" }}>
-          <div className="col-sm-6">
-            <CommonCardHeader title="B2B Report" />
-          </div>
-          <div className="col-sm-6" align="right">
-            <div style={{ paddingRight: "30px" }}>
-              <Button
-                color="primary"
-                onClick={handleDownload}
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Spinner size="sm" /> Downloading...
-                  </>
-                ) : (
-                  "Download B2B CSV"
-                )}
-              </Button>
-            </div>
+      <div className="row" style={{ alignItems: "center" }}>
+        <div className="col-sm-6 mt-1" style={{}}>
+          <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
+            <DropdownToggle caret color="primary">
+              {selectedReport} Report
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={() => setSelectedReport("B2B")}>
+                B2B
+              </DropdownItem>
+              <DropdownItem onClick={() => setSelectedReport("Unit")}>
+                Unit
+              </DropdownItem>
+              <DropdownItem onClick={() => setSelectedReport("Lab")}>
+                Lab
+              </DropdownItem>
+              <DropdownItem onClick={() => setSelectedReport("Collection Center")}>
+                Collection Center
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+        </div>
+        <div className="col-sm-6" align="right">
+          <div style={{ paddingRight: "30px" }}>
+            <Button color="primary" onClick={handleDownload} disabled={loading}>
+              {loading ? (
+                <>
+                  <Spinner size="sm" /> Downloading...
+                </>
+              ) : (
+                "Download"
+              )}
+            </Button>
           </div>
         </div>
-        <CardBody>
-          <Table bordered>
-            <thead>
-              <tr>
-                <th>Sl. No</th>
-                <th>Name of Organisation</th>
-                <th>Category Name</th>
-                <th>No. of Tests under Category</th>
-                <th>Category Value (Rs)</th>
-                <th>Total No. of Tests</th>
-                <th>Total Value (Rs.)</th>
-              </tr>
-            </thead>
-            <tbody>
-              {b2breportList.data?.map((org, index) => (
-                <>
-                  <tr key={index}>
-                    <td>{index + 1}</td>
-                    <td>{org.organization_name}</td>
-                    <td colSpan="5"></td>
+      </div>
+      <CardBody>
+        <Table bordered>
+          <thead>
+            <tr>
+              <th>Sl. No</th>
+              <th>Name of Organisation</th>
+              <th>Category Name</th>
+              <th>No. of Tests under Category</th>
+              <th>Category Value (Rs)</th>
+              <th>Total No. of Tests</th>
+              <th>Total Value (Rs.)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reportList.data?.map((org, index) => (
+              <>
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{org.organization_name}</td>
+                  <td colSpan="5"></td>
+                </tr>
+                {org.test_categories.map((category, catIndex) => (
+                  <tr key={`${index}-${catIndex}`}>
+                    <td></td>
+                    <td></td>
+                    <td>{category}</td>
+                    <td>{org.category_tests_count[catIndex]}</td>
+                    <td>{org.test_order_amount[catIndex]}</td>
+                    {catIndex === 0 && (
+                      <>
+                        <td rowSpan={org.test_categories.length}>
+                          {org.total_no_of_tests}
+                        </td>
+                        <td rowSpan={org.test_categories.length}>
+                          {org.total_test_order_amount}
+                        </td>
+                      </>
+                    )}
                   </tr>
-                  {org.test_categories.map((category, catIndex) => (
-                    <tr key={`${index}-${catIndex}`}>
-                      <td></td>
-                      <td></td>
-                      <td>{category}</td>
-                      <td>{org.category_tests_count[catIndex]}</td>
-                      <td>{org.test_order_amount[catIndex]}</td>
-                      {catIndex === 0 && (
-                        <>
-                          <td rowSpan={org.test_categories.length}>
-                            {org.total_no_of_tests}
-                          </td>
-                          <td rowSpan={org.test_categories.length}>
-                            {org.total_test_order_amount}
-                          </td>
-                        </>
-                      )}
-                    </tr>
-                  ))}
-                </>
-              ))}
-            </tbody>
-          </Table>
-        </CardBody>
-      </Card>
+                ))}
+              </>
+            ))}
+          </tbody>
+        </Table>
+      </CardBody>
+    </Card>
     </Col>
   );
 };

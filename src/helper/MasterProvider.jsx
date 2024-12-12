@@ -48,6 +48,7 @@ export const MasterProvider = ({ children }) => {
   const [docList, setdocList] = useState({loading: true,data: [],total: ""});
   const [transationList, setTransationList] = useState({loading: true,data: [],total: ""});
   const [bankList, setBankList] = useState({loading: true,data: [],total: ""});
+  const [cihList, setCihList] = useState({loading: true,data: [],total: ""});
   const [zoneList, setzoneList] = useState({loading: true,data: [],total: ""});
   const [zoneprice, setzonePrice] = useState({loading: true,data: []});
   const [sahcDoc, setSahcDoc] = useState({loading: true,data: []});
@@ -245,6 +246,7 @@ export const MasterProvider = ({ children }) => {
 
   const allCustomerList = async (dataToSend) => {
     try {
+      setcustomerLists({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/customers/list`,
         {...dataToSend},
@@ -289,6 +291,7 @@ export const MasterProvider = ({ children }) => {
 
   const gettestCategoryList = async (dataToSend) => {
     try {
+      settestCategory({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/test-categories/list`,
         {...dataToSend},
@@ -339,6 +342,7 @@ export const MasterProvider = ({ children }) => {
 
   const gettestTestList = async (dataToSend) => {
     try {
+      settestList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/test/list`,
         {...dataToSend},
@@ -447,6 +451,7 @@ export const MasterProvider = ({ children }) => {
 
   const getAllTestCategory = async (data) => {
     try {
+      setalltestCategory({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/all/test-categories`,
         {},
@@ -473,6 +478,7 @@ export const MasterProvider = ({ children }) => {
 
   const getProfessionalList = async (dataToSend) => {
     try {
+      setprofessionalList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/professional-fee/list`,
         {...dataToSend},
@@ -545,6 +551,7 @@ export const MasterProvider = ({ children }) => {
 
   const getAllTest = async (data) => {
     try {
+      setalltest({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/all/tests`,
         {},
@@ -614,6 +621,7 @@ export const MasterProvider = ({ children }) => {
 
   const getAllTestPackage = async (dataToSend) => {
     try {
+      settestpackageList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/test-package/list`,
         {...dataToSend},
@@ -708,6 +716,7 @@ export const MasterProvider = ({ children }) => {
 
   const getTaskList = async (dataToSend) => {
     try {
+      setTaskList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/task/list`,
         {...dataToSend},
@@ -733,6 +742,7 @@ export const MasterProvider = ({ children }) => {
 
   const getTPList = async (dataToSend) => {
     try {
+      setTestParameter({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/test-parameter/list`,
         {...dataToSend},
@@ -851,6 +861,7 @@ export const MasterProvider = ({ children }) => {
 
   const getunitMasterList = async (dataToSend) => {
     try {
+      setUnitMasterList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/test/parameter/units/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
@@ -900,6 +911,7 @@ export const MasterProvider = ({ children }) => {
 
   const getSpeciesMasterList = async (dataToSend) => {
     try {
+      setSpeciesMasterList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/species/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
@@ -1112,6 +1124,7 @@ export const MasterProvider = ({ children }) => {
 
   const getdistrictList = async (dataTosend) => {
     try {
+      setdistrictList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/district/list`,{...dataTosend},
         { headers: { Authorization: AuthToken } }
@@ -1362,6 +1375,7 @@ export const MasterProvider = ({ children }) => {
 
   const getTimeList = async (dataToSend) => {
     try {
+      setTimeListdata({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/time-slots/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
@@ -1526,6 +1540,7 @@ export const MasterProvider = ({ children }) => {
 
   const getDesignationMasterList = async (dataToSend) => {
     try {
+      setdesignationMasterList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/designation/list`,{...dataToSend},
         { headers: { Authorization: AuthToken } }
@@ -1927,6 +1942,7 @@ export const MasterProvider = ({ children }) => {
 
   const getsahcList = async () => {
     try {
+      setsahcList({ data: [], loading: true });
       const response = await axios.post(
         `${base_url}/admin/sahc-master/list `,{},
         { headers: { Authorization: AuthToken } }
@@ -2311,9 +2327,76 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const editBankList = async (id,dataToSend) => {
+    try {
+     
+      const response = await axios.post(
+        `${base_url}/admin/bank/edit/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getBankMasterList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const DeleteBank = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/bank/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getBankMasterList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const getCashinHandList = async (dataToSend) => {
+    try {
+      setCihList({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomist/cash-in-hand/list`,{...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setCihList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        toast.error(response?.data?.message);
+        setCihList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+      setCihList({ data: [], loading: false });
+    }
+  };
+
+
+
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
