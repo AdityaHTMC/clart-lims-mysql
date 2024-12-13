@@ -57,6 +57,32 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+
+  const DeleteUnit = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/unit/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getunitList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+
   const addUnit = async (formDataToSend) => {
     try {
       const response = await axios.post(
@@ -515,6 +541,29 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setCollectionLists({ data: [], total: "", loading: false });
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const DeleteCollection = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/collection-center/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getCollectionList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
       toast.error(error.response?.data?.message || 'Server error');
     }
   };
@@ -987,6 +1036,29 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+  const DeleteB2b = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/b2b-user/delete/${id}`,
+        
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getB2bList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
 
   const getTaskDetails = async (id) => {
     try {
@@ -1026,6 +1098,7 @@ export const CategoryProvider = ({ children }) => {
       const data = response.data;
       if (response.status === 200) {
         toast.success(response?.data?.message);
+        navigate('/task-management')
       } else {
         toast.error(response?.data?.message)
       }
@@ -1038,7 +1111,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer,getTaskDetails,taskdetails,editTask
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer,getTaskDetails,taskdetails,editTask,DeleteUnit,DeleteCollection,DeleteB2b
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

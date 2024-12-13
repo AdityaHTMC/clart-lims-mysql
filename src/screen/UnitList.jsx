@@ -32,7 +32,7 @@ import { Pagination, Stack } from "@mui/material";
 const UnitList = () => {
   const navigate = useNavigate();
 
-  const { getunitList, unitLists, ProductDelete } = useCategoryContext();
+  const { getunitList, unitLists, DeleteUnit } = useCategoryContext();
 
   const [open, setOpen] = useState(false);
 
@@ -66,7 +66,7 @@ const UnitList = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
-      ProductDelete(id);
+      DeleteUnit(id);
     }
   };
   const onCloseModal = () => {

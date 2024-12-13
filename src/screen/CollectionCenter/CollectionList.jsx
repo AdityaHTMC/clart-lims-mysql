@@ -34,7 +34,7 @@ import { Pagination, Stack } from "@mui/material";
 const CollectionList = () => {
   const navigate = useNavigate();
 
-  const { collectionLists , getCollectionList } = useCategoryContext();
+  const { collectionLists , getCollectionList,DeleteCollection } = useCategoryContext();
 
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -69,7 +69,7 @@ const CollectionList = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
       // delete product logic here
-      // ProductDelete(id);
+      DeleteCollection(id);
     }
   };
 

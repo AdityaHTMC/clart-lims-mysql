@@ -31,7 +31,7 @@ import { Pagination, Stack } from "@mui/material";
 const TestCategory = () => {
   const navigate = useNavigate();
 
-  const { testCategory, gettestCategoryList, addtestCategory,deleteTestcate,editTestCategory } =useMasterContext();
+  const { testCategory, gettestCategoryList, addtestCategory,deleteTestcate,editTestCategory,getReportTemplateList, reportTemplateList  } =useMasterContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemperPage = 8;
@@ -44,11 +44,13 @@ const TestCategory = () => {
   const [formData, setFormData] = useState({
     name: "",
     discount_percentage:'',
+    template_id: '',
   });
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
     discount_percentage:'',
+    template_id: '',
   });
 
   useEffect(() => {
@@ -57,9 +59,16 @@ const TestCategory = () => {
       limit: itemperPage,
     };
     gettestCategoryList(dataToSend);
+    getReportTemplateList()
   }, [currentPage]);
 
- 
+  const handleTemplateSelect = (templateId) => {
+    setFormData({ ...formData, template_id: templateId });
+  };
+
+  const handleeditTemplateSelect = (templateId) => {
+    setSelectedvarity({ ...selectedvarity, template_id: templateId });
+  };
 
   const handleEdit = (product) => {
     setSelectedvarity(product);
@@ -260,6 +269,38 @@ const TestCategory = () => {
                 id="discount_percentage"
               />
             </FormGroup>
+            <FormGroup>
+        
+          <FormGroup>
+          <Label className="col-form-label">Select Template:</Label>
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+            {reportTemplateList.data.map((template) => (
+              <div
+                key={template.id}
+                onClick={() => handleTemplateSelect(template.id)}
+                style={{
+                  cursor: "pointer",
+                  border: formData.template_id === template.id ? "2px solid #007bff" : "2px solid transparent",
+                  padding: "8px",
+                  textAlign: "center",
+                  backgroundColor: formData.template_id === template.id ? "#e6f7ff" : "transparent",
+                }}
+              >
+                <img
+                  src={template.preview}
+                  alt={template.title}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                />
+                <p style={{ margin: "8px 0 0" }}>{template.title}</p>
+              </div>
+            ))}
+          </div>
+        </FormGroup>
+        </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -304,6 +345,35 @@ const TestCategory = () => {
                 id="discount_percentage"
               />
             </FormGroup>
+            <FormGroup>
+          <Label className="col-form-label">Select Template:</Label>
+          <div style={{ display: "flex", gap: "16px", flexWrap: "wrap" }}>
+            {reportTemplateList.data?.map((template) => (
+              <div
+                key={template.id}
+                onClick={() => handleeditTemplateSelect(template.id)}
+                style={{
+                  cursor: "pointer",
+                  border: selectedvarity.template_id === template.id ? "2px solid #007bff" : "2px solid transparent",
+                  padding: "8px",
+                  textAlign: "center",
+                  backgroundColor: selectedvarity.template_id === template.id ? "#e6f7ff" : "transparent",
+                }}
+              >
+                <img
+                  src={template.preview}
+                  alt={template.title}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                  }}
+                />
+                <p style={{ margin: "8px 0 0" }}>{template.title}</p>
+              </div>
+            ))}
+          </div>
+        </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>

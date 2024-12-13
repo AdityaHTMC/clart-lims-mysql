@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {
-  Button,
   Card,
   CardBody,
   Col,
@@ -10,50 +9,39 @@ import {
   Row,
   Spinner,
   Table,
+  UncontrolledTooltip,
 } from "reactstrap";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+
+import { IconButton, Pagination, Stack, TextField } from "@mui/material";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
-import { Pagination, Stack } from "@mui/material";
 
-const TaskList = () => {
+const Audit = () => {
   const navigate = useNavigate();
 
-  const { getTaskList, taskList } = useMasterContext();
+  const { getAuditTrailList, auditTrailsList } = useMasterContext();
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const itemperPage = 8;
-
+  const itemperPage = 15;
 
   const totalPages =
-  taskList?.total && Math.ceil(taskList?.total / itemperPage);
+    auditTrailsList?.total && Math.ceil(auditTrailsList?.total / itemperPage);
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
 
   useEffect(() => {
     const dataToSend = {
       page: currentPage,
       limit: itemperPage,
+      keyword_search: searchTerm,
     };
-    getTaskList(dataToSend);
-  }, [currentPage]);
-
-
-
-  const onOpenModal = () => {
-    navigate("/add-task");
-  };
-  const handleEdit = (id) => {
-    navigate(`/edit-task/${id}`);
-  };
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      // ProductDelete(id);
-    }
-  };
+    getAuditTrailList(dataToSend);
+  }, [currentPage, searchTerm]);
 
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
@@ -61,68 +49,80 @@ const TaskList = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Task Management List" />
+      <CommonBreadcrumb title="Audit Trails" />
       <Container fluid>
         <Row>
           <Col sm="12">
             <Card>
-              {/* <CommonCardHeader title="Product Sub Categoty" /> */}
               <CardBody>
-                <div className="btn-popup pull-right">
-                  <Button color="primary" onClick={onOpenModal}>
-                    Add Task
-                  </Button>
-                </div>
                 <div className="clearfix"></div>
                 <div id="basicScenario" className="product-physical">
                   <div className="promo-code-list">
                     <Table hover responsive>
                       <thead>
                         <tr>
-                          <th>Task </th>
-                          <th>Target Compilation Date</th>
-                          <th>status</th>
-                          <th>Action</th>
+                          <th> Action Done </th>
+                          <th>Ip</th>
+                          <th>Action Date</th>
                         </tr>
                       </thead>
                       <tbody>
                         {/* Show loading spinner */}
-                        {taskList?.loading ? (
+                        {auditTrailsList?.loading ? (
                           <tr>
                             <td colSpan="7" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : taskList?.data?.length === 0 ? (
+                        ) : auditTrailsList?.data?.length === 0 ? (
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No task List Found
+                              No List Found
                             </td>
                           </tr>
                         ) : (
-                          taskList?.data?.map((product, index) => (
+                          auditTrailsList?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.task_title}</td>
-                              <td>
-                                {product?.target_compilation_date
-                                  ? new Date(
-                                      product.target_compilation_date
-                                    ).toLocaleDateString("en-GB")
-                                  : ""}
-                              </td>
-                              <td>{product?.status}</td>
-                              <td>
-                                <div className="circelBtnBx">
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handleEdit(product?.id)}
+                              <td id={`action_done-${index}`}>
+                                {product?.action_done
+                                  ? product?.action_done?.length > 20
+                                    ? `${product?.action_done?.slice(0, 20)}...`
+                                    : product?.action_done
+                                  : "NA"}
+                                {product?.action_done && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`action_done-${index}`}
                                   >
-                                    <FaEdit />
-                                  </Button>
-                                 
-                                </div>
+                                    {product?.action_done}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                              <td id={`ip-${index}`}>
+                                {product?.ip
+                                  ? product?.ip?.length > 40
+                                    ? `${product?.ip?.slice(0, 40)}...`
+                                    : product?.ip
+                                  : "NA"}
+                                {product?.ip && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`ip-${index}`}
+                                  >
+                                    {product?.ip}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
+                              <td>
+                                {" "}
+                                {product?.created_at
+                                  ? new Date(
+                                      product.created_at
+                                    ).toLocaleDateString("en-GB")
+                                  : ""}{" "}
                               </td>
                             </tr>
                           ))
@@ -149,4 +149,4 @@ const TaskList = () => {
   );
 };
 
-export default TaskList;
+export default Audit;

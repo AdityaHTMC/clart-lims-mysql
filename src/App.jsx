@@ -127,6 +127,8 @@ import AllOrderList from "./OrderMenu/AllOrderList";
 import PendingOrder from "./OrderMenu/PendingOrder";
 import BankMaster from "./Master/BankMaster/BankMaster";
 import CashInHand from "./screen/Fiance/CashInHand";
+import Audit from "./screen/Audit/Audit";
+import ReportTemplate from "./screen/ReportTemplate/ReportTemplate";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -185,7 +187,8 @@ function App() {
           <Route path="/enquiry-list" element={<EnquiryList />} />
           <Route path="/collection-report" element={<Transaction />} />
           <Route path="/cash-in-hand-report" element={<CashInHand />} />
-
+          <Route path="/audit-trails" element={<Audit />} />
+          <Route path="/report-templates" element={<ReportTemplate />} />
           {/* master */}
 
           <Route path="/breed-management" element={<BreadList />} />

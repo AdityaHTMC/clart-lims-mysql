@@ -314,7 +314,7 @@ const getLabReport = async () => {
 const getCCReport = async () => {
   try {
       const response = await axios.post(
-          `${base_url}/admin/lab/data`,{},
+          `${base_url}/admin/collection-center/data`,{},
           { headers: { Authorization: Authtoken } }
       );
       if (response.status === 200) {

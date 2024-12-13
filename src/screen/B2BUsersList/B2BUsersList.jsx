@@ -34,7 +34,7 @@ import {
   const B2BUsersList = () => {
     const navigate = useNavigate();
   
-    const { b2busers,getB2bList,DeleteLab } = useCategoryContext();
+    const { b2busers,getB2bList,DeleteB2b } = useCategoryContext();
   
     const [open, setOpen] = useState(false);
   
@@ -67,7 +67,7 @@ import {
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
-        DeleteLab(id);
+        DeleteB2b(id);
       }
     };
   
