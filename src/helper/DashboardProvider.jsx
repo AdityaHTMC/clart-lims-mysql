@@ -389,7 +389,7 @@ const csvLabReport = async () => {
 const csvCCReport = async () => {
   try {
       const response = await axios.post(
-          `${base_url}/lab/convert-to-csv`,{},
+          `${base_url}/collection-center/convert-to-csv`,{},
           { headers: { Authorization: Authtoken } }
       );
       if (response.status === 200) {
