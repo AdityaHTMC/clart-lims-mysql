@@ -105,9 +105,8 @@ const CreateOrder = () => {
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
       getZonePrice(selectedCustomer.pincode);
-      getallSahcList();
     }
-  },[selectedCustomer]);
+  },[selectedCustomer , formData.type, formData.booking_date]);
 
 
 
@@ -158,7 +157,6 @@ const CreateOrder = () => {
   useEffect(() => {
     if (formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date ) {
       setCollectionFees(zoneprice?.data?.charge || 350);
-      
     } else {
       setCollectionFees(0);
     }
