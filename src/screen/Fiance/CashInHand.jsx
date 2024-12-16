@@ -69,7 +69,7 @@ const CashInHand = () => {
 
   return (
     <>
-      <CommonBreadcrumb title="Phlebotomist Cash in hand" />
+      <CommonBreadcrumb title="Phlebotomist Cash in hand list" />
       <Container fluid>
         <Row>
           <Col sm="12">

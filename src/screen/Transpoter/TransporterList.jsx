@@ -51,7 +51,7 @@ const TransporterList = () => {
     navigate("/add-transporters");
   };
   const handleEdit = (id) => {
-    navigate(`/editphlebotomist/${id}`);
+    navigate(`/editTransporter/${id}`);
   };
 
   const handleDelete = (id) => {

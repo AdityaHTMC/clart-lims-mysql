@@ -32,16 +32,19 @@ import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Pagination, Stack } from "@mui/material";
+import { useCategoryContext } from "../../helper/CategoryProvider";
 
 const DoctorList = () => {
   const navigate = useNavigate();
 
-  const { getDocList, docList, addDocMaster, getallSahcList, allsahcList,editDocList, DeleteDoc} =
+  const { getDocList, docList, addDocMaster,editDocList, DeleteDoc} =
     useMasterContext();
+
+    const { getAllCollection , collectionDropdown} = useCategoryContext()
 
   const [formData, setFormData] = useState({
     name: "",
-    sahc_id: "",
+    colleciton_center_id: "",
     registration_number: "",
   });
 
@@ -56,7 +59,7 @@ const DoctorList = () => {
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
-    sahc_id: "",
+    colleciton_center_id    : "",
     registration_number: "",
     id: "",
   });
@@ -67,7 +70,7 @@ const DoctorList = () => {
       limit: itemperPage,
     };
     getDocList(dataToSend);
-    getallSahcList();
+    getAllCollection();
   }, [currentPage]);
 
   const onOpenModal = () => {
@@ -83,7 +86,7 @@ const DoctorList = () => {
     setModalOpen(false);
     setSelectedvarity({
       name: "",
-      sahc_id: "",
+      colleciton_center_id: "",
       registration_number: "",
       id: "",
     });
@@ -93,7 +96,7 @@ const DoctorList = () => {
     setOpen(false);
     setFormData({
       name: "",
-      sahc_id: "",
+      colleciton_center_id: "",
       registration_number: "",
       id: "",
     });
@@ -261,20 +264,20 @@ const DoctorList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="sahc_id" className="col-form-label">
-                Govt. Collection Center:
+              <Label htmlFor="colleciton_center_id" className="col-form-label">
+                Collection Center:
               </Label>
               <Input
                 type="select"
-                name="sahc_id"
-                value={formData.sahc_id}
+                name="colleciton_center_id"
+                value={formData.colleciton_center_id}
                 onChange={handleInputChange}
-                id="sahc_id"
+                id="colleciton_center_id"
               >
-                <option value="">Select  Govt. Collection Center</option>
-                {allsahcList?.data?.map((variety) => (
-                  <option key={variety._id} value={variety.id}>
-                    {variety.name}
+                <option value="">Select Collection Center</option>
+                {collectionDropdown?.data?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.organization_name}
                   </option>
                 ))}
               </Input>
@@ -324,20 +327,20 @@ const DoctorList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="sahc_id" className="col-form-label">
-                Sahc:
+              <Label htmlFor="colleciton_center_id" className="col-form-label">
+                Collection Center:
               </Label>
               <Input
                 type="select"
-                name="sahc_id"
-                value={selectedvarity.sahc_id}
+                name="colleciton_center_id"
+                value={selectedvarity.colleciton_center_id}
                 onChange={handleInputChanges}
-                id="sahc_id"
+                id="colleciton_center_id"
               >
-                <option value="">Select sahc</option>
-                {allsahcList?.data?.map((variety) => (
+                <option value="">Select Collection</option>
+                {collectionDropdown?.data?.map((variety) => (
                   <option key={variety._id} value={variety.id}>
-                    {variety.name}
+                    {variety.organization_name}
                   </option>
                 ))}
               </Input>

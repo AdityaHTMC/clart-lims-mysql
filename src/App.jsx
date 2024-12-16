@@ -129,6 +129,7 @@ import BankMaster from "./Master/BankMaster/BankMaster";
 import CashInHand from "./screen/Fiance/CashInHand";
 import Audit from "./screen/Audit/Audit";
 import ReportTemplate from "./screen/ReportTemplate/ReportTemplate";
+import EditTransporter from "./screen/Transpoter/EditTransporter";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -172,6 +173,7 @@ function App() {
           <Route path="/phlebotomist-list" element={<PhlebotomistList />} />
           <Route path="/transporters-list" element={<TransporterList />} />
           <Route path="/editphlebotomist/:id" element={<EditPhelbotomist />} />
+          <Route path="/editTransporter/:id" element={<EditTransporter />} />
           <Route path="/edit-transporters-list/:id" element={<EditTestParameter />} />
 
           <Route path="/b2b-users" element={<B2BUsersList />} />

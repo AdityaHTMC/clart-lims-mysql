@@ -53,13 +53,13 @@ const CreateOrder = () => {
     getSahcwiseDoc,
     sahcDoc,
   } = useMasterContext();
-  const { getAllLabs, labDropdown } = useCategoryContext();
+  const { getAllLabs, labDropdown ,getAllCollection , collectionDropdown } = useCategoryContext();
   const Navigate = useNavigate();
 
   const [search, setSearch] = useState("");
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedLab, setSelectedLab] = useState("");
+  const [selectedCC, setSelectedCC] = useState("");
   const [selectedsahc, setSelectedsahc] = useState("");
   const [selectedDoc, setSelectedDoc] = useState("");
   const [selectedTest, setSelectedTest] = useState([]);
@@ -87,9 +87,7 @@ const CreateOrder = () => {
     setSelectedSlot(slot);
   };
 
-  // console.log(selectedSlot, "selectedSlot");
-  // console.log(formData.booking_date, "booking_date");
-  // console.log(selectedPhelbo, "phelobmist");
+
 
   useEffect(() => {
    
@@ -97,11 +95,11 @@ const CreateOrder = () => {
       const dataToSend = {
         booking_date: formData.booking_date,
         pincode: selectedCustomer.pincode,
-        ...(formData.type === 'Lab' && { lab_id: selectedLab }),
+        ...(formData.type === 'Collection_Center' && { colleciton_center_id: selectedCC }),
       }
       getAllTimeList(dataToSend);
     }
-  }, [selectedCustomer, formData.booking_date,selectedLab,formData.type]);
+  }, [selectedCustomer, formData.booking_date,selectedCC,formData.type]);
 
   useEffect(()=>{
     if (selectedCustomer) {
@@ -111,14 +109,14 @@ const CreateOrder = () => {
     }
   },[selectedCustomer]);
 
-  console.log(selectedLab, 'selected lab')
+
 
   useEffect(() => {
     getAllTest();
     getProfessionalFees();
     getTestPackageList();
    
-    getAllLabs();
+    getAllCollection();
   }, []);
 
   useEffect(() => {
@@ -164,7 +162,7 @@ const CreateOrder = () => {
     } else {
       setCollectionFees(0);
     }
-  }, [formData.type, zoneprice  ]);
+  }, [formData.type, zoneprice ]);
 
   useEffect(()=>{
    
@@ -178,18 +176,18 @@ const CreateOrder = () => {
       getOrderPhelboList(dataToSend);
     }
 
-    if(formData.type === "Lab" && selectedCustomer?.pincode && formData.booking_date && selectedSlot){
+    if(formData.type === "Collection_Center" && selectedCustomer?.pincode && formData.booking_date && selectedSlot){
       const dataToSend = {
         booking_date: formData.booking_date,
         pincode: selectedCustomer?.pincode,
         start_time:selectedSlot?.start_time,
         end_time: selectedSlot?.end_time,
-        lab_id: selectedLab
+        colleciton_center_id: selectedCC
       }
       getOrderPhelboList(dataToSend);
     }
 
-  },[selectedCustomer, formData.booking_date ,selectedSlot, selectedLab ])
+  },[selectedCustomer, formData.booking_date ,selectedSlot, selectedCC ])
 
 
 
@@ -221,7 +219,7 @@ const CreateOrder = () => {
   };
 
   const handleLabSelect = (lab) => {
-    setSelectedLab(lab);
+    setSelectedCC(lab);
   };
 
   const handleSahcSelect = (sahc) => {
@@ -278,7 +276,7 @@ const CreateOrder = () => {
     bodyData.append("state", selectedCustomer.state || "");
     bodyData.append("district", selectedCustomer.district || "");
     bodyData.append("address", selectedCustomer.address || "");
-    bodyData.append("lab_id", selectedLab || "");
+    bodyData.append("colleciton_center_id", selectedCC || "");
     bodyData.append("collection_fees", collectionFees || "");
     bodyData.append("pincode", selectedCustomer.pincode || "");
     if (selectedPhelbo) {
@@ -505,36 +503,36 @@ const CreateOrder = () => {
                                   className="form-check-input"
                                   type="radio"
                                   name="type"
-                                  value="Lab"
+                                  value="Collection_Center"
                                   onChange={onChange}
                                   disabled={isProcessing}
-                                  checked={formData.type === "Lab"}
+                                  checked={formData.type === "Collection_Center"}
                                 />
-                                <Label className="form-check-label">Lab</Label>
+                                <Label className="form-check-label">Colleciton Center</Label>
                               </div>
                             </FormGroup>
-                            {formData.type === "Lab" && (
+                            {formData.type === "Collection_Center" && (
                               <FormGroup className="mt-3">
-                                <Label for="labSelect" className="fw-bold">
-                                  Select Lab
+                                <Label for="Collection_Center" className="fw-bold">
+                                  Select Collection Center
                                 </Label>
                                 <Input
                                   type="select"
-                                  id="labSelect"
-                                  name="lab"
+                                  id="Collection_Center"
+                                  name="Collection_Center"
                                   className="form-select"
-                                  value={selectedLab || ""}
+                                  value={selectedCC || ""}
                                   onChange={(e) =>
                                     handleLabSelect(e.target.value)
                                   }
-                                  required={formData.type === "Lab"}
+                                  required={formData.type === "Collection_Center"}
                                 >
                                   <option value="" disabled>
-                                    Select Lab
+                                    Select Collection Center
                                   </option>
-                                  {labDropdown.data.map((lab) => (
-                                    <option key={lab.id} value={lab.id}>
-                                      {lab.organization_name}
+                                  {collectionDropdown.data.map((cc) => (
+                                    <option key={cc.id} value={cc.id}>
+                                      {cc.organization_name}
                                     </option>
                                   ))}
                                 </Input>
@@ -621,11 +619,11 @@ const CreateOrder = () => {
                                   }
                                 >
                                   <option value="" disabled>
-                                    Select Govt. Collection Center
+                                    Select Collection Center
                                   </option>
-                                  {allsahcList?.data?.map((sahc) => (
-                                    <option key={sahc.id} value={sahc.id}>
-                                      {sahc.name}
+                                  {collectionDropdown?.data?.map((item) => (
+                                    <option key={item.id} value={item.id}>
+                                      {item.organization_name}
                                     </option>
                                   ))}
                                 </Input>
@@ -894,7 +892,7 @@ const CreateOrder = () => {
                                   !formData.payment_mode || // Payment mode must be selected
                                   !formData.pet || // Pet must be selected
                                   !formData.booking_date || // Booking date must be selected
-                                  (formData.type === "Lab" && !selectedLab) || // If Lab is selected, Lab dropdown must also be selected
+                                  (formData.type === "Collection_Center" && !selectedCC) || // If Collection_Center is selected, Collection_Center dropdown must also be selected
                                   isProcessing // Button should be disabled if processing
                                 }
                                 onClick={createOrder}

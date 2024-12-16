@@ -61,9 +61,11 @@ const Audit = () => {
                     <Table hover responsive>
                       <thead>
                         <tr>
-                          <th> Action Done </th>
+                          <th>User Type </th>
+                          <th>User contact</th>
+                          <th> Action</th>
                           <th>Ip</th>
-                          <th>Action Date</th>
+                          <th>Action Date & Time</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -84,6 +86,29 @@ const Audit = () => {
                         ) : (
                           auditTrailsList?.data?.map((product, index) => (
                             <tr key={index}>
+                              <td>{product?.user_type}</td>
+
+                              <td id={`user_email-${index}`}>
+                                {product?.user_email
+                                  ? product?.user_email.length > 20
+                                    ? `${product?.user_email.slice(0, 20)}...`
+                                    : product?.user_email
+                                  : "NA"}
+                                {product?.user_mobile && (
+                                  <span>
+                                    <br />({product?.user_mobile})
+                                  </span>
+                                )}
+                                {product?.user_email && (
+                                  <UncontrolledTooltip
+                                    placement="top"
+                                    target={`user_email-${index}`}
+                                  >
+                                    {product?.user_email}
+                                  </UncontrolledTooltip>
+                                )}
+                              </td>
+
                               <td id={`action_done-${index}`}>
                                 {product?.action_done
                                   ? product?.action_done?.length > 20
@@ -117,12 +142,20 @@ const Audit = () => {
                               </td>
 
                               <td>
-                                {" "}
                                 {product?.created_at
-                                  ? new Date(
-                                      product.created_at
-                                    ).toLocaleDateString("en-GB")
-                                  : ""}{" "}
+                                  ? new Date(product.created_at).toLocaleString(
+                                      "en-GB",
+                                      {
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                        hour12: false, // Use 24-hour format; set to `true` for 12-hour format with AM/PM
+                                      }
+                                    )
+                                  : ""}
                               </td>
                             </tr>
                           ))

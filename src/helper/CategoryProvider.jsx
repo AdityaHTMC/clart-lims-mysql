@@ -447,6 +447,28 @@ export const CategoryProvider = ({ children }) => {
     }
   };
 
+  const editTransporter = async (id,formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/phlebotomist/edit/${id}`,
+        formDataToSend,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        navigate('/transporters-list');
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
   const DeleteLab = async (id) => {
     try {
       const response = await axios.delete(
@@ -1111,7 +1133,7 @@ export const CategoryProvider = ({ children }) => {
 
 
   const values = {
-   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer,getTaskDetails,taskdetails,editTask,DeleteUnit,DeleteCollection,DeleteB2b
+   getunitList,unitLists, addUnit,getLabsList,labLists,addlab , getCollectionList ,collectionLists,addCollection,getAllCollection,collectionDropdown,getAllLabs,labDropdown,getAllUnit,unitDropdown,getAllphlebotomist,phlebotomistList,addphlebotomist,getFaqList,FaqList,addFaq,editFaq,BannerList,getBannerList,addBanner,editBranner,bannerDelete,switchBranner,faqDelete,DeleteLab,getallstateList,getallDistrictList,allstateList,alldistrictList,getLabDetails,labDetails,b2busers,getB2bList,addB2b, DeletePhlebotomist,getCCDetails,CCDetails,getB2bDetails,b2bDetails,getphelboDetails,phelboDetails,editPhelbo,editTransporter,getunitDetails,unitDetails,editUnit,editLab,editCC,editb2b,addTransporters,getTpDetails,tpDetails,editTp,getCustomerDetails,customerDetails,editCustomer,getTaskDetails,taskdetails,editTask,DeleteUnit,DeleteCollection,DeleteB2b
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

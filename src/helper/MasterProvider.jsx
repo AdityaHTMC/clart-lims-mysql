@@ -2250,7 +2250,7 @@ export const MasterProvider = ({ children }) => {
   const getSahcwiseDoc = async (dataToSend) => {
     try {
       const response = await axios.post(
-        `${base_url}/admin/doctor/getAll`,{sahc_id:dataToSend},
+        `${base_url}/admin/doctor/getAll`,{colleciton_center_id:dataToSend},
         { headers: { Authorization: AuthToken } }
       );
       if (response.status === 200) {
