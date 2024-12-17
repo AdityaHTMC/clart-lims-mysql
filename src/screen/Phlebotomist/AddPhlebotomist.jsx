@@ -57,7 +57,7 @@ const AddPhlebotomist = () => {
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
   const [error, setError] = useState("");
-  const [aadhaarError, setAadhaarError] = React.useState("");
+  const [aadhaarError, setAadhaarError] = useState("");
   const handleAddPincode = () => {
     if (pincode) {
       setPincodes([...pincodes, pincode]);

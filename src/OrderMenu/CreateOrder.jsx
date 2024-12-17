@@ -114,7 +114,6 @@ const CreateOrder = () => {
     getAllTest();
     getProfessionalFees();
     getTestPackageList();
-   
     getAllCollection();
   }, []);
 
