@@ -130,6 +130,7 @@ import CashInHand from "./screen/Fiance/CashInHand";
 import Audit from "./screen/Audit/Audit";
 import ReportTemplate from "./screen/ReportTemplate/ReportTemplate";
 import EditTransporter from "./screen/Transpoter/EditTransporter";
+import ContainerBox from "./Master/Container/ContainerBox";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -219,6 +220,7 @@ function App() {
           <Route path="/doctor-list" element={<DoctorList />} />
           <Route path="/zone-list" element={<ZoneMasterList />} />
           <Route path="/banks" element={<BankMaster />} />
+          <Route path="/containers" element={<ContainerBox />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />

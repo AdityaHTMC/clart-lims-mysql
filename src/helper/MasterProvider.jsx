@@ -51,6 +51,8 @@ export const MasterProvider = ({ children }) => {
   const [cihList, setCihList] = useState({loading: true,data: [],total: ""});
   const [auditTrailsList, setAuditTrailsList] = useState({loading: true,data: [],total: ""});
   const [reportTemplateList, setReportTemplateList] = useState({loading: true,data: [],total: ""});
+  const [containerList, setContainerList] = useState({loading: true,data: [],total: ""});
+  const [allContainerList, setallContainerList] = useState({loading: true,data: []});
   const [zoneList, setzoneList] = useState({loading: true,data: [],total: ""});
   const [zoneprice, setzonePrice] = useState({loading: true,data: []});
   const [sahcDoc, setSahcDoc] = useState({loading: true,data: []});
@@ -118,14 +120,14 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Breed added successfully");
+        toast.success(response?.data?.message);
         navigate("/breed-management");
       } else {
-        toast.error("Failed to add Breed");
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       console.error("Error adding Breed:", error);
-      toast.error("An error occurred while adding the Breed");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -193,7 +195,6 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      console.error("Error adding Breed:", error);
       toast.error(error.response?.data?.message || 'Server error');
     }
   };
@@ -235,14 +236,13 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("customer added successfully");
+        toast.success(response?.data?.message);
         navigate("/customers-list");
       } else {
-        toast.error("Failed to add customer");
+        toast.error(response?.data?.message);
       }
     } catch (error) {
-      console.error("Error adding customer:", error);
-      toast.error("An error occurred while adding the customer");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -263,11 +263,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setcustomerLists({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch customer list");
+       
       }
     } catch (error) {
         setcustomerLists({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch customer list");
+     
     }
   };
 
@@ -280,14 +280,13 @@ export const MasterProvider = ({ children }) => {
       );
       
       if (response.status === 200) {
-        toast.success('customer deleted successfully');
+        toast.success(response?.data?.message)
         allCustomerList(); 
       } else {
-        toast.error('Failed to delete customer');
+        toast.error(response?.data?.message)
       }
     } catch (error) {
-      console.error('Error deleting customer:', error);
-      toast.error('An error occurred while deleting the customer');
+      toast.error(error.response?.data?.message || "Server error");
     }
   }
 
@@ -308,11 +307,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         settestCategory({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch customer list");
+        
       }
     } catch (error) {
       settestCategory({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch customer list");
+      
     }
   };
 
@@ -359,11 +358,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         settestList({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test list");
+       
       }
     } catch (error) {
       settestList({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test list");
+      
     }
   };
 
@@ -401,10 +400,9 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         gettestCategoryList()
       } else {
-        toast.error("server errors");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
-      console.error("Error edit Test category:", error);
       toast.error(error.response?.data?.message || "Server error");
     }
   };
@@ -421,7 +419,7 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         gettestTestList();
       } else {
-        toast.error("server errors");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
@@ -444,7 +442,7 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         navigate("/test-list");
       } else {
-        toast.error("server errors");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
@@ -467,11 +465,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setalltestCategory({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test category list");
+        
       }
     } catch (error) {
       setalltestCategory({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test category list");
+      
     }
   };
 
@@ -516,14 +514,13 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Test category added successfully");
+        toast.success(response.data.message);
         getProfessionalList()
       } else {
-        toast.error("Failed to add Test category");
+        toast.error(response?.data?.message)
       }
     } catch (error) {
-      console.error("Error adding Test category:", error);
-      toast.error("An error occurred while adding the Test category");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -2435,10 +2432,120 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getConatinerList = async () => {
+    try {
+      setContainerList({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/container/list`, {},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setContainerList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+       
+        setContainerList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+   
+      setContainerList({ data: [], loading: false });
+    }
+  };
+
+
+  const addContainerMaster = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/container/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getConatinerList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const editContainerList = async (id,dataToSend) => {
+    try {
+     
+      const response = await axios.put(
+        `${base_url}/admin/container/edit/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getConatinerList()
+      } else {
+        toast.error("server errors");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const DeleteContainer = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/container/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getConatinerList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+
+  const getAllConatinerList = async () => {
+    try {
+      setallContainerList({ data: [], loading: true });
+      const response = await axios.get(
+        `${base_url}/admin/container/getAll`, 
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setallContainerList({ data: response?.data?.data || [] , loading: false });
+      } else {
+       
+        setallContainerList({ data: [], loading: false });
+      }
+    } catch (error) {
+   
+      setallContainerList({ data: [], loading: false });
+    }
+  };
+
+
+
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

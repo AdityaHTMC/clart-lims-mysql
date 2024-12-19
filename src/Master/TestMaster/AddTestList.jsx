@@ -22,7 +22,7 @@ const AddTestList = () => {
     getAllSpeciesList,
     allspecies,
     getAllItemList,
-    allItemList,
+    allItemList,getAllConatinerList,allContainerList
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -32,6 +32,7 @@ const AddTestList = () => {
     getAllSpeciesList();
     getProfessionalFees();
     getAllItemList();
+    getAllConatinerList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -49,6 +50,7 @@ const AddTestList = () => {
     image: null,
     method: "",
     observation: [""],
+    container_id: "",
   });
 
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
@@ -145,6 +147,7 @@ const AddTestList = () => {
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("method", inputData.method);
     formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("container_id", inputData.container_id);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
     }
@@ -566,10 +569,34 @@ const AddTestList = () => {
                     border: "1px solid #ced4da",
                     borderRadius: "5px",
                     padding: "10px",
-                   
+
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                   }}
                 />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row" style={{ marginBottom: "20px" }}>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="container_id" className="col-form-label">
+                  Container:
+                </Label>
+                <Input
+                  type="select"
+                  name="container_id"
+                  value={inputData.container_id}
+                  onChange={handleInputChange}
+                  id="container_id"
+                >
+                  <option value="">Select Container</option>
+                  {allContainerList?.data?.map((container) => (
+                    <option key={container._id} value={container.id}>
+                      {container.container_name}
+                    </option>
+                  ))}
+                </Input>
               </FormGroup>
             </div>
           </div>
@@ -739,9 +766,7 @@ const AddTestList = () => {
                         marginRight: "10px",
                       }}
                     />
-                    <div
-                  
-                    >
+                    <div>
                       <Button
                         type="button"
                         color="primary"

@@ -225,7 +225,7 @@ const ProfessionalList = () => {
       <Modal
         isOpen={open}
         toggle={onCloseModal}
-        className="modal-lg" // Increases the width
+        className="modal-xg" // Increases the width
       >
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -262,7 +262,7 @@ const ProfessionalList = () => {
               />
             </FormGroup>
 
-            <FormGroup>
+            {/* <FormGroup>
               <Autocomplete
                 options={allItemList?.data || []}
                 getOptionLabel={(option) => option.name} // Display name in the dropdown
@@ -285,7 +285,7 @@ const ProfessionalList = () => {
                   option._id === value._id
                 } // Check if option is equal to value
               />
-            </FormGroup>
+            </FormGroup> */}
           </Form>
         </ModalBody>
         <ModalFooter>
