@@ -26,7 +26,7 @@ const EditTestList = () => {
     testDetails,
     editTest,
     getAllItemList,
-    allItemList,
+    allItemList,getAllConatinerList,allContainerList
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -36,6 +36,7 @@ const EditTestList = () => {
     getAllSpeciesList();
     getProfessionalFees();
     getAllItemList();
+    getAllConatinerList();
   }, []);
 
   useEffect(() => {
@@ -58,6 +59,7 @@ const EditTestList = () => {
     why_the_test: "",
     image: null,
     method: "",
+    container_id: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -82,6 +84,7 @@ const EditTestList = () => {
         why_the_test: testDetails.data.why_the_test || "",
         method: testDetails.data.method || "",
         image: testDetails.data.address || "",
+        container_id: testDetails.data.container_id || "",
       });
       setSelectedProducts(testDetails.data.test_species || []);
       setSelectedFees(testDetails.data.professional_fees || []);
@@ -195,6 +198,7 @@ const EditTestList = () => {
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("is_popular", inputData.is_popular);
     formDataToSend.append("method", inputData.method);
+    formDataToSend.append("container_id", inputData.container_id);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
     }
@@ -234,12 +238,15 @@ const EditTestList = () => {
           }}
         >
           <div className="row">
+
+
             <div className="col-md-6">
-              <FormGroup>
-                <Label for="test_name">Test Name *</Label>
+              <FormGroup className="mb-3">
+                <Label for="test_name">Test Name  <span className="text-danger">*</span></Label>
                 <Input
                   type="text"
                   name="test_name"
+                  className="form-control shadow-sm"
                   value={inputData.test_name}
                   onChange={handleInputChange}
                   id="test_name"
@@ -248,13 +255,14 @@ const EditTestList = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup>
+              <FormGroup className="mb-3">
                 <Label htmlFor="price" className="col-form-label">
-                  price:
+                  price: <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
                   name="price"
+                  className="form-control shadow-sm"
                   value={inputData.price}
                   onChange={handleInputChange}
                   id="price"
@@ -553,6 +561,30 @@ const EditTestList = () => {
               </FormGroup>
             </div>
           </div>
+
+            <div className="row" style={{ marginBottom: "20px" }}>
+                      <div className="col-md-6">
+                        <FormGroup>
+                          <Label htmlFor="container_id" className="col-form-label">
+                            Container:
+                          </Label>
+                          <Input
+                            type="select"
+                            name="container_id"
+                            value={inputData.container_id}
+                            onChange={handleInputChange}
+                            id="container_id"
+                          >
+                            <option value="">Select Container</option>
+                            {allContainerList?.data?.map((container) => (
+                              <option key={container._id} value={container.id}>
+                                {container.container_name}
+                              </option>
+                            ))}
+                          </Input>
+                        </FormGroup>
+                      </div>
+                    </div>
 
           <FormGroup>
             <label className="mb-3 mt-3">Observations:</label>

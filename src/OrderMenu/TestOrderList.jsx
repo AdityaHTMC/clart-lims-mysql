@@ -187,15 +187,6 @@ const TestOrderList = () => {
                                     <FaEye />
                                   </Button>
                                 </div>
-                                {/* <div className="circelBtnBx">
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    // onClick={() => handleRemove(lab)}
-                                  >
-                                    <FiEdit />
-                                  </Button>
-                                </div> */}
                               </div>
                             </td>
                           </tr>
