@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
@@ -62,6 +62,7 @@ const EditPhelbotomist = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
+   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (phelboDetails) {
@@ -144,7 +145,7 @@ const EditPhelbotomist = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
@@ -184,7 +185,15 @@ const EditPhelbotomist = () => {
         formDataToSend.append(`serviceable_pincode[${index}]`, pin);
       });
 
-    editPhelbo(id,formDataToSend);
+      try {
+        await  editPhelbo(id,formDataToSend);
+      } catch (error) {
+        console.error("Error submitting the form:", error);
+      } finally {
+        setIsLoading(false);
+      }
+
+   
   };
 
   return (
@@ -453,8 +462,16 @@ const EditPhelbotomist = () => {
             </div>
           </div>
 
-          <Button type="submit" color="primary">
-            edit
+          
+
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Edit Phelbotomist"
+            )}
           </Button>
         </form>
       </div>

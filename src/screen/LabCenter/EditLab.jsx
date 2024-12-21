@@ -43,6 +43,7 @@ const EditLab = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (labDetails) {
@@ -103,9 +104,9 @@ const EditLab = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const SelectedProductIdsCC = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -133,7 +134,15 @@ const EditLab = () => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
 
-    editLab(id,formDataToSend);
+    try {
+      await  editLab(id,formDataToSend);;
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+  
   };
 
   return (

@@ -52,6 +52,7 @@ const ItemManagement = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const itemperPage = 8;
 
   const totalPages =
@@ -89,6 +90,7 @@ const ItemManagement = () => {
     low_quantity_alert: "",
     stock_quantity: "",
     id: "",
+    unit: "",
   });
 
   const onOpenModal = () => {
@@ -109,6 +111,7 @@ const ItemManagement = () => {
       low_quantity_alert: "",
       stock_quantity: "",
       id: "",
+      unit: "",
     });
   };
 
@@ -137,8 +140,18 @@ const ItemManagement = () => {
   };
 
   // Handle submit for updating the brand
-  const handleSubmits = () => {
-    editIM(selectedvarity.id, selectedvarity);
+  const handleSubmits = async() => {
+
+    try {
+      setIsLoading(true);
+      await editIM(selectedvarity.id, selectedvarity);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    
     onCloseModal2();
   };
 
@@ -165,9 +178,9 @@ const ItemManagement = () => {
   };
   
   // Handle form submission
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     const newErrors = {};
-  
+     setIsLoading(true);
     // Validate required fields
     if (!formData.name) newErrors.name = "Name is required.";
     if (!formData.item_group_id) newErrors.item_group_id = "Item Group is required.";
@@ -179,8 +192,14 @@ const ItemManagement = () => {
       return; // Stop form submission
     }
   
-    // If validation passes, call the API and close the modal
-    addIM(formData);
+    try {
+      await  addIM(formData);;
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+   
     onCloseModal();
   };
 
@@ -445,8 +464,20 @@ const ItemManagement = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Save
+        
+        <Button
+            type="submit"
+            color="primary"
+            disabled={isLoading}
+            onClick={handleSubmit}
+          >
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add"
+            )}
           </Button>
           <Button color="secondary" onClick={onCloseModal}>
             Close
@@ -467,18 +498,7 @@ const ItemManagement = () => {
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
           <Form>
-            {/* <FormGroup>
-              <Label htmlFor="title" className="col-form-label">
-                Unit:
-              </Label>
-              <Input
-                type="text"
-                name="title"
-                value={selectedvarity.title}
-                onChange={handleInputChanges}
-                id="title"
-              />
-            </FormGroup> */}
+            
             <FormGroup>
               <Label htmlFor="name" className="col-form-label">
                 Name :
@@ -534,12 +554,45 @@ const ItemManagement = () => {
                 ))}
               </Input>
             </FormGroup>
+            <FormGroup >
+              <Label htmlFor="unit" className="col-form-label">
+                Item Unit:
+              </Label>
+              <Input
+                type="select"
+                name="unit"
+                value={selectedvarity.unit}
+                onChange={handleInputChanges}
+                id="unit"
+                required
+              >
+                <option value="">Select Item Group</option>
+                {allUnitList.data.map((group) => (
+                  <option key={group._id} value={group.id}>
+                    {group.title}
+                  </option>
+                ))}
+              </Input>
+              {errors.item_group_id && <span className="text-danger">{errors.item_group_id}</span>}
+            </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmits}>
-            Save
+        <Button
+            type="submit"
+            color="primary"
+            disabled={isLoading}
+            onClick={handleSubmits}
+          >
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "edit"
+            )}
           </Button>
+          
           <Button color="secondary" onClick={onCloseModal2}>
             Close
           </Button>

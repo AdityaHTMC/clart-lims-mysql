@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, Col, FormGroup, Input, Label, Row } from "reactstrap";
+import { Button, Col, FormGroup, Input, Label, Row, Spinner } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
@@ -68,6 +68,7 @@ const EditTestList = () => {
   const [itemDataList, setItemDataList] = useState([""]);
   const [preview, setPreview] = useState(null);
   const [priImages, setPriImages] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     if (testDetails) {
       setInputData({
@@ -173,9 +174,9 @@ const EditTestList = () => {
     setItemDataList((prevState) => prevState.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -220,7 +221,15 @@ const EditTestList = () => {
       formDataToSend.append(`items[${index}][quantity]`, item.quantity);
     });
 
-    editTest(id, formDataToSend);
+    try {
+      await editTest(id, formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    
   };
 
   return (
@@ -692,18 +701,24 @@ const EditTestList = () => {
             </Button>
           </FormGroup>
 
-          <Button
-            type="submit"
-            color="primary"
-            style={{
-              marginTop: "20px",
-              padding: "10px 20px",
-              borderRadius: "5px",
-              fontWeight: "bold",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
-            }}
+         
+
+          <Button type="submit" color="primary" disabled={isLoading}
+           style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            borderRadius: "5px",
+            fontWeight: "bold",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
+          }}
           >
-            edit Test
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Edit Test"
+            )}
           </Button>
         </form>
       </div>

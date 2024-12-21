@@ -1,7 +1,7 @@
 /* eslint-disable no-constant-binary-expression */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +22,9 @@ const AddTestList = () => {
     getAllSpeciesList,
     allspecies,
     getAllItemList,
-    allItemList,getAllConatinerList,allContainerList
+    allItemList,
+    getAllConatinerList,
+    allContainerList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -57,6 +59,7 @@ const AddTestList = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts1, setSelectedProducts1] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleObseravition = (index, value) => {
     const updatedObservations = [...inputData.observation];
@@ -125,9 +128,9 @@ const AddTestList = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -169,9 +172,13 @@ const AddTestList = () => {
       formDataToSend.append(`items[${i}][quantity]`, el.quantity);
     });
 
-    addTest(formDataToSend);
-
-    console.log(formDataToSend);
+    try {
+      await addTest(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -815,6 +822,7 @@ const AddTestList = () => {
           <Button
             type="submit"
             color="primary"
+            disabled={isLoading}
             style={{
               marginTop: "20px",
               padding: "10px 20px",
@@ -823,7 +831,13 @@ const AddTestList = () => {
               boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
             }}
           >
-            add Test
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Test"
+            )}
           </Button>
         </form>
       </div>

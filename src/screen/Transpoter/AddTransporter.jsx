@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +55,7 @@ const AddTransporter = () => {
   const [pincode, setPincode] = useState("");
   const [pincodes, setPincodes] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAddPincode = () => {
     if (pincode) {
@@ -93,9 +94,9 @@ const AddTransporter = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -137,8 +138,13 @@ const AddTransporter = () => {
       formDataToSend.append("image", inputData.image); // Append the file as binary
     }
 
-    addTransporters(formDataToSend);
-
+    try {
+      await addTransporters(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
     console.log(formDataToSend);
   };
 
@@ -368,10 +374,14 @@ const AddTransporter = () => {
             </div>
           </div>
 
-          {/* Image previews */}
-
-          <Button type="submit" color="primary">
-            Add Transporter
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Transporter"
+            )}
           </Button>
         </form>
       </div>

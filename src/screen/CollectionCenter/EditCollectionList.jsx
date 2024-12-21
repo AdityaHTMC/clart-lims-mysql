@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
@@ -46,6 +46,7 @@ const EditCollectionList = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
+   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (CCDetails) {
@@ -108,9 +109,9 @@ const EditCollectionList = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const SelectedProductIdsLL = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -140,7 +141,15 @@ const EditCollectionList = () => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
 
-    editCC(id,formDataToSend);
+    try {
+      await editCC(id,formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
+    
   };
 
   return (
@@ -374,8 +383,15 @@ const EditCollectionList = () => {
             </div>
           </div>
 
-          <Button type="submit" color="primary">
-            Edit
+
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Edit"
+            )}
           </Button>
         </form>
       </div>

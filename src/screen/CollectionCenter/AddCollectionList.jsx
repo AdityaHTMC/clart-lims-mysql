@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
@@ -39,6 +39,7 @@ const AddCollectionList = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -75,9 +76,9 @@ const AddCollectionList = () => {
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map(product => product.id)
     ];
@@ -114,9 +115,16 @@ const AddCollectionList = () => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addCollection(formDataToSend);
+    try {
+      await addCollection(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
 
-    console.log(formDataToSend);
+    
+
   };
 
   return (
@@ -446,9 +454,15 @@ const AddCollectionList = () => {
           )}
         </div> */}
 
-        <Button type="submit" color="primary">
-          Add Collection Center
-        </Button>
+        <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Collection Center"
+            )}
+          </Button>
       </form>
     </div>
     </>

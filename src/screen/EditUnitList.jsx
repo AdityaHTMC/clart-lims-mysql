@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, Input, Label } from "reactstrap";
+import { Button, FormGroup, Input, Label, Spinner } from "reactstrap";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
-
 
 const EditUnitList = () => {
   const navigate = useNavigate();
@@ -23,7 +22,9 @@ const EditUnitList = () => {
     unitDropdown,
     getAllLabs,
     labDropdown,
-    getunitDetails,unitDetails, editUnit
+    getunitDetails,
+    unitDetails,
+    editUnit,
   } = useCategoryContext();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const EditUnitList = () => {
 
   useEffect(() => {
     if (id) {
-    getunitDetails(id);
+      getunitDetails(id);
     }
   }, [id]);
 
@@ -55,6 +56,7 @@ const EditUnitList = () => {
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (unitDetails) {
@@ -76,12 +78,12 @@ const EditUnitList = () => {
         );
 
         if (selectedState) {
-
           getallDistrictList(selectedState.id);
         }
       }
       setSelectedProducts(unitDetails.data.associated_lab_details || []);
-      setSelectedProducts3(unitDetails.data.associated_collection_centers_details || []
+      setSelectedProducts3(
+        unitDetails.data.associated_collection_centers_details || []
       );
     }
   }, [unitDetails]);
@@ -96,9 +98,8 @@ const EditUnitList = () => {
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: "" }); 
+    setInputData({ ...inputData, state: selectedStateName, district: "" });
 
-  
     const selectedState = allstateList?.data?.find(
       (state) => state.state === selectedStateName
     );
@@ -119,16 +120,16 @@ const EditUnitList = () => {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
 
     const allSelectedProduct3Ids = [
-        ...selectedProducts3.map((product) => product.id),
-      ];
+      ...selectedProducts3.map((product) => product.id),
+    ];
 
     const formDataToSend = new FormData();
 
@@ -142,14 +143,20 @@ const EditUnitList = () => {
     formDataToSend.append("pincode", inputData.pincode);
 
     allSelectedProduct3Ids.forEach((id, index) => {
-        formDataToSend.append(`associated_collection_centers[${index}]`, id);
-      });
+      formDataToSend.append(`associated_collection_centers[${index}]`, id);
+    });
 
-      allSelectedProductIds.forEach((id, index) => {
-        formDataToSend.append(`associated_labs[${index}]`, id);
-      });
+    allSelectedProductIds.forEach((id, index) => {
+      formDataToSend.append(`associated_labs[${index}]`, id);
+    });
 
-    editUnit(id,formDataToSend);
+    try {
+      await editUnit(id, formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -353,10 +360,14 @@ const EditUnitList = () => {
             </div>
           </div>
 
-    
-
-          <Button type="submit" color="primary">
-          Edit
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Edit Unit"
+            )}
           </Button>
         </form>
       </div>

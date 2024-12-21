@@ -9,6 +9,7 @@ import {
   FormText,
   Input,
   Label,
+  Spinner,
 } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { FaTrash, FaPlus } from "react-icons/fa";
@@ -42,6 +43,7 @@ const AddCustomer = () => {
   });
 
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -83,9 +85,9 @@ const AddCustomer = () => {
   };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const formDataToSend = new FormData();
 
     formDataToSend.append("name", inputData.name);
@@ -114,9 +116,14 @@ const AddCustomer = () => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addCustomer(formDataToSend);
+    try {
+      await addCustomer(formDataToSend);;
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
 
-    console.log(formDataToSend);
   };
 
   return (
@@ -294,10 +301,14 @@ const AddCustomer = () => {
          </div>
           </div>
 
-        
-
-          <Button type="submit" color="primary">
-            Add Customer
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Customer"
+            )}
           </Button>
         </form>
       </div>

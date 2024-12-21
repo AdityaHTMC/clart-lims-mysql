@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -52,6 +52,7 @@ const AddB2b = () => {
   const [selectedProducts3, setSelectedProducts3] = useState([]);
   const [error, setError] = useState("");
   const [gsterror, setgsterror] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -119,9 +120,9 @@ const AddB2b = () => {
     setInputData({ ...inputData, district: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -163,7 +164,13 @@ const AddB2b = () => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addB2b(formDataToSend);
+    try {
+      await addB2b(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -497,8 +504,14 @@ const AddB2b = () => {
             )}
           </div> */}
 
-          <Button type="submit" color="primary">
-            Add B2B
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add B2B"
+            )}
           </Button>
         </form>
       </div>

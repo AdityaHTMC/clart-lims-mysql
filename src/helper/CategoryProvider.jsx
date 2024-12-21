@@ -35,6 +35,7 @@ export const CategoryProvider = ({ children }) => {
 
   const getunitList = async (dataToSend) => {
     try {
+      setUnitLists({...unitLists, loading: true});
       const response = await axios.post(
         `${base_url}/admin/unit/list`,
         {...dataToSend},
@@ -91,7 +92,6 @@ export const CategoryProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            "Content-Type": "multipart/form-data", // Set correct content type for FormData
           },
         }
       );

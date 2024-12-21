@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -45,6 +45,7 @@ const AddLab = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -62,11 +63,13 @@ const AddLab = () => {
 
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
+    setInputData({ ...inputData, state: selectedStateName, district: "" }); // Update state and reset district
 
     // Find the selected state object based on the state name
-    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+    const selectedState = allstateList?.data?.find(
+      (state) => state.state === selectedStateName
+    );
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -77,9 +80,9 @@ const AddLab = () => {
     setInputData({ ...inputData, district: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -111,7 +114,13 @@ const AddLab = () => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addlab(formDataToSend);
+    try {
+      await addlab(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -131,7 +140,9 @@ const AddLab = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-                <Label for="title" className="col-form-label">Organization Name <span className="text-danger">*</span></Label>
+                <Label for="title" className="col-form-label">
+                  Organization Name <span className="text-danger">*</span>
+                </Label>
                 <Input
                   type="text"
                   name="organization_name"
@@ -175,7 +186,7 @@ const AddLab = () => {
                   id="mobile"
                   required
                 />
-                {error && <FormText color="danger">{error}</FormText>} 
+                {error && <FormText color="danger">{error}</FormText>}
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -230,7 +241,6 @@ const AddLab = () => {
               </FormGroup>
             </div>
           </div>
-
 
           <div className="row">
             <div className="col-md-6">
@@ -402,8 +412,14 @@ const AddLab = () => {
             )}
           </div> */}
 
-          <Button type="submit" color="primary">
-            Add Lab
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Lab"
+            )}
           </Button>
         </form>
       </div>

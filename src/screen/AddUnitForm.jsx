@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
 import { useCategoryContext } from "../helper/CategoryProvider";
 import { FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -9,14 +9,20 @@ const AddUnitForm = () => {
   const navigate = useNavigate();
 
   const {
-    addUnit,getAllLabs,labDropdown,getAllCollection,collectionDropdown} = useCategoryContext();
-  const {getallstateList,getallDistrictList,allstateList,alldistrictList} = useCategoryContext();
+    addUnit,
+    getAllLabs,
+    labDropdown,
+    getAllCollection,
+    collectionDropdown,
+  } = useCategoryContext();
+  const { getallstateList, getallDistrictList, allstateList, alldistrictList } =
+    useCategoryContext();
 
-  useEffect(()=>{
-    getAllCollection()
-    getAllLabs()
-    getallstateList()
-  },[])
+  useEffect(() => {
+    getAllCollection();
+    getAllLabs();
+    getallstateList();
+  }, []);
 
   const [inputData, setInputData] = useState({
     organization_name: "",
@@ -33,7 +39,7 @@ const AddUnitForm = () => {
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [error, setError] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -49,14 +55,15 @@ const AddUnitForm = () => {
     }));
   };
 
-
   const handleStateChange = (e) => {
     const selectedStateName = e.target.value;
-    setInputData({ ...inputData, state: selectedStateName, district: '' }); // Update state and reset district
+    setInputData({ ...inputData, state: selectedStateName, district: "" }); // Update state and reset district
 
     // Find the selected state object based on the state name
-    const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+    const selectedState = allstateList?.data?.find(
+      (state) => state.state === selectedStateName
+    );
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -67,17 +74,15 @@ const AddUnitForm = () => {
     setInputData({ ...inputData, district: e.target.value });
   };
 
-
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+    setIsLoading(true);
     const allSelectedProductIds = [
-      ...selectedProducts.map(product => product.id)
+      ...selectedProducts.map((product) => product.id),
     ];
-    
+
     const allSelectedProduct2Ids = [
-      ...selectedProducts2.map(product => product.id)
+      ...selectedProducts2.map((product) => product.id),
     ];
 
     const formDataToSend = new FormData();
@@ -87,15 +92,15 @@ const AddUnitForm = () => {
     formDataToSend.append("mobile", inputData.mobile);
     formDataToSend.append("password", inputData.password);
     formDataToSend.append("email", inputData.email);
-    formDataToSend.append("address", inputData.address );
-    formDataToSend.append("district", inputData.district );
-    formDataToSend.append("state", inputData.state );
-    formDataToSend.append("pincode", inputData.pincode );
-    
+    formDataToSend.append("address", inputData.address);
+    formDataToSend.append("district", inputData.district);
+    formDataToSend.append("state", inputData.state);
+    formDataToSend.append("pincode", inputData.pincode);
+
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
-  
+
     // Append associated_labs with array index
     allSelectedProduct2Ids.forEach((id, index) => {
       formDataToSend.append(`associated_labs[${index}]`, id);
@@ -104,7 +109,13 @@ const AddUnitForm = () => {
     //   formDataToSend.append(`images[${index}]`, image);
     // });
 
-    addUnit(formDataToSend);
+    try {
+      await addUnit(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
 
     console.log(formDataToSend);
   };
@@ -115,21 +126,22 @@ const AddUnitForm = () => {
         onSubmit={handleSubmit}
         style={{
           backgroundColor: "#ffffff",
-            padding: "30px",
-            borderRadius: "10px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            border: "1px solid #e0e0e0",
+          padding: "30px",
+          borderRadius: "10px",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          border: "1px solid #e0e0e0",
         }}
       >
         <div className="row">
           <div className="col-md-6">
             <FormGroup>
-              <Label for="title" className="col-form-label">Organization Name <span className="text-danger">*</span></Label>
+              <Label for="title" className="col-form-label">
+                Organization Name <span className="text-danger">*</span>
+              </Label>
               <Input
                 type="text"
                 name="organization_name"
                 value={inputData.organization_name}
-            
                 onChange={handleInputChange}
                 id="organization_name"
                 required
@@ -139,7 +151,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="contact_person" className="col-form-label">
-              Contact Person <span className="text-danger">*</span>
+                Contact Person <span className="text-danger">*</span>
               </Label>
               <Input
                 type="text"
@@ -169,11 +181,11 @@ const AddUnitForm = () => {
                 id="mobile"
                 required
               />
-               {error && <FormText color="danger">{error}</FormText>} 
+              {error && <FormText color="danger">{error}</FormText>}
             </FormGroup>
           </div>
           <div className="col-md-6">
-          <FormGroup>
+            <FormGroup>
               <Label htmlFor="pincode" className="col-form-label">
                 Pincode <span className="text-danger">*</span>
               </Label>
@@ -212,7 +224,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="address" className="col-form-label">
-                Address 
+                Address
               </Label>
               <Input
                 type="text"
@@ -225,100 +237,99 @@ const AddUnitForm = () => {
           </div>
         </div>
 
-  
         <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="state" className="col-form-label">
-                  State:
-                </Label>
-                <Input
-                  type="select"
-                  name="state"
-                  value={inputData.state}
-                  onChange={handleStateChange}
-                  id="state"
-                >
-                  <option value="">Select State</option>
-                  {allstateList?.data?.map((state) => (
-                    <option key={state._id} value={state.state}>
-                      {state.state}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </div>
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="district" className="col-form-label">
-                  District:
-                </Label>
-                <Input
-                  type="select"
-                  name="district"
-                  value={inputData.district}
-                  onChange={handleDistrictChange}
-                  id="district"
-                  disabled={!inputData.state} // Disable until a state is selected
-                >
-                  <option value="">Select District</option>
-                  {alldistrictList?.data?.map((district) => (
-                    <option key={district._id} value={district.district}>
-                      {district.district}
-                    </option>
-                  ))}
-                </Input>
-              </FormGroup>
-            </div>
+          <div className="col-md-6">
+            <FormGroup>
+              <Label htmlFor="state" className="col-form-label">
+                State:
+              </Label>
+              <Input
+                type="select"
+                name="state"
+                value={inputData.state}
+                onChange={handleStateChange}
+                id="state"
+              >
+                <option value="">Select State</option>
+                {allstateList?.data?.map((state) => (
+                  <option key={state._id} value={state.state}>
+                    {state.state}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
           </div>
+          <div className="col-md-6">
+            <FormGroup>
+              <Label htmlFor="district" className="col-form-label">
+                District:
+              </Label>
+              <Input
+                type="select"
+                name="district"
+                value={inputData.district}
+                onChange={handleDistrictChange}
+                id="district"
+                disabled={!inputData.state} // Disable until a state is selected
+              >
+                <option value="">Select District</option>
+                {alldistrictList?.data?.map((district) => (
+                  <option key={district._id} value={district.district}>
+                    {district.district}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+          </div>
+        </div>
 
         <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label for="New">Add Collection Center</Label>
-                <Autocomplete
-                  sx={{ m: 1 }}
-                  multiple
-                  options={collectionDropdown.data || []}
-                  getOptionLabel={(option) => option?.organization_name || ""}
-                  value={selectedProducts}
-                  onChange={(event, newValue) => setSelectedProducts(newValue)}
-                  disableCloseOnSelect
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
-                    />
-                  )}
-                />
-              </FormGroup>
-            </div>
-
-            <div className="col-md-6">
-              <FormGroup>
-                <Label for="New">Add New Lab Center</Label>
-                <Autocomplete
-                  sx={{ m: 1 }}
-                  multiple
-                  options={labDropdown.data || []}
-                  getOptionLabel={(option) => option?.organization_name || ""}
-                  value={selectedProducts2}
-                  onChange={(event, newValue) => setSelectedProducts2(newValue)}
-                  disableCloseOnSelect
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      variant="outlined"
-                      label="Select Collection Center"
-                      placeholder="Select Collection Center"
-                    />
-                  )}
-                />
-              </FormGroup>
-            </div>
+          <div className="col-md-6">
+            <FormGroup>
+              <Label for="New">Add Collection Center</Label>
+              <Autocomplete
+                sx={{ m: 1 }}
+                multiple
+                options={collectionDropdown.data || []}
+                getOptionLabel={(option) => option?.organization_name || ""}
+                value={selectedProducts}
+                onChange={(event, newValue) => setSelectedProducts(newValue)}
+                disableCloseOnSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Collection Center"
+                    placeholder="Select Collection Center"
+                  />
+                )}
+              />
+            </FormGroup>
           </div>
+
+          <div className="col-md-6">
+            <FormGroup>
+              <Label for="New">Add New Lab Center</Label>
+              <Autocomplete
+                sx={{ m: 1 }}
+                multiple
+                options={labDropdown.data || []}
+                getOptionLabel={(option) => option?.organization_name || ""}
+                value={selectedProducts2}
+                onChange={(event, newValue) => setSelectedProducts2(newValue)}
+                disableCloseOnSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Collection Center"
+                    placeholder="Select Collection Center"
+                  />
+                )}
+              />
+            </FormGroup>
+          </div>
+        </div>
 
         {/* <div className="row">
           <div className="col-md-6">
@@ -397,8 +408,14 @@ const AddUnitForm = () => {
           )}
         </div> */}
 
-        <Button type="submit" color="primary">
-          Add Unit
+        <Button type="submit" color="primary" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner size="sm" /> Submitting...
+            </>
+          ) : (
+            "Add Unit"
+          )}
         </Button>
       </form>
     </div>

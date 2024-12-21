@@ -50,7 +50,6 @@ const AddPhlebotomist = () => {
     }
   }, [inputData.stateId]);
 
-  const [isProcessing, setIsProcessing] = useState(false);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
@@ -58,6 +57,7 @@ const AddPhlebotomist = () => {
   const [pincodes, setPincodes] = useState([]);
   const [error, setError] = useState("");
   const [aadhaarError, setAadhaarError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const handleAddPincode = () => {
     if (pincode) {
       setPincodes([...pincodes, pincode]);
@@ -106,7 +106,7 @@ const AddPhlebotomist = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
@@ -153,11 +153,16 @@ const AddPhlebotomist = () => {
     if (inputData.image) {
       formDataToSend.append("image", inputData.image); // Append the file as binary
     }
-    setIsProcessing(true);
-    const res = await addphlebotomist(formDataToSend);
-    setIsProcessing(false);
 
-    console.log(formDataToSend);
+  
+    try {
+      await addphlebotomist(formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
   };
 
   return (
@@ -461,9 +466,17 @@ const AddPhlebotomist = () => {
 
           {/* Image previews */}
 
-          <Button type="submit" color="primary" disabled={isProcessing}>
-            {isProcessing ? <Spinner size="sm" /> : "Add Phlebotomist"}
-          </Button>
+            <Button type="submit" color="primary" disabled={isLoading}>
+                      {isLoading ? (
+                        <>
+                          <Spinner size="sm" /> Submitting...
+                        </>
+                      ) : (
+                        "Add Phlebotomist"
+                      )}
+                    </Button>
+
+         
         </form>
       </div>
     </>
