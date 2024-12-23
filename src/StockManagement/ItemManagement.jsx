@@ -75,7 +75,6 @@ const ItemManagement = () => {
     item_group_id: "",
     amount: "",
     low_quantity_alert: "",
-    stock_quantity: "",
     unit: "",
   });
 
@@ -88,7 +87,6 @@ const ItemManagement = () => {
     item_group_id: "",
     amount: "",
     low_quantity_alert: "",
-    stock_quantity: "",
     id: "",
     unit: "",
   });
@@ -109,7 +107,6 @@ const ItemManagement = () => {
       item_group_id: "",
       amount: "",
       low_quantity_alert: "",
-      stock_quantity: "",
       id: "",
       unit: "",
     });
@@ -122,7 +119,6 @@ const ItemManagement = () => {
       item_group_id: "",
       amount: "",
       low_quantity_alert: "",
-      stock_quantity: "",
       id: "",
     });
   };
@@ -132,7 +128,7 @@ const ItemManagement = () => {
     const { name, value } = e.target;
     setSelectedvarity((prevState) => ({
       ...prevState,
-      [name]: ["low_quantity_alert", "stock_quantity", "item_group_id", "amount"].includes(name)
+      [name]: ["low_quantity_alert", "item_group_id", "amount"].includes(name)
         ? parseInt(value, 10) || 0
         : value,
     }));
@@ -170,7 +166,7 @@ const ItemManagement = () => {
     const { name, value } = e.target;
     setFormData((prevState) => ({
       ...prevState,
-      [name]: ["low_quantity_alert", "stock_quantity", "item_group_id", "amount"].includes(name)
+      [name]: ["low_quantity_alert", "item_group_id", "amount"].includes(name)
         ? parseInt(value, 10) || 0
         : value,
     }));
@@ -180,12 +176,12 @@ const ItemManagement = () => {
   // Handle form submission
   const handleSubmit = async() => {
     const newErrors = {};
-     setIsLoading(true);
+    
     // Validate required fields
     if (!formData.name) newErrors.name = "Name is required.";
     if (!formData.item_group_id) newErrors.item_group_id = "Item Group is required.";
     if (!formData.amount) newErrors.amount = "Amount is required.";
-    if (!formData.stock_quantity) newErrors.stock_quantity = "Stock Quantity is required.";
+    // if (!formData.stock_quantity) newErrors.stock_quantity = "Stock Quantity is required.";
     if (!formData.low_quantity_alert) newErrors.low_quantity_alert = "Low Quantity Alert is required.";
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors); // Set errors to display
@@ -193,6 +189,7 @@ const ItemManagement = () => {
     }
   
     try {
+      setIsLoading(true);
       await  addIM(formData);;
     } catch (error) {
       console.error("Error submitting the form:", error);
@@ -400,21 +397,7 @@ const ItemManagement = () => {
                 />
                {errors.amount && <span className="text-danger">{errors.low_quantity_alert}</span>}
               </FormGroup>
-              <FormGroup className="col-md-6">
-                <Label htmlFor="stock_quantity" className="col-form-label">
-                  Stock Quantity :
-                </Label>
-                <Input
-                  type="number"
-                  name="stock_quantity"
-                  min={0}
-                  value={formData.stock_quantity}
-                  onChange={handleInputChange}
-                  id="stock_quantity"
-                  required
-                />
-                {errors.stock_quantity && <span className="text-danger">{errors.stock_quantity}</span>}
-              </FormGroup>
+
             </div>
             <div className="row">
             <FormGroup className="col-md-6">
