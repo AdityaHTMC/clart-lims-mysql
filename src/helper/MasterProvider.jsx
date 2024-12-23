@@ -2129,9 +2129,9 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
-  const editDocList = async (id,dataToSend) => {
+  const editDocList = async (dataToSend) => {
     try {
-     
+      const {id} = dataToSend
       const response = await axios.put(
         `${base_url}/admin/doctor/update/${id}`,
         dataToSend,

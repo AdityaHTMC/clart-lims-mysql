@@ -225,8 +225,6 @@ const CmsList = () => {
                     <thead>
                       <tr>
                         <th>Title</th>
-                        {/* <th>Description</th> */}
-                        {/* <th>status</th> */}
                         <th>Action</th>
                       </tr>
                     </thead>

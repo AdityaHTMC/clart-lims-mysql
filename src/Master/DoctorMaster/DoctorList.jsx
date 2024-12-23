@@ -44,7 +44,7 @@ const DoctorList = () => {
 
   const [formData, setFormData] = useState({
     name: "",
-    colleciton_center_id: "",
+    collection_center_id: "",
     registration_number: "",
   });
 
@@ -59,7 +59,7 @@ const DoctorList = () => {
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
-    colleciton_center_id    : "",
+    collection_center_id    : "",
     registration_number: "",
     id: "",
   });
@@ -86,7 +86,7 @@ const DoctorList = () => {
     setModalOpen(false);
     setSelectedvarity({
       name: "",
-      colleciton_center_id: "",
+      collection_center_id: "",
       registration_number: "",
       id: "",
     });
@@ -96,7 +96,7 @@ const DoctorList = () => {
     setOpen(false);
     setFormData({
       name: "",
-      colleciton_center_id: "",
+      collection_center_id: "",
       registration_number: "",
       id: "",
     });
@@ -113,7 +113,13 @@ const DoctorList = () => {
 
   // Handle submit for updating the brand
   const handleSubmits = () => {
-    editDocList(selectedvarity.id, selectedvarity);
+    const dataToSend = {
+      name: selectedvarity.name,
+      collection_center_id    : selectedvarity.collection_center_id,
+      registration_number: selectedvarity.registration_number,
+      id: selectedvarity.id,
+    }
+    editDocList(dataToSend);
     onCloseModal2();
   };
 
@@ -163,7 +169,7 @@ const DoctorList = () => {
                       <tr>
                         <th>Name </th>
                         <th>Registration Number</th>
-                        <th>Sahc Name</th>
+                        <th>Collection Center Name</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -185,7 +191,7 @@ const DoctorList = () => {
                           <tr key={index}>
                             <td>{product.name}</td>
                             <td>{product.registration_number}</td>
-                            <td>{product.sahc_name}</td>
+                            <td>{product.collection_center_name}</td>
                             <td>
                               <div className="circelBtnBx">
                                 <Button
@@ -264,15 +270,15 @@ const DoctorList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="colleciton_center_id" className="col-form-label">
+              <Label htmlFor="collection_center_id" className="col-form-label">
                 Collection Center:
               </Label>
               <Input
                 type="select"
-                name="colleciton_center_id"
-                value={formData.colleciton_center_id}
+                name="collection_center_id"
+                value={formData.collection_center_id}
                 onChange={handleInputChange}
-                id="colleciton_center_id"
+                id="collection_center_id"
               >
                 <option value="">Select Collection Center</option>
                 {collectionDropdown?.data?.map((item) => (
@@ -327,15 +333,15 @@ const DoctorList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="colleciton_center_id" className="col-form-label">
+              <Label htmlFor="collection_center_id" className="col-form-label">
                 Collection Center:
               </Label>
               <Input
                 type="select"
-                name="colleciton_center_id"
-                value={selectedvarity.colleciton_center_id}
+                name="collection_center_id"
+                value={selectedvarity.collection_center_id}
                 onChange={handleInputChanges}
-                id="colleciton_center_id"
+                id="collection_center_id"
               >
                 <option value="">Select Collection</option>
                 {collectionDropdown?.data?.map((variety) => (
