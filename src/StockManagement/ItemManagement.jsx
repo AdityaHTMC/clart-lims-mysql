@@ -180,7 +180,7 @@ const ItemManagement = () => {
   // Handle form submission
   const handleSubmit = async() => {
     const newErrors = {};
-     setIsLoading(true);
+    
     // Validate required fields
     if (!formData.name) newErrors.name = "Name is required.";
     if (!formData.item_group_id) newErrors.item_group_id = "Item Group is required.";
@@ -193,6 +193,7 @@ const ItemManagement = () => {
     }
   
     try {
+      setIsLoading(true);
       await  addIM(formData);;
     } catch (error) {
       console.error("Error submitting the form:", error);
