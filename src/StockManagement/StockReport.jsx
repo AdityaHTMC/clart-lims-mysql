@@ -42,7 +42,10 @@ const StockReport = () => {
     purchaseList,
     getallvendorlist,
     allvendorList,
-    addPurchase,addStockissue, getStockReportList ,srList
+    addPurchase,
+    addStockissue,
+    getStockReportList,
+    srList,
   } = useStockContext();
   const { getAllItemList, allItemList } = useMasterContext();
 
@@ -56,14 +59,14 @@ const StockReport = () => {
     getAllphlebotomist,
     phlebotomistList,
   } = useCategoryContext();
- 
+
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
   const itemperPage = 12;
 
-  const totalPages =
-  srList?.total && Math.ceil(srList?.total / itemperPage);
+  const totalPages = srList?.total && Math.ceil(srList?.total / itemperPage);
 
   useEffect(() => {
     getPurchaseList();
@@ -71,13 +74,13 @@ const StockReport = () => {
     getallvendorlist();
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     const dataToSend = {
       page: currentPage,
       limit: itemperPage,
     };
-    getStockReportList(dataToSend)
-  },[currentPage])
+    getStockReportList(dataToSend);
+  }, [currentPage]);
 
   const [selectedOption, setSelectedOption] = useState(""); // For storing which radio is selected
   const [dropdownData, setDropdownData] = useState([]); // For storing dropdown data
@@ -87,6 +90,8 @@ const StockReport = () => {
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value); // Set the selected radio button option
   };
+
+
 
   // Fetch data when the selected option changes
   useEffect(() => {
@@ -145,11 +150,29 @@ const StockReport = () => {
 
   const [open, setOpen] = useState(false);
 
-
   const onOpenModal = () => {
     setOpen(true);
   };
 
+  useEffect(() => {
+    // Validate the form whenever formData or selectedOption changes
+    const validateForm = () => {
+      if (!selectedOption || !selectedStockIssue) {
+        return false;
+      }
+
+      return formData.stock.every(
+        (item) =>
+          item.item_id &&
+          item.quantity &&
+          item.amount &&
+          !isNaN(item.quantity) &&
+          !isNaN(item.amount)
+      );
+    };
+
+    setIsFormValid(validateForm());
+  }, [formData, selectedOption, selectedStockIssue]);
 
   const onCloseModal = () => {
     setOpen(false);
@@ -165,10 +188,6 @@ const StockReport = () => {
       ],
     });
   };
-
-
-
-
 
   // Handle input changes
   const handleInputChange = (e, index) => {
@@ -226,9 +245,9 @@ const StockReport = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     const formDataToSend = new FormData();
-    
+
     if (selectedOption === "unit") {
       formDataToSend.append("issued_to_unit", selectedStockIssue);
     } else if (selectedOption === "lab") {
@@ -249,7 +268,7 @@ const StockReport = () => {
     setIsLoading(true);
 
     try {
-      await addStockissue(formDataToSend);;
+      await addStockissue(formDataToSend);
     } catch (error) {
       console.error("Error submitting the form:", error);
     } finally {
@@ -309,27 +328,25 @@ const StockReport = () => {
                       ) : (
                         srList?.data?.map((product, index) => (
                           <tr key={index}>
-                            
-
                             <td id={`item_name-${index}`}>
-                                {product?.item_name
-                                  ? product.item_name.length > 15
-                                    ? `${product.item_name.slice(0, 15)}...`
-                                    : product.item_name
-                                  : "NA"}
-                                {product?.item_name && (
-                                  <UncontrolledTooltip
-                                    placement="top"
-                                    target={`item_name-${index}`}
-                                  >
-                                    {product?.item_name}
-                                  </UncontrolledTooltip>
-                                )}
-                              </td>
+                              {product?.item_name
+                                ? product.item_name.length > 15
+                                  ? `${product.item_name.slice(0, 15)}...`
+                                  : product.item_name
+                                : "NA"}
+                              {product?.item_name && (
+                                <UncontrolledTooltip
+                                  placement="top"
+                                  target={`item_name-${index}`}
+                                >
+                                  {product?.item_name}
+                                </UncontrolledTooltip>
+                              )}
+                            </td>
 
                             <td>{product?.vendor_name || "NA"}</td>
                             <td>{product?.quantity || 0}</td>
-                            <td>{product?.used_quantity }</td>
+                            <td>{product?.used_quantity}</td>
                             {/* <td>{product.purchased_quantity}</td> */}
                             <td>{product?.amount}</td>
                             <td>{product?.issued_to}</td>
@@ -346,14 +363,14 @@ const StockReport = () => {
                     </tbody>
                   </Table>
                   <Stack className="rightPagination mt10" spacing={2}>
-                      <Pagination
-                        color="primary"
-                        count={totalPages}
-                        page={currentPage}
-                        shape="rounded"
-                        onChange={(event, value) => handlepagechange(value)}
-                      />
-                    </Stack>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                 </div>
               </CardBody>
             </Card>
@@ -534,11 +551,10 @@ const StockReport = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-
-        <Button
+          <Button
             type="submit"
             color="primary"
-            disabled={isLoading}
+            disabled={!isFormValid || isLoading} // Disable if form is invalid or loading
             onClick={handleSubmit}
           >
             {isLoading ? (
@@ -554,8 +570,6 @@ const StockReport = () => {
           </Button>
         </ModalFooter>
       </Modal>
-
-      
     </>
   );
 };

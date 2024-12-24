@@ -476,7 +476,7 @@ const ItemManagement = () => {
       >
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Unit
+            Edit Item
           </h5>
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>

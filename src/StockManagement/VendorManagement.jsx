@@ -40,11 +40,11 @@ const VendorManagement = () => {
   const { getvendorList, addVendor, editVendor, deletevendor, vendorList } =
     useStockContext();
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState("");
-    const itemperPage = 8;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const itemperPage = 8;
 
-    const totalPages =
+  const totalPages =
     vendorList?.total && Math.ceil(vendorList?.total / itemperPage);
 
   useEffect(() => {
@@ -64,12 +64,14 @@ const VendorManagement = () => {
     state: "",
     district: "",
     pincode: "",
-    GSTIN:"",
-    PAN : "",
+    GSTIN: "",
+    PAN: "",
   });
 
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
@@ -80,8 +82,8 @@ const VendorManagement = () => {
     state: "",
     district: "",
     pincode: "",
-    GSTIN:"",
-    PAN : "",
+    GSTIN: "",
+    PAN: "",
   });
 
   const onOpenModal = () => {
@@ -105,8 +107,8 @@ const VendorManagement = () => {
       district: "",
       pincode: "",
       id: "",
-      GSTIN:"",
-      PAN : "",
+      GSTIN: "",
+      PAN: "",
     });
   };
 
@@ -146,8 +148,28 @@ const VendorManagement = () => {
   };
 
   // Handle form submission
-  const handleSubmit = () => {
-    addVendor(formData);
+  const handleSubmit = async () => {
+    const newErrors = {};
+    // Validate required fields
+    if (!formData.name) newErrors.name = "Name is required.";
+    if (!formData.contact_person)
+      newErrors.contact_person = "Contact Person is required.";
+    if (!formData.mobile) newErrors.mobile = "Mobile is required.";
+    if (!formData.GSTIN) newErrors.GSTIN = "GSTIN is required.";
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors); // Set errors to display
+      return; // Stop form submission
+    }
+
+    try {
+      setIsLoading(true);
+      await addVendor(formData);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
+
     onCloseModal();
   };
 
@@ -226,14 +248,14 @@ const VendorManagement = () => {
                   </Table>
 
                   <Stack className="rightPagination mt10" spacing={2}>
-                      <Pagination
-                        color="primary"
-                        count={totalPages}
-                        page={currentPage}
-                        shape="rounded"
-                        onChange={(event, value) => handlepagechange(value)}
-                      />
-                    </Stack>
+                    <Pagination
+                      color="primary"
+                      count={totalPages}
+                      page={currentPage}
+                      shape="rounded"
+                      onChange={(event, value) => handlepagechange(value)}
+                    />
+                  </Stack>
                 </div>
               </CardBody>
             </Card>
@@ -260,7 +282,9 @@ const VendorManagement = () => {
                   value={formData.name}
                   onChange={handleInputChange}
                   id="name"
+                  required
                 />
+                {errors.name && <span className="text-danger">{errors.name}</span>}
               </FormGroup>
               <FormGroup className="col-md-6">
                 <Label htmlFor="contact_person" className="col-form-label">
@@ -272,7 +296,11 @@ const VendorManagement = () => {
                   value={formData.contact_person}
                   onChange={handleInputChange}
                   id="contact_person"
+                  required
                 />
+                {errors.contact_person && (
+                  <span className="text-danger">{errors.contact_person}</span>
+                )}
               </FormGroup>
             </div>
 
@@ -287,6 +315,7 @@ const VendorManagement = () => {
                   value={formData.email}
                   onChange={handleInputChange}
                   id="email"
+                  required
                 />
               </FormGroup>
               <FormGroup className="col-md-6">
@@ -300,7 +329,9 @@ const VendorManagement = () => {
                   value={formData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
+                  required
                 />
+                {errors.mobile && <span className="text-danger">{errors.mobile}</span>}
               </FormGroup>
             </div>
 
@@ -354,6 +385,7 @@ const VendorManagement = () => {
                   value={formData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
+                  required
                 />
               </FormGroup>
             </div>
@@ -369,11 +401,13 @@ const VendorManagement = () => {
                   value={formData.GSTIN}
                   onChange={handleInputChange}
                   id="GSTIN"
+                  required
                 />
+                {errors.GSTIN && <span className="text-danger">{errors.GSTIN}</span>}
               </FormGroup>
               <FormGroup className="col-md-6">
                 <Label htmlFor="PAN" className="col-form-label">
-                 PAN :
+                  PAN :
                 </Label>
                 <Input
                   type="number"
@@ -387,8 +421,20 @@ const VendorManagement = () => {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={handleSubmit}>
-            Save
+
+        <Button
+            type="submit"
+            color="primary"
+            disabled={isLoading}
+            onClick={handleSubmit}
+          >
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Save"
+            )}
           </Button>
           <Button color="secondary" onClick={onCloseModal}>
             Close
@@ -404,7 +450,7 @@ const VendorManagement = () => {
       >
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Unit
+            Edit Item
           </h5>
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
