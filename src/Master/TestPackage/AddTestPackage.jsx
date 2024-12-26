@@ -30,6 +30,7 @@ const AddTestPackage = () => {
     price: "",
     sell_price: "",
     is_popular: "",
+    hsn_code: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -75,6 +76,7 @@ const AddTestPackage = () => {
     formDataToSend.append("price", inputData.price);
     formDataToSend.append("sell_price", inputData.sell_price );
     formDataToSend.append("is_popular", inputData.is_popular );
+    formDataToSend.append("hsn_code", inputData.hsn_code );
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`tests[${index}]`, parseInt(id, 10));
     });
@@ -256,6 +258,23 @@ const AddTestPackage = () => {
                     </Label>
                   </div>
                 </div>
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="hsn_code" className="col-form-label">
+                 Hsn Code:
+                </Label>
+                <Input
+                  type="text"
+                  name="hsn_code"
+                  value={inputData.hsn_code}
+                  onChange={handleInputChange}
+                  id="hsn_code"
+                />
               </FormGroup>
             </div>
           </div>

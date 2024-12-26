@@ -53,6 +53,7 @@ const AddTestList = () => {
     method: "",
     observation: [""],
     container_id: "",
+    hsn_code: "",
   });
 
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
@@ -151,6 +152,7 @@ const AddTestList = () => {
     formDataToSend.append("method", inputData.method);
     formDataToSend.append("is_popular", inputData.is_popular);
     formDataToSend.append("container_id", inputData.container_id);
+    formDataToSend.append("hsn_code", inputData.hsn_code);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
     }
@@ -604,6 +606,22 @@ const AddTestList = () => {
                     </option>
                   ))}
                 </Input>
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label htmlFor="hsn_code">
+                 Hsn Code 
+                </Label>
+                <Input
+                  type="text"
+                  name="hsn_code"
+                  className="form-control shadow-sm"
+                  value={inputData.hsn_code}
+                  onChange={handleInputChange}
+                  id="hsn_code"
+                  placeholder="Enter hsn_code"
+                />
               </FormGroup>
             </div>
           </div>

@@ -26,7 +26,9 @@ const EditTestList = () => {
     testDetails,
     editTest,
     getAllItemList,
-    allItemList,getAllConatinerList,allContainerList
+    allItemList,
+    getAllConatinerList,
+    allContainerList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -60,6 +62,7 @@ const EditTestList = () => {
     image: null,
     method: "",
     container_id: "",
+    hsn_code: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -86,6 +89,7 @@ const EditTestList = () => {
         method: testDetails.data.method || "",
         image: testDetails.data.address || "",
         container_id: testDetails.data.container_id || "",
+        hsn_code: testDetails.data.hsn_code || "",
       });
       setSelectedProducts(testDetails.data.test_species || []);
       setSelectedFees(testDetails.data.professional_fees || []);
@@ -174,7 +178,7 @@ const EditTestList = () => {
     setItemDataList((prevState) => prevState.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const allSelectedProductIds = [
@@ -200,6 +204,7 @@ const EditTestList = () => {
     formDataToSend.append("is_popular", inputData.is_popular);
     formDataToSend.append("method", inputData.method);
     formDataToSend.append("container_id", inputData.container_id);
+    formDataToSend.append("hsn_code", inputData.hsn_code);
     if (inputData.image) {
       formDataToSend.append("image", inputData.image);
     }
@@ -228,8 +233,6 @@ const EditTestList = () => {
     } finally {
       setIsLoading(false);
     }
-
-    
   };
 
   return (
@@ -247,11 +250,11 @@ const EditTestList = () => {
           }}
         >
           <div className="row">
-
-
             <div className="col-md-6">
               <FormGroup className="mb-3">
-                <Label for="test_name">Test Name  <span className="text-danger">*</span></Label>
+                <Label for="test_name">
+                  Test Name <span className="text-danger">*</span>
+                </Label>
                 <Input
                   type="text"
                   name="test_name"
@@ -296,7 +299,7 @@ const EditTestList = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-            <FormGroup>
+              <FormGroup>
                 <Label htmlFor="test_preparation" className="col-form-label">
                   Test Preparation:
                 </Label>
@@ -571,29 +574,43 @@ const EditTestList = () => {
             </div>
           </div>
 
-            <div className="row" style={{ marginBottom: "20px" }}>
-                      <div className="col-md-6">
-                        <FormGroup>
-                          <Label htmlFor="container_id" className="col-form-label">
-                            Container:
-                          </Label>
-                          <Input
-                            type="select"
-                            name="container_id"
-                            value={inputData.container_id}
-                            onChange={handleInputChange}
-                            id="container_id"
-                          >
-                            <option value="">Select Container</option>
-                            {allContainerList?.data?.map((container) => (
-                              <option key={container._id} value={container.id}>
-                                {container.container_name}
-                              </option>
-                            ))}
-                          </Input>
-                        </FormGroup>
-                      </div>
-                    </div>
+          <div className="row" style={{ marginBottom: "20px" }}>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="container_id" className="col-form-label">
+                  Container:
+                </Label>
+                <Input
+                  type="select"
+                  name="container_id"
+                  value={inputData.container_id}
+                  onChange={handleInputChange}
+                  id="container_id"
+                >
+                  <option value="">Select Container</option>
+                  {allContainerList?.data?.map((container) => (
+                    <option key={container._id} value={container.id}>
+                      {container.container_name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="hsn_code" className="col-form-label">
+                  Hsn Code:
+                </Label>
+                <Input
+                  type="text"
+                  name="hsn_code"
+                  value={inputData.hsn_code}
+                  onChange={handleInputChange}
+                  id="hsn_code"
+                />
+              </FormGroup>
+            </div>
+          </div>
 
           <FormGroup>
             <label className="mb-3 mt-3">Observations:</label>
@@ -701,16 +718,17 @@ const EditTestList = () => {
             </Button>
           </FormGroup>
 
-         
-
-          <Button type="submit" color="primary" disabled={isLoading}
-           style={{
-            marginTop: "20px",
-            padding: "10px 20px",
-            borderRadius: "5px",
-            fontWeight: "bold",
-            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
-          }}
+          <Button
+            type="submit"
+            color="primary"
+            disabled={isLoading}
+            style={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)", // Button shadow
+            }}
           >
             {isLoading ? (
               <>

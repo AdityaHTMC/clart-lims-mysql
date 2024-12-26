@@ -37,6 +37,7 @@ const EditTestPackage = () => {
     price: "",
     sell_price: "",
     is_popular: "",
+    hsn_code: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -53,6 +54,7 @@ const EditTestPackage = () => {
         price: tpdetails.data.price || "",
         sell_price: tpdetails.data.sell_price || "",
         is_popular: tpdetails.data.is_popular || "",
+        hsn_code: tpdetails.data.hsn_code || "",
       });
       setSelectedProducts(tpdetails.data.test_details || []);
     }
@@ -96,6 +98,7 @@ const EditTestPackage = () => {
     formDataToSend.append("price", inputData.price);
     formDataToSend.append("sell_price", inputData.sell_price );
     formDataToSend.append("is_popular", inputData.is_popular );
+    formDataToSend.append("hsn_code", inputData.hsn_code );
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`tests[${index}]`, id);
     });
@@ -286,6 +289,21 @@ const EditTestPackage = () => {
                     </Label>
                   </div>
                 </div>
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label for="hsn_code">Hsn Code</Label>
+                <Input
+                  type="text"
+                  name="hsn_code"
+                  value={inputData.hsn_code}
+                  onChange={handleInputChange}
+                  id="hsn_code"
+                />
               </FormGroup>
             </div>
           </div>
