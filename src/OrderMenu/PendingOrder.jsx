@@ -117,7 +117,9 @@ import {
                       <thead>
                         <tr>
                           <th>Order Id</th>
-                          <th>Collection Date</th>
+                          <th>Booking Date</th>
+                          <th>Sample Collection Date</th>
+                          <th>Lab Accepted Date</th>
                           <th>Customer Info</th>
                           <th>Pet</th>
                           <th>Total Amount</th>
@@ -140,6 +142,34 @@ import {
                                     ).toLocaleDateString("en-GB")
                                   : ""}
                               </td>
+                            <td>
+                              {order?.sample_collected_at
+                                ? new Date(
+                                    order.sample_collected_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
+                            </td>
+                            <td>
+                              {order?.lab_accepted_at
+                                ? new Date(
+                                    order.lab_accepted_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
+                            </td>
                               <td>
                                 <div className="d-flex align-items-center gap-3">
                                   {/* <img className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src={order?.customer_image || `/assets/images/profile.png`} alt="header-user" /> */}

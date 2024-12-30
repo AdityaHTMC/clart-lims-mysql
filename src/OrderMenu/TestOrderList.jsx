@@ -12,18 +12,15 @@ import {
 } from "reactstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate } from "react-router-dom";
-
 import { useEffect, useState } from "react";
-
 import { FaDeleteLeft, FaEye } from "react-icons/fa6";
-
 import { FiEdit } from "react-icons/fi";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
-import { Pagination, Stack } from "@mui/material";
+import { IconButton, Pagination, Stack, TextField } from "@mui/material";
 import { useDashboardContext } from "../helper/DashboardProvider";
 
 const TestOrderList = () => {
@@ -59,6 +56,7 @@ const TestOrderList = () => {
       limit: itemperPage,
       start_date: startDate ? formatDate(startDate) : null,
       end_date: endDate ? formatDate(endDate) : null,
+      keyword_search: searchTerm,
     };
     getTestOrderList(dataToSend);
   }, [selectedStatus, currentPage, searchTerm,startDate, endDate]);
@@ -68,11 +66,9 @@ const TestOrderList = () => {
     getTestOrderCount();
   }, []);
 
-  // useEffect(() => {
-  //     if(orderStatus?.data?.length > 0){
-  //         setSelectedStatus(orderStatus?.data[0].title)
-  //     }
-  // }, [orderStatus.data])
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
   };
@@ -111,6 +107,27 @@ const TestOrderList = () => {
                   >
                     Clear Dates
                   </Button>
+                  <form
+                    className="searchBx"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <TextField
+                      id="search-box"
+                      label="Search Order"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      sx={{
+                        maxWidth: "400px",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <IconButton type="submit" aria-label="search">
+                      <SearchIcon style={{ fill: "#979797" }} />
+                    </IconButton>
+                  </form>
                 </div>
 
                 <div className="d-flex gap-2 flex-wrap mb-3">
@@ -131,7 +148,9 @@ const TestOrderList = () => {
                     <thead>
                       <tr>
                         <th>Order Id</th>
-                        <th>Collection Date</th>
+                        <th>Booking Date</th>
+                        <th>Sample Collection Date</th>
+                        <th>Lab Accepted Date</th>
                         <th>Customer Info</th>
                         <th>Pet</th>
                         <th>Total Amount</th>
@@ -154,6 +173,34 @@ const TestOrderList = () => {
                                     ).toLocaleDateString("en-GB")
                                   : ""}
                               </td>
+                            <td>
+                              {order?.sample_collected_at
+                                ? new Date(
+                                    order.sample_collected_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
+                            </td>
+                            <td>
+                              {order?.lab_accepted_at
+                                ? new Date(
+                                    order.lab_accepted_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
+                            </td>
                             <td>
                               <div className="d-flex align-items-center gap-3">
                                 {/* <img className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src={order?.customer_image || `/assets/images/profile.png`} alt="header-user" /> */}

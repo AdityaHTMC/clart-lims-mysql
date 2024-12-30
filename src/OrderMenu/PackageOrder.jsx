@@ -10,19 +10,16 @@ import {
   Spinner,
   Table,
 } from "reactstrap";
-
 import { useNavigate } from "react-router-dom";
-
+import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useState } from "react";
-
 import { FaDeleteLeft, FaEye } from "react-icons/fa6";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useOrderContext } from "../helper/OrderProvider";
 import { useMasterContext } from "../helper/MasterProvider";
-import { Pagination, Stack } from "@mui/material";
+import { IconButton, Pagination, Stack, TextField } from "@mui/material";
 import { useDashboardContext } from "../helper/DashboardProvider";
 
 const PackageOrder = () => {
@@ -58,6 +55,7 @@ const PackageOrder = () => {
       limit: itemperPage,
       start_date: startDate ? formatDate(startDate) : null,
       end_date: endDate ? formatDate(endDate) : null,
+      keyword_search: searchTerm,
     };
     getpackageOrderList(dataToSend);
   }, [selectedStatus, currentPage, searchTerm,startDate, endDate]);
@@ -78,6 +76,9 @@ const PackageOrder = () => {
   // }, [orderStatus.data])
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
+  };
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -111,6 +112,27 @@ const PackageOrder = () => {
                   >
                     Clear Dates
                   </Button>
+                  <form
+                    className="searchBx"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <TextField
+                      id="search-box"
+                      label="Search Order"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      sx={{
+                        maxWidth: "400px",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <IconButton type="submit" aria-label="search">
+                      <SearchIcon style={{ fill: "#979797" }} />
+                    </IconButton>
+                  </form>
                 </div>
                 <div className="d-flex gap-2 flex-wrap mb-3">
                   {packageOrderCount?.data?.map((el, i) => (
@@ -130,7 +152,9 @@ const PackageOrder = () => {
                     <thead>
                       <tr>
                         <th>Order Id</th>
-                        <th>Collection Date</th>
+                        <th>Booking Date</th>
+                        <th>Sample Collection Date</th>
+                        <th>Lab Accepted Date</th>
                         <th>Customer Info</th>
                         <th>Pet</th>
                         <th>Total Amount</th>
@@ -147,11 +171,39 @@ const PackageOrder = () => {
                               <Badge color="danger">{order.order_id}</Badge>
                             </td>
                             <td>
-                              {order?.booking_date
-                                ? new Date(
+                                {order?.booking_date
+                                  ? new Date(
                                     order.booking_date
-                                  ).toLocaleDateString("en-GB")
-                                : ""}
+                                    ).toLocaleDateString("en-GB")
+                                  : ""}
+                              </td>
+                            <td>
+                              {order?.sample_collected_at
+                                ? new Date(
+                                    order.sample_collected_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
+                            </td>
+                            <td>
+                              {order?.lab_accepted_at
+                                ? new Date(
+                                    order.lab_accepted_at
+                                  ).toLocaleString("en-GB", {
+                                    day: "2-digit",
+                                    month: "2-digit",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                    second: "2-digit",
+                                  })
+                                : "NA"}
                             </td>
                             <td>
                               <div className="d-flex align-items-center gap-3">

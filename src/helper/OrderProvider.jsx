@@ -144,6 +144,7 @@ export const OrderProvider = ({ children }) => {
 
       const getAllOrderList = async (dataToSend) => {
         try {
+            setAllOrder({ loading: true, data: [] ,total: ""})
             const response = await axios.post(
                 `${base_url}/admin/all/orders/list`,
                 {...dataToSend} ,
@@ -167,6 +168,7 @@ export const OrderProvider = ({ children }) => {
     
     const getTestOrderList = async (dataToSend) => {
         try {
+            setAllOrder({ loading: true, data: [] ,total: ""})
             const response = await axios.post(
                 `${base_url}/admin/test/orders/list`,
                 {...dataToSend} ,
@@ -190,6 +192,7 @@ export const OrderProvider = ({ children }) => {
 
     const getPendingOrderList = async (dataToSend) => {
         try {
+            setPendingOrder({ loading: true, data: [] ,total: ""})
             const response = await axios.post(
                 `${base_url}/admin/pending/orders/list`,
                 {...dataToSend} ,
@@ -212,6 +215,7 @@ export const OrderProvider = ({ children }) => {
 
     const getpackageOrderList = async (dataToSend) => {
         try {
+            setPackageOrder({ loading: true, data: [] ,total: ""})
             const response = await axios.post(
                 `${base_url}/admin/test-package/orders/list`,
                 {...dataToSend} ,
