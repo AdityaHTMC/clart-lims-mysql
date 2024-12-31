@@ -135,12 +135,6 @@ const Notification = () => {
              key={index}
              id={`notification-${index}`} // Add an ID to match the tooltip target
              style={notificationItemStyle}
-             onMouseEnter={(e) => {
-               e.target.style.backgroundColor = "#f0f0f0";
-             }}
-             onMouseLeave={(e) => {
-               e.target.style.backgroundColor = "#fff";
-             }}
            >
              <div>
                <strong>Message:</strong>{" "}
