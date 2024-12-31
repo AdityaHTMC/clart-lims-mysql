@@ -131,6 +131,7 @@ import Audit from "./screen/Audit/Audit";
 import ReportTemplate from "./screen/ReportTemplate/ReportTemplate";
 import EditTransporter from "./screen/Transpoter/EditTransporter";
 import ContainerBox from "./Master/Container/ContainerBox";
+import NotificationList from "./screen/NotificationList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -192,6 +193,7 @@ function App() {
           <Route path="/cash-in-hand-report" element={<CashInHand />} />
           <Route path="/audit-trails" element={<Audit />} />
           <Route path="/report-templates" element={<ReportTemplate />} />
+          <Route path="/all-notifications-list" element={<NotificationList />} />
           {/* master */}
 
           <Route path="/breed-management" element={<BreadList />} />

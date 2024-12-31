@@ -22,6 +22,7 @@ export const DashboardProvider = ({ children }) => {
     const [unitreportList, setUnitreportList] = useState({ loading: true, data: [], total:'' });
     const [labreportList, setLabreportList] = useState({ loading: true, data: [], total:'' });
     const [CCreportList, setCCreportList] = useState({ loading: true, data: [], total:'' });
+    const [notificationList, setNotificationList] = useState({ loading: true, data: [], total:'' });
     const [csvb2b, setCsvb2b] = useState('');
     const [csvUnit, setCsvUnit] = useState('');
     const [csvLab, setCsvLab] = useState('');
@@ -404,9 +405,31 @@ const csvCCReport = async () => {
 };
 
 
+const getNotificationList = async (dataToSend) => {
+  try {
+    setNotificationList({ ...notificationList, loading: true });
+      const response = await axios.post(
+          `${base_url}/admin/notification/list`,{...dataToSend},
+          { headers: { Authorization: Authtoken } }
+      );
+      if (response.status === 200) {
+        setNotificationList({
+              data: response?.data?.data || [],
+              total: response.data.total,
+              loading: false,
+          });
+      } else {
+        setNotificationList({ data: [], loading: false });
+      }
+  } catch (error) {
+    setNotificationList({ data: [], loading: false });
+  }
+};
+
+
 
     const values = {
-       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount,getB2bReport,b2breportList,csvB2bReport,csvb2b,getunitReport,unitreportList,csvUnitReport,csvUnit,getLabReport,labreportList,csvLabReport,csvLab,getCCReport,CCreportList,csvCCReport,csvCC
+       getCmsList ,cmsList ,getDashboardOrderList,dashboardOrderList,getDashboardOrderCount,dashboardOrderCount,getAllOrderStatus , orderStatus,getbarcode,barcode,getDashboardCount,orderCount,generateBarcode,Barcodeprint,getTestOrderCount,testOrderCount,getPackageOrderCount,packageOrderCount,getB2bReport,b2breportList,csvB2bReport,csvb2b,getunitReport,unitreportList,csvUnitReport,csvUnit,getLabReport,labreportList,csvLabReport,csvLab,getCCReport,CCreportList,csvCCReport,csvCC,getNotificationList,notificationList
     }
     return (
         <AppContext.Provider value={values} >

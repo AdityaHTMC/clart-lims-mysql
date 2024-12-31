@@ -365,8 +365,8 @@ const EditTransporter = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Lab"
+                      placeholder="Select Lab"
                     />
                   )}
                 />
@@ -387,8 +387,8 @@ const EditTransporter = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Unit"
+                      placeholder="Select Unit"
                     />
                   )}
                 />
@@ -412,8 +412,8 @@ const EditTransporter = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Collection Center"
+                      placeholder="Select Collection Center"
                     />
                   )}
                 />

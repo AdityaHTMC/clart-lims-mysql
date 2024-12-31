@@ -366,8 +366,8 @@ const EditPhelbotomist = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Lab"
+                      placeholder="Select Lab"
                     />
                   )}
                 />
@@ -375,7 +375,7 @@ const EditPhelbotomist = () => {
             </div>
             <div className="col-md-6">
               <FormGroup>
-                <Label for="New">Associated Unit Details</Label>
+                <Label for="New">Associated Units</Label>
                 <Autocomplete
                   sx={{ m: 1 }}
                   multiple
@@ -388,8 +388,8 @@ const EditPhelbotomist = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Unit"
+                      placeholder="Select Unit"
                     />
                   )}
                 />
@@ -413,8 +413,8 @@ const EditPhelbotomist = () => {
                     <TextField
                       {...params}
                       variant="outlined"
-                      label="Select Test"
-                      placeholder="Select Test"
+                      label="Select Collection Center"
+                      placeholder="Select Collection Center"
                     />
                   )}
                 />

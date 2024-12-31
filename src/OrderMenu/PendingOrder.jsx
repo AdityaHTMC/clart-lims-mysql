@@ -15,7 +15,7 @@ import {
   import { useNavigate } from "react-router-dom";
   
   import { useEffect, useState } from "react";
-  
+  import SearchIcon from "@mui/icons-material/Search";
   import { FaDeleteLeft, FaEye } from "react-icons/fa6";
   
   import DatePicker from "react-datepicker";
@@ -23,7 +23,7 @@ import {
   import CommonBreadcrumb from "../component/common/bread-crumb";
   import { useOrderContext } from "../helper/OrderProvider";
   import { useMasterContext } from "../helper/MasterProvider";
-  import { Pagination, Stack } from "@mui/material";
+  import { IconButton, Pagination, Stack, TextField } from "@mui/material";
   import { useDashboardContext } from "../helper/DashboardProvider";
   
   const PendingOrder = () => {
@@ -58,9 +58,10 @@ import {
         limit: itemperPage,
         start_date: startDate ? formatDate(startDate) : null,
         end_date: endDate ? formatDate(endDate) : null,
+        keyword_search: searchTerm,
       };
       getPendingOrderList(dataToSend);
-    }, [selectedStatus, currentPage, searchTerm, startDate, endDate]);
+    }, [selectedStatus, currentPage, searchTerm, startDate, endDate,searchTerm]);
   
     useEffect(() => {
       getOrderMasterList();
@@ -78,6 +79,10 @@ import {
   
     const navigatOrderDetails = (id) => {
       Navigate(`/order-details/${id}`);
+    };
+
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
     };
   
     return (
@@ -111,6 +116,27 @@ import {
                   >
                     Clear Dates
                   </Button>
+                  <form
+                    className="searchBx"
+                    style={{ display: "flex", alignItems: "center" }}
+                  >
+                    <TextField
+                      id="search-box"
+                      label="Search Order"
+                      variant="outlined"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      fullWidth
+                      sx={{
+                        maxWidth: "400px",
+                        backgroundColor: "#fff",
+                        borderRadius: "4px",
+                      }}
+                    />
+                    <IconButton type="submit" aria-label="search">
+                      <SearchIcon style={{ fill: "#979797" }} />
+                    </IconButton>
+                  </form>
                 </div>
                   <div className="promo-code-list">
                     <Table hover responsive>
@@ -141,7 +167,7 @@ import {
                                     order.booking_date
                                     ).toLocaleDateString("en-GB")
                                   : ""}
-                              </td>
+                              </td> 
                             <td>
                               {order?.sample_collected_at
                                 ? new Date(

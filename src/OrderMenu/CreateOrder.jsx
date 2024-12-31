@@ -238,6 +238,16 @@ const CreateOrder = () => {
   };
 
   const handleDateChange = (e) => {
+    if (e.target.name === 'booking_date') {
+      const date = new Date();
+      date.setHours(0, 0, 0, 0);
+      const date2 = new Date(e.target.value);
+      date2.setHours(0, 0, 0, 0);
+      if (date2 < date) {
+          toast.info('Booking date should not be in the past.')
+          return
+      }
+  }
     const selectedDate = new Date(e.target.value);
     const formattedDate = selectedDate.toISOString();
 
@@ -295,9 +305,6 @@ const CreateOrder = () => {
       bodyData.append(`professional_fees[${i}][price]`, el.expected_charges);
     });
 
-    // if (formData.test_package) {
-    //   bodyData.append("package_id", parseInt(test_package.data[0]._id, 10));
-    // }
 
     if (formData.images.length > 0) {
       formData.images.forEach((image, index) => {
@@ -714,26 +721,7 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                            {/* <FormGroup className="mt-3">
-                              <Label for="selectPackage" className="fw-bold">
-                                Select Health Package
-                              </Label>
-                              <Input
-                                type="select"
-                                value={formData.test_package}
-                                name="test_package"
-                                className="form-select"
-                                disabled={isProcessing}
-                                onChange={(e) => onPackageSelect(e)}
-                              >
-                                <option value="">--Select--</option>
-                                {test_package?.data?.map((el, i) => (
-                                  <option key={i} value={el.id}>
-                                    {el?.package_name} ({el?.sell_price})
-                                  </option>
-                                ))}
-                              </Input>
-                            </FormGroup> */}
+                        
                             <FormGroup className="mt-3">
                               <Label for="selectPackage" className="fw-bold">
                                 Select Health Package
@@ -888,7 +876,8 @@ const CreateOrder = () => {
                                   totalAmount === 0 || // Total amount should not be 0
                                   !formData.payment_mode || // Payment mode must be selected
                                   !formData.pet || // Pet must be selected
-                                  !formData.booking_date || // Booking date must be selected
+                                  !formData.booking_date ||
+                                  (selectedTest.length === 0 && selectedPackages.length === 0) || 
                                   (formData.type === "Collection_Center" && !selectedCC) || // If Collection_Center is selected, Collection_Center dropdown must also be selected
                                   isProcessing // Button should be disabled if processing
                                 }
