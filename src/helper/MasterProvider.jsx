@@ -330,14 +330,14 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Test category added successfully");
+        toast.success(response.data.message);
         gettestCategoryList()
       } else {
-        toast.error("Failed to add Test category");
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error adding Test category:", error);
-      toast.error("An error occurred while adding the Test category");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -378,7 +378,7 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         gettestCategoryList();
       } else {
-        toast.error("server errors");
+        toast.error(response.data.message);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
@@ -565,11 +565,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setalltest({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test list");
+        toast.error(response.data?.message || "Server error");
       }
     } catch (error) {
       setalltest({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -585,14 +585,14 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Test package added successfully");
+        toast.success(response.data.message);
        navigate('/test-packages')
       } else {
-        toast.error("Failed to add Test category");
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
-      toast.error("An error occurred while adding the Test package");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -611,7 +611,7 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
        navigate('/test-packages')
       } else {
-        toast.error("server errors");
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
@@ -652,14 +652,14 @@ export const MasterProvider = ({ children }) => {
       );
       
       if (response.status === 200) {
-        toast.success('Test package deleted successfully');
+        toast.success(response.data?.message);
         getAllTestPackage(); 
       } else {
-        toast.error('Failed to delete Test package');
+        toast.error(response.data?.message);
       }
     } catch (error) {
       console.error('Error deleting Test package:', error);
-      toast.error('An error occurred while deleting the Test package');
+      toast.error(error.response?.data?.message || 'Server error');
     }
   }
 
@@ -679,11 +679,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setTpdetails({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test list");
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       setTpdetails({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 
@@ -697,19 +697,18 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );
       if (response.status === 200) {
-        toast.success("Task management added successfully");
+        toast.success(response.data.message);
        navigate('/task-management')
       } else {
-        toast.error("Failed to add Task management");
+        toast.error(response.data.message || "Server error");
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
-      toast.error("An error occurred while adding the Task management");
+      toast.error(error.response?.data?.message || "Server error");
     }
   };
 
@@ -757,11 +756,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setTestParameter({ data: [], total: "", loading: false });
-        toast.error("Failed to fetch test parameter list");
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       setTestParameter({ data: [], total: "", loading: false });
-      toast.error("Failed to fetch test parameter list");
+      toast.error(error.response?.data?.message || 'Server error');
     }
   };
 

@@ -25,7 +25,6 @@ const EditEvent = () => {
 
   const { geteventDetail,editEvent,eventDetails } = useCommonContext();
 
-  console.log(eventDetails, "eventDetails");
 
   // States to store editable fields
   const [title, setTitle] = useState("");
@@ -53,7 +52,7 @@ const EditEvent = () => {
       setlocation(eventDetails?.data?.location || "");
       setdate(eventDetails?.data?.date || "");
       setprimary_image(eventDetails?.data?.primary_image || "");
-      setgallery_images(eventDetails?.data?.images || []);
+      setgallery_images(eventDetails?.data?.gallery_images || []);
     }
   }, [eventDetails]);
 
@@ -78,20 +77,14 @@ const EditEvent = () => {
   };
   // Handle image removal for existing images
   const handleRemoveImage = (index) => {
-    const updatedImages = gallery_images.filter(
-      (_, imgIndex) => imgIndex !== index
-    );
+    const updatedImages = gallery_images.filter((_, imgIndex) => imgIndex !== index);
     setgallery_images(updatedImages);
   };
 
   // Handle image removal for new images
   const handleRemoveNewImage = (index) => {
-    const updatedNewImages = newImages.filter(
-      (_, imgIndex) => imgIndex !== index
-    );
-    const updatedPreviews = newImagePreviews.filter(
-      (_, imgIndex) => imgIndex !== index
-    );
+    const updatedNewImages = newImages.filter((_, imgIndex) => imgIndex !== index);
+    const updatedPreviews = newImagePreviews.filter((_, imgIndex) => imgIndex !== index);
     setNewImages(updatedNewImages);
     setNewImagePreviews(updatedPreviews);
   };
@@ -108,6 +101,8 @@ const EditEvent = () => {
     setDescription(value); // Set description directly to the new value
   };
 
+  console.log(newImages,'all img' )
+
   // Submit handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -118,14 +113,20 @@ const EditEvent = () => {
     formDataToSend.append("description", description);
     formDataToSend.append("location", location);
     formDataToSend.append("date", date);
-    if(priImages.length > 0) {
-      formDataToSend.append("primary_image", priImages);
-    }
+    formDataToSend.append("primary_image", priImages);
 
-    newImages.forEach((image, index) => {
+  // Combine existing and new images
+  const combinedImages = [...gallery_images, ...newImages];
+
+  combinedImages.forEach((image, index) => {
+    // Existing images are URLs; new images are files
+    if (image instanceof File) {
       formDataToSend.append(`gallery_images[${index}]`, image);
-    });
-
+    } else {
+      formDataToSend.append(`gallery_images[${index}]`, image); // Handle as a URL
+    }
+  });
+  
     try {
       // Call the API to update product
       await editEvent(id, formDataToSend);
@@ -213,7 +214,7 @@ const EditEvent = () => {
 
           {/* Existing Images */}
           <FormGroup className="mt-4">
-            {/* <Label>Existing Images</Label> */}
+             <Label>Existing Gallery Images</Label> 
             <Row>
               {gallery_images?.map((image, index) => (
                 <Col key={index} sm="2">
@@ -228,10 +229,6 @@ const EditEvent = () => {
                         width: "100px",
                         height: "auto",
                         marginBottom: "10px",
-                      }}
-                      onError={(e) => {
-                        e.target.src = "/placeholder-image.jpg"; // Optional fallback
-                        console.error("Image failed to load:", image);
                       }}
                     />
                     <FaTrashAlt

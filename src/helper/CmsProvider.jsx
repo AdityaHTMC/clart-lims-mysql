@@ -43,7 +43,7 @@ export const CMsProvider = ({ children }) => {
             setCmsList({ data: response?.data?.data || [], total:response.data.total, loading: false });
           } else {
             setCmsList({data: [],total:'', loading: false});
-            toast.error("Failed to fetch Bag Type list");
+            toast.error(response?.data?.message)
           }
         } catch (error) {
             setCmsList({data: [], loading: false});
@@ -65,40 +65,17 @@ export const CMsProvider = ({ children }) => {
             }
           );
           if (response.status === 200) {
-            toast.success('CMS added successfully');
-            getCmsList();  // Refresh the banner list after success
+            toast.success(response?.data?.message)
+            getCmsList();  
           } else {
-            toast.error("Failed to add CMS ");
+            toast.error(response?.data?.message)
           }
         } catch (error) {
-          console.error("Error adding CMS:", error);
-          toast.error("An error occurred while adding the CMS ");
+          
+          toast.error(error.response?.data?.message || 'Server error');
         }
       };
 
-      const updateCms = async (formDataToSend, id) => {
-        try {
-          const response = await axios.put(
-            `${base_url}/cms/update/${id}`,
-            formDataToSend,  // Pass FormData directly without spreading
-            { 
-              headers: { 
-                Authorization: AuthToken,
-                'Content-Type': 'application/json' 
-              }
-            }
-          );
-          if (response.status === 200) {
-            toast.success('CMS updated successfully');
-            getCmsList();  // Refresh the banner list after success
-          } else {
-            toast.error("Failed to update CMS ");
-          }
-        } catch (error) {
-          console.error("Error updating CMS:", error);
-          toast.error("An error occurred while updating the CMS ");
-        }
-      };
 
       const deleteCms = async (id) => {
         try {
@@ -111,14 +88,14 @@ export const CMsProvider = ({ children }) => {
             }
           );
           if (response.status === 200) {
-            toast.success('CMS deleted successfully');
+            toast.success(response?.data?.message)
             getCmsList();  // Refresh the banner list after success
           } else {
-            toast.error("Failed to delete CMS ");
+            toast.error(response?.data?.message)
           }
         } catch (error) {
           console.error("Error deleting CMS:", error);
-          toast.error("An error occurred while deleting the CMS ");
+          toast.error(error.response?.data?.message || 'Server error');
         }
       };
 
@@ -135,14 +112,14 @@ export const CMsProvider = ({ children }) => {
           );
           const data = response.data;
           if (response.status === 200) {
-            toast.success('CMS updated successfully');
+            toast.success(response?.data?.message)
             getCmsList();  // Refresh the brand list after success
           } else {
             toast.error('Failed to update the CMS');
           }
         } catch (error) {
           console.error('Error updating CMS:', error);
-          toast.error('An error occurred while updating the CMS');
+          toast.error(error.response?.data?.message || 'Server error');
         }
       };
 
@@ -158,7 +135,7 @@ export const CMsProvider = ({ children }) => {
             setCurrencyList({ data: response?.data?.data || [], loading: false });
           } else {
             setCurrencyList({...currencyList, loading: false});
-            toast.error("Failed to fetch Bag Type list");
+             toast.error(response?.data?.message)
           }
         } catch (error) {
           setCurrencyList({...currencyList, loading: false});
