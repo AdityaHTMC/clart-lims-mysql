@@ -315,14 +315,14 @@ const FaqList = () => {
       <Modal isOpen={modalOpen} toggle={onCloseModal2}  className="modal-lg" >
         <ModalHeader toggle={onCloseModal2}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Varity Master
+            Edit FAQ
           </h5>
         </ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup>
               <Label htmlFor="question" className="col-form-label">
-                Title:
+              Question:
               </Label>
               <Input
                 type="text"
@@ -335,7 +335,7 @@ const FaqList = () => {
 
             <FormGroup>
               <Label htmlFor="answer" className="col-form-label">
-                Description:
+                Answer:
               </Label>
               <Input
                 type="textarea"
