@@ -17,16 +17,12 @@ const LoginSlider = () => {
         <div className="svg-icon">
           <Media style={{height:'100%'}} alt="" src={companyLogo} className="Img-fluid" />
         </div>
-        <Slider className="single-item" {...settings}>
-          {[...Array(3)].map((_, i) => (
-            <div key={i}>
+            <div>
               <div>
                 <h3>Welcome to CLART LIMS</h3>
                 <p>Centre for Laboratory Animal Research and Training (CLART) under West Bengal Livestock Development Corporation Ltd.</p>
               </div>
             </div>
-          ))}
-        </Slider>
       </Card>
     </Col>
   );

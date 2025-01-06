@@ -132,6 +132,7 @@ import ReportTemplate from "./screen/ReportTemplate/ReportTemplate";
 import EditTransporter from "./screen/Transpoter/EditTransporter";
 import ContainerBox from "./Master/Container/ContainerBox";
 import NotificationList from "./screen/NotificationList";
+import ParameterGroup from "./Master/ParameterGroup/ParameterGroup";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -223,6 +224,7 @@ function App() {
           <Route path="/zone-list" element={<ZoneMasterList />} />
           <Route path="/banks" element={<BankMaster />} />
           <Route path="/containers" element={<ContainerBox />} />
+          <Route path="/parameter-group" element={<ParameterGroup />} />
 
           {/* stock start */}
           <Route path="/item-groups" element={<ItemGroup />} />

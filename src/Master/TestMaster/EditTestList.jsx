@@ -28,7 +28,7 @@ const EditTestList = () => {
     getAllItemList,
     allItemList,
     getAllConatinerList,
-    allContainerList,
+    allContainerList,    getAllParameterGrList,allparameterGrList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -39,6 +39,7 @@ const EditTestList = () => {
     getProfessionalFees();
     getAllItemList();
     getAllConatinerList();
+    getAllParameterGrList();
   }, []);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ const EditTestList = () => {
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [selectedParameterGrList, setparameterGrList] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [observationsList, setObservations] = useState([""]);
   const [itemDataList, setItemDataList] = useState([""]);
@@ -95,6 +97,7 @@ const EditTestList = () => {
       setSelectedFees(testDetails.data.professional_fees || []);
       setObservations(testDetails.data.observations || []);
       setItemDataList(testDetails.data.items || []);
+      setparameterGrList(testDetails.data.parameter_groups || []);
     }
   }, [testDetails]);
 
@@ -186,6 +189,7 @@ const EditTestList = () => {
     ];
 
     const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
+    const allSelectedParameterGrIds = [...selectedParameterGrList.map((product) => product.id)];
 
     const combinedObservations = [...observationsList];
 
@@ -213,6 +217,10 @@ const EditTestList = () => {
       formDataToSend.append(`species[${index}]`, parseInt(id, 10));
     });
 
+    allSelectedParameterGrIds.forEach((id, index) => {
+      formDataToSend.append(`parameter_groups[${index}]`, parseInt(id, 10));
+    });
+
     allSelectedfeesIds.forEach((id, index) => {
       formDataToSend.append(`professional_fees[${index}]`, parseInt(id, 10));
     });
@@ -234,6 +242,12 @@ const EditTestList = () => {
       setIsLoading(false);
     }
   };
+
+  console.log(testDetails.loading , 'testDetails loading')
+
+  if (testDetails.loading) {
+    return <div className="spinner"><Spinner color="secondary" className="my-4" /></div>;
+  }
 
   return (
     <>
@@ -607,6 +621,31 @@ const EditTestList = () => {
                   value={inputData.hsn_code}
                   onChange={handleInputChange}
                   id="hsn_code"
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row">
+          <div className="col-md-6">
+              <FormGroup>
+                <Label for="New">Parameter Group</Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={allparameterGrList?.data || []}
+                  getOptionLabel={(option) => option?.name || ""}
+                  value={selectedParameterGrList}
+                  onChange={(event, newValue) => setparameterGrList(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Parameter Group"
+                      placeholder="Select parameter Group"
+                    />
+                  )}
                 />
               </FormGroup>
             </div>

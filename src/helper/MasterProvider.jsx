@@ -27,6 +27,7 @@ export const MasterProvider = ({ children }) => {
   const [stateList, setstateList] = useState({loading: true,data: [],total: ""});
   const [alltest, setalltest] = useState({loading: true,data: []});
   const [allPPL, setallPPL] = useState({loading: true,data: []});
+  const [allTestParaGr, setTestParaGr] = useState({loading: true,data: []});
   const [allspecies, setallspecies] = useState({loading: true,data: []});
   const [allUnitList, setallUnitList] = useState({loading: true,data: []});
   const [allDistrictList, setallDistrictList] = useState({loading: true,data: []});
@@ -42,7 +43,7 @@ export const MasterProvider = ({ children }) => {
   const [petList, setPetList] = useState({loading: true,data: [],total: ""});
   const [petDetails, setPetDetails] = useState({loading: true,data: []});
   const [orderDetails, setOrderDetails] = useState({ loading: true, data: [] }) 
-  const [testDetails, setTestDetails] = useState({ loading: true, data: [] }) 
+  const [testDetails, setTestDetails] = useState({ loading: true, data: {} }) 
   const [sahcList, setsahcList] = useState({loading: true,data: [],total: ""});
   const [allsahcList, setallsahcList] = useState({loading: true,data: []});
   const [docList, setdocList] = useState({loading: true,data: [],total: ""});
@@ -52,6 +53,8 @@ export const MasterProvider = ({ children }) => {
   const [auditTrailsList, setAuditTrailsList] = useState({loading: true,data: [],total: ""});
   const [reportTemplateList, setReportTemplateList] = useState({loading: true,data: [],total: ""});
   const [containerList, setContainerList] = useState({loading: true,data: [],total: ""});
+  const [parameterGrList, setparameterGrList] = useState({loading: true,data: [],total: ""});
+  const [allparameterGrList, setAllparameterGrList] = useState({loading: true,data: []});
   const [allContainerList, setallContainerList] = useState({loading: true,data: []});
   const [zoneList, setzoneList] = useState({loading: true,data: [],total: ""});
   const [zoneprice, setzonePrice] = useState({loading: true,data: []});
@@ -811,6 +814,29 @@ export const MasterProvider = ({ children }) => {
     }
   };
 
+  const getTestParaGr = async (testId) => {
+    try {
+      setTestParaGr({ loading: true , data: []});
+      const response = await axios.post(
+        `${base_url}/test/parameter-group/getAll`,
+        {test_id: testId},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        setTestParaGr({
+          data: response?.data?.data || [],
+          loading: false,
+        });
+      } else {
+        setTestParaGr({ data: [], total: "", loading: false });
+      }
+    } catch (error) {
+      setTestParaGr({ data: [], total: "", loading: false });
+      
+    }
+  };
+
 
   const addTestParameter = async (formDataToSend) => {
     try {
@@ -820,7 +846,6 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );
@@ -1825,19 +1850,20 @@ export const MasterProvider = ({ children }) => {
 
   const getTestDetails = async (id) => {
     try {
+      setTestDetails({ data: {} , loading: true });
       const response = await axios.get(
         `${base_url}/admin/test/details/${id}`,
         { headers: { Authorization: AuthToken } }
       );
       if (response.status === 200) {
-        setTestDetails({ data: response?.data?.data || [], loading: false });
+        setTestDetails({ data: response?.data?.data || {}, loading: false });
       } else {
         toast.error(response?.data?.message);
-        setTestDetails({ data: [], loading: false });
+        setTestDetails({ data: {}, loading: false });
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Server error");
-      setTestDetails({ data: [], loading: false });
+      setTestDetails({ data: {}, loading: false });
     }
   };
 
@@ -2560,11 +2586,112 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getParameterGrList = async () => {
+    try {
+      setparameterGrList({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/parameter-group/list`, {},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setparameterGrList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        setparameterGrList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      setparameterGrList({ data: [], loading: false });
+    }
+  };
 
+
+
+
+  const addParameterGrMaster = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/parameter-group/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getParameterGrList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const editParameterGrList = async (id,dataToSend) => {
+    try {
+      const response = await axios.put(
+        `${base_url}/admin/parameter-group/update/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getParameterGrList()
+      } else {
+        toast.error(response?.data?.message || 'Server error');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Server error");
+    }
+  };
+
+
+  const DeleteParameterGr = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/parameter-group/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getParameterGrList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Server error');
+    }
+  };
+
+  const getAllParameterGrList = async () => {
+    try {
+      setAllparameterGrList({ data: [], loading: true });
+      const response = await axios.get(
+        `${base_url}/admin/parameter-group/getAll`, 
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setAllparameterGrList({ data: response?.data?.data || [], loading: false });
+      } else {
+        setAllparameterGrList({ data: [], loading: false });
+      }
+    } catch (error) {
+      setAllparameterGrList({ data: [], loading: false });
+    }
+  };
 
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData,getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr,getAllParameterGrList,allparameterGrList,getTestParaGr,allTestParaGr
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

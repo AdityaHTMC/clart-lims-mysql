@@ -25,6 +25,7 @@ const AddTestList = () => {
     allItemList,
     getAllConatinerList,
     allContainerList,
+    getAllParameterGrList,allparameterGrList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
@@ -35,6 +36,7 @@ const AddTestList = () => {
     getProfessionalFees();
     getAllItemList();
     getAllConatinerList();
+    getAllParameterGrList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -58,7 +60,7 @@ const AddTestList = () => {
 
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [selectedProducts1, setSelectedProducts1] = useState([]);
+  const [selectedParameterGrList, setparameterGrList] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -138,6 +140,8 @@ const AddTestList = () => {
 
     const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
 
+    const allSelectedParameterGrIds = [...selectedParameterGrList.map((product) => product.id)];
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("test_name", inputData.test_name);
@@ -159,6 +163,10 @@ const AddTestList = () => {
 
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`species[${index}]`, parseInt(id, 10));
+    });
+
+    allSelectedParameterGrIds.forEach((id, index) => {
+      formDataToSend.append(`parameter_groups[${index}]`, parseInt(id, 10));
     });
 
     allSelectedfeesIds.forEach((id, index) => {
@@ -621,6 +629,46 @@ const AddTestList = () => {
                   onChange={handleInputChange}
                   id="hsn_code"
                   placeholder="Enter hsn_code"
+                />
+              </FormGroup>
+            </div>
+          </div>
+
+          <div className="row" style={{ marginBottom: "20px" }}>
+          <div className="col-md-6">
+              <FormGroup>
+                <Label
+                  for="New"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Parameter Group
+                </Label>
+                <Autocomplete
+                  sx={{ m: 1 }}
+                  multiple
+                  options={allparameterGrList?.data || []}
+                  getOptionLabel={(option) => option?.name || ""}
+                  value={selectedParameterGrList}
+                  onChange={(event, newValue) => setparameterGrList(newValue)}
+                  disableCloseOnSelect
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Parameter Group"
+                      placeholder="Select Parameter Group"
+                      style={{
+                        backgroundColor: "#fff",
+                        borderRadius: "5px",
+                        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+                  )}
                 />
               </FormGroup>
             </div>

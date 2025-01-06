@@ -151,7 +151,7 @@ const AddPhlebotomist = () => {
     // });
 
     if (inputData.image) {
-      formDataToSend.append("image", inputData.image); // Append the file as binary
+      formDataToSend.append("image", inputData.image); 
     }
 
   

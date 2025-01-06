@@ -17,7 +17,7 @@ const AddTestParameter = () => {
     allPPL,
     addTestParameter,
     getDDunitList,
-    allUnitList,
+    allUnitList,getTestParaGr,allTestParaGr
   } = useMasterContext();
 
   useEffect(() => {
@@ -32,6 +32,7 @@ const AddTestParameter = () => {
     lower_range: "",
     parentId: "",
     test_id: "",
+    group_id:"",
   });
 
   const [selectedTestId, setSelectedTestId] = useState("");
@@ -48,10 +49,9 @@ const AddTestParameter = () => {
     if (value) {
       const testId = value.id;
       setSelectedTestId(testId);
-
-      // Fetch parentId list based on selected testId
       if (testId) {
         getPPL(testId);
+        getTestParaGr(testId)
       }
     } else {
       setSelectedTestId("");
@@ -63,12 +63,14 @@ const AddTestParameter = () => {
     const formDataToSend = new FormData();
 
     formDataToSend.append("parameter", inputData.parameter);
-    formDataToSend.append("parameter_unit_id", inputData.unit);
-    formDataToSend.append("upper_range", inputData.upper_range);
-    formDataToSend.append("lower_range", inputData.lower_range);
-    formDataToSend.append("parent_id", inputData.parentId || "");
-    formDataToSend.append("test_id", selectedTestId);
-
+    formDataToSend.append("parameter_unit_id", parseInt(inputData.unit, 10));
+    formDataToSend.append("upper_range", parseInt(inputData.upper_range, 10));
+    formDataToSend.append("lower_range", parseInt(inputData.lower_range, 10));
+    if (inputData.parentId) {
+      formDataToSend.append("parent_id", parseInt(inputData.parentId, 10));
+    }
+    formDataToSend.append("test_id", parseInt(selectedTestId, 10));
+    formDataToSend.append("group_id", parseInt(inputData.group_id, 10));
     addTestParameter(formDataToSend);
   };
 
@@ -201,6 +203,31 @@ const AddTestParameter = () => {
               )}
             </div>
           </div>
+
+        <div className="row">
+        <div className="col-md-6">
+              {selectedTestId && allTestParaGr?.data?.length > 0 && (
+                <FormGroup>
+                  <Label for="group_id">Test Parameter Group </Label>
+                  <Input
+                    type="select"
+                    name="group_id"
+                    id="group_id"
+                    value={inputData.group_id}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Test Parameter Group</option>
+                    {allTestParaGr?.data?.map((parent) => (
+                      <option key={parent._id} value={parent.id}>
+                        {parent.name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
+              )}
+            </div>
+        </div>
+
 
           <Button type="submit" color="primary">
             Add Test Parameter
