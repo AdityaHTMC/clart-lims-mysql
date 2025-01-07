@@ -21,7 +21,7 @@ const EditTestParameter = () => {
     allPPL,
     addTestParameter,
     getDDunitList,
-    allUnitList,
+    allUnitList,getTestParaGr,allTestParaGr
   } = useMasterContext();
 
   useEffect(() => {
@@ -30,10 +30,7 @@ const EditTestParameter = () => {
     }
   }, [id]);
 
-  useEffect(() => {
-    getAllTest();
-    getDDunitList();
-  }, []);
+
 
   const [inputData, setInputData] = useState({
     parameter: "",
@@ -42,6 +39,7 @@ const EditTestParameter = () => {
     lower_range: "",
     parentId: "",
     test_id: "",
+    group_id:"",
   });
 
   const [selectedTestId, setSelectedTestId] = useState("");
@@ -54,10 +52,18 @@ const EditTestParameter = () => {
         lower_range: tpDetails.data.lower_range || "",
         parentId: tpDetails.data.parent_id || "",
         test_id: tpDetails.data.test_id || "",
+        group_id: tpDetails.data.group_id || "",
       });
       setSelectedTestId(tpDetails.data.test_id);
     }
   }, [tpDetails]);
+
+
+  useEffect(() => {
+    getAllTest();
+    getDDunitList();
+    getTestParaGr(tpDetails?.data?.test_id );
+  }, [tpDetails?.data?.test_id ]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -70,10 +76,9 @@ const EditTestParameter = () => {
   const handleTestSelect = (e) => {
     const testId = e.target.value;
     setSelectedTestId(testId);
-
-    // Fetch parentId list based on selected testId
     if (testId) {
       getPPL(testId);
+      getTestParaGr(testId)
     }
   };
 
@@ -88,13 +93,14 @@ const EditTestParameter = () => {
     formDataToSend.append("lower_range", inputData.lower_range);
     formDataToSend.append("parent_id", inputData.parentId || "");
     formDataToSend.append("test_id", selectedTestId);
-
+    formDataToSend.append("group_id", inputData.group_id);
+    
     editTp(id, formDataToSend);
   };
 
   return (
     <>
-      <CommonBreadcrumb title="Edit Teat parameter" />
+      <CommonBreadcrumb title="Edit Test Parameter" />
       <div className="product-form-container" style={{ padding: "2px" }}>
         <form
           onSubmit={handleSubmit}
@@ -215,6 +221,30 @@ const EditTestParameter = () => {
                 </FormGroup>
               )}
             </div>
+          </div>
+
+          <div className="row">
+            {tpDetails?.data?.group_name && (
+              <div className="col-md-6">
+                  <FormGroup>
+                    <Label for="group_id">Test Parameter Group </Label>
+                    <Input
+                      type="select"
+                      name="group_id"
+                      id="group_id"
+                      value={inputData.group_id}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">Select Test Parameter Group</option>
+                      {allTestParaGr?.data?.map((parent) => (
+                        <option key={parent._id} value={parent.id}>
+                          {parent.name}
+                        </option>
+                      ))}
+                    </Input>
+                  </FormGroup>
+              </div>
+            )}
           </div>
 
           <Button type="submit" color="primary">

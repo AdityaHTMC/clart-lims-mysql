@@ -43,7 +43,7 @@ import { Pagination, Stack } from "@mui/material";
       navigate("/add-test-parameters");
     };
     const handleEdit = (id) => {
-      navigate(`/edit-transporters-list/${id}`);
+      navigate(`/edit-testparameter/${id}`);
     };
   
     const handleDelete = (id) => {

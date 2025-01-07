@@ -177,7 +177,7 @@ function App() {
           <Route path="/transporters-list" element={<TransporterList />} />
           <Route path="/editphlebotomist/:id" element={<EditPhelbotomist />} />
           <Route path="/editTransporter/:id" element={<EditTransporter />} />
-          <Route path="/edit-transporters-list/:id" element={<EditTestParameter />} />
+          <Route path="/edit-testparameter/:id" element={<EditTestParameter />} />
 
           <Route path="/b2b-users" element={<B2BUsersList />} />
           <Route path="/edit-b2b-edit/:id" element={<EditB2bList />} />
