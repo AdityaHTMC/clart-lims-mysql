@@ -47,7 +47,7 @@ export const AuthProvider = ({ children }) => {
                 toast.error(response?.data?.message)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
     }
 
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             setPermissionList({...permissionList, loading: false})
-            // toast.error(error.response?.data?.message || 'Server error');
+            // toast.error(error.response?.data?.message || "Something went wrong");
         }
     }
 
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }) => {
                 setAllPermission(data.data)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
     }
 
@@ -146,7 +146,7 @@ export const AuthProvider = ({ children }) => {
             const {data} = await axios.put(`${base_url}/permissions/update/${id}`, body, { headers: { 'Authorization': Authtoken }});
             return data
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             return error?.response?.data || null
         }
     }
@@ -168,7 +168,7 @@ export const AuthProvider = ({ children }) => {
                 console.error(data.message)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setRolesList({...rolesList, loading: false})
         }
     }
@@ -178,7 +178,7 @@ export const AuthProvider = ({ children }) => {
             const {data} = await axios.post(`${base_url}/role/add`, body, { headers: { 'Authorization': Authtoken }});
             return data
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             return error?.response?.data || null
         }
     }
@@ -188,7 +188,7 @@ export const AuthProvider = ({ children }) => {
             const {data} = await axios.put(`${base_url}/role/update/${id}`, body, { headers: { 'Authorization': Authtoken }});
             return data
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             return error?.response?.data || null
         }
     }
@@ -202,7 +202,7 @@ export const AuthProvider = ({ children }) => {
             })
             return data
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             return error?.response?.data || null
         }
     }
@@ -219,7 +219,7 @@ export const AuthProvider = ({ children }) => {
                 setAllRoles(data.data)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
     }
 
@@ -238,7 +238,7 @@ export const AuthProvider = ({ children }) => {
             }
         } catch (error) {
             setSubAdminList({...subAdminList, loading: false})
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
         }
     }
 

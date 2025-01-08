@@ -20,41 +20,37 @@ import {
     Table,
   } from "reactstrap";
   import { useEffect, useState } from "react";
-  
   import { useNavigate } from "react-router-dom";
   import { FaEdit } from "react-icons/fa";
-  
   import { FaTrashAlt } from "react-icons/fa";
-  
   import { Spinner } from "reactstrap";
-  import { useMasterContext } from "../../helper/MasterProvider";
-  import CommonBreadcrumb from "../../component/common/bread-crumb";
   import { Pagination, Stack } from "@mui/material";
-  import { useCategoryContext } from "../../helper/CategoryProvider";
+import { useMasterContext } from "../../helper/MasterProvider";
+import CommonBreadcrumb from "../../component/common/bread-crumb";
   
-  const ParameterGroup = () => {
+  const RoleList = () => {
     const navigate = useNavigate();
   
-    const { getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr} =
+    const { getRoleList,roleList,addRole,editRoleList} =
       useMasterContext();
   
 
   
     const [formData, setFormData] = useState({
-      name: "",
+      role: "",
     });
   
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const itemperPage = 8;
   
-    const totalPages = parameterGrList?.total && Math.ceil(parameterGrList?.total / itemperPage);
+    const totalPages = roleList?.total && Math.ceil(roleList?.total / itemperPage);
   
     const [open, setOpen] = useState(false);
     const [modalOpen, setModalOpen] = useState(false);
   
     const [selectedvarity, setSelectedvarity] = useState({
-      name: "",
+      role: "",
       id: "",
     });
   
@@ -63,7 +59,7 @@ import {
         page: currentPage,
         limit: itemperPage,
       };
-      getParameterGrList(dataToSend);
+      getRoleList(dataToSend);
     }, [currentPage]);
   
     const onOpenModal = () => {
@@ -78,7 +74,7 @@ import {
     const onCloseModal2 = () => {
       setModalOpen(false);
       setSelectedvarity({
-        name: "",
+        role: "",
         id: "",
       });
     };
@@ -86,7 +82,7 @@ import {
     const onCloseModal = () => {
       setOpen(false);
       setFormData({
-        name: "",
+        role: "",
         id: "",
       });
     };
@@ -103,15 +99,15 @@ import {
     // Handle submit for updating the brand
     const handleSubmits = () => {
       const dataToSend = {
-        name: selectedvarity.name,
+        role: selectedvarity.role,
       }
-      editParameterGrList(selectedvarity.id,dataToSend);
+      editRoleList(selectedvarity.id,dataToSend);
       onCloseModal2();
     };
   
     const handleDelete = (id) => {
       if (window.confirm("Are you sure you wish to delete this item?")) {
-        DeleteParameterGr(id);
+        // DeleteParameterGr(id);
       }
     };
   
@@ -126,7 +122,7 @@ import {
   
     // Handle form submission
     const handleSubmit = () => {
-        addParameterGrMaster(formData);
+        addRole(formData);
       onCloseModal();
     };
   
@@ -136,7 +132,7 @@ import {
   
     return (
       <>
-        <CommonBreadcrumb title="Parameter Group List" />
+        <CommonBreadcrumb title="Roles Management" />
         <Container fluid>
           <Row>
             <Col sm="12">
@@ -153,29 +149,27 @@ import {
                     <Table striped responsive>
                       <thead>
                         <tr>
-                          <th>Name </th>
-                     
+                          <th>Role Name </th>
                           <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {parameterGrList?.loading ? (
+                        {roleList?.loading ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               <Spinner color="secondary" className="my-4" />
                             </td>
                           </tr>
-                        ) : parameterGrList?.data?.length === 0 ? (
+                        ) : roleList?.data?.length === 0 ? (
                           <tr>
                             <td colSpan="4" className="text-center">
                               No Data Found
                             </td>
                           </tr>
                         ) : (
-                            parameterGrList?.data?.map((product, index) => (
+                            roleList?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product.name}</td>
-                    
+                              <td>{product.role}</td>
                               <td>
                                 <div className="circelBtnBx">
                                   <Button
@@ -184,13 +178,6 @@ import {
                                     onClick={() => onOpenModal2(product)}
                                   >
                                     <FaEdit />
-                                  </Button>
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handleDelete(product.id)}
-                                  >
-                                    <FaTrashAlt />
                                   </Button>
                                 </div>
                               </td>
@@ -228,17 +215,17 @@ import {
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form onSubmit={(e) => e.preventDefault()}>
+            <Form>
               <FormGroup>
-                <Label htmlFor="name" className="col-form-label">
-                  Name
+                <Label htmlFor="role" className="col-form-label">
+                  Role Name
                 </Label>
                 <Input
                   type="text"
-                  name="name"
-                  value={formData.name}
+                  name="role"
+                  value={formData.role}
                   onChange={handleInputChange}
-                  id="name"
+                  id="role"
                 />
               </FormGroup>
               
@@ -263,15 +250,15 @@ import {
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
             <Form>
               <FormGroup>
-                <Label htmlFor="name" className="col-form-label">
-                  Name:
+                <Label htmlFor="role" className="col-form-label">
+                 Role Name:
                 </Label>
                 <Input
                   type="text"
-                  name="name"
-                  value={selectedvarity.name}
+                  name="role"
+                  value={selectedvarity.role}
                   onChange={handleInputChanges}
-                  id="name"
+                  id="role"
                 />
               </FormGroup>
          
@@ -291,5 +278,5 @@ import {
     );
   };
   
-  export default ParameterGroup;
+  export default RoleList;
   

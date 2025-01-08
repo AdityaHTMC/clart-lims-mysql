@@ -48,7 +48,7 @@ export const DashboardProvider = ({ children }) => {
           }
         } catch (error) {
             setCmsList({...cmsList, loading: false});
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -70,7 +70,7 @@ export const DashboardProvider = ({ children }) => {
           }
         } catch (error) {
             setDashboardOrderList({data:[], loading: false});
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -91,7 +91,7 @@ export const DashboardProvider = ({ children }) => {
           }
         } catch (error) {
           setDashboardOrderCount({data:[], loading: false});
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -198,7 +198,7 @@ export const DashboardProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -222,7 +222,7 @@ export const DashboardProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -265,7 +265,7 @@ const getB2bReport = async () => {
       }
   } catch (error) {
     setB2breportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -287,7 +287,7 @@ const getunitReport = async () => {
       }
   } catch (error) {
     setUnitreportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -308,7 +308,7 @@ const getLabReport = async () => {
       }
   } catch (error) {
     setLabreportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -329,7 +329,7 @@ const getCCReport = async () => {
       }
   } catch (error) {
     setCCreportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -349,7 +349,7 @@ const csvB2bReport = async () => {
       }
   } catch (error) {
     setCsvb2b('');
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -366,7 +366,7 @@ const csvUnitReport = async () => {
       }
   } catch (error) {
     setCsvUnit('');
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -383,7 +383,7 @@ const csvLabReport = async () => {
       }
   } catch (error) {
     setCsvLab('');
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -400,7 +400,7 @@ const csvCCReport = async () => {
       }
   } catch (error) {
     setCsvCC('');
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 

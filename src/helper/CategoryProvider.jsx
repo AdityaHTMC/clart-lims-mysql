@@ -54,7 +54,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setUnitLists({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -78,7 +78,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -103,7 +103,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -127,7 +127,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -150,7 +150,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -173,7 +173,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -196,7 +196,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -219,7 +219,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -243,7 +243,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setLabLists({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -287,7 +287,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setCCDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -309,7 +309,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setb2bDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -331,7 +331,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setUnitDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -354,7 +354,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setTpDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -376,7 +376,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setCustomerDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -399,7 +399,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setphelboDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -421,7 +421,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -443,7 +443,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -465,7 +465,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -489,7 +489,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -513,7 +513,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Lab:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -536,7 +536,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -563,7 +563,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setCollectionLists({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -586,7 +586,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -709,7 +709,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setPhlebotomistList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -737,7 +737,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -760,7 +760,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -783,7 +783,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -807,7 +807,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setFaqList({...FaqList, loading: false});
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -990,7 +990,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error deleting banner:', error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -1009,7 +1009,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1029,7 +1029,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1054,7 +1054,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setb2busers({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1077,7 +1077,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1100,7 +1100,7 @@ export const CategoryProvider = ({ children }) => {
       }
     } catch (error) {
       setTaskDetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1125,7 +1125,7 @@ export const CategoryProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 

@@ -39,7 +39,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setCmsList({ ...cmsList, loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -87,7 +87,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setitemgroup({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -109,7 +109,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -132,7 +132,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -151,7 +151,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -176,7 +176,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setIMList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -198,7 +198,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -220,7 +220,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -243,7 +243,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setIMAllList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -262,7 +262,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setIMAllList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -287,7 +287,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setVendorList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -310,7 +310,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -332,7 +332,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -350,7 +350,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -374,7 +374,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setPurchaseList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -398,7 +398,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setStockreport({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -417,11 +417,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setallvendorList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setallvendorList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -445,7 +445,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -472,7 +472,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setSrList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -495,7 +495,7 @@ export const StockProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -519,7 +519,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setStockhistory({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -543,7 +543,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setStocklqa({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 

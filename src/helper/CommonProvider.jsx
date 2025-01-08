@@ -47,7 +47,7 @@ export const CommonProvider = ({ children }) => {
                 setMenuList({ ...menuList, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setMenuList({ ...menuList, loading: false })
         }
     }
@@ -62,7 +62,7 @@ export const CommonProvider = ({ children }) => {
                 setCountryList({ ...countryList, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setCountryList({ ...countryList, loading: false })
         }
     }
@@ -78,7 +78,7 @@ export const CommonProvider = ({ children }) => {
                 setStateList({  data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setStateList({  data:[], loading: false })
         }
     }
@@ -94,7 +94,7 @@ export const CommonProvider = ({ children }) => {
                 setCityList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setCityList({ data:[], loading: false })
         }
     }
@@ -110,7 +110,7 @@ export const CommonProvider = ({ children }) => {
                 setSmsData({ ...smsData, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setSmsData({ ...smsData, loading: false })
         }
     }
@@ -126,7 +126,7 @@ export const CommonProvider = ({ children }) => {
               toast.error('Failed to update the pack');
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setSmsData({ ...smsData, loading: false })
         }
     }
@@ -143,7 +143,7 @@ export const CommonProvider = ({ children }) => {
                 setMailList({ ...smsData, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setMailList({ ...smsData, loading: false })
         }
     }
@@ -159,7 +159,7 @@ export const CommonProvider = ({ children }) => {
                 setUserList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setUserList({ data:[], loading: false })
         }
     }
@@ -196,7 +196,7 @@ export const CommonProvider = ({ children }) => {
                 setOrderList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setOrderList({ data:[], loading: false })
         }
     }
@@ -211,7 +211,7 @@ export const CommonProvider = ({ children }) => {
                 setOrderStatusList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setOrderStatusList({ data:[], loading: false })
         }
     }
@@ -229,7 +229,7 @@ export const CommonProvider = ({ children }) => {
                 setOrderDetails({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setOrderDetails({ data:[], loading: false })
         }
     }
@@ -247,7 +247,7 @@ export const CommonProvider = ({ children }) => {
                 
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             
         }
     }
@@ -266,7 +266,7 @@ export const CommonProvider = ({ children }) => {
               setallDeliveryList({ data:[], total:'',  loading: false })
           }
       } catch (error) {
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
           setallDeliveryList({ data:[], loading: false })
       }
     }
@@ -283,7 +283,7 @@ export const CommonProvider = ({ children }) => {
                 setPromoCode({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setPromoCode({ data:[], loading: false })
         }
     }
@@ -323,7 +323,7 @@ export const CommonProvider = ({ children }) => {
                 setVendorList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setVendorList({ data:[], loading: false })
         }
     }
@@ -340,10 +340,10 @@ export const CommonProvider = ({ children }) => {
           toast.success("Vendor Edited successfully");
           getVendorList();
         } else {
-          toast.error("Server error");
+          toast.error("Something went wrong");
         }
       } catch (error) {
-        toast.error(error.response?.data?.message || "Server error");
+        toast.error(error.response?.data?.message || "Something went wrong");
         setVendorList({ data: [], loading: false });
       }
     };
@@ -378,7 +378,7 @@ export const CommonProvider = ({ children }) => {
                 setEventList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setEventList({ data:[], loading: false })
         }
     }
@@ -439,7 +439,7 @@ export const CommonProvider = ({ children }) => {
                 setSectionList({ data:[], loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setSectionList({ data:[], loading: false })
         }
     }
@@ -455,7 +455,7 @@ export const CommonProvider = ({ children }) => {
               setallProductList({ data:[], loading: false })
           }
       } catch (error) {
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
           setallProductList({ data:[], loading: false })
       }
   }
@@ -472,7 +472,7 @@ export const CommonProvider = ({ children }) => {
             setprouctDetails({ data:[], loading: false })
         }
     } catch (error) {
-        toast.error(error.response?.data?.message || 'Server error');
+        toast.error(error.response?.data?.message || "Something went wrong");
         setprouctDetails({ data:[], loading: false })
     }
 }
@@ -491,7 +491,7 @@ const editfeaturedSection = async (dataToSend) => {
   
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
 
   }
 }
@@ -532,7 +532,7 @@ const getDeliveryBoyList = async () => {
           setBoyList({ data:[], total:'',  loading: false })
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
       setBoyList({ data:[], loading: false })
   }
 }
@@ -550,7 +550,7 @@ const DeliveryBoyDetail = async (id) => {
           setBoyDetails({ data:[], total:'',  loading: false })
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
       setBoyDetails({ data:[], loading: false })
   }
 }
@@ -569,7 +569,7 @@ const DeliveryBoyUpdate = async (id,formData) => {
     
       } 
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
 
   }
 }
@@ -609,7 +609,7 @@ const deliveryDelete = async (id) => {
       toast.error(response?.data?.message)
     }
   } catch (error) {
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 }
 
@@ -654,7 +654,7 @@ const geteventDetail = async (id) => {
           setEventDetails({ data:[],  loading: false })
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
       setEventDetails({ data:[], loading: false })
   }
 }
@@ -672,7 +672,7 @@ const editEvent = async (id,dataToSend) => {
   
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
 
   }
 }
@@ -693,7 +693,7 @@ const updateOrderStatus = async (dataToSend) => {
       toast.error(response?.data?.message);
     }
   } catch (error) {
-    toast.error(error.response?.data?.message || "Server error");
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -708,7 +708,7 @@ const getallPhelboList = async () => {
           setPhlebotomistList({ data:[], total:'',  loading: false })
       }
   } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
       setPhlebotomistList({ data:[], loading: false })
   }
 }
@@ -726,7 +726,7 @@ const getNewLetterList = async (dataToSend) => {
         setnewsletters({ data:[],  loading: false })
     }
 } catch (error) {
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
     setnewsletters({ data:[], loading: false })
 }
 }
@@ -743,7 +743,7 @@ const getEnquiryList = async (dataToSend) => {
         setenquirylist({ data:[],  loading: false })
     }
 } catch (error) {
-    toast.error(error.response?.data?.message || 'Server error');
+    toast.error(error.response?.data?.message || "Something went wrong");
     setenquirylist({ data:[], loading: false })
 }
 }
@@ -762,7 +762,7 @@ const updateItemStatus = async (dataToSend) => {
       toast.error(response?.data?.message);
     }
   } catch (error) {
-    toast.error(error.response?.data?.message || "Server error");
+    toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 

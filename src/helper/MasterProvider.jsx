@@ -59,6 +59,11 @@ export const MasterProvider = ({ children }) => {
   const [zoneList, setzoneList] = useState({loading: true,data: [],total: ""});
   const [zoneprice, setzonePrice] = useState({loading: true,data: []});
   const [sahcDoc, setSahcDoc] = useState({loading: true,data: []});
+  const [roleList, setRoleList] = useState({loading: true,data: [],total: ""});
+  const [permissionList, setPermissionList] = useState({loading: true,data: [],total: ""});
+  const [userMagList, setUserMagList] = useState({loading: true,data: [],total: ""});
+  const [dropdownRoleList, setdropdownRoleList] = useState({loading: true,data: []});
+  const [dropdownMenuList, setdropdownMenuList] = useState({loading: true,data: []});
   const [csvAuditData, setCsvAuditData] = useState('');
   const AuthToken = localStorage.getItem("Authtoken");
   // console.log(AuthToken)
@@ -131,7 +136,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Breed:", error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -155,7 +160,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setbreedLists({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -178,7 +183,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Breed:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -199,7 +204,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -246,7 +251,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -290,7 +295,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -340,7 +345,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Test category:", error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -384,7 +389,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -407,7 +412,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -426,7 +431,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -449,7 +454,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -501,7 +506,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setprofessionalList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -524,7 +529,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -547,7 +552,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -568,11 +573,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setalltest({ data: [], total: "", loading: false });
-        toast.error(response.data?.message || "Server error");
+        toast.error(response.data?.message || "Something went wrong");
       }
     } catch (error) {
       setalltest({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -595,7 +600,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -618,7 +623,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -643,7 +648,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       settestpackageList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -662,7 +667,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error('Error deleting Test package:', error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -686,7 +691,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setTpdetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -707,11 +712,11 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
        navigate('/task-management')
       } else {
-        toast.error(response.data.message || "Server error");
+        toast.error(response.data.message || "Something went wrong");
       }
     } catch (error) {
       console.error("Error adding Test package:", error);
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -737,7 +742,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setTaskList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -763,7 +768,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setTestParameter({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -785,7 +790,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -903,7 +908,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setUnitMasterList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1023,7 +1028,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1047,7 +1052,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1092,7 +1097,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1117,7 +1122,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1260,7 +1265,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1284,7 +1289,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1308,7 +1313,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1331,7 +1336,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1351,7 +1356,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -1370,7 +1375,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -1393,7 +1398,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       settimeList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1417,7 +1422,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setTimeListdata({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1443,7 +1448,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1468,7 +1473,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1488,7 +1493,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   }
 
@@ -1511,7 +1516,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setPhelboList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1533,7 +1538,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setorderPhelboList({ data: [], loading: false });
-      // toast.error(error.response?.data?.message || 'Server error');
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1556,7 +1561,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setallItemList({ data: [], loading: false });
-      // toast.error(error.response?.data?.message || 'Server error');
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1582,7 +1587,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setdesignationMasterList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1607,7 +1612,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1631,7 +1636,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1655,7 +1660,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1679,7 +1684,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setEmailSettingsList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1704,7 +1709,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1728,7 +1733,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setPetList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1752,7 +1757,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1776,7 +1781,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       setPetDetails({ data: [], loading: false });
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1800,7 +1805,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1825,7 +1830,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1843,7 +1848,7 @@ export const MasterProvider = ({ children }) => {
         setOrderDetails({ data: [], loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setOrderDetails({ data: [], loading: false });
     }
   };
@@ -1862,7 +1867,7 @@ export const MasterProvider = ({ children }) => {
         setTestDetails({ data: {}, loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setTestDetails({ data: {}, loading: false });
     }
   };
@@ -1887,7 +1892,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1910,7 +1915,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1935,7 +1940,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1960,7 +1965,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -1979,7 +1984,7 @@ export const MasterProvider = ({ children }) => {
         setsahcList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setsahcList({ data: [], loading: false });
     }
   };
@@ -1997,7 +2002,7 @@ export const MasterProvider = ({ children }) => {
         setallsahcList({ data: [],  loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setallsahcList({ data: [], loading: false });
     }
   };
@@ -2023,7 +2028,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2042,7 +2047,7 @@ export const MasterProvider = ({ children }) => {
         setdocList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setdocList({ data: [], loading: false });
     }
   };
@@ -2067,7 +2072,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2084,7 +2089,7 @@ export const MasterProvider = ({ children }) => {
         setzoneList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setzoneList({ data: [], loading: false });
     }
   };
@@ -2109,7 +2114,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2126,7 +2131,7 @@ export const MasterProvider = ({ children }) => {
         setzonePrice({ data: [], loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setzonePrice({ data: [], loading: false });
     }
   };
@@ -2151,7 +2156,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2174,7 +2179,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2197,7 +2202,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2221,7 +2226,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2243,7 +2248,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2265,7 +2270,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2283,7 +2288,7 @@ export const MasterProvider = ({ children }) => {
         setSahcDoc({ data: [],  loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setSahcDoc({ data: [], loading: false });
     }
   };
@@ -2302,7 +2307,7 @@ export const MasterProvider = ({ children }) => {
         setTransationList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setTransationList({ data: [], loading: false });
     }
   };
@@ -2322,7 +2327,7 @@ export const MasterProvider = ({ children }) => {
         setBankList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setBankList({ data: [], loading: false });
     }
   };
@@ -2347,7 +2352,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2371,7 +2376,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2393,7 +2398,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2412,7 +2417,7 @@ export const MasterProvider = ({ children }) => {
         setCihList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setCihList({ data: [], loading: false });
     }
   };
@@ -2432,7 +2437,7 @@ export const MasterProvider = ({ children }) => {
         setAuditTrailsList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setAuditTrailsList({ data: [], loading: false });
     }
   };
@@ -2452,7 +2457,7 @@ export const MasterProvider = ({ children }) => {
         setReportTemplateList({ data: [], total:'', loading: false });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
       setReportTemplateList({ data: [], loading: false });
     }
   };
@@ -2497,7 +2502,7 @@ export const MasterProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2520,7 +2525,7 @@ export const MasterProvider = ({ children }) => {
         toast.error("server errors");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2542,7 +2547,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2581,7 +2586,7 @@ export const MasterProvider = ({ children }) => {
         }
     } catch (error) {
       setCsvAuditData('');
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2624,7 +2629,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2643,10 +2648,10 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         getParameterGrList()
       } else {
-        toast.error(response?.data?.message || 'Server error');
+        toast.error(response?.data?.message || "Something went wrong");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Server error");
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2668,7 +2673,7 @@ export const MasterProvider = ({ children }) => {
         toast.error(response?.data?.message)
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Server error');
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -2690,10 +2695,282 @@ export const MasterProvider = ({ children }) => {
   };
 
 
+  const getRoleList = async () => {
+    try {
+      setRoleList({ data: [], loading: true });
+      const response = await axios.get(
+        `${base_url}/all/admin/roles/list`, 
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setRoleList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        setRoleList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      setRoleList({ data: [], loading: false });
+    }
+  };
+
+
+  const addRole = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/role/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getRoleList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
+
+  const editRoleList = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/role/update/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getRoleList()
+      } else {
+        toast.error(response?.data?.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong"); 
+    }
+  };
+
+
+  const getDropDownRoleList = async () => {
+    try {
+      setdropdownRoleList({ data: [], loading: true });
+      const response = await axios.get(
+        `${base_url}/admin/role/list`, 
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setdropdownRoleList({ data: response?.data?.data || [], loading: false });
+      } else {
+        setdropdownRoleList({ data: [], loading: false });
+      }
+    } catch (error) {
+      setdropdownRoleList({ data: [], loading: false });
+    }
+  };
+
+
+  const getDropDownMenuList = async () => {
+    try {
+      setdropdownMenuList({ data: [], loading: true });
+      const response = await axios.get(
+        `${base_url}/menu/list`, 
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setdropdownMenuList({ data: response?.data?.data || [], loading: false });
+      } else {
+        setdropdownMenuList({ data: [], loading: false });
+      }
+    } catch (error) {
+      setdropdownMenuList({ data: [], loading: false });
+    }
+  };
+
+
+  const getpermissionList = async (dataToSend) => {
+    try {
+      setPermissionList({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/permission/list`, {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setPermissionList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        setPermissionList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      setPermissionList({ data: [], loading: false });
+    }
+  };
+
+
+  const addPermission  = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/permission/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getpermissionList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
+
+
+  const editpermissionList = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/permission/edit/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getpermissionList()
+      } else {
+        toast.error(response?.data?.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong"); 
+    }
+  };
+
+
+  const Deletepermission = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/permission/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getpermissionList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
+
+ 
+
+
+  const getUserMagList = async (dataToSend) => {
+    try {
+      setUserMagList({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/sub-admin/list`, {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      if (response.status === 200) {
+        setUserMagList({ data: response?.data?.data || [], total: response.data.total , loading: false });
+      } else {
+        setUserMagList({ data: [], total:'', loading: false });
+      }
+    } catch (error) {
+      setUserMagList({ data: [], loading: false });
+    }
+  };
+
+  const addUserManagement  = async (formDataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/sub-admin/add`,
+        {...formDataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getUserMagList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
+  const editUserMagList = async (id,dataToSend) => {
+    try {
+      const response = await axios.post(
+        `${base_url}/admin/sub-admin/update/${id}`,
+        {...dataToSend},
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        getUserMagList()
+      } else {
+        toast.error(response?.data?.message || "Something went wrong");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong"); 
+    }
+  };
+
+  const DeleteUserMag = async (id) => {
+    try {
+      const response = await axios.delete(
+        `${base_url}/admin/sub-admin/delete/${id}`,
+        {
+          headers: {
+            Authorization: AuthToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        toast.success(response?.data?.message);
+        getUserMagList()
+      } else {
+        toast.error(response?.data?.message)
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    }
+  };
+
  
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData,getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr,getAllParameterGrList,allparameterGrList,getTestParaGr,allTestParaGr
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData,getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr,getAllParameterGrList,allparameterGrList,getTestParaGr,allTestParaGr,getRoleList,roleList,addRole,editRoleList,getDropDownRoleList,dropdownRoleList,getDropDownMenuList,dropdownMenuList,getpermissionList,permissionList,addPermission,editpermissionList,Deletepermission,getUserMagList,userMagList,addUserManagement,editUserMagList,DeleteUserMag
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };

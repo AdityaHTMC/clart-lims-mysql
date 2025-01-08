@@ -54,9 +54,6 @@ import DeliveryBoyList from "./screen/DeliveryBoyList";
 import AddDeliveryBoy from "./screen/AddDeliveryBoy";
 import EditDeliveryBoy from "./screen/EditDeliveryBoy";
 import StoreSetting from "./screen/StoreSetting";
-import PermissionManagement from "./screen/permission_management";
-import RoleManagement from "./screen/RoleManagement";
-import UserManagement from "./screen/UserManagement";
 import UnitList from "./screen/UnitList";
 import AddUnitList from "./screen/AddUnitList";
 import CollectionList from "./screen/CollectionCenter/CollectionList";
@@ -133,6 +130,9 @@ import EditTransporter from "./screen/Transpoter/EditTransporter";
 import ContainerBox from "./Master/Container/ContainerBox";
 import NotificationList from "./screen/NotificationList";
 import ParameterGroup from "./Master/ParameterGroup/ParameterGroup";
+import RoleList from "./screen/SubAdmin/RoleList";
+import PermissionList from "./screen/SubAdmin/PermissionList";
+import UserManagementList from "./screen/SubAdmin/UserManagementList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -311,13 +311,16 @@ function App() {
           <Route path="/editDelivery/:id" element={<EditDeliveryBoy />} />
           <Route path="/store-settings" element={<StoreSetting />} />
 
-          <Route path="/permission-management" element={<PermissionManagement />} />
-
+          {/* <Route path="/permission-management" element={<PermissionManagement />} /> */}
+          
+          <Route path="/permission-management" element={<PermissionList />} />
           
 
-          <Route path="/role-management" element={<RoleManagement />} />
+          {/* <Route path="/role-management" element={<RoleManagement />} /> */}
+          <Route path="/role-management" element={<RoleList />} />
 
-          <Route path="/user-management" element={<UserManagement />} />
+          {/* <Route path="/user-management" element={<UserManagement />} /> */}
+          <Route path="/user-management" element={<UserManagementList />} />
 
           <Route path="/sales/orders" element={<SalesOrders />} />
           <Route path="/sales/transactions" element={<SalesTransaction />} />

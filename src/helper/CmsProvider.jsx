@@ -26,7 +26,7 @@ export const CMsProvider = ({ children }) => {
                 setMenuList({ ...menuList, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Server error');
+            toast.error(error.response?.data?.message || "Something went wrong");
             setMenuList({ ...menuList, loading: false })
         }
     }
@@ -47,7 +47,7 @@ export const CMsProvider = ({ children }) => {
           }
         } catch (error) {
             setCmsList({data: [], loading: false});
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -72,7 +72,7 @@ export const CMsProvider = ({ children }) => {
           }
         } catch (error) {
           
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -95,7 +95,7 @@ export const CMsProvider = ({ children }) => {
           }
         } catch (error) {
           console.error("Error deleting CMS:", error);
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -119,7 +119,7 @@ export const CMsProvider = ({ children }) => {
           }
         } catch (error) {
           console.error('Error updating CMS:', error);
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -139,7 +139,7 @@ export const CMsProvider = ({ children }) => {
           }
         } catch (error) {
           setCurrencyList({...currencyList, loading: false});
-          toast.error(error.response?.data?.message || 'Server error');
+          toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 

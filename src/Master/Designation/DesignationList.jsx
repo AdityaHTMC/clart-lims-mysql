@@ -217,8 +217,8 @@ import {
           </ModalHeader>
           <ModalBody>
             {" "}
-            {/* Scroll in Y-axis */}
-            <Form>
+        
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
                   Name :
