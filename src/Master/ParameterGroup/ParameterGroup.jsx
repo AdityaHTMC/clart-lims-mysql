@@ -154,7 +154,6 @@ import {
                       <thead>
                         <tr>
                           <th>Name </th>
-                     
                           <th>Action</th>
                         </tr>
                       </thead>
@@ -261,7 +260,7 @@ import {
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="name" className="col-form-label">
                   Name:

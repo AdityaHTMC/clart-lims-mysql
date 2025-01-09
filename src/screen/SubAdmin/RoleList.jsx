@@ -215,7 +215,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="role" className="col-form-label">
                   Role Name
@@ -228,7 +228,6 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                   id="role"
                 />
               </FormGroup>
-              
             </Form>
           </ModalBody>
           <ModalFooter>
@@ -248,7 +247,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="role" className="col-form-label">
                  Role Name:
@@ -262,7 +261,6 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
                 />
               </FormGroup>
          
-            
             </Form>
           </ModalBody>
           <ModalFooter>

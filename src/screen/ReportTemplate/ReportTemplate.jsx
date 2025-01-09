@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {
-    Button,
+  Button,
   Card,
   CardBody,
   CardImg,
@@ -51,47 +51,58 @@ const ReportTemplate = () => {
                 <div className="clearfix"></div>
                 <div id="basicScenario" className="product-physical">
                   <div className="promo-code-list">
-                    <Row>
-                      {reportTemplateList.data?.map((template) => (
-                        <Col
-                          lg="4"
-                          md="6"
-                          sm="12"
-                          key={template.id}
-                          className="mb-4"
-                        >
-                          <Card className="shadow border-0">
-                            <CardImg
-                              top
-                              src={template.preview}
-                              alt={template.title}
-                              style={{ height: "200px", objectFit: "cover" }}
-                            />
-                            <CardBody>
-                              <CardTitle tag="h5" className="text-primary">
-                                {template.title}
-                              </CardTitle>
-                              <CardText>
-                                <strong>Template ID:</strong>{" "}
-                                {template.template_id}
-                              </CardText>
-                              <CardText>
-                                <strong>Created At:</strong>{" "}
-                                {new Date(
-                                  template.created_at
-                                ).toLocaleDateString()}
-                              </CardText>
-                              <Button
-                                color="primary"
-                                onClick={() => handleDownload(template.preview, template.title)}
-                              >
-                                Download Template
-                              </Button>
-                            </CardBody>
-                          </Card>
-                        </Col>
-                      ))}
-                    </Row>
+                    {reportTemplateList.loading ? (
+                      <div className="text-center my-4">
+                        <Spinner color="secondary" className="my-4" />
+                      </div>
+                    ) : (
+                      <Row>
+                        {reportTemplateList.data?.map((template) => (
+                          <Col
+                            lg="4"
+                            md="6"
+                            sm="12"
+                            key={template.id}
+                            className="mb-4"
+                          >
+                            <Card className="shadow border-0">
+                              <CardImg
+                                top
+                                src={template.preview}
+                                alt={template.title}
+                                style={{ height: "200px", objectFit: "cover" }}
+                              />
+                              <CardBody>
+                                <CardTitle tag="h5" className="text-primary">
+                                  {template.title}
+                                </CardTitle>
+                                <CardText>
+                                  <strong>Template ID:</strong>{" "}
+                                  {template.template_id}
+                                </CardText>
+                                <CardText>
+                                  <strong>Created At:</strong>{" "}
+                                  {new Date(
+                                    template.created_at
+                                  ).toLocaleDateString()}
+                                </CardText>
+                                <Button
+                                  color="primary"
+                                  onClick={() =>
+                                    handleDownload(
+                                      template.preview,
+                                      template.title
+                                    )
+                                  }
+                                >
+                                  Download Template
+                                </Button>
+                              </CardBody>
+                            </Card>
+                          </Col>
+                        ))}
+                      </Row>
+                    )}
                   </div>
                 </div>
               </CardBody>

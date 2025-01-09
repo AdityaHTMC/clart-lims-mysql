@@ -77,11 +77,12 @@ import { Pagination, Stack } from "@mui/material";
     // Close the modal
     const onCloseModal2 = () => {
       setModalOpen(false);
-      setSelectedvarity({ title: "", image: "", _id: "" });
+      setSelectedvarity({ title: "", });
     };
   
     const onCloseModal = () => {
       setOpen(false);
+      setFormData({ title: "" });
     };
   
 
@@ -223,7 +224,7 @@ import { Pagination, Stack } from "@mui/material";
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
                   Species Name :
@@ -260,7 +261,7 @@ import { Pagination, Stack } from "@mui/material";
             </h5>
           </ModalHeader>
           <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
                   Species

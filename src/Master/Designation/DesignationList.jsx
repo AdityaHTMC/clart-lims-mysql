@@ -158,7 +158,7 @@ import {
                             // Show "No products found" when there's no data
                             <tr>
                               <td colSpan="7" className="text-center">
-                                No Test Category List Found
+                                No Data Found
                               </td>
                             </tr>
                           ) : (
@@ -251,7 +251,7 @@ import {
             </h5>
           </ModalHeader>
           <ModalBody>
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="name" className="col-form-label">
                   Title:

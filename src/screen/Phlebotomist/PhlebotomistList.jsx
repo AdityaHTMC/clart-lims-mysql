@@ -55,8 +55,6 @@ const PhlebotomistList = () => {
 
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      // ProductDelete(id);
       DeletePhlebotomist(id);
     }
   };

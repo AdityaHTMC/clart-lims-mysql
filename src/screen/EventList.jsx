@@ -82,7 +82,7 @@ const EventList = () => {
                 <div className="clearfix"></div>
                 <div id="basicScenario" className="product-physical">
                   <div className="promo-code-list">
-                    <Table bordered hover responsive>
+                    <Table hover responsive>
                       <thead>
                         <tr>
                           <th>Event Image</th>

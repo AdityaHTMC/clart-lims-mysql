@@ -208,7 +208,7 @@ const ItemGroup = () => {
         <ModalBody>
           {" "}
           {/* Scroll in Y-axis */}
-          <Form>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
                 Item Group :
@@ -251,7 +251,7 @@ const ItemGroup = () => {
           </h5>
         </ModalHeader>
         <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
-          <Form>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <FormGroup>
               <Label htmlFor="title" className="col-form-label">
                 Item Group :

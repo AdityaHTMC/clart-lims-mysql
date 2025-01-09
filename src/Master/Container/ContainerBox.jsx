@@ -214,7 +214,7 @@ import {
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -224,7 +224,7 @@ import {
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="container_name" className="col-form-label">
                  Container Name :
@@ -256,7 +256,7 @@ import {
             </h5>
           </ModalHeader>
           <ModalBody>
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="container_name" className="col-form-label">
                 Container Name :

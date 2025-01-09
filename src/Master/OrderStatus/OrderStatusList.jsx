@@ -187,7 +187,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
         <Modal
           isOpen={open}
           toggle={onCloseModal}
-          className="modal-lg" // Increases the width
+          className="modal-xg" // Increases the width
         >
           <ModalHeader toggle={onCloseModal}>
             <h5 className="modal-title f-w-600" id="exampleModalLabel2">
@@ -197,7 +197,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
                   Order Status

@@ -103,7 +103,6 @@ import { Pagination, Stack } from "@mui/material";
     };
   
     const handleDelete = (id) => {
-      console.log('idssss: ' + id);
       if (window.confirm("Are you sure you wish to delete this item?")) {
         // delete product logic here
         DeleteParameterUnits(id);
@@ -224,7 +223,7 @@ import { Pagination, Stack } from "@mui/material";
           <ModalBody>
             {" "}
             {/* Scroll in Y-axis */}
-            <Form>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <FormGroup>
                 <Label htmlFor="title" className="col-form-label">
                   Unit :

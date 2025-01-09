@@ -174,7 +174,7 @@ const ProfessionalList = () => {
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No professional List Found
+                              No Data Found
                             </td>
                           </tr>
                         ) : (

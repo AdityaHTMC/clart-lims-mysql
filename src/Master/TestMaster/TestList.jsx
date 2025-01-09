@@ -25,7 +25,7 @@ const TestList = () => {
   const { gettestTestList, testList,deleteTest } = useMasterContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const itemperPage = 8;
+  const itemperPage = 15;
 
   const totalPages =
     testList?.total && Math.ceil(testList?.total / itemperPage);
@@ -67,7 +67,6 @@ const TestList = () => {
         <Row>
           <Col sm="12">
             <Card>
-              {/* <CommonCardHeader title="Product Sub Categoty" /> */}
               <CardBody>
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <form className="searchBx" style={{ display: "flex", alignItems: "center" }}>
@@ -126,7 +125,7 @@ const TestList = () => {
                           // Show "No products found" when there's no data
                           <tr>
                             <td colSpan="7" className="text-center">
-                              No test List Found
+                              No Data Found
                             </td>
                           </tr>
                         ) : (
