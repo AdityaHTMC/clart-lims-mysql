@@ -50,7 +50,6 @@ const EventList = () => {
 
   const handleStatusToggle = async (product) => {
     const newStatus = product.status === "Active" ? "Inactive" : "Active";
-    //   await switchUser(product._id, newStatus); // Your API call here
   };
 
   const handleEdit = (id) => {

@@ -1,10 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Button, FormGroup, FormText, Input, Label } from "reactstrap";
-import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { Autocomplete, Chip, TextField } from "@mui/material";
-import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 

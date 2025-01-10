@@ -976,11 +976,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setallspecies({ data: [], loading: false });
-        toast.error("Failed to fetch unit list");
+
       }
     } catch (error) {
       setallspecies({ data: [], loading: false });
-      toast.error("Failed to fetch unit list");
+
     }
   };
 
@@ -997,14 +997,13 @@ export const MasterProvider = ({ children }) => {
         }
       );
       if (response.status === 200) {
-        toast.success("Species unit added successfully");
+        toast.success(response?.data?.message);
         getSpeciesMasterList()
       } else {
-        toast.error("Failed to add Species unit");
+        toast.error(response?.data?.message);
       }
     } catch (error) {
-      console.error("Error adding Species unit:", error);
-      toast.error("An error occurred while adding the Species unit");
+      toast.success(error.response?.data?.message);
     }
   };
 
@@ -1070,11 +1069,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setorderMasterList({ data: [], loading: false });
-        toast.error("Failed to fetch unit list");
+
       }
     } catch (error) {
       setorderMasterList({ data: [], loading: false });
-      toast.error("Failed to fetch unit list");
+
     }
   };
 
@@ -1094,7 +1093,7 @@ export const MasterProvider = ({ children }) => {
         toast.success(response.data.message);
         getOrderMasterList()
       } else {
-        toast.error("server errors");
+        toast.error(response.data.message);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Something went wrong");
@@ -1134,19 +1133,17 @@ export const MasterProvider = ({ children }) => {
         {
           headers: {
             Authorization: AuthToken,
-            'Content-Type': 'application/json' ,
           },
         }
       );
       if (response.status === 200) {
-        toast.success("Order Status added successfully");
+        toast.success(response.data.message);
         getOrderMasterList()
       } else {
-        toast.error("Failed to add Order Status");
+        toast.success(response.data.message);
       }
     } catch (error) {
-      console.error("Error adding Order Status:", error);
-      toast.error("An error occurred while adding the Order Status");
+      toast.success(error.response.data.message);
     }
   };
 
