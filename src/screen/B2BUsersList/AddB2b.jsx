@@ -137,16 +137,23 @@ const AddB2b = () => {
 
     const formDataToSend = new FormData();
 
-    formDataToSend.append("organization_name", inputData.organization_name);
-    formDataToSend.append("contact_person", inputData.contact_person);
-    formDataToSend.append("mobile", inputData.mobile);
-    formDataToSend.append("password", inputData.password);
-    formDataToSend.append("email", inputData.email);
-    formDataToSend.append("address", inputData.address);
-    formDataToSend.append("district", inputData.district);
-    formDataToSend.append("state", inputData.state);
-    formDataToSend.append("pincode", inputData.pincode);
-    formDataToSend.append("GSTIN", inputData.GSTIN);
+    // formDataToSend.append("organization_name", inputData.organization_name);
+    // formDataToSend.append("contact_person", inputData.contact_person);
+    // formDataToSend.append("mobile", inputData.mobile);
+    // formDataToSend.append("password", inputData.password);
+    // formDataToSend.append("email", inputData.email);
+    // formDataToSend.append("address", inputData.address);
+    // formDataToSend.append("district", inputData.district);
+    // formDataToSend.append("state", inputData.state);
+    // formDataToSend.append("pincode", inputData.pincode);
+    // formDataToSend.append("GSTIN", inputData.GSTIN);
+
+    Object.entries(inputData).forEach(([key, value]) => {
+      if (value) {
+        formDataToSend.append(key, value);
+      }
+    });
+
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
@@ -214,7 +221,7 @@ const AddB2b = () => {
                   value={inputData.contact_person}
                   onChange={handleInputChange}
                   id="contact_person"
-                  required
+                  
                 />
               </FormGroup>
             </div>
