@@ -234,7 +234,7 @@ const AddB2b = () => {
                   value={inputData.mobile}
                   onChange={handleInputChange}
                   id="mobile"
-                  required
+                  
                 />
                 {error && <FormText color="danger">{error}</FormText>}
               </FormGroup>
@@ -251,7 +251,7 @@ const AddB2b = () => {
                   value={inputData.pincode}
                   onChange={handleInputChange}
                   id="pincode"
-                  required
+                  
                 />
               </FormGroup>
             </div>

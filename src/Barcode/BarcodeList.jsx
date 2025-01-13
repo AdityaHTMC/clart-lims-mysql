@@ -126,11 +126,6 @@ const BarcodeList = () => {
 
   // Generate PDF
   const generatePDF = async () => {
-    const newdataToSend = {
-      page: currentPage,
-      limit: itemperPage,
-      ...selectedStatus, 
-    };
     if (selectedBarcodes.length === 0) {
       return;
     }
@@ -144,42 +139,48 @@ const BarcodeList = () => {
     // Call the Barcodeprint API function with the payload
     await Barcodeprint(dataToSend);
   
-    const pdf = new jsPDF();
-    const itemsPerPage = 24; // 8 rows * 3 columns
-    let currentItem = 0;
+    const pdf = new jsPDF({
+      orientation: "landscape", // Landscape mode
+      unit: "cm", // Use cm as the unit
+      format: [10.3, 3.8], // Set custom page size
+    });
   
-    for (let index = 0; index < selectedBarcodes.length; index++) {
-      const product = barcode.data.find(
-        (item) => item.code === selectedBarcodes[index]
-      );
+    for (const barcodeCode of selectedBarcodes) {
+      const product = barcode.data.find((item) => item.code === barcodeCode);
       if (!product) continue;
   
       // Fetch image from URL and convert to data URI
       const img = await loadImageToDataURI(product.bar_code);
   
-      // Calculate position for 3 columns and 8 rows
-      const col = currentItem % 3;
-      const row = Math.floor(currentItem / 3) % 8;
-      const x = col * 70 + 10; // Adjust for spacing and centering
-      const y = row * 35 + 10;
+      // Calculate position for centering the barcode image
+      const imgWidth = 9.5; // Adjust the width of the barcode
+      const imgHeight = 3; // Adjust the height of the barcode
+      const x = (10.3 - imgWidth) / 2; // Center horizontally
+      const y = (3.8 - imgHeight) / 2; // Center vertically
   
       // Add image
-      pdf.addImage(img, "PNG", x, y, 55, 30); // Adjust image width and height
+      pdf.addImage(img, "PNG", x, y, imgWidth, imgHeight);
   
-      currentItem++;
-  
-      // Add a new page after every 24 items
-      if (currentItem % itemsPerPage === 0) {
+      // Add a new page for each barcode except the last one
+      if (selectedBarcodes.indexOf(barcodeCode) !== selectedBarcodes.length - 1) {
         pdf.addPage();
-        currentItem = 0;
       }
     }
   
+    // Save the PDF file
     pdf.save("barcodes.pdf");
-
+  
+    // Optionally, refresh barcode data
+    const newdataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      ...selectedStatus,
+    };
     getbarcode(newdataToSend);
+  
     setSelectedBarcodes([]);
   };
+  
   
 
   return (

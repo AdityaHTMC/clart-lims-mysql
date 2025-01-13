@@ -159,7 +159,7 @@ const AddUnitForm = () => {
                 value={inputData.contact_person}
                 onChange={handleInputChange}
                 id="contact_person"
-                required
+                
               />
             </FormGroup>
           </div>
@@ -179,7 +179,7 @@ const AddUnitForm = () => {
                 value={inputData.mobile}
                 onChange={handleInputChange}
                 id="mobile"
-                required
+                
               />
               {error && <FormText color="danger">{error}</FormText>}
             </FormGroup>
@@ -196,7 +196,7 @@ const AddUnitForm = () => {
                 value={inputData.pincode}
                 onChange={handleInputChange}
                 id="pincode"
-                required
+                
               />
             </FormGroup>
           </div>

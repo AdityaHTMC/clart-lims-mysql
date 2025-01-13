@@ -167,7 +167,7 @@ const AddCollectionList = () => {
                 value={inputData.contact_person}
                 onChange={handleInputChange}
                 id="contact_person"
-                required
+                
               />
             </FormGroup>
           </div>
@@ -187,7 +187,7 @@ const AddCollectionList = () => {
                 value={inputData.mobile}
                 onChange={handleInputChange}
                 id="mobile"
-                required
+                
               />
               {error && <FormText color="danger">{error}</FormText>} 
             </FormGroup>
@@ -204,7 +204,7 @@ const AddCollectionList = () => {
                 value={inputData.pincode}
                 onChange={handleInputChange}
                 id="pincode"
-                required
+                
               />
             </FormGroup>
           </div>
@@ -303,7 +303,7 @@ const AddCollectionList = () => {
                 value={inputData.serviceable_pin_code}
                 onChange={handleInputChange}
                 id="serviceable_pin_code"
-                required
+                
               />
             </FormGroup>
           </div>
