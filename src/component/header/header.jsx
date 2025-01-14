@@ -19,12 +19,18 @@ import Notification from "./notification";
 import { useAppDispatch, useAppSelector } from "../../Redux/Hooks";
 
 import companyLogo from "../../assets/wbldcl-logo-v1.png";
+import { useAuthContext } from "../../helper/AuthProvider";
 
 const Header = () => {
   const { sidebar, rightSidebar } = useAppSelector(
     (store) => store.LayoutReducer
   );
   const dispatch = useAppDispatch();
+
+  const {user} = useAuthContext()
+
+  console.log(user, 'user')
+
   const [fullScreen, setFullScreen] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [navMenus, setNavMenus] = useState(false);
@@ -76,6 +82,7 @@ const Header = () => {
           </div>
           <Col au className="nav-right ">
             <ul className={"nav-menus " + (navMenus ? "open" : "")}>
+              <li> <strong>Admin</strong> : {user?.name} ({user?.role_name}) </li>
               <li>
                 <Notification />
               </li>
