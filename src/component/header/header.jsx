@@ -82,7 +82,7 @@ const Header = () => {
           </div>
           <Col au className="nav-right ">
             <ul className={"nav-menus " + (navMenus ? "open" : "")}>
-              <li> <strong>Admin</strong> : {user?.name} ({user?.role_name}) </li>
+              <li> {user?.name} ({user?.role_name}) </li>
               <li>
                 <Notification />
               </li>
