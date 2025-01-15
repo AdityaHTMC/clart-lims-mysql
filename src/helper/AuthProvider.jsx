@@ -35,21 +35,50 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
 
+    const otp_request = async (data) => {
+        try {
+            const response = await axios.post(`${base_url}/admin/send-otp`, data);
+            console.log(response)
+            return response?.data
+
+        } catch (error) {
+            return error?.response?.data || null
+        }
+    }
+
+
     const admin_login = async (data) => {
         try {
-            const response = await axios.post(`${base_url}/admin/login`, data);
+            const response = await axios.post(`${base_url}/admin/verify-otp`, data);
             if(response.status === 200) {
                 localStorage.setItem('Authtoken', response?.data?.token)
                 setAuthtoken(response?.data?.token || null)
                 toast.success('Logged in successfully');
-                navigate('/dashboard', {replace: true})
+                setInitialLoading(true)
+                navigate('/', {replace: true})
             }else {
                 toast.error(response?.data?.message)
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || 'Login failed with this credentials');
         }
     }
+
+    // const admin_login = async (data) => {
+    //     try {
+    //         const response = await axios.post(`${base_url}/admin/login`, data);
+    //         if(response.status === 200) {
+    //             localStorage.setItem('Authtoken', response?.data?.token)
+    //             setAuthtoken(response?.data?.token || null)
+    //             toast.success('Logged in successfully');
+    //             navigate('/dashboard', {replace: true})
+    //         }else {
+    //             toast.error(response?.data?.message)
+    //         }
+    //     } catch (error) {
+    //         toast.error(error.response?.data?.message || "Something went wrong");
+    //     }
+    // }
 
     const validate_admin = async () => {
         try {
@@ -286,7 +315,7 @@ export const AuthProvider = ({ children }) => {
     }, [initialLoading, user, Authtoken])
 
     const values = {
-        Authtoken, user, admin_login, validate_admin, initialLoading,getPermissionList,permissionList,CreatePermission,update_permission,getAllPermission,allPermission, getRolesList, rolesList, getAllRoles, allRoles, create_role, update_role, role_detail,getSubAdminList,subAdminList,getMenuList,allMenuList,
+        Authtoken, user, admin_login, validate_admin, initialLoading,getPermissionList,permissionList,CreatePermission,update_permission,getAllPermission,allPermission, getRolesList, rolesList, getAllRoles, allRoles, create_role, update_role, role_detail,getSubAdminList,subAdminList,getMenuList,allMenuList,otp_request
     }
     return (
         <AppContext.Provider value={values}>

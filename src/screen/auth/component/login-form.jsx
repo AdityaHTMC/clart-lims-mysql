@@ -1,75 +1,179 @@
 /* eslint-disable no-unused-vars */
-// import Cookies from "js-cookie";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Eye, EyeOff } from "react-feather";
-// import { toast } from "react-toastify";
-import { Button, Form, FormGroup, Input, InputGroup, InputGroupText, Label,Spinner  } from "reactstrap";
-import SocialMediaIcons from "./social-media-icon";
+import {
+  Button,
+  Form,
+  FormGroup,
+  Input,
+  InputGroup,
+  InputGroupText,
+  Label,
+  Spinner,
+} from "reactstrap";
+import { toast } from "react-toastify";
 import { useAuthContext } from "../../../helper/AuthProvider";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginForm = () => {
   const [showPassWord, setShowPassWord] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const  { admin_login } = useAuthContext()
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [isOtpSend, setIsOtpSend] = useState(false);
+  const [timer, setTimer] = useState(0); // Timer in seconds
+  const [verified, setVerified] = useState(false);
+  const recaptchaRef = useRef(null);
+  const { admin_login, otp_request } = useAuthContext();
   const [formValues, setFormValues] = useState({
     email: "",
-    password: "",
+    otp: "",
   });
-
-  // const { email, password } = formValues;
 
   const handleUserValue = (event) => {
     setFormValues({ ...formValues, [event.target.name]: event.target.value });
+    if (event.target.name === "email") {
+      resetRecaptcha();
+    }
+  };
+
+  const onVerified = () => {
+    setVerified(true);
+  };
+
+  const resetRecaptcha = () => {
+    setVerified(false);
+    if (recaptchaRef.current) {
+      recaptchaRef.current.reset();
+    }
   };
 
   const formSubmitHandle = async (event) => {
     event.preventDefault();
-    setIsLoading(true); // Start loading
 
-    try {
-      await admin_login(formValues); // Call the login function
-    } catch (error) {
-      console.error("Login error:", error); // Handle error if needed
-    } finally {
-      setIsLoading(false); // Stop loading
+    if (!isOtpSend) {
+      await sendOtp(); // Call send OTP function
+    } else {
+      setIsProcessing(true);
+      const res = await admin_login(formValues);
+      setIsProcessing(false);
+
+      if (res.status === 200) {
+        toast.success("Login successful");
+      } else {
+        toast.error("Invalid OTP or Login failed");
+      }
     }
+  };
+
+  const sendOtp = async () => {
+    setIsProcessing(true);
+    const res = await otp_request(formValues);
+    setIsProcessing(false);
+
+    if (res.status === 200) {
+      setIsOtpSend(true);
+      setTimer(120); // Start the timer for 2 minutes
+      toast.success("OTP sent successfully");
+    } else {
+      toast.error("Failed to send OTP");
+    }
+  };
+
+  // Timer effect to decrement every second
+  useEffect(() => {
+    let timerInterval;
+    if (timer > 0) {
+      timerInterval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    // Cleanup timer on unmount
+    return () => clearInterval(timerInterval);
+  }, [timer]);
+
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
 
   return (
     <Form className="form-horizontal auth-form" onSubmit={formSubmitHandle}>
       <FormGroup>
-        <Input required onChange={handleUserValue} type="email" value={formValues.email} placeholder="Enter email" name="email" />
-      </FormGroup>
-      <FormGroup>
-        <InputGroup onClick={() => setShowPassWord(!showPassWord)}>
-          <Input required onChange={handleUserValue} type={showPassWord ? "password" : "text"} name="password"  value={formValues.password} placeholder="Password" />
-          <InputGroupText>{showPassWord ? <EyeOff /> : <Eye />}</InputGroupText>
-        </InputGroup>
+        <Input
+          required
+          onChange={handleUserValue}
+          type="email"
+          value={formValues.email}
+          placeholder="Enter email"
+          name="email"
+          disabled={isOtpSend} // Disable email field if OTP is sent
+        />
       </FormGroup>
 
-      <div className="form-terms">
-        <div className="custom-control custom-checkbox me-sm-2">
-          <Label className="d-block">
-            <Input className="checkbox_animated" id="chk-ani2" type="checkbox" />
-            Remember Me
-            <span className="pull-right">
-              <Button color="transparent" className="forgot-pass p-0">
-                Forgot Password
-              </Button>
-            </span>
-          </Label>
-        </div>
-      </div>
+      {!isOtpSend && formValues.email && (
+        <ReCAPTCHA
+          // sitekey="6LfZeIMqAAAAABOvtLmqRSwd3A4n1HaCm73yEoeO"  // for live 
+          sitekey= "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" //  For testing in local
+          onChange={onVerified}
+          ref={recaptchaRef}
+          size="normal"
+        />
+      )}
+
+      {isOtpSend && (
+        <>
+          <FormGroup>
+            <InputGroup>
+              <Input
+                required
+                onChange={handleUserValue}
+                type={showPassWord ? "number" : "password"}
+                name="otp"
+                value={formValues.otp}
+                placeholder="Enter OTP"
+                maxLength={6}
+                minLength={6}
+              />
+              <InputGroupText onClick={() => setShowPassWord(!showPassWord)}>
+                {showPassWord ? <Eye /> : <EyeOff />}
+              </InputGroupText>
+            </InputGroup>
+            <div className="text-muted mt-2">
+              {timer > 0
+                ? `OTP expires in: ${formatTime(timer)}`
+                : "OTP expired. Please resend."}
+            </div>
+          </FormGroup>
+        </>
+      )}
 
       <div className="form-button">
-        <Button color="primary" type="submit" disabled={isLoading}>
-          {isLoading ? <Spinner size="sm" /> : "Login"}
+        {isOtpSend && timer <= 0 && (
+          <Button
+            color="secondary"
+            type="button"
+            onClick={sendOtp}
+            disabled={isProcessing} // Disable button while processing
+            className="me-3"
+          >
+            Resend OTP
+          </Button>
+        )}
+        <Button
+          color="primary"
+          type="submit"
+          disabled={!verified || isProcessing} // Disable if not verified
+        >
+          {isProcessing ? (
+            <Spinner size="sm" />
+          ) : isOtpSend ? (
+            "Verify OTP"
+          ) : (
+            "Send OTP"
+          )}
         </Button>
       </div>
-      {/* <div className="form-footer">
-        <span>Or Login up with social platforms</span>
-        <SocialMediaIcons />
-      </div> */}
     </Form>
   );
 };
