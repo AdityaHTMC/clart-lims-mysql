@@ -1,11 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
-import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";
-
-import { FaTrash } from "react-icons/fa";
+import { Button, FormGroup, FormText, Input, Label, Spinner } from "reactstrap";;
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Autocomplete, Chip, TextField } from "@mui/material";

@@ -19,6 +19,7 @@ import { useDashboardContext } from "../helper/DashboardProvider";
 import { CircularProgress, Pagination, Stack } from "@mui/material";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
+import  logo from '../../src/assets/wbldcl-logo-v1.png';
 const BarcodeList = () => {
   const navigate = useNavigate();
 
@@ -140,26 +141,37 @@ const BarcodeList = () => {
     await Barcodeprint(dataToSend);
   
     const pdf = new jsPDF({
-      orientation: "landscape", // Landscape mode
-      unit: "cm", // Use cm as the unit
-      format: [10.3, 3.8], // Set custom page size
+      orientation: "landscape", 
+      unit: "mm", // Use mm as the unit
+      format: [50, 38], // Custom page size 50x38 mm
     });
+  
+    const logoImg = await loadImageToDataURI(logo); // Replace with the path to your logo file
   
     for (const barcodeCode of selectedBarcodes) {
       const product = barcode.data.find((item) => item.code === barcodeCode);
       if (!product) continue;
   
-      // Fetch image from URL and convert to data URI
+      // Fetch barcode image from URL and convert to data URI
       const img = await loadImageToDataURI(product.bar_code);
   
-      // Calculate position for centering the barcode image
-      const imgWidth = 9.5; // Adjust the width of the barcode
-      const imgHeight = 3; // Adjust the height of the barcode
-      const x = (10.3 - imgWidth) / 2; // Center horizontally
-      const y = (3.8 - imgHeight) / 2; // Center vertically
+      // Add logo at the top-left corner
+      // Adjust position and size as needed
   
-      // Add image
+      // Add Name text below the logo
+      pdf.setFont("helvetica", "bold");
+      pdf.setFontSize(10);
+      
+      // Calculate position for centering the barcode image
+      const imgWidth = 34; // Adjust the width of the barcode
+      const imgHeight = 15; // Adjust the height of the barcode
+      const x = 4; // Center horizontally
+      const y = 8; // Center vertically and account for logo/text
+      
+      // Add the barcode image
       pdf.addImage(img, "PNG", x, y, imgWidth, imgHeight);
+      pdf.addImage(logoImg, "PNG", 40, 2, 7, 7); 
+      pdf.text(`Name: `, 4, 32); // Adjust position as needed
   
       // Add a new page for each barcode except the last one
       if (selectedBarcodes.indexOf(barcodeCode) !== selectedBarcodes.length - 1) {
@@ -180,6 +192,7 @@ const BarcodeList = () => {
   
     setSelectedBarcodes([]);
   };
+  
   
   
 

@@ -27,8 +27,6 @@ import { FaEdit } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 
 import { Spinner } from "reactstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
@@ -296,7 +294,7 @@ const VendorManagement = () => {
                   value={formData.contact_person}
                   onChange={handleInputChange}
                   id="contact_person"
-                  required
+                  required   
                 />
                 {errors.contact_person && (
                   <span className="text-danger">{errors.contact_person}</span>

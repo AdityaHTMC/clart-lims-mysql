@@ -144,7 +144,7 @@ export const OrderProvider = ({ children }) => {
 
       const getAllOrderList = async (dataToSend) => {
         try {
-            setAllOrder({ loading: true, data: [] ,total: ""})
+            setAllOrderlist({ loading: true, data: [] ,total: ""})
             const response = await axios.post(
                 `${base_url}/admin/all/orders/list`,
                 {...dataToSend} ,
