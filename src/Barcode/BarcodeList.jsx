@@ -141,40 +141,56 @@ const BarcodeList = () => {
     await Barcodeprint(dataToSend);
   
     const pdf = new jsPDF({
-      orientation: "landscape", 
+      orientation: "landscape",
       unit: "mm", // Use mm as the unit
-      format: [50, 38], // Custom page size 50x38 mm
+      format: [100, 38], // Custom page size 100x38 mm
     });
   
     const logoImg = await loadImageToDataURI(logo); // Replace with the path to your logo file
   
-    for (const barcodeCode of selectedBarcodes) {
-      const product = barcode.data.find((item) => item.code === barcodeCode);
-      if (!product) continue;
+    const pageWidth = 100; // Page width in mm
+    const barcodeWidth = 34;
+    const barcodeHeight = 15;
+    const gap = 10; // Gap between barcodes
+    const totalBarcodeWidth = barcodeWidth * 2 + gap; // Total width occupied by the two barcodes
+    const centerX = (pageWidth - totalBarcodeWidth) / 2; // Starting x position for the first barcode
+    const barcodeY = 12; // Adjusted y position for better logo visibility
+    const nameTextYOffset = barcodeY + barcodeHeight + 5; // Name text position
+    const logoWidth = 5;
+    const logoHeight = 5;
   
-      // Fetch barcode image from URL and convert to data URI
-      const img = await loadImageToDataURI(product.bar_code);
+    for (let i = 0; i < selectedBarcodes.length; i += 2) {
+      // Fetch data for the first barcode
+      const product1 = barcode.data.find((item) => item.code === selectedBarcodes[i]);
+      const img1 = product1 ? await loadImageToDataURI(product1.bar_code) : null;
   
-      // Add logo at the top-left corner
-      // Adjust position and size as needed
+      // Fetch data for the second barcode if available
+      const product2 = selectedBarcodes[i + 1]
+        ? barcode.data.find((item) => item.code === selectedBarcodes[i + 1])
+        : null;
+      const img2 = product2 ? await loadImageToDataURI(product2.bar_code) : null;
   
-      // Add Name text below the logo
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(10);
-      
-      // Calculate position for centering the barcode image
-      const imgWidth = 34; // Adjust the width of the barcode
-      const imgHeight = 15; // Adjust the height of the barcode
-      const x = 4; // Center horizontally
-      const y = 8; // Center vertically and account for logo/text
-      
-      // Add the barcode image
-      pdf.addImage(img, "PNG", x, y, imgWidth, imgHeight);
-      pdf.addImage(logoImg, "PNG", 40, 2, 7, 7); 
-      pdf.text(`Name: `, 4, 32); // Adjust position as needed
+      // Add the first barcode with its details
+      if (img1) {
+        pdf.addImage(img1, "PNG", centerX, barcodeY, barcodeWidth, barcodeHeight);
+        pdf.addImage(logoImg, "PNG", centerX + barcodeWidth - logoWidth, barcodeY - 8, logoWidth, logoHeight); // Logo above barcode
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(10);
+        pdf.text(`Name: `, centerX, nameTextYOffset);
+      }
   
-      // Add a new page for each barcode except the last one
-      if (selectedBarcodes.indexOf(barcodeCode) !== selectedBarcodes.length - 1) {
+      // Add the second barcode with its details, if available
+      if (img2) {
+        const xOffset = centerX + barcodeWidth + gap; // Start position for the second barcode
+        pdf.addImage(img2, "PNG", xOffset, barcodeY, barcodeWidth, barcodeHeight);
+        pdf.addImage(logoImg, "PNG", xOffset + barcodeWidth - logoWidth, barcodeY - 8, logoWidth, logoHeight); // Logo above barcode
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(10);
+        pdf.text(`Name: `, xOffset, nameTextYOffset);
+      }
+  
+      // Add a new page for the next set of barcodes
+      if (i + 2 < selectedBarcodes.length) {
         pdf.addPage();
       }
     }
@@ -192,6 +208,7 @@ const BarcodeList = () => {
   
     setSelectedBarcodes([]);
   };
+  
   
   
   

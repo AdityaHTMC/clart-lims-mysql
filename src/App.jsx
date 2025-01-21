@@ -133,6 +133,7 @@ import ParameterGroup from "./Master/ParameterGroup/ParameterGroup";
 import RoleList from "./screen/SubAdmin/RoleList";
 import PermissionList from "./screen/SubAdmin/PermissionList";
 import UserManagementList from "./screen/SubAdmin/UserManagementList";
+import UnPaidOrders from "./OrderMenu/UnPaidOrders";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -241,6 +242,7 @@ function App() {
           <Route path="/all-orders" element={<AllOrderList />} />
           <Route path="/package-orders" element={<PackageOrder />} />
           <Route path="/pending-orders" element={<PendingOrder />} />
+          <Route path="/unpaid-orders" element={<UnPaidOrders />} />
           <Route path="/add-order" element={<CreateOrder />} />
           <Route path="/order-details/:id" element={<OrderDetailspage />} />
           {/* order end */}

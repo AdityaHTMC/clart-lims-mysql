@@ -19,7 +19,7 @@ const LoginSlider = () => {
         </div>
             <div>
               <div>
-                <h3>Welcome to CLART LIMS</h3>
+                <h3>Welcome to CLART</h3>
                 <p>Centre for Laboratory Animal Research and Training (CLART) under West Bengal Livestock Development Corporation Ltd.</p>
               </div>
             </div>
