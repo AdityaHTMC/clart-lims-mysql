@@ -4,8 +4,7 @@ import { Button, FormGroup, Input, Label } from "reactstrap";
 
 import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";

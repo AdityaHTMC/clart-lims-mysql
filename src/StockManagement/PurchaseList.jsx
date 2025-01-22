@@ -64,7 +64,7 @@ const PurchaseList = () => {
     vendor_id: "",
     order_id: "",
     invoice_number: "",
-    invoice_date: "",
+    date: "",
     stock: [
       {
         item_id: "",
@@ -76,71 +76,58 @@ const PurchaseList = () => {
   });
 
   const [open, setOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const [selectedvarity, setSelectedvarity] = useState({
-    item_id: "",
-    vendor_id: "",
-    quantity: "",
-    amount: "",
-  });
 
   const onOpenModal = () => {
     setOpen(true);
   };
-  const onOpenModal2 = (product) => {
-    setSelectedvarity(product);
-    setModalOpen(true);
-  };
-
-  // Close the modal
-  const onCloseModal2 = () => {
-    setModalOpen(false);
-    setSelectedvarity({
-      item_id: "",
-      vendor_id: "",
-      quantity: "",
-      amount: "",
-      id: "",
-    });
-  };
 
   const onCloseModal = () => {
     setOpen(false);
-  };
-
-  // Handle form input change
-  const handleInputChanges = (e) => {
-    const { name, value } = e.target;
-    setSelectedvarity((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-
-  // Handle submit for updating the brand
-  const handleSubmits = () => {
-    // editVendor(selectedvarity._id, selectedvarity);
-    onCloseModal2();
+    setFormData({
+      vendor_id: "",
+      order_id: "",
+      invoice_number: "",
+      date: "",
+      stock: [
+        {
+          item_id: "",
+          quantity: "",
+          stock_quantity: "",
+          amount: "",
+        },
+      ],
+    })
   };
 
   const handleDateChange = (e) => {
-    const selectedDate = new Date(e.target.value); // Create a Date object from the selected date
-    const formattedDate = selectedDate.toISOString(); // Convert to ISO string format
-
+    const selectedDate = e.target.value; // Directly take the value from the input
+    if (!selectedDate) return; // Avoid updating with an invalid value
+  
     setFormData((prevData) => ({
       ...prevData,
-      booking_date: formattedDate, // Update booking_date in formData
+      date: new Date(selectedDate).toISOString(), // Ensure the date is in ISO format
     }));
   };
+  
 
   const getFormattedDate = (date) => {
     if (!date) return ""; // If no date, return an empty string
     const parsedDate = new Date(date);
     return isNaN(parsedDate.getTime())
       ? ""
-      : parsedDate.toISOString().split("T")[0]; // Only return the date part
+      : parsedDate.toISOString().split("T")[0]; // Return the date in YYYY-MM-DD format
   };
+  
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+  
+    setFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  
 
   // Handle input changes
   const handleInputChange = (e, index) => {
@@ -175,6 +162,7 @@ const PurchaseList = () => {
       vendor_id: newValue ? newValue.id : "", // Update vendor_id based on selection
     }));
   };
+
   // Add new row for stock
   const addStockRow = () => {
     setFormData((prevData) => ({
@@ -201,7 +189,9 @@ const PurchaseList = () => {
 
     // Append the fields to FormData
     formDataToSend.append("vendor_id", formData.vendor_id);
-
+    formDataToSend.append("order_id", formData.order_id);
+    formDataToSend.append("invoice_number", formData.invoice_number);
+    formDataToSend.append("date", formData.date);
     // Append each stock item to FormData
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
@@ -210,8 +200,6 @@ const PurchaseList = () => {
     });
 
     addPurchase(formDataToSend);
-    console.log("Quantity Type:", typeof Number(formData.stock[0].quantity)); // should be 'number'
-    console.log("Amount Type:", typeof Number(formData.stock[0].amount)); // should be 'number'
 
     onCloseModal();
   };
@@ -336,39 +324,39 @@ const PurchaseList = () => {
                   Order ID :
                 </Label>
                 <Input
-                  type="number"
-                  name="GSTIN"
-                  value={formData.GSTIN}
-                  onChange={handleInputChange}
-                  id="GSTIN"
+                  type="text"
+                  name="order_id"
+                  value={formData.order_id}
+                  onChange={handleChange}
+                  id="order_id"
                 />
               </FormGroup>
             </div>
 
             <div className="row">
               <FormGroup className="col-md-6">
-                <Label htmlFor="PAN" className="col-form-label">
+                <Label htmlFor="invoice_number" className="col-form-label">
                   Invoice Number :
                 </Label>
                 <Input
-                  type="number"
-                  name="PAN"
-                  value={formData.PAN}
-                  onChange={handleInputChange}
-                  id="PAN"
+                  type="text"
+                  name="invoice_number"
+                  value={formData.invoice_number}
+                  onChange={handleChange}
+                  id="invoice_number"
                 />
               </FormGroup>
 
               <FormGroup className="col-md-6">
-                <Label for="bookingDate" className="fw-bold">
-                 Invoice Date
+                <Label for="date" className="fw-bold">
+                  Invoice Date
                 </Label>
                 <Input
                   type="date"
-                  id="bookingDate"
-                  name="booking_date"
+                  id="date"
+                  name="date"
                   className="form-control"
-                  value={getFormattedDate(formData.booking_date)}
+                  value={getFormattedDate(formData.date)}
                   onChange={handleDateChange}
                 />
               </FormGroup>
@@ -481,138 +469,6 @@ const PurchaseList = () => {
             Save
           </Button>
           <Button color="secondary" onClick={onCloseModal}>
-            Close
-          </Button>
-        </ModalFooter>
-      </Modal>
-
-      <Modal
-        isOpen={modalOpen}
-        toggle={onCloseModal2}
-        className="modal-lg"
-        style={{ maxWidth: "800px" }}
-      >
-        <ModalHeader toggle={onCloseModal2}>
-          <h5 className="modal-title f-w-600" id="exampleModalLabel2">
-            Edit Unit
-          </h5>
-        </ModalHeader>
-        <ModalBody style={{ maxHeight: "450px", overflowY: "auto" }}>
-          <Form>
-            <div className="row">
-              <FormGroup className="col-md-6">
-                <Label htmlFor="name" className="col-form-label">
-                  Name:
-                </Label>
-                <Input
-                  type="text"
-                  name="name"
-                  value={selectedvarity.name}
-                  onChange={handleInputChanges}
-                  id="name"
-                />
-              </FormGroup>
-              <FormGroup className="col-md-6">
-                <Label htmlFor="contact_person" className="col-form-label">
-                  Contact Person:
-                </Label>
-                <Input
-                  type="text"
-                  name="contact_person"
-                  value={formData.contact_person}
-                  onChange={handleInputChange}
-                  id="contact_person"
-                />
-              </FormGroup>
-            </div>
-
-            <div className="row">
-              <FormGroup className="col-md-6">
-                <Label htmlFor="email" className="col-form-label">
-                  Email:
-                </Label>
-                <Input
-                  type="text"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  id="email"
-                />
-              </FormGroup>
-              <FormGroup className="col-md-6">
-                <Label htmlFor="mobile" className="col-form-label">
-                  Mobile:
-                </Label>
-                <Input
-                  type="text"
-                  name="mobile"
-                  value={formData.mobile}
-                  onChange={handleInputChange}
-                  id="mobile"
-                />
-              </FormGroup>
-            </div>
-
-            <div className="row">
-              <FormGroup className="col-md-6">
-                <Label htmlFor="address" className="col-form-label">
-                  Address:
-                </Label>
-                <Input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  id="address"
-                />
-              </FormGroup>
-              <FormGroup className="col-md-6">
-                <Label htmlFor="state" className="col-form-label">
-                  State:
-                </Label>
-                <Input
-                  type="text"
-                  name="state"
-                  value={formData.state}
-                  onChange={handleInputChange}
-                  id="state"
-                />
-              </FormGroup>
-            </div>
-
-            <div className="row">
-              <FormGroup className="col-md-6">
-                <Label htmlFor="district" className="col-form-label">
-                  District:
-                </Label>
-                <Input
-                  type="text"
-                  name="district"
-                  value={formData.district}
-                  onChange={handleInputChange}
-                  id="district"
-                />
-              </FormGroup>
-              <FormGroup className="col-md-6">
-                <Label htmlFor="pincode" className="col-form-label">
-                  Pincode:
-                </Label>
-                <Input
-                  type="text"
-                  name="pincode"
-                  value={formData.pincode}
-                  onChange={handleInputChange}
-                  id="pincode"
-                />
-              </FormGroup>
-            </div>
-          </Form>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleSubmits}>
-            Save
-          </Button>
-          <Button color="secondary" onClick={onCloseModal2}>
             Close
           </Button>
         </ModalFooter>

@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Button, FormGroup, Input, Label } from "reactstrap";
 import { FaTrash, FaTrashAlt } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useCommonContext } from "../helper/CommonProvider";
 

@@ -28,8 +28,7 @@ import { FaEdit, FaHistory } from "react-icons/fa";
 import { FaTrashAlt } from "react-icons/fa";
 
 import { Spinner } from "reactstrap";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+
 import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
@@ -397,10 +396,7 @@ const ItemManagement = () => {
                 />
                {errors.amount && <span className="text-danger">{errors.low_quantity_alert}</span>}
               </FormGroup>
-
-            </div>
-            <div className="row">
-            <FormGroup className="col-md-6">
+              <FormGroup className="col-md-6">
               <Label htmlFor="item_group_id" className="col-form-label">
                 Item Group:
               </Label>
@@ -421,6 +417,8 @@ const ItemManagement = () => {
               </Input>
               {errors.item_group_id && <span className="text-danger">{errors.item_group_id}</span>}
             </FormGroup>
+            </div>
+            <div className="row">
             <FormGroup className="col-md-6">
               <Label htmlFor="unit" className="col-form-label">
                 Item Unit:

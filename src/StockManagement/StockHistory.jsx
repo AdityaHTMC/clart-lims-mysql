@@ -21,18 +21,8 @@
     Table,
   } from "reactstrap";
   import { useEffect, useState } from "react";
-
   import { useNavigate, useParams } from "react-router-dom";
-  import { FaEdit } from "react-icons/fa";
-
-  import { FaTrashAlt } from "react-icons/fa";
-
-  // Register the necessary Chart.js components
-
   import { Spinner } from "reactstrap";
-  import ReactQuill from "react-quill";
-  import "react-quill/dist/quill.snow.css";
-import { useMasterContext } from "../helper/MasterProvider";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { useStockContext } from "../helper/StockManagement";
 import { Pagination, Stack } from "@mui/material";
