@@ -69,12 +69,13 @@ const OrderDetailspage = () => {
   const [isEditingPhelbo, setIsEditingPhelbo] = useState(false);
   const [isEditingPayment, setIsEditingPayment] = useState(false);
 
-  const handleStatusUpdate = (itemId, status) => {
+  const handleStatusUpdate = async (itemId, status) => {
     const dataToSend = {
       status,
       item_id: itemId,
     };
-    updateItemStatus(dataToSend);
+    await updateItemStatus(dataToSend);
+    getOrderDetails(id);
   };
 
   const handleDownloadInvoice = () => {
@@ -344,8 +345,8 @@ const OrderDetailspage = () => {
                     <td className="text-wrap">
                       {orderDetails.data?.pet_details?.date_of_birth
                         ? new Date(
-                            orderDetails.data.pet_details.date_of_birth
-                          ).toLocaleDateString("en-GB")
+                          orderDetails.data.pet_details.date_of_birth
+                        ).toLocaleDateString("en-GB")
                         : ""}
                     </td>
                   </tr>
@@ -379,8 +380,8 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-           
-           {orderDetails?.data?.invoice && (
+
+              {orderDetails?.data?.invoice && (
                 <Button
                   color="primary"
                   style={{ marginBottom: "10px", float: "right" }}
@@ -389,7 +390,7 @@ const OrderDetailspage = () => {
                   <FaReceipt fontSize={12} /> Print Invoice
                 </Button>
               )}
-              
+
 
               <div style={{ marginBottom: "10px", clear: "both" }}>
                 <div className="d-flex align-items-center">
@@ -592,67 +593,133 @@ const OrderDetailspage = () => {
                 <h5 style={{ fontWeight: "600" }}>
                   Item Request From : {orderDetails?.data?.lab_name || "NA"}
                 </h5>
-                <Slider ref={sliderRef} className="single-item" {...settings}>
-                  {orderDetails?.data?.item_requests?.map(
-                    (itemRequest, index) => (
-                      <div key={index}>
-                        <p style={{ marginBottom: "5px" }}>
-                          Item Name: {itemRequest?.item_name}
-                        </p>
-                        <p style={{ marginBottom: "5px" }}>
-                          Item Quantity: {itemRequest?.quantity}
-                        </p>
-                        <p style={{ marginBottom: "5px" }}>
-                          Reason: {itemRequest?.quantity}
-                        </p>
-                        <p style={{ marginBottom: "5px" }}>
-                          Status: {itemRequest?.status}
-                        </p>
-                        {itemRequest.status === "Pending" && (
-                          <div align="center" className="mt-5">
-                            <button
-                              style={{
-                                padding: "10px 20px",
-                                background: "green",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                                marginRight: "20px",
-                              }}
-                              onClick={() =>
-                                handleStatusUpdate(
-                                  itemRequest?.item_id,
-                                  "Approved"
-                                )
-                              }
-                            >
-                              Approve
-                            </button>
-                            <button
-                              style={{
-                                padding: "10px 20px",
-                                background: "red",
-                                color: "#fff",
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer",
-                              }}
-                              onClick={() =>
-                                handleStatusUpdate(
-                                  itemRequest?.item_id,
-                                  "Rejected"
-                                )
-                              }
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    )
-                  )}
-                </Slider>
+
+                {orderDetails?.data?.item_requests?.length > 1 ? (
+                  <Slider ref={sliderRef} className="single-item" {...settings}>
+                    {orderDetails?.data?.item_requests?.map(
+                      (itemRequest, index) => (
+                        <div key={index}>
+                          <p style={{ marginBottom: "5px" }}>
+                            Item Name: {itemRequest?.item_name}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Item Quantity: {itemRequest?.quantity}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Reason: {itemRequest?.quantity}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Status: {itemRequest?.status}
+                          </p>
+                          {itemRequest.status === "Pending" && (
+                            <div align="center" className="mt-5">
+                              <button
+                                style={{
+                                  padding: "10px 20px",
+                                  background: "green",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  marginRight: "20px",
+                                }}
+                                onClick={() =>
+                                  handleStatusUpdate(
+                                    itemRequest?.id,
+                                    "Approved"
+                                  )
+                                }
+                              >
+                                Approve
+                              </button>
+                              <button
+                                style={{
+                                  padding: "10px 20px",
+                                  background: "red",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleStatusUpdate(
+                                    itemRequest?.id,
+                                    "Rejected"
+                                  )
+                                }
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    )}
+                  </Slider>
+                ) : (
+                  <>
+                    {orderDetails?.data?.item_requests?.map(
+                      (itemRequest, index) => (
+                        <div key={index}>
+                          <p style={{ marginBottom: "5px" }}>
+                            Item Name: {itemRequest?.item_name}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Item Quantity: {itemRequest?.quantity}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Reason: {itemRequest?.quantity}
+                          </p>
+                          <p style={{ marginBottom: "5px" }}>
+                            Status: {itemRequest?.status}
+                          </p>
+                          {itemRequest.status === "Pending" && (
+                            <div align="center" className="mt-5">
+                              <button
+                                style={{
+                                  padding: "10px 20px",
+                                  background: "green",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  marginRight: "20px",
+                                }}
+                                onClick={() =>
+                                  handleStatusUpdate(
+                                    itemRequest?.id,
+                                    "Approved"
+                                  )
+                                }
+                              >
+                                Approve
+                              </button>
+                              <button
+                                style={{
+                                  padding: "10px 20px",
+                                  background: "red",
+                                  color: "#fff",
+                                  border: "none",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleStatusUpdate(
+                                    itemRequest?.id,
+                                    "Rejected"
+                                  )
+                                }
+                              >
+                                Reject
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )
+                    )}
+                  </>
+                )}
+
 
                 {/* Left Button */}
                 <button
