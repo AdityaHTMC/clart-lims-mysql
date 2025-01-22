@@ -433,7 +433,7 @@ const ItemManagement = () => {
               >
                 <option value="">Select Item Group</option>
                 {allUnitList.data.map((group) => (
-                  <option key={group._id} value={group.id}>
+                  <option key={group.id} value={group.title}>
                     {group.title}
                   </option>
                 ))}
@@ -549,7 +549,7 @@ const ItemManagement = () => {
               >
                 <option value="">Select Item Group</option>
                 {allUnitList.data.map((group) => (
-                  <option key={group._id} value={group.id}>
+                  <option key={group._id} value={group.title}>
                     {group.title}
                   </option>
                 ))}
