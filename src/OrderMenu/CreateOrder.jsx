@@ -70,7 +70,7 @@ const CreateOrder = () => {
     type: "Home Visit",
     test_package: "",
     images: [],
-    payment_mode: "Cash",
+    payment_mode: "pay_via_link",
     booking_date: "",
     referred_from: "",
     other_doctor: "",
@@ -198,7 +198,7 @@ const CreateOrder = () => {
       type: "test",
       test_package: "",
       images: [],
-      payment_mode: "Cash",
+      payment_mode: "pay_via_link",
       booking_date: "",
     });
     setSelectedCustomer(null);
@@ -297,7 +297,7 @@ const CreateOrder = () => {
       bodyData.append(`tests[${i}][price]`, el.sell_price);
     });
     selectedPackages.forEach((el, i) => {
-      bodyData.append(`packages[${i}][package]`, el._id);
+      bodyData.append(`packages[${i}][package]`, el.id);
       bodyData.append(`packages[${i}][price]`, el.sell_price);
     });
     selectedFees?.forEach((el, i) => {
@@ -812,15 +812,15 @@ const CreateOrder = () => {
                                         className="form-check-input"
                                         type="radio"
                                         name="payment_mode"
-                                        value="Cash"
+                                        value="pay_via_link"
                                         onChange={onChange}
                                         disabled={isProcessing}
                                         checked={
-                                          formData.payment_mode === "Cash"
+                                          formData.payment_mode === "pay_via_link"
                                         }
                                       />
                                       <Label className="form-check-label">
-                                        CASH
+                                        Pay via link
                                       </Label>
                                     </div>
                                     {/* <div className="form-check">
