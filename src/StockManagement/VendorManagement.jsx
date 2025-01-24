@@ -394,7 +394,7 @@ const VendorManagement = () => {
                   GSTIN :
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="GSTIN"
                   value={formData.GSTIN}
                   onChange={handleInputChange}
@@ -408,7 +408,7 @@ const VendorManagement = () => {
                   PAN :
                 </Label>
                 <Input
-                  type="number"
+                  type="text"
                   name="PAN"
                   value={formData.PAN}
                   onChange={handleInputChange}
