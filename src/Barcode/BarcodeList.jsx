@@ -146,18 +146,18 @@ const BarcodeList = () => {
       format: [100, 38], // Custom page size 100x38 mm
     });
   
-    const logoImg = await loadImageToDataURI(logo); // Replace with the path to your logo file
-  
     const pageWidth = 100; // Page width in mm
     const barcodeWidth = 34;
     const barcodeHeight = 15;
-    const gap = 10; // Gap between barcodes
-    const totalBarcodeWidth = barcodeWidth * 2 + gap; // Total width occupied by the two barcodes
-    const centerX = (pageWidth - totalBarcodeWidth) / 2; // Starting x position for the first barcode
-    const barcodeY = 12; // Adjusted y position for better logo visibility
+    const barcodeY = 14; // Adjusted y position for better visibility
     const nameTextYOffset = barcodeY + barcodeHeight + 5; // Name text position
-    const logoWidth = 5;
-    const logoHeight = 5;
+  
+    const clartFontSize = 12; // Font size for CLART text
+    const clartY = barcodeY - 4; // Same top height as the removed logoImg
+    const clartXOffset = barcodeWidth / 2 - 6; // Center align CLART text
+  
+    const leftX = 11; // Extreme left position
+    const rightX = pageWidth - barcodeWidth - 2; // Extreme right position
   
     for (let i = 0; i < selectedBarcodes.length; i += 2) {
       // Fetch data for the first barcode
@@ -170,23 +170,27 @@ const BarcodeList = () => {
         : null;
       const img2 = product2 ? await loadImageToDataURI(product2.bar_code) : null;
   
-      // Add the first barcode with its details
+      pdf.setFont("arial", "bold");
+      pdf.setFontSize(clartFontSize);
+  
+      // Add the first barcode with "CLART" centered above it
       if (img1) {
-        pdf.addImage(img1, "PNG", centerX, barcodeY, barcodeWidth, barcodeHeight);
-        pdf.addImage(logoImg, "PNG", centerX + barcodeWidth - logoWidth, barcodeY - 8, logoWidth, logoHeight); // Logo above barcode
-        pdf.setFont("helvetica", "bold");
+        pdf.text("CLART", leftX + clartXOffset, clartY);
+        pdf.addImage(img1, "PNG", leftX, barcodeY, barcodeWidth, barcodeHeight);
         pdf.setFontSize(10);
-        pdf.text(`Name: `, centerX, nameTextYOffset);
+        pdf.text(`Name: `, leftX, nameTextYOffset);
       }
   
-      // Add the second barcode with its details, if available
+      // Ensure font settings remain consistent before adding the second barcode
+      pdf.setFont("arial", "bold");
+      pdf.setFontSize(clartFontSize);
+  
+      // Add the second barcode with "CLART" centered above it
       if (img2) {
-        const xOffset = centerX + barcodeWidth + gap; // Start position for the second barcode
-        pdf.addImage(img2, "PNG", xOffset, barcodeY, barcodeWidth, barcodeHeight);
-        pdf.addImage(logoImg, "PNG", xOffset + barcodeWidth - logoWidth, barcodeY - 8, logoWidth, logoHeight); // Logo above barcode
-        pdf.setFont("helvetica", "bold");
+        pdf.text("CLART", rightX + clartXOffset, clartY);
+        pdf.addImage(img2, "PNG", rightX, barcodeY, barcodeWidth, barcodeHeight);
         pdf.setFontSize(10);
-        pdf.text(`Name: `, xOffset, nameTextYOffset);
+        pdf.text(`Name: `, rightX, nameTextYOffset);
       }
   
       // Add a new page for the next set of barcodes
@@ -208,6 +212,10 @@ const BarcodeList = () => {
   
     setSelectedBarcodes([]);
   };
+  
+  
+  
+  
   
   
   
