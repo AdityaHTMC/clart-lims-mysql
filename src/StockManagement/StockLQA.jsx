@@ -101,11 +101,11 @@ console.log(stocklqa,'stock')
                         ) : (
                             stocklqa?.data?.map((product, index) => (
                             <tr key={index}>
-                              <td>{product?.item_name}</td>
-                              <td>{product?.item_group_name}</td>
-                              <td>{product?.low_quantity_alert}</td>
-                              <td>{product?.stock_quantity}</td>
-                              <td>{product?.amount}</td>
+                              <td>{product?.name || "NA"}</td>
+                              <td>{product?.group_name || "NA"}</td>
+                              <td>{product?.low_quantity_alert || "NA"}</td>
+                              <td>{product?.stock_quantity || "NA"}</td>
+                              <td>{product?.amount || "NA"}</td>
                             </tr>
                           ))
                         )}

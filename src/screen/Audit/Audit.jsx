@@ -204,11 +204,19 @@ const Audit = () => {
                               </td>
 
                               <td id={`action_done-${index}`}>
-                                {product?.action_done
-                                  ? product?.action_done?.length > 30
-                                    ? `${product?.action_done?.slice(0, 30)}...`
-                                    : product?.action_done
-                                  : "NA"}
+                                {product?.action_done ? (
+                                  product?.action_done.length > 49 ? (
+                                    <>
+                                      {product?.action_done.slice(0, 49)}
+                                      <br />
+                                      {product?.action_done.slice(49)}
+                                    </>
+                                  ) : (
+                                    product?.action_done
+                                  )
+                                ) : (
+                                  "NA"
+                                )}
                                 {product?.action_done && (
                                   <UncontrolledTooltip
                                     placement="top"
