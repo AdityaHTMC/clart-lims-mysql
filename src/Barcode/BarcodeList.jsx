@@ -149,9 +149,9 @@ const BarcodeList = () => {
     const pageWidth = 100; // Page width in mm
     const barcodeWidth = 34;
     const barcodeHeight = 12;
-    const barcodeY = 12; // Adjusted y position for better visibility
-    const petNameYOffset = barcodeY + barcodeHeight + 5; // Name pet position
-    const nameTextYOffset = petNameYOffset + 7; // Position for "owner Name"
+    const barcodeY = 11; // Adjusted y position for better visibility
+    const petNameYOffset = barcodeY + barcodeHeight + 6; // Name pet position
+    const nameTextYOffset = petNameYOffset + 6; // Position for "owner Name"
   
     const clartFontSize = 12; // Font size for CLART text
     const clartY = barcodeY - 5; // Same top height as the removed logoImg
@@ -171,7 +171,7 @@ const BarcodeList = () => {
         : null;
       const img2 = product2 ? await loadImageToDataURI(product2.bar_code) : null;
   
-      pdf.setFont("poppins-bold");
+      pdf.setFont("helvetica", "bold");
       pdf.setFontSize(clartFontSize);
   
       // Add the first barcode with "CLART" centered above it
@@ -184,7 +184,7 @@ const BarcodeList = () => {
       }
   
       // Ensure font settings remain consistent before adding the second barcode
-      pdf.setFont("poppins-bold");
+      pdf.setFont("helvetica", "bold");
       pdf.setFontSize(clartFontSize);
   
       // Add the second barcode with "CLART" centered above it
