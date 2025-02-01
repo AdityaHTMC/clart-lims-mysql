@@ -19,7 +19,7 @@ import { useDashboardContext } from "../helper/DashboardProvider";
 import { CircularProgress, Pagination, Stack } from "@mui/material";
 import jsPDF from "jspdf";
 import { toast } from "react-toastify";
-import  logo from '../../src/assets/wbldcl-logo-v1.png';
+import logo from '../../src/assets/wbldcl-logo-v1.png';
 const BarcodeList = () => {
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const BarcodeList = () => {
     const dataToSend = {
       page: currentPage,
       limit: itemperPage,
-      ...selectedStatus, 
+      ...selectedStatus,
     };
     getbarcode(dataToSend);
   }, [currentPage, selectedStatus]);
@@ -55,7 +55,7 @@ const BarcodeList = () => {
 
     try {
       await generateBarcode(dataToSend); // Assuming generateBarcode returns a promise
-     
+
     } catch (error) {
       console.log(error.message);
     } finally {
@@ -130,99 +130,99 @@ const BarcodeList = () => {
     if (selectedBarcodes.length === 0) {
       return;
     }
-  
+
     const dataToSend = {
       bar_code_ids: barcode.data
         .filter((product) => selectedBarcodes.includes(product.code))
         .map((product) => product.id),
     };
-  
+
     // Call the Barcodeprint API function with the payload
     await Barcodeprint(dataToSend);
-  
+
     const pdf = new jsPDF({
       orientation: "landscape",
-      unit: "mm", // Use mm as the unit
+      unit: "mm",
       format: [100, 38], // Custom page size 100x38 mm
     });
-  
-    const pageWidth = 100; // Page width in mm
+
+    const pageWidth = 100;
     const barcodeWidth = 34;
     const barcodeHeight = 12;
-    const barcodeY = 11; // Adjusted y position for better visibility
-    const petNameYOffset = barcodeY + barcodeHeight + 6; // Name pet position
-    const nameTextYOffset = petNameYOffset + 6; // Position for "owner Name"
-  
-    const clartFontSize = 12; // Font size for CLART text
-    const clartY = barcodeY - 5; // Same top height as the removed logoImg
-    const clartXOffset = barcodeWidth / 2 - 6; // Center align CLART text
-  
-    const leftX = 11; // Extreme left position
-    const rightX = pageWidth - barcodeWidth - 2; // Extreme right position
-  
+    const barcodeY = 11;
+    const petNameYOffset = barcodeY + barcodeHeight + 6;
+    const nameTextYOffset = petNameYOffset + 6;
+
+    const clartFontSize = 12;
+    const clartY = barcodeY - 5;
+    const clartXOffset = barcodeWidth / 2 - 6;
+
+    const leftX = 11;
+    const rightX = pageWidth - barcodeWidth - 2;
+
     for (let i = 0; i < selectedBarcodes.length; i += 2) {
-      // Fetch data for the first barcode
       const product1 = barcode.data.find((item) => item.code === selectedBarcodes[i]);
       const img1 = product1 ? await loadImageToDataURI(product1.bar_code) : null;
-  
-      // Fetch data for the second barcode if available
+
       const product2 = selectedBarcodes[i + 1]
         ? barcode.data.find((item) => item.code === selectedBarcodes[i + 1])
         : null;
       const img2 = product2 ? await loadImageToDataURI(product2.bar_code) : null;
-  
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(clartFontSize);
-  
-      // Add the first barcode with "CLART" centered above it
+
+      // Add the first barcode
       if (img1) {
+        pdf.setFont("helvetica", "bold"); // Set CLART text to bold
+        pdf.setFontSize(clartFontSize);
         pdf.text("CLART", leftX + clartXOffset, clartY);
+
         pdf.addImage(img1, "PNG", leftX, barcodeY, barcodeWidth, barcodeHeight);
+
+        pdf.setFont("helvetica", "normal"); // Set PET and OWNER text to normal
         pdf.setFontSize(10);
         pdf.text("PET:", leftX, petNameYOffset);
-        pdf.text(`OWNER: `, leftX, nameTextYOffset);
+        pdf.text("OWNER:", leftX, nameTextYOffset);
       }
-  
-      // Ensure font settings remain consistent before adding the second barcode
-      pdf.setFont("helvetica", "bold");
-      pdf.setFontSize(clartFontSize);
-  
-      // Add the second barcode with "CLART" centered above it
+
+      // Add the second barcode
       if (img2) {
+        pdf.setFont("helvetica", "bold");
+        pdf.setFontSize(clartFontSize);
         pdf.text("CLART", rightX + clartXOffset, clartY);
+
         pdf.addImage(img2, "PNG", rightX, barcodeY, barcodeWidth, barcodeHeight);
+
+        pdf.setFont("helvetica", "normal");
         pdf.setFontSize(10);
         pdf.text("PET:", rightX, petNameYOffset);
-        pdf.text(`OWNER: `, rightX, nameTextYOffset);
+        pdf.text("OWNER:", rightX, nameTextYOffset);
       }
-  
+
       // Add a new page for the next set of barcodes
       if (i + 2 < selectedBarcodes.length) {
         pdf.addPage();
       }
     }
-  
-    // Save the PDF file
+
     pdf.save("barcodes.pdf");
-  
-    // Optionally, refresh barcode data
+
+    // Refresh barcode data
     const newdataToSend = {
       page: currentPage,
       limit: itemperPage,
       ...selectedStatus,
     };
     getbarcode(newdataToSend);
-  
+
     setSelectedBarcodes([]);
   };
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
 
   return (
     <>
@@ -262,7 +262,7 @@ const BarcodeList = () => {
                   <Button
                     color={selectedStatus.isPrinted ? "primary" : "danger"}
                     style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus({ isPrinted: true })} 
+                    onClick={() => setSelectedStatus({ isPrinted: true })}
                     size="sm"
                   >
                     Printed
@@ -270,7 +270,7 @@ const BarcodeList = () => {
                   <Button
                     color={selectedStatus.isUsed ? "primary" : "danger"}
                     style={{ minWidth: "max-content" }}
-                    onClick={() => setSelectedStatus({ isUsed: true, isPrinted: true })} 
+                    onClick={() => setSelectedStatus({ isUsed: true, isPrinted: true })}
                     size="sm"
                   >
                     Used
@@ -301,7 +301,7 @@ const BarcodeList = () => {
                             <th>Code</th>
                             <th>Is Used?</th>
                             <th>Is Printed?</th>
-                         
+
                           </tr>
                         </thead>
                         <tbody>
