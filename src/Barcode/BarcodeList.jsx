@@ -148,12 +148,13 @@ const BarcodeList = () => {
   
     const pageWidth = 100; // Page width in mm
     const barcodeWidth = 34;
-    const barcodeHeight = 15;
-    const barcodeY = 14; // Adjusted y position for better visibility
-    const nameTextYOffset = barcodeY + barcodeHeight + 5; // Name text position
+    const barcodeHeight = 12;
+    const barcodeY = 12; // Adjusted y position for better visibility
+    const petNameYOffset = barcodeY + barcodeHeight + 5; // Name pet position
+    const nameTextYOffset = petNameYOffset + 7; // Position for "owner Name"
   
     const clartFontSize = 12; // Font size for CLART text
-    const clartY = barcodeY - 4; // Same top height as the removed logoImg
+    const clartY = barcodeY - 5; // Same top height as the removed logoImg
     const clartXOffset = barcodeWidth / 2 - 6; // Center align CLART text
   
     const leftX = 11; // Extreme left position
@@ -170,7 +171,7 @@ const BarcodeList = () => {
         : null;
       const img2 = product2 ? await loadImageToDataURI(product2.bar_code) : null;
   
-      pdf.setFont("arial", "bold");
+      pdf.setFont("poppins-bold");
       pdf.setFontSize(clartFontSize);
   
       // Add the first barcode with "CLART" centered above it
@@ -178,11 +179,12 @@ const BarcodeList = () => {
         pdf.text("CLART", leftX + clartXOffset, clartY);
         pdf.addImage(img1, "PNG", leftX, barcodeY, barcodeWidth, barcodeHeight);
         pdf.setFontSize(10);
-        pdf.text(`Name: `, leftX, nameTextYOffset);
+        pdf.text("PET:", leftX, petNameYOffset);
+        pdf.text(`OWNER: `, leftX, nameTextYOffset);
       }
   
       // Ensure font settings remain consistent before adding the second barcode
-      pdf.setFont("arial", "bold");
+      pdf.setFont("poppins-bold");
       pdf.setFontSize(clartFontSize);
   
       // Add the second barcode with "CLART" centered above it
@@ -190,7 +192,8 @@ const BarcodeList = () => {
         pdf.text("CLART", rightX + clartXOffset, clartY);
         pdf.addImage(img2, "PNG", rightX, barcodeY, barcodeWidth, barcodeHeight);
         pdf.setFontSize(10);
-        pdf.text(`Name: `, rightX, nameTextYOffset);
+        pdf.text("PET:", rightX, petNameYOffset);
+        pdf.text(`OWNER: `, rightX, nameTextYOffset);
       }
   
       // Add a new page for the next set of barcodes
