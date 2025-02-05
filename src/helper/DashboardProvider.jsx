@@ -181,6 +181,7 @@ export const DashboardProvider = ({ children }) => {
 
   const generateBarcode = async (formDataToSend) => {
     try {
+      const { limit} = formDataToSend
       const response = await axios.post(
         `${base_url}/admin/barcode/bulk-create`,
         formDataToSend ,

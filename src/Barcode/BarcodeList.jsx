@@ -31,7 +31,7 @@ const BarcodeList = () => {
   const [selectedBarcodes, setSelectedBarcodes] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const [loading, setLoading] = useState(false);
-  const itemperPage = 24;
+  const itemperPage = 50;
 
   const totalPages = barcode?.total && Math.ceil(barcode?.total / itemperPage);
 
@@ -50,7 +50,8 @@ const BarcodeList = () => {
     setLoading(true); // Start loading
 
     const dataToSend = {
-      quantity: 24,
+      quantity: 50,
+      limit: itemperPage,
     };
 
     try {
@@ -63,19 +64,7 @@ const BarcodeList = () => {
     }
   };
 
-  const onOpenModal = () => {
-    navigate("/add-test-packages");
-  };
-  const handleEdit = (id) => {
-    navigate(`/testpackage-edit/${id}`);
-  };
 
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure you wish to delete this item?")) {
-      // delete product logic here
-      //  tpDelete(id);
-    }
-  };
 
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
@@ -100,9 +89,8 @@ const BarcodeList = () => {
   };
 
   useEffect(() => {
-    if (selectedBarcodes.length > 24) {
-      console.log("Barcode selection can't exceed 24.");
-      toast.error("Barcode selection can't exceed 24");
+    if (selectedBarcodes.length > 50) {
+      console.log("Barcode selection can't exceed 50.");
     } else {
       console.log(".");
     }
@@ -178,7 +166,7 @@ const BarcodeList = () => {
         pdf.addImage(img1, "PNG", leftX, barcodeY, barcodeWidth, barcodeHeight);
 
         pdf.setFont("helvetica", "normal"); // Set PET and OWNER text to normal
-        pdf.setFontSize(10);
+        pdf.setFontSize(8);
         pdf.text("PET:", leftX, petNameYOffset);
         pdf.text("OWNER:", leftX, nameTextYOffset);
       }
@@ -192,7 +180,7 @@ const BarcodeList = () => {
         pdf.addImage(img2, "PNG", rightX, barcodeY, barcodeWidth, barcodeHeight);
 
         pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(10);
+        pdf.setFontSize(8);
         pdf.text("PET:", rightX, petNameYOffset);
         pdf.text("OWNER:", rightX, nameTextYOffset);
       }
@@ -278,7 +266,7 @@ const BarcodeList = () => {
                   <Button
                     color="primary"
                     onClick={generatePDF}
-                    disabled={selectedBarcodes.length === 0 || selectedBarcodes.length > 24}
+                    disabled={selectedBarcodes.length === 0 || selectedBarcodes.length > 50}
                   >
                     Print To PDF({selectedBarcodes.length})
                   </Button>
