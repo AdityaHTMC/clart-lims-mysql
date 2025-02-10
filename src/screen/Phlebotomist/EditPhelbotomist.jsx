@@ -57,12 +57,13 @@ const EditPhelbotomist = () => {
     state: "",
     pincode: "",
     address: "",
+    working_type: "",
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedProducts2, setSelectedProducts2] = useState([]);
   const [selectedProducts3, setSelectedProducts3] = useState([]);
-   const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (phelboDetails) {
@@ -77,6 +78,7 @@ const EditPhelbotomist = () => {
         district: phelboDetails.data.district || "",
         pincode: phelboDetails.data.pincode || "",
         address: phelboDetails.data.address || "",
+        working_type: phelboDetails.data.working_type || "",
       });
       if (allstateList?.data?.length > 0) {
         const selectedState = allstateList?.data?.find(
@@ -145,7 +147,7 @@ const EditPhelbotomist = () => {
     );
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
@@ -169,6 +171,7 @@ const EditPhelbotomist = () => {
     formDataToSend.append("address", inputData.address);
     formDataToSend.append("district", inputData.district);
     formDataToSend.append("state", inputData.state);
+    formDataToSend.append("working_type", inputData.working_type);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_labs[${index}]`, id);
     });
@@ -180,20 +183,20 @@ const EditPhelbotomist = () => {
     allSelectedProduct3Ids.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
-    
+
     pincodes.forEach((pin, index) => {
-        formDataToSend.append(`serviceable_pincode[${index}]`, pin);
-      });
+      formDataToSend.append(`serviceable_pincode[${index}]`, pin);
+    });
 
-      try {
-        await  editPhelbo(id,formDataToSend);
-      } catch (error) {
-        console.error("Error submitting the form:", error);
-      } finally {
-        setIsLoading(false);
-      }
+    try {
+      await editPhelbo(id, formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
 
-   
+
   };
 
   return (
@@ -462,7 +465,32 @@ const EditPhelbotomist = () => {
             </div>
           </div>
 
-          
+          <div className="row">
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="working_type" className="col-form-label">
+                  Work Type
+                </Label>
+                <Input
+                  type="select"
+                  name="working_type"
+                  value={inputData.working_type}
+                  onChange={handleInputChange}
+                  id="working_type"
+                >
+                  <option value="">Select Working Type</option>
+                  <option value='home'>
+                    On Field (Home collection)
+                  </option>
+                  <option value='center'>
+                    SAHC Center
+                  </option>
+                </Input>
+              </FormGroup>
+            </div>
+          </div>
+
+
 
           <Button type="submit" color="primary" disabled={isLoading}>
             {isLoading ? (

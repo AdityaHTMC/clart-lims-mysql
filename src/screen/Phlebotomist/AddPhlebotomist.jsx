@@ -34,6 +34,7 @@ const AddPhlebotomist = () => {
     districtId: "",
     image: "",
     aadhaar_id: "",
+    working_type: "",
   });
 
   useEffect(() => {
@@ -128,6 +129,9 @@ const AddPhlebotomist = () => {
     formDataToSend.append("state", selectedState?.state);
     formDataToSend.append("district", selectedDistrict?.district);
     formDataToSend.append("aadhaar_id", inputData?.aadhaar_id);
+    if(inputData?.working_type){
+      formDataToSend.append("working_type", inputData?.working_type);
+    }
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
@@ -147,10 +151,10 @@ const AddPhlebotomist = () => {
     // });
 
     if (inputData.image) {
-      formDataToSend.append("image", inputData.image); 
+      formDataToSend.append("image", inputData.image);
     }
 
-  
+
     try {
       await addphlebotomist(formDataToSend);
     } catch (error) {
@@ -232,7 +236,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="address" className="col-form-label">
-                  Address:
+                  Address
                 </Label>
                 <Input
                   type="text"
@@ -249,7 +253,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="stateId" className="col-form-label">
-                  State:
+                  State
                 </Label>
                 <Input
                   type="select"
@@ -271,7 +275,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="districtId" className="col-form-label">
-                  District:
+                  District
                 </Label>
                 <Input
                   type="select"
@@ -425,7 +429,7 @@ const AddPhlebotomist = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="banner-image" className="col-form-label">
-                  Upload Image :
+                  Upload Image
                 </Label>
                 <Input
                   id="banner-image"
@@ -458,21 +462,43 @@ const AddPhlebotomist = () => {
                 )}
               </FormGroup>
             </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="working_type" className="col-form-label">
+                  Work Type
+                </Label>
+                <Input
+                  type="select"
+                  name="working_type"
+                  value={inputData.working_type}
+                  onChange={handleInputChange}
+                  id="working_type"
+                >
+                  <option value="">Select Working Type</option>
+                  <option value='home'>
+                    On Field (Home collection)
+                  </option>
+                  <option value='center'>
+                    SAHC Center
+                  </option>
+                </Input>
+              </FormGroup>
+            </div>
           </div>
 
           {/* Image previews */}
 
-            <Button type="submit" color="primary" disabled={isLoading}>
-                      {isLoading ? (
-                        <>
-                          <Spinner size="sm" /> Submitting...
-                        </>
-                      ) : (
-                        "Add Phlebotomist"
-                      )}
-                    </Button>
+          <Button type="submit" color="primary" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Spinner size="sm" /> Submitting...
+              </>
+            ) : (
+              "Add Phlebotomist"
+            )}
+          </Button>
 
-         
+
         </form>
       </div>
     </>

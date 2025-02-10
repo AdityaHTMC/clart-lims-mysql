@@ -43,7 +43,7 @@ const CreateOrder = () => {
   const {
     getAllTimeList,
     timeList,
-    getOrderPhelboList,orderphelboList,
+    getOrderPhelboList, orderphelboList,
     getCustomerPetList,
     petList,
     getZonePrice,
@@ -53,7 +53,7 @@ const CreateOrder = () => {
     getSahcwiseDoc,
     sahcDoc,
   } = useMasterContext();
-  const { getAllLabs, labDropdown ,getAllCollection , collectionDropdown } = useCategoryContext();
+  const { getAllLabs, labDropdown, getAllCollection, collectionDropdown } = useCategoryContext();
   const Navigate = useNavigate();
 
   const [search, setSearch] = useState("");
@@ -90,8 +90,8 @@ const CreateOrder = () => {
 
 
   useEffect(() => {
-   
-    if (formData.booking_date && selectedCustomer?.pincode  ) {
+
+    if (formData.booking_date && selectedCustomer?.pincode) {
       const dataToSend = {
         booking_date: formData.booking_date,
         pincode: selectedCustomer.pincode,
@@ -99,14 +99,14 @@ const CreateOrder = () => {
       }
       getAllTimeList(dataToSend);
     }
-  }, [selectedCustomer, formData.booking_date,selectedCC,formData.type]);
+  }, [selectedCustomer, formData.booking_date, selectedCC, formData.type]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (selectedCustomer) {
       getCustomerPetList(selectedCustomer.id);
       getZonePrice(selectedCustomer.pincode);
     }
-  },[selectedCustomer , formData.type, formData.booking_date]);
+  }, [selectedCustomer, formData.type, formData.booking_date]);
 
 
 
@@ -154,37 +154,37 @@ const CreateOrder = () => {
   }, [selectedTest, selectedPackages, selectedFees, formData.type]);
 
   useEffect(() => {
-    if (formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date ) {
+    if (formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date) {
       setCollectionFees(zoneprice?.data?.charge || 350);
     } else {
       setCollectionFees(0);
     }
-  }, [formData.type, zoneprice ]);
+  }, [formData.type, zoneprice]);
 
-  useEffect(()=>{
-   
-    if(formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date &&  selectedSlot){
+  useEffect(() => {
+
+    if (formData.type === "Home Visit" && selectedCustomer?.pincode && formData.booking_date && selectedSlot) {
       const dataToSend = {
         booking_date: formData.booking_date,
         pincode: selectedCustomer?.pincode,
-        start_time:selectedSlot?.start_time,
+        start_time: selectedSlot?.start_time,
         end_time: selectedSlot?.end_time
       }
       getOrderPhelboList(dataToSend);
     }
 
-    if(formData.type === "Collection_Center" && selectedCustomer?.pincode && formData.booking_date && selectedSlot){
+    if (formData.type === "Collection_Center" && selectedCustomer?.pincode && formData.booking_date && selectedSlot) {
       const dataToSend = {
         booking_date: formData.booking_date,
         pincode: selectedCustomer?.pincode,
-        start_time:selectedSlot?.start_time,
+        start_time: selectedSlot?.start_time,
         end_time: selectedSlot?.end_time,
         colleciton_center_id: selectedCC
       }
       getOrderPhelboList(dataToSend);
     }
 
-  },[selectedCustomer, formData.booking_date ,selectedSlot, selectedCC ])
+  }, [selectedCustomer, formData.booking_date, selectedSlot, selectedCC])
 
 
 
@@ -244,10 +244,10 @@ const CreateOrder = () => {
       const date2 = new Date(e.target.value);
       date2.setHours(0, 0, 0, 0);
       if (date2 < date) {
-          toast.info('Booking date should not be in the past.')
-          return
+        toast.info('Booking date should not be in the past.')
+        return
       }
-  }
+    }
     const selectedDate = new Date(e.target.value);
     const formattedDate = selectedDate.toISOString();
 
@@ -721,7 +721,7 @@ const CreateOrder = () => {
                                 )}
                               />
                             </FormGroup>
-                        
+
                             <FormGroup className="mt-3">
                               <Label for="selectPackage" className="fw-bold">
                                 Select Health Package
@@ -823,21 +823,23 @@ const CreateOrder = () => {
                                         Pay via link
                                       </Label>
                                     </div>
+                                    {selectedCustomer?.isCodAvailable === 1 && (
+                                      <div className="form-check">
+                                        <Input
+                                          className="form-check-input"
+                                          type="radio"
+                                          name="payment_mode"
+                                          value="COD"
+                                          onChange={onChange}
+                                          disabled={isProcessing}
+                                          checked={formData.payment_mode === "COD"}
+                                        />
+                                        <Label className="form-check-label">
+                                          Cash On Delivary
+                                        </Label>
+                                      </div>
+                                    )}
                                     {/* <div className="form-check">
-                                    <Input
-                                      className="form-check-input"
-                                      type="radio"
-                                      name="payment_mode"
-                                      value="UPI"
-                                      onChange={onChange}
-                                      disabled={isProcessing}
-                                      checked={formData.payment_mode === "UPI"}
-                                    />
-                                    <Label className="form-check-label">
-                                      UPI
-                                    </Label>
-                                  </div>
-                                  <div className="form-check">
                                     <Input
                                       className="form-check-input"
                                       type="radio"
@@ -877,7 +879,7 @@ const CreateOrder = () => {
                                   !formData.payment_mode || // Payment mode must be selected
                                   !formData.pet || // Pet must be selected
                                   !formData.booking_date ||
-                                  (selectedTest.length === 0 && selectedPackages.length === 0) || 
+                                  (selectedTest.length === 0 && selectedPackages.length === 0) ||
                                   (formData.type === "Collection_Center" && !selectedCC) || // If Collection_Center is selected, Collection_Center dropdown must also be selected
                                   isProcessing // Button should be disabled if processing
                                 }

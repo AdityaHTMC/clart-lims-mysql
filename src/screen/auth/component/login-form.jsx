@@ -53,14 +53,8 @@ const LoginForm = () => {
       await sendOtp(); // Call send OTP function
     } else {
       setIsProcessing(true);
-      const res = await admin_login(formValues);
+      await admin_login(formValues);
       setIsProcessing(false);
-
-      if (res.status === 200) {
-        toast.success("Login successful");
-      } else {
-        toast.error("Invalid OTP or Login failed");
-      }
     }
   };
 

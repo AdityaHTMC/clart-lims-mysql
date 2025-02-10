@@ -10,7 +10,7 @@ const EditCustomer = () => {
   const { id } = useParams();
 
 
-  const {getallstateList,getallDistrictList,allstateList,alldistrictList, getCustomerDetails,customerDetails,editCustomer } = useCategoryContext();
+  const { getallstateList, getallDistrictList, allstateList, alldistrictList, getCustomerDetails, customerDetails, editCustomer } = useCategoryContext();
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -19,7 +19,7 @@ const EditCustomer = () => {
 
   useEffect(() => {
     if (id) {
-     getCustomerDetails(id);
+      getCustomerDetails(id);
     }
   }, [id]);
 
@@ -33,6 +33,7 @@ const EditCustomer = () => {
     city: "",
     state: "",
     district: "",
+    isCodAvailable: ""
   });
 
 
@@ -49,10 +50,11 @@ const EditCustomer = () => {
         pincode: customerDetails.data.pincode || "",
         address: customerDetails.data.address || "",
         image: customerDetails.data.image || "",
+        isCodAvailable: customerDetails.data.isCodAvailable || "0",
       });
-      if(allstateList?.data?.length > 0){
+      if (allstateList?.data?.length > 0) {
         const selectedState = allstateList?.data?.find((state) => state.state === customerDetails.data.state);
-      
+
         if (selectedState) {
           // Pass the selected state's _id to get the district list
           getallDistrictList(selectedState.id);
@@ -89,7 +91,7 @@ const EditCustomer = () => {
 
     // Find the selected state object based on the state name
     const selectedState = allstateList?.data?.find((state) => state.state === selectedStateName);
-    
+
     if (selectedState) {
       // Pass the selected state's _id to get the district list
       getallDistrictList(selectedState.id);
@@ -117,19 +119,20 @@ const EditCustomer = () => {
     formDataToSend.append("city", inputData.city);
     formDataToSend.append("district", inputData.district);
     formDataToSend.append("state", inputData.state);
+    formDataToSend.append("isCodAvailable", inputData.isCodAvailable || "0");
 
     if (inputData.image) {
-      formDataToSend.append("image", inputData.image); 
+      formDataToSend.append("image", inputData.image);
     }
- 
-    editCustomer(id,formDataToSend);
+
+    editCustomer(id, formDataToSend);
   };
 
   return (
     <>
       <CommonBreadcrumb title="Edit Customer" />
       <div className="product-form-container" style={{ padding: "2px" }}>
-      <form
+        <form
           onSubmit={handleSubmit}
           style={{
             backgroundColor: "#ffffff",
@@ -185,7 +188,7 @@ const EditCustomer = () => {
                   onChange={handleInputChange}
                   id="mobile"
                 />
-                {error && <FormText color="danger">{error}</FormText>} 
+                {error && <FormText color="danger">{error}</FormText>}
               </FormGroup>
             </div>
             <div className="col-md-6">
@@ -283,22 +286,41 @@ const EditCustomer = () => {
           </div>
 
           <div className="row">
-         <div className="col-md-6">
-         <FormGroup>
-              <Label htmlFor="banner-image" className="col-form-label">
-                Upload New Image :
-              </Label>
-              <Input
-                id="banner-image"
-                type="file"
-                name="image"
-                onChange={handleFileChange}
-              />
-            </FormGroup>
-         </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="banner-image" className="col-form-label">
+                  Upload New Image :
+                </Label>
+                <Input
+                  id="banner-image"
+                  type="file"
+                  name="image"
+                  onChange={handleFileChange}
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="isCodAvailable" className="col-form-label">
+                  COD Order:
+                </Label>
+                <Input
+                  type="select"
+                  name="isCodAvailable"
+                  value={inputData.isCodAvailable}
+                  onChange={handleInputChange}
+                  id="isCodAvailable"
+                  >
+                  <option value="">Choose COD Order</option>
+                  <option value="1">Enabled</option>
+                  <option value="0">Disabled</option>
+                 
+                </Input>
+              </FormGroup>
+            </div>
           </div>
 
-        
+
 
           <Button type="submit" color="primary">
             Edit Customer
