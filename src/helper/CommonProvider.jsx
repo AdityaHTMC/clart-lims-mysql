@@ -262,11 +262,11 @@ export const CommonProvider = ({ children }) => {
           if (response.status === 200) {
             setallDeliveryList({ data: response?.data?.data || [], loading: false })
           } else {
-              toast.error(response?.data?.message)
+              // toast.error(response?.data?.message)
               setallDeliveryList({ data:[], total:'',  loading: false })
           }
       } catch (error) {
-          toast.error(error.response?.data?.message || "Something went wrong");
+          // toast.error(error.response?.data?.message || "Something went wrong");
           setallDeliveryList({ data:[], loading: false })
       }
     }
@@ -333,8 +333,7 @@ export const CommonProvider = ({ children }) => {
         const response = await axios.post(
           `${base_url}/admin/fulfillment-center/update/${id}`,
           { ...dataToSend },
-          { headers: { Authorization: Authtoken },
-         'Content-Type': 'application/json'  }
+          { headers: { Authorization: Authtoken }}
         );
         if (response.status === 200) {
           toast.success("Vendor Edited successfully");
@@ -708,7 +707,7 @@ const updateOrderRefund = async (dataToSend) => {
     );
     if (response.status === 200) {
       toast.success(response?.data?.message)
-      // getOrderDetails(id);
+      getOrderDetails(order_id);
     } else {
       toast.error(response?.data?.message);
     }

@@ -84,7 +84,7 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setTestPackage({ data: [], loading: false });
-            toast.error("Failed to test list");
+            // toast.error("Failed to test list");
         }
     };
 
@@ -105,7 +105,7 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setProfessionalFees({ data: [], loading: false });
-            toast.error("Failed to test list");
+            // toast.error("Failed to test list");
         }
     };
 
@@ -161,7 +161,7 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setAllOrderlist({ loading: false, data: [] });
-            toast.error(error.response?.data?.message || "Something went wrong");
+            // toast.error(error.response?.data?.message || "Something went wrong");
         }
     };
 
@@ -185,7 +185,7 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setAllOrder({ loading: false, data: [] });
-            toast.error(error.response?.data?.message || "Something went wrong");
+            // toast.error(error.response?.data?.message || "Something went wrong");
         }
     };
 
@@ -209,7 +209,7 @@ export const OrderProvider = ({ children }) => {
             }
         } catch (error) {
             setPendingOrder({ loading: false, data: [] });
-            toast.error(error.response?.data?.message || "Something went wrong");
+            // toast.error(error.response?.data?.message || "Something went wrong");
         }
     };
 

@@ -44,11 +44,11 @@ export const DashboardProvider = ({ children }) => {
             setCmsList({ data: response?.data?.data || [], loading: false });
           } else {
             setCmsList({...cmsList, loading: false});
-            toast.error("Failed to fetch Bag Type list");
+            // toast.error("Failed to fetch Bag Type list");
           }
         } catch (error) {
             setCmsList({...cmsList, loading: false});
-          toast.error(error.response?.data?.message || "Something went wrong");
+          // toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -66,11 +66,11 @@ export const DashboardProvider = ({ children }) => {
             setDashboardOrderList({ data: response?.data?.data || [], loading: false });
           } else {
             setDashboardOrderList({data:[], loading: false});
-            toast.error("Failed to fetch Bag Type list");
+            // toast.error("Failed to fetch Bag Type list");
           }
         } catch (error) {
             setDashboardOrderList({data:[], loading: false});
-          toast.error(error.response?.data?.message || "Something went wrong");
+          // toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -87,11 +87,11 @@ export const DashboardProvider = ({ children }) => {
             setDashboardOrderCount({ data: response?.data?.data || [], loading: false });
           } else {
             setDashboardOrderCount({data:[], loading: false});
-            toast.error("server errors");
+            // toast.error("server errors");
           }
         } catch (error) {
           setDashboardOrderCount({data:[], loading: false});
-          toast.error(error.response?.data?.message || "Something went wrong");
+          // toast.error(error.response?.data?.message || "Something went wrong");
         }
       };
 
@@ -244,7 +244,7 @@ export const DashboardProvider = ({ children }) => {
         }
     } catch (error) {
         setOrderStatus({ data: [], loading: false });
-        toast.error("Failed to fetch  count");
+        // toast.error("Failed to fetch  count");
     }
 };
 
@@ -288,7 +288,7 @@ const getunitReport = async () => {
       }
   } catch (error) {
     setUnitreportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || "Something went wrong");
+    // toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 
@@ -309,7 +309,7 @@ const getLabReport = async () => {
       }
   } catch (error) {
     setLabreportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || "Something went wrong");
+    // toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 

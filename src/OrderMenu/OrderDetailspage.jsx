@@ -92,6 +92,20 @@ const OrderDetailspage = () => {
     }
   };
 
+  const handleDownloadReport = () => {
+    const reportUrl = orderDetails?.data?.report;
+    if (reportUrl) {
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = reportUrl;
+      link.download = "Repoet.pdf"; // Set the file name
+      link.target = "_blank"; // Open in a new tab if required
+      link.click();
+    } else {
+      toast.error("Report is not available.");
+    }
+  };
+
   const toggleEditStatus = () => {
     setIsEditingStatus(!isEditingStatus);
     setIsEditingPayment(false);
@@ -210,7 +224,7 @@ const OrderDetailspage = () => {
                   </span>
                 </h5>
                 <p style={{ color: "#777", margin: 0 }}>
-                  Booking Date :{" "}
+                 Order Collection Date :{" "}
                   {orderDetails.data?.booking_date
                     ? new Date(orderDetails.data.booking_date).toLocaleString(
                         "en-GB",
@@ -389,6 +403,16 @@ const OrderDetailspage = () => {
                   onClick={handleDownloadInvoice}
                 >
                   <FaReceipt fontSize={12} /> Print Invoice
+                </Button>
+              )}
+
+               {orderDetails?.data?.report && (
+                <Button
+                  color="primary"
+                  style={{ marginBottom: "10px", float: "right" }}
+                  onClick={handleDownloadReport}
+                >
+                  <FaReceipt fontSize={12} /> Report
                 </Button>
               )}
 

@@ -156,11 +156,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setbreedLists({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       setbreedLists({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -502,11 +502,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setprofessionalList({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       setprofessionalList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -573,11 +573,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setalltest({ data: [], total: "", loading: false });
-        toast.error(response.data?.message || "Something went wrong");
+        // toast.error(response.data?.message || "Something went wrong");
       }
     } catch (error) {
       setalltest({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -644,11 +644,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         settestpackageList({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       settestpackageList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -687,11 +687,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setTpdetails({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message);
+        // toast.error(response?.data?.message);
       }
     } catch (error) {
       setTpdetails({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -738,11 +738,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setTaskList({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       setTaskList({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -764,11 +764,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setTestParameter({ data: [], total: "", loading: false });
-        toast.error(response?.data?.message);
+        // toast.error(response?.data?.message);
       }
     } catch (error) {
       setTestParameter({ data: [], total: "", loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -880,11 +880,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setallUnitList({ data: [], loading: false });
-        toast.error("Failed to fetch unit list");
+
       }
     } catch (error) {
       setallUnitList({ data: [], loading: false });
-      toast.error("Failed to fetch unit list");
+
     }
   };
 
@@ -904,11 +904,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setUnitMasterList({ data: [], total:'', loading: false });
-        toast.error(response?.data?.message)
+        // toast.error(response?.data?.message)
       }
     } catch (error) {
       setUnitMasterList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -954,11 +954,11 @@ export const MasterProvider = ({ children }) => {
         });
       } else {
         setSpeciesMasterList({ data: [], loading: false });
-        toast.error("Failed to fetch unit list");
+
       }
     } catch (error) {
       setSpeciesMasterList({ data: [], loading: false });
-      toast.error("Failed to fetch unit list");
+
     }
   };
 

@@ -35,11 +35,11 @@ export const StockProvider = ({ children }) => {
         setCmsList({ data: response?.data?.data || [], loading: false });
       } else {
         setCmsList({ ...cmsList, loading: false });
-        toast.error("Failed to fetch Bag Type list");
+        // toast.error("Failed to fetch Bag Type list");
       }
     } catch (error) {
       setCmsList({ ...cmsList, loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -83,11 +83,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setitemgroup({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setitemgroup({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -172,11 +172,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setIMList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setIMList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -239,11 +239,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setIMAllList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setIMAllList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -283,11 +283,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setVendorList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setVendorList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -370,11 +370,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setPurchaseList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setPurchaseList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -394,11 +394,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setStockreport({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setStockreport({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -421,7 +421,7 @@ export const StockProvider = ({ children }) => {
       }
     } catch (error) {
       setallvendorList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -468,11 +468,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setSrList({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setSrList({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -515,11 +515,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setStockhistory({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setStockhistory({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
@@ -539,11 +539,11 @@ export const StockProvider = ({ children }) => {
         });
       } else {
         setStocklqa({ data: [], loading: false });
-        toast.error(response.data.message);
+        // toast.error(response.data.message);
       }
     } catch (error) {
       setStocklqa({ data: [], loading: false });
-      toast.error(error.response?.data?.message || "Something went wrong");
+      // toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
 
