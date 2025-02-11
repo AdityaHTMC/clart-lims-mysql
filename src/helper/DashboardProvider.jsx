@@ -266,7 +266,7 @@ const getB2bReport = async () => {
       }
   } catch (error) {
     setB2breportList({ data: [],total:'', loading: false });
-    toast.error(error.response?.data?.message || "Something went wrong");
+    // toast.error(error.response?.data?.message || "Something went wrong");
   }
 };
 

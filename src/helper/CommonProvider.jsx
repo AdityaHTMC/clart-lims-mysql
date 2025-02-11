@@ -47,7 +47,7 @@ export const CommonProvider = ({ children }) => {
                 setMenuList({ ...menuList, loading: false })
             }
         } catch (error) {
-            toast.error(error.response?.data?.message || "Something went wrong");
+            // toast.error(error.response?.data?.message || "Something went wrong");
             setMenuList({ ...menuList, loading: false })
         }
     }
