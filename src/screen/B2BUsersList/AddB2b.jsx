@@ -433,82 +433,22 @@ const AddB2b = () => {
             </div>
           </div>
 
-          {/* <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="pincode" className="col-form-label">
-                  Pincode:
-                </Label>
-                <Input
-                  type="text"
-                  name="pincode"
-                  value={inputData.pincode}
-                  onChange={handleInputChange}
-                  id="pincode"
-                />
-              </FormGroup>
-            </div>
-
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="images" className="col-form-label">
-                  Upload Images:
-                </Label>
-                <Input
-                  type="file"
-                  name="images"
-                  id="images"
-                  onChange={handleImageChange}
-                  multiple
-                />
-              </FormGroup>
-            </div>
-          </div>
-
-        
-          <div className="row">
-            {inputData.images?.length > 0 && (
-              <div className="col-md-12">
-                <div
-                  className="image-preview-container"
-                  style={{ display: "flex", flexWrap: "wrap" }}
-                >
-                  {inputData.images.map((image, index) => (
-                    <div
-                      key={index}
-                      className="image-preview"
-                      style={{ position: "relative", margin: "5px" }}
-                    >
-                      <img
-                        src={URL.createObjectURL(image)}
-                        alt={`preview-${index}`}
-                        style={{
-                          width: "100px",
-                          height: "100px",
-                          objectFit: "cover",
-                          marginRight: "10px",
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        style={{
-                          position: "absolute",
-                          top: "0",
-                          right: "0",
-                          background: "none",
-                          border: "none",
-                          cursor: "pointer",
-                        }}
-                      >
-                        <FaTrash style={{ color: "red" }} />
-                      </button>
+              <div className="row">
+                  <div className="col-md-6">
+                      <FormGroup>
+                        <Label htmlFor="password" className="col-form-label">
+                          Password
+                        </Label>
+                        <Input
+                          type="text"
+                          name="password"
+                          value={inputData.password}
+                          onChange={handleInputChange}
+                          id="password"
+                        />
+                      </FormGroup>
                     </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div> */}
+                  </div>
 
           <Button type="submit" color="primary" disabled={isLoading}>
             {isLoading ? (

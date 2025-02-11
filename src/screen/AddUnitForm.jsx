@@ -157,7 +157,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="contact_person" className="col-form-label">
-                Contact Person <span className="text-danger">*</span>
+                Contact Person 
               </Label>
               <Input
                 type="text"
@@ -193,7 +193,7 @@ const AddUnitForm = () => {
           <div className="col-md-6">
             <FormGroup>
               <Label htmlFor="pincode" className="col-form-label">
-                Pincode <span className="text-danger">*</span>
+                Pincode 
               </Label>
               <Input
                 type="number"
@@ -337,82 +337,22 @@ const AddUnitForm = () => {
           </div>
         </div>
 
-        {/* <div className="row">
-          <div className="col-md-6">
+        <div className="row">
+        <div className="col-md-6">
             <FormGroup>
-              <Label htmlFor="pincode" className="col-form-label">
-                Pincode:
+              <Label htmlFor="password" className="col-form-label">
+                Password
               </Label>
               <Input
-                type="number"
-                name="pincode"
-                value={inputData.pincode}
+                type="text"
+                name="password"
+                value={inputData.password}
                 onChange={handleInputChange}
-                id="pincode"
-              />
-            </FormGroup>
-          </div>
-
-          <div className="col-md-6">
-            <FormGroup>
-              <Label htmlFor="images" className="col-form-label">
-                Upload Images:
-              </Label>
-              <Input
-                type="file"
-                name="images"
-                id="images"
-                onChange={handleImageChange}
-                multiple
-               
+                id="password"
               />
             </FormGroup>
           </div>
         </div>
-
-        <div className="row">
-          {inputData.images?.length > 0 && (
-            <div className="col-md-12">
-              <div
-                className="image-preview-container"
-                style={{ display: "flex", flexWrap: "wrap" }}
-              >
-                {inputData.images.map((image, index) => (
-                  <div
-                    key={index}
-                    className="image-preview"
-                    style={{ position: "relative", margin: "5px" }}
-                  >
-                    <img
-                      src={URL.createObjectURL(image)}
-                      alt={`preview-${index}`}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        marginRight: "10px",
-                      }}
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeImage(index)}
-                      style={{
-                        position: "absolute",
-                        top: "0",
-                        right: "0",
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <FaTrash style={{ color: "red" }} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div> */}
 
         <Button type="submit" color="primary" disabled={isLoading}>
           {isLoading ? (

@@ -322,7 +322,7 @@ export const AuthProvider = ({ children }) => {
         if (!token && location.pathname !== '/login') {
             navigate('/login')
         }
-        if (location.pathname == '/') {
+        if (location.pathname == '/'  && token) {
             navigate('/dashboard')
         }
     }, [location.pathname])

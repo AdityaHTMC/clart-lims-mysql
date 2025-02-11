@@ -50,6 +50,7 @@ const OrderDetailspage = () => {
   };
 
   const {
+    updateOrderRefund,
     updateOrderStatus,
     getallPhelboList,
     phlebotomistList,
@@ -209,17 +210,19 @@ const OrderDetailspage = () => {
                   </span>
                 </h5>
                 <p style={{ color: "#777", margin: 0 }}>
-                  {" "}
-                  Booking Date : {""}
-                  {new Date(orderDetails.data?.booking_date).toLocaleString(
-                    "en-GB",
-                    {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    }
-                  )}
+                  Booking Date :{" "}
+                  {orderDetails.data?.booking_date
+                    ? new Date(orderDetails.data.booking_date).toLocaleString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )
+                    : "No Date"}
                 </p>
+
                 <p style={{ color: "#777", margin: 0 }}>
                   {" "}
                   Order Placed Date : {""}
@@ -379,8 +382,7 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-           
-           {orderDetails?.data?.invoice && (
+              {orderDetails?.data?.invoice && (
                 <Button
                   color="primary"
                   style={{ marginBottom: "10px", float: "right" }}
@@ -389,7 +391,6 @@ const OrderDetailspage = () => {
                   <FaReceipt fontSize={12} /> Print Invoice
                 </Button>
               )}
-              
 
               <div style={{ marginBottom: "10px", clear: "both" }}>
                 <div className="d-flex align-items-center">
@@ -556,6 +557,29 @@ const OrderDetailspage = () => {
                   Submit
                 </Button>
               )}
+
+              {orderDetails.data?.payment_status === "Paid" && 
+                (orderDetails.data?.status === "Order Received" ||
+                  orderDetails.data?.status === "Rejected" ||
+                  orderDetails.data?.status === "Cancelled") && (
+                  <button
+                    style={{
+                      background: "red",
+                      color: "white",
+                      padding: "8px 12px",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => {
+                      const dataToSend = {
+                        order_id: orderDetails.data.order_id,
+                      };
+                      updateOrderRefund(dataToSend);
+                    }}
+                  >
+                    Refund & Cancel
+                  </button>
+                )}
             </Card>
 
             <Card

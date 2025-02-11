@@ -80,7 +80,7 @@ const CreateOrder = () => {
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
-  const [selectedSlot, setSelectedSlot] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState('');
   const [selectedPhelbo, setSelectedPhelbo] = useState("");
 
   const handleSelect = (slot) => {
@@ -289,7 +289,7 @@ const CreateOrder = () => {
     if (selectedPhelbo) {
       bodyData.append("phlebotomist_id", selectedPhelbo.id || "");
     }
-    bodyData.append("booking_date", formData.booking_date || "");
+    
     bodyData.append("collection_type", formData.type || "");
     bodyData.append("pet_id", formData.pet);
     selectedTest.forEach((el, i) => {
@@ -314,8 +314,11 @@ const CreateOrder = () => {
     bodyData.append("other_doctor ", formData.other_doctor || "");
     bodyData.append("doctor_id", selectedDoc || "");
     bodyData.append("referred_from ", formData.referred_from || "");
-    bodyData.append("start_time", selectedSlot.start_time);
-    bodyData.append("end_time", selectedSlot.end_time || "");
+    if(formData.type === "Home Visit"){
+      bodyData.append("start_time", selectedSlot.start_time || "");
+      bodyData.append("end_time", selectedSlot.end_time || "");
+      bodyData.append("booking_date", formData.booking_date || "");
+    }
 
     bodyData.append("payment_mode", formData.payment_mode);
     bodyData.append("total_amount", totalAmount + collectionFees);
@@ -660,7 +663,10 @@ const CreateOrder = () => {
                                   </Input>
                                 </FormGroup>
                               )}
-                            <FormGroup className="mt-3">
+                              {
+                                formData.type === "Home Visit" && (
+                                  <>
+                                     <FormGroup className="mt-3">
                               <Label for="bookingDate" className="fw-bold">
                                 Booking Date
                               </Label>
@@ -695,6 +701,10 @@ const CreateOrder = () => {
                                 </div>
                               </div>
                             )}
+                                  </>
+                                )
+                              }
+                         
                             <FormGroup className="mt-3">
                               <Label for="selectTest" className="fw-bold">
                                 Select Test
@@ -878,7 +888,6 @@ const CreateOrder = () => {
                                   totalAmount === 0 || // Total amount should not be 0
                                   !formData.payment_mode || // Payment mode must be selected
                                   !formData.pet || // Pet must be selected
-                                  !formData.booking_date ||
                                   (selectedTest.length === 0 && selectedPackages.length === 0) ||
                                   (formData.type === "Collection_Center" && !selectedCC) || // If Collection_Center is selected, Collection_Center dropdown must also be selected
                                   isProcessing // Button should be disabled if processing

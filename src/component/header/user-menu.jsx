@@ -8,7 +8,8 @@ const UserMenu = () => {
 
   const handleLogOut = () => {
     localStorage.removeItem("Authtoken");
-    navigate("/login");
+    // navigate("/login");
+    window.location.reload();
   };
 
   return (

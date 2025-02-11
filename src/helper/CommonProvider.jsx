@@ -687,7 +687,27 @@ const updateOrderStatus = async (dataToSend) => {
       { headers: { Authorization: Authtoken } }
     );
     if (response.status === 200) {
-      toast.success("Order status updated successfully");
+      toast.success(response?.data?.message)
+      // getOrderDetails(id);
+    } else {
+      toast.error(response?.data?.message);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Something went wrong");
+  }
+};
+
+
+const updateOrderRefund = async (dataToSend) => {
+  try {
+    const { order_id } = dataToSend;
+    const response = await axios.post(
+      `${base_url}/admin/order/refund`,
+      { ...dataToSend },
+      { headers: { Authorization: Authtoken } }
+    );
+    if (response.status === 200) {
+      toast.success(response?.data?.message)
       // getOrderDetails(id);
     } else {
       toast.error(response?.data?.message);
@@ -769,7 +789,7 @@ const updateItemStatus = async (dataToSend) => {
 
     const values = {
         getMenuList, menuList , countryList , getCountryList , getStateList , stateList, getCityList, cityList,
-        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails,updateOrderStatus,getallPhelboList, phlebotomistList,getNewLetterList,newsletterlist,getEnquiryList,enquirylist,updateItemStatus
+        getSmsSetting, smsData,SmsUpdateSetting , getEmailSubscribeList , mailList , getUserList, userList,switchUser,getOrderList,orderList,getOrderDetails , orderDetails , promoCode , getPromoCodeList,addPromoCode , getVendorList , vendorList ,VendorEdit,vendorDelete,getOrderStatus, orderStatusList,OrderStatusUpdate,addEvent,getEventList,eventList,eventDelete,getFeturedSection,sectionList,getAllProducts,allProductList,getprouctDetails,prouctDetails,editfeaturedSection,addDelivery,getDeliveryBoyList , boyList,DeliveryBoyDetail,boyDetails,DeliveryBoyUpdate,switchDelivery,deliveryDelete,allDeliveryBoyList,allDeliveryList,getSettingDetails,storeSetting,edit_store_setting,geteventDetail,editEvent,eventDetails,updateOrderStatus,getallPhelboList, phlebotomistList,getNewLetterList,newsletterlist,getEnquiryList,enquirylist,updateItemStatus,updateOrderRefund
     }
     return (
         <AppContext.Provider value={values} >
