@@ -134,6 +134,8 @@ import RoleList from "./screen/SubAdmin/RoleList";
 import PermissionList from "./screen/SubAdmin/PermissionList";
 import UserManagementList from "./screen/SubAdmin/UserManagementList";
 import UnPaidOrders from "./OrderMenu/UnPaidOrders";
+import CrmMaster from "./screen/Customers/CrmMaster";
+import CustomerOrderList from "./screen/Customers/CustomerOrderList";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -186,6 +188,8 @@ function App() {
           <Route path="/add-phlebotomist" element={<AddPhlebotomist />} />
           <Route path="/add-transporters" element={<AddTransporter />} />
           <Route path="/customers-list" element={<CustomerList />} />
+          <Route path="/crm-list" element={<CrmMaster />} />
+          <Route path="/payments/:id/:status" element={<CustomerOrderList />} />
           <Route path="/edit-customers/:id" element={<EditCustomer />} />
           <Route path="/add-customer" element={<AddCustomer />} />
 

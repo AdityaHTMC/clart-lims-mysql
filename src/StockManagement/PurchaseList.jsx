@@ -65,6 +65,7 @@ const PurchaseList = () => {
     order_id: "",
     invoice_number: "",
     date: "",
+    challan_date: "",
     stock: [
       {
         item_id: "",
@@ -87,6 +88,7 @@ const PurchaseList = () => {
       vendor_id: "",
       order_id: "",
       invoice_number: "",
+      challan_date: "",
       date: "",
       stock: [
         {
@@ -100,12 +102,12 @@ const PurchaseList = () => {
   };
 
   const handleDateChange = (e) => {
-    const selectedDate = e.target.value; // Directly take the value from the input
-    if (!selectedDate) return; // Avoid updating with an invalid value
+    const { name, value } = e.target; // Get the name and value of the input
+    if (!value) return; // Avoid updating with an invalid value
   
     setFormData((prevData) => ({
       ...prevData,
-      date: new Date(selectedDate).toISOString(), // Ensure the date is in ISO format
+      [name]: new Date(value).toISOString(), // Ensure date is in ISO format
     }));
   };
   
@@ -192,6 +194,7 @@ const PurchaseList = () => {
     formDataToSend.append("order_id", formData.order_id);
     formDataToSend.append("invoice_number", formData.invoice_number);
     formDataToSend.append("date", formData.date);
+    formDataToSend.append("challan_date", formData.challan_date);
     // Append each stock item to FormData
     formData.stock.forEach((item, index) => {
       formDataToSend.append(`stock[${index}][item_id]`, item.item_id);
@@ -290,7 +293,7 @@ const PurchaseList = () => {
             Add New Stock
           </h5>
         </ModalHeader>
-        <ModalBody>
+        <ModalBody style={{ maxHeight: "70vh", overflowY: "auto" }}>
           <Form>
             <div className="row mt-3">
               <FormGroup className="col-md-6">
@@ -357,6 +360,22 @@ const PurchaseList = () => {
                   name="date"
                   className="form-control"
                   value={getFormattedDate(formData.date)}
+                  onChange={handleDateChange}
+                />
+              </FormGroup>
+            </div>
+
+            <div className="row">
+            <FormGroup className="col-md-6">
+                <Label for="challan_date" className="fw-bold">
+                  Challan Date
+                </Label>
+                <Input
+                  type="date"
+                  id="challan_date"
+                  name="challan_date"
+                  className="form-control"
+                  value={getFormattedDate(formData.challan_date)}
                   onChange={handleDateChange}
                 />
               </FormGroup>

@@ -55,6 +55,7 @@ const EditTestList = () => {
     sell_price: "",
     collection_fee: "",
     is_popular: "",
+    isPrescriptionRequired : "",
     testcode: "",
     advice: "",
     duration: "",
@@ -83,6 +84,7 @@ const EditTestList = () => {
         sell_price: testDetails.data.sell_price || "",
         collection_fee: testDetails.data.collection_fee || "",
         is_popular: testDetails.data.is_popular || "",
+        isPrescriptionRequired : testDetails.data.isPrescriptionRequired || "",
         testcode: testDetails.data.testcode || "",
         advice: testDetails.data.advice || "",
         duration: testDetails.data.duration || "",
@@ -146,6 +148,13 @@ const EditTestList = () => {
     }));
   };
 
+  const handlePrescription = (e) => {
+    setInputData((prevState) => ({
+      ...prevState,
+      isPrescriptionRequired: e.target.value,
+    }));
+  };
+
   const handleObservationChange = (index, value) => {
     const updatedObservations = [...observationsList];
     updatedObservations[index] = value;
@@ -206,6 +215,7 @@ const EditTestList = () => {
     formDataToSend.append("test_preparation", inputData.test_preparation);
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("isPrescriptionRequired", inputData.isPrescriptionRequired);
     formDataToSend.append("method", inputData.method);
     formDataToSend.append("container_id", inputData.container_id);
     formDataToSend.append("hsn_code", inputData.hsn_code);
@@ -283,7 +293,7 @@ const EditTestList = () => {
             <div className="col-md-6">
               <FormGroup className="mb-3">
                 <Label htmlFor="price" className="col-form-label">
-                  price: <span className="text-danger">*</span>
+                  MRP: <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -301,7 +311,7 @@ const EditTestList = () => {
             <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="sell_price" className="col-form-label">
-                  Sell Price:
+                  Discounted Price:
                 </Label>
                 <Input
                   type="number"
@@ -647,6 +657,42 @@ const EditTestList = () => {
                     />
                   )}
                 />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label className="col-form-label">Is Prescription Required ?</Label>
+                <div className="d-flex align-items-center">
+                  <div className="form-check me-3">
+                    <Input
+                      type="radio"
+                      name="isPrescriptionRequired "
+                      value="Yes"
+                      className="form-check-input"
+                      id="radioYes"
+                      checked={inputData.isPrescriptionRequired  === "Yes"}
+                      onChange={handlePrescription}
+                    />
+                    <Label className="form-check-label" htmlFor="radioYes">
+                      Yes
+                    </Label>
+                  </div>
+                  <div className="form-check">
+                    <Input
+                      type="radio"
+                      name="isPrescriptionRequired "
+                      value="No"
+                      className="form-check-input"
+                      id="radioNo"
+                      checked={inputData.isPrescriptionRequired  === "No"}
+                      onChange={handlePrescription}
+                    />
+                    <Label className="form-check-label" htmlFor="radioNo">
+                      No
+                    </Label>
+                  </div>
+                </div>
               </FormGroup>
             </div>
           </div>

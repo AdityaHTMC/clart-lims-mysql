@@ -152,6 +152,7 @@ const EditCustomer = () => {
                   value={inputData.name}
                   onChange={handleInputChange}
                   id="organization_name"
+                  disabled
                   required
                 />
               </FormGroup>
@@ -167,6 +168,7 @@ const EditCustomer = () => {
                   value={inputData.email}
                   onChange={handleInputChange}
                   id="email"
+                  disabled
                   required
                 />
               </FormGroup>
@@ -186,6 +188,7 @@ const EditCustomer = () => {
                   min={0}
                   value={inputData.mobile}
                   onChange={handleInputChange}
+                  disabled 
                   id="mobile"
                 />
                 {error && <FormText color="danger">{error}</FormText>}

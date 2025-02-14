@@ -55,6 +55,7 @@ const AddTestList = () => {
     observation: [""],
     container_id: "",
     hsn_code: "",
+    isPrescriptionRequired : "",
   });
 
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
@@ -130,6 +131,13 @@ const AddTestList = () => {
     }));
   };
 
+  const handlePrescription = (e) => {
+    setInputData((prevState) => ({
+      ...prevState,
+      isPrescriptionRequired: e.target.value,
+    }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -154,6 +162,7 @@ const AddTestList = () => {
     formDataToSend.append("why_the_test", inputData.why_the_test);
     formDataToSend.append("method", inputData.method);
     formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("isPrescriptionRequired", inputData.isPrescriptionRequired);
     formDataToSend.append("container_id", inputData.container_id);
     formDataToSend.append("hsn_code", inputData.hsn_code);
     if (inputData.image) {
@@ -228,7 +237,7 @@ const AddTestList = () => {
             <div className="col-md-6">
               <FormGroup className="mb-3">
                 <Label for="price" className="form-label">
-                  Price <span className="text-danger">*</span>
+                  MRP <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -249,7 +258,7 @@ const AddTestList = () => {
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
                 <Label htmlFor="sell_price">
-                  Sell Price <span className="text-danger">*</span>
+                  Discounted Price <span className="text-danger">*</span>
                 </Label>
                 <Input
                   type="number"
@@ -466,7 +475,7 @@ const AddTestList = () => {
                     marginBottom: "5px",
                   }}
                 >
-                  Is It Popular Test ?:
+                  Is It Popular Test ?
                 </Label>
                 <div
                   className="d-flex align-items-center"
@@ -669,6 +678,79 @@ const AddTestList = () => {
                     />
                   )}
                 />
+              </FormGroup>
+            </div>
+
+            <div className="col-md-6">
+              <FormGroup>
+                <Label
+                  className="col-form-label"
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: "14px",
+                    color: "#495057",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Is Prescription Required ?
+                </Label>
+                <div
+                  className="d-flex align-items-center"
+                  style={{
+                    border: "1px solid #ced4da",
+                    borderRadius: "5px",
+                    padding: "10px",
+                    backgroundColor: "#f8f9fa",
+                  }}
+                >
+                  <div
+                    className="form-check me-3"
+                    style={{
+                      marginRight: "20px",
+                    }}
+                  >
+                    <Input
+                      type="radio"
+                      name="isPrescriptionRequired "
+                      value="Yes"
+                      className="form-check-input"
+                      id="radioYes"
+                      checked={inputData.isPrescriptionRequired  === "Yes"}
+                      onChange={handlePrescription}
+                      style={{
+                        marginRight: "5px",
+                      }}
+                    />
+                    <Label
+                      className="form-check-label"
+                      htmlFor="radioYes"
+                      style={{ fontSize: "14px", color: "#495057" }}
+                    >
+                      Yes
+                    </Label>
+                  </div>
+                  <div className="form-check">
+                    <Input
+                      type="radio"
+                      name="isPrescriptionRequired "
+                      value="No"
+                      className="form-check-input"
+                      id="radioNo"
+                      checked={inputData.isPrescriptionRequired  === "No"}
+                      onChange={handlePrescription}
+                      style={{
+                        marginRight: "5px",
+                      }}
+                    />
+                    <Label
+                      className="form-check-label"
+                      htmlFor="radioNo"
+                      style={{ fontSize: "14px", color: "#495057" }}
+                    >
+                      No
+                    </Label>
+                  </div>
+                </div>
               </FormGroup>
             </div>
           </div>
