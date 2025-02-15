@@ -43,6 +43,7 @@ const AllOrderList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const itemperPage = 15;
 
   const totalPages =
@@ -55,6 +56,21 @@ const AllOrderList = () => {
     return `${year}-${month}-${day}`;
   };
 
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Debounce effect (500ms delay)
+useEffect(() => {
+  const handler = setTimeout(() => {
+    setDebouncedSearch(searchTerm);
+  }, 1000);
+
+  return () => {
+    clearTimeout(handler);
+  };
+}, [searchTerm]);
+
   useEffect(() => {
     const dataToSend = {
       status: selectedStatus,
@@ -62,10 +78,10 @@ const AllOrderList = () => {
       limit: itemperPage,
       start_date: startDate ? formatDate(startDate) : null,
       end_date: endDate ? formatDate(endDate) : null,
-      keyword_search: searchTerm,
+      keyword_search: debouncedSearch,
     };
     getAllOrderList(dataToSend);
-  }, [selectedStatus, currentPage, searchTerm, startDate, endDate,searchTerm]);
+  }, [selectedStatus, currentPage, startDate, endDate,debouncedSearch]);
 
   useEffect(() => {
     getOrderMasterList();
@@ -78,9 +94,6 @@ const AllOrderList = () => {
     }
   }, [statusTerm]);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
 
 
   // useEffect(() => {

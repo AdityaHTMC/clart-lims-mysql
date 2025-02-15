@@ -15,7 +15,7 @@ import {
   
   import { useEffect, useState } from "react";
   
-  import { FaDeleteLeft, FaEye } from "react-icons/fa6";
+  import { FaEye } from "react-icons/fa6";
   
   import DatePicker from "react-datepicker";
   import "react-datepicker/dist/react-datepicker.css";
@@ -29,10 +29,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   const CustomerOrderList = () => {
     const Navigate = useNavigate();
     const { getAllOrderList, allOrderlist } = useOrderContext();
-
-
     const { id , status } = useParams();
-
     const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -82,7 +79,7 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
   
     return (
       <>
-        <CommonBreadcrumb title="Orders List" parent="" />
+        <CommonBreadcrumb title= { `${status} Order List`} />
         <Container fluid>
           <Row>
             <Col sm="12">

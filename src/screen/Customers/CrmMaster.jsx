@@ -18,6 +18,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
 import { IconButton, Pagination, Stack, TextField, Grid, Grid2 } from "@mui/material";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CrmMaster = () => {
   const navigate = useNavigate();
@@ -26,6 +28,9 @@ const CrmMaster = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemperPage = 10;
@@ -33,36 +38,58 @@ const CrmMaster = () => {
   const totalPages =
     crmListsdata?.total && Math.ceil(crmListsdata?.total / itemperPage);
 
-  useEffect(() => {
-    const dataToSend = {
-      page: currentPage,
-      limit: itemperPage,
-      keyword_search: searchTerm,
-      min_price: "",
-      max_price: "",
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+      const day = String(date.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
     };
-    crmList(dataToSend);
-  }, [currentPage, searchTerm]);
+
+    const handleSearchChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
+  
+    // Debounce effect (500ms delay)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 1000);
+  
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchTerm]);
+
+    useEffect(() => {
+      const dataToSend = {
+        page: currentPage,
+        limit: itemperPage,
+        keyword_search: debouncedSearch, 
+        min_price: "",
+        max_price: "",
+        start_date: startDate ? formatDate(startDate) : null,
+        end_date: endDate ? formatDate(endDate) : null,
+      };
+      crmList(dataToSend);
+    }, [currentPage, debouncedSearch, startDate, endDate]);
 
   const fetchCRMList = () => {
     const dataToSend = {
       page: currentPage,
       keyword_search: searchTerm,
-      min_price: minPrice || null, // Send only if provided
+      min_price: minPrice || null, 
       max_price: maxPrice || null,
     };
 
-    crmList(dataToSend); // Call your API
+    crmList(dataToSend); 
   };
 
   // Auto-fetch on search or pagination changes
   useEffect(() => {
     fetchCRMList();
-  }, [currentPage, searchTerm]);
+  }, [currentPage]);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-  };
+
 
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
@@ -152,6 +179,36 @@ const CrmMaster = () => {
                         Apply Filter
                       </Button>
                     </Grid2>
+                    {/* date filter */}
+                    <Grid2 item xs={12} md={3} lg={2}>
+                      <DatePicker
+                        selected={startDate}
+                        onChange={(date) => setStartDate(date)}
+                        placeholderText="Start Date"
+                        className="form-control"
+                      />
+                    </Grid2>
+                    <Grid2 item xs={12} md={3} lg={2}>
+                      <DatePicker
+                        selected={endDate}
+                        onChange={(date) => setEndDate(date)}
+                        placeholderText="End Date"
+                        className="form-control"
+                      />
+                    </Grid2>
+
+                    <Grid2 item xs={12} md={3} lg={2}>
+                      <Button
+                        color="primary"
+                        onClick={() => {
+                          setStartDate(null);
+                          setEndDate(null);
+                        }}
+                      >
+                        Clear Dates
+                      </Button>
+                    </Grid2>
+                    
                   </Grid2>
                 </div>
                 <div className="clearfix"></div>
