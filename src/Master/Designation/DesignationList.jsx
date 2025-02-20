@@ -165,7 +165,7 @@ import {
                             designationMasterList?.data?.map((product, index) => (
                               <tr key={index}>
                                 <td>{product?.title}</td>
-                                <td>
+                                {/* <td>
                                   <div className="circelBtnBx">
                                     <Button
                                       className="btn"
@@ -182,7 +182,7 @@ import {
                                       <FaTrashAlt />
                                     </Button>
                                   </div>
-                                </td>
+                                </td> */}
                               </tr>
                             ))
                           )}
