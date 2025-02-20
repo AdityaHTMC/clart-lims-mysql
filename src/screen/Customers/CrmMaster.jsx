@@ -17,14 +17,21 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
-import { IconButton, Pagination, Stack, TextField, Grid, Grid2 } from "@mui/material";
+import {
+  IconButton,
+  Pagination,
+  Stack,
+  TextField,
+  Grid,
+  Grid2,
+} from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const CrmMaster = () => {
   const navigate = useNavigate();
 
-  const { crmList, crmListsdata } = useMasterContext();
+  const { crmList, crmListsdata, crmCSV } = useMasterContext();
   const [searchTerm, setSearchTerm] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
@@ -38,50 +45,52 @@ const CrmMaster = () => {
   const totalPages =
     crmListsdata?.total && Math.ceil(crmListsdata?.total / itemperPage);
 
-    const formatDate = (date) => {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
-      const day = String(date.getDate()).padStart(2, "0");
-      return `${year}-${month}-${day}`;
-    };
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
 
-    const handleSearchChange = (e) => {
-      setSearchTerm(e.target.value);
-    };
-  
-    // Debounce effect (500ms delay)
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Debounce effect (500ms delay)
   useEffect(() => {
     const handler = setTimeout(() => {
       setDebouncedSearch(searchTerm);
     }, 1000);
-  
+
     return () => {
       clearTimeout(handler);
     };
   }, [searchTerm]);
 
-    useEffect(() => {
-      const dataToSend = {
-        page: currentPage,
-        limit: itemperPage,
-        keyword_search: debouncedSearch, 
-        min_price: "",
-        max_price: "",
-        start_date: startDate ? formatDate(startDate) : null,
-        end_date: endDate ? formatDate(endDate) : null,
-      };
-      crmList(dataToSend);
-    }, [currentPage, debouncedSearch, startDate, endDate]);
+  useEffect(() => {
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      keyword_search: debouncedSearch,
+      min_price: "",
+      max_price: "",
+      start_date: startDate ? formatDate(startDate) : null,
+      end_date: endDate ? formatDate(endDate) : null,
+    };
+    crmList(dataToSend);
+  }, [currentPage, debouncedSearch, startDate, endDate]);
 
   const fetchCRMList = () => {
     const dataToSend = {
       page: currentPage,
+      limit: itemperPage,
       keyword_search: searchTerm,
-      min_price: minPrice || null, 
+      min_price: minPrice || null,
       max_price: maxPrice || null,
     };
 
-    crmList(dataToSend); 
+    crmList(dataToSend);
+  
   };
 
   // Auto-fetch on search or pagination changes
@@ -89,7 +98,45 @@ const CrmMaster = () => {
     fetchCRMList();
   }, [currentPage]);
 
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setMinPrice(""); // Clear Min Price
+    setMaxPrice(""); // Clear Max Price
+    setSearchTerm(""); // Clear search input if applicable
+  
+    const dataToSend = {
+      page: currentPage,
+      limit: itemperPage,
+      keyword_search: "",
+      min_price:  null,
+      max_price:  null,
+    };
+    // Call API with empty filter values
+    fetchCRMList(dataToSend);
+  };
 
+  
+  const handleCsv = async () => {
+    const dataToSend = {
+      page: currentPage,
+      keyword_search: searchTerm || null,
+      min_price: minPrice || null,
+      max_price: maxPrice || null,
+    };
+  
+    try {
+      const res = await crmCSV(dataToSend);
+  
+      if (res?.fileUrl) {
+        window.open(res.fileUrl, "_blank"); 
+      } else {
+        console.error("File URL not found in response.");
+      }
+    } catch (error) {
+      console.error("Error fetching CSV file:", error);
+    }
+  };
 
   const handlepagechange = (newpage) => {
     setCurrentPage(newpage);
@@ -200,15 +247,19 @@ const CrmMaster = () => {
                     <Grid2 item xs={12} md={3} lg={2}>
                       <Button
                         color="primary"
-                        onClick={() => {
-                          setStartDate(null);
-                          setEndDate(null);
-                        }}
+                        onClick={handleClearFilters}
                       >
-                        Clear Dates
+                        Clear Filter
                       </Button>
                     </Grid2>
-                    
+                    <Grid2 item xs={12} md={3} lg={2}>
+                      <Button
+                        color="primary"
+                        onClick={handleCsv}
+                      >
+                        CSV
+                      </Button>
+                    </Grid2>
                   </Grid2>
                 </div>
                 <div className="clearfix"></div>
@@ -223,8 +274,8 @@ const CrmMaster = () => {
                           <th>Address</th>
                           <th>District</th>
                           <th> Total Order </th>
-                          <th>Total Paid </th>
-                          <th> Total Paid </th>
+                          <th>Total Amount Paid </th>
+                          <th>Paid Order</th>
                           <th>Unpaid Order </th>
                         </tr>
                       </thead>

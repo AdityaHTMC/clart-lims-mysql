@@ -13,6 +13,7 @@ export const MasterProvider = ({ children }) => {
   const [breedLists, setbreedLists] = useState({loading: true,data: [],total: ""});
   const [customerLists, setcustomerLists] = useState({loading: true,data: [],total: ""});
   const [crmListsdata, setcrmLists] = useState({loading: true,data: [],total: ""});
+  const [crmCSvdata, setcrmCSV] = useState({loading: true,data: [],total: ""});
   const [testCategory, settestCategory] = useState({loading: true,data: [],total: ""});
   const [testList, settestList] = useState({loading: true,data: [],total: ""});
   const [professionalList, setprofessionalList] = useState({loading: true,data: [],total: ""});
@@ -304,6 +305,26 @@ export const MasterProvider = ({ children }) => {
     } catch (error) {
       setcrmLists({ data: [], total: "", loading: false });
      
+    }
+  };
+
+  const crmCSV = async (dataToSend) => {
+    try {
+      setcrmCSV({ data: [], loading: true });
+      const response = await axios.post(
+        `${base_url}/admin/crm/csv/export `,
+        {...dataToSend},
+        { headers: { Authorization: AuthToken } }
+      );
+      const data = response.data;
+      if (response.status === 200) {
+        return response.data
+      } else {
+  
+        return null
+      }
+    } catch (error) {
+      return null
     }
   };
 
@@ -2994,7 +3015,7 @@ export const MasterProvider = ({ children }) => {
  
 
   const values = {
-    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData,getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr,getAllParameterGrList,allparameterGrList,getTestParaGr,allTestParaGr,getRoleList,roleList,addRole,editRoleList,getDropDownRoleList,dropdownRoleList,getDropDownMenuList,dropdownMenuList,getpermissionList,permissionList,addPermission,editpermissionList,Deletepermission,getUserMagList,userMagList,addUserManagement,editUserMagList,DeleteUserMag,crmList,crmListsdata
+    addBreed , breedLists , getBreedList , allBreedList,allbreed,addCustomer,allCustomerList,customerLists,testCategory, gettestCategoryList,addtestCategory,gettestTestList,testList,addTest,getAllTestCategory,alltestCategory,getProfessionalList,professionalList,addProfessional,getAllTest, alltest,addtestPackage,getAllTestPackage , testpackageList , addtask ,getTaskList , taskList,getTPList , testParameter,getPPL,allPPL,addTestParameter,getDDunitList,allUnitList,getunitMasterList, unitMasterList,addUnitMasterList,getSpeciesMasterList,speciesMasterList,addSpeciesMasterList,getOrderMasterList,orderMasterList,addOrderMasterList,getAllSpeciesList,allspecies,getdistrictList,districtList,getStateList,stateList,getAlldistrictList,allDistrictList,getAllStateList,allStateList,customerDelete , TestPackageDetail , tpdetails,editTestPackage ,tpDelete,getAllTimeList,addTimeMaster,editTimeMaster,timeDelete,timeList,getAllPhelboList,allphelboList,getAllItemList, allItemList,editBreed,deleteBreed,getDesignationMasterList, designationMasterList,addDesignation,DeleteDesignation,editDesignation,editSpeciesMasterList,DeleteSpecies,getEmailSettingsList,editEmailSettingsList,emailSettingsList,getCustomerPetList,petList,addPet,editPetList,deleteTest,orderDetails,getOrderDetails,deletePetList,deleteTestcate,editTestCategory, editParameterUnitMasterList, DeleteParameterUnits, DeleteProfessionalFees,editProfessionalFees,deleteTPList,getTestDetails,testDetails,editTest,editOrderStatus,DeleteOrderStatus,getTimeList,timeListdata,addState,addDistrict,editDistrict,DistrictDelete,editState,StateDelete,getsahcList,sahcList,addSahc,getDocList,docList,addDocMaster,getallSahcList,allsahcList,getZoneList,zoneList,addZoneMaster,getZonePrice,zoneprice,editZonePincodeList,editDocList,editSahcList,DeleteSahcFees,DeleteDoc,DeleteZoneFees,getSahcwiseDoc,sahcDoc,getTransationList,transationList,getOrderPhelboList,orderphelboList, getBankMasterList, bankList,addBankMaster,editBankList,DeleteBank,getCashinHandList,cihList,getAuditTrailList,auditTrailsList,getReportTemplateList,reportTemplateList,getConatinerList,containerList,addContainerMaster,editContainerList,DeleteContainer,getAllConatinerList,allContainerList, getcsvAudit, csvAuditData,getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr,getAllParameterGrList,allparameterGrList,getTestParaGr,allTestParaGr,getRoleList,roleList,addRole,editRoleList,getDropDownRoleList,dropdownRoleList,getDropDownMenuList,dropdownMenuList,getpermissionList,permissionList,addPermission,editpermissionList,Deletepermission,getUserMagList,userMagList,addUserManagement,editUserMagList,DeleteUserMag,crmList,crmListsdata,crmCSV
   };
   return <AppContext.Provider value={values}>{children}</AppContext.Provider>;
 };
