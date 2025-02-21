@@ -26,16 +26,16 @@ import { FaTrashAlt } from "react-icons/fa";
 import { Spinner } from "reactstrap";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
-import { Pagination, Stack } from "@mui/material";
+import { Autocomplete, Pagination, Stack, TextField } from "@mui/material";
 import { useCategoryContext } from "../../helper/CategoryProvider";
 
 const DoctorList = () => {
   const navigate = useNavigate();
 
-  const { getDocList, docList, addDocMaster,editDocList, DeleteDoc} =
+  const { getDocList, docList, addDocMaster, editDocList, DeleteDoc } =
     useMasterContext();
 
-    const { getAllCollection , collectionDropdown} = useCategoryContext()
+  const { getAllCollection, collectionDropdown } = useCategoryContext();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -54,7 +54,7 @@ const DoctorList = () => {
 
   const [selectedvarity, setSelectedvarity] = useState({
     name: "",
-    collection_center_id    : "",
+    collection_center_id: "",
     registration_number: "",
     id: "",
   });
@@ -93,7 +93,6 @@ const DoctorList = () => {
       name: "",
       collection_center_id: "",
       registration_number: "",
-      id: "",
     });
   };
 
@@ -110,10 +109,11 @@ const DoctorList = () => {
   const handleSubmits = () => {
     const dataToSend = {
       name: selectedvarity.name,
-      collection_center_id    : selectedvarity.collection_center_id,
+      collection_center_id: selectedvarity.collection_center_id,
       registration_number: selectedvarity.registration_number,
       id: selectedvarity.id,
-    }
+    };
+    // console.log(dataToSend, 'update')
     editDocList(dataToSend);
     onCloseModal2();
   };
@@ -135,6 +135,7 @@ const DoctorList = () => {
 
   // Handle form submission
   const handleSubmit = () => {
+    // console.log(formData, 'submit');
     addDocMaster(formData);
     onCloseModal();
   };
@@ -226,11 +227,7 @@ const DoctorList = () => {
         </Row>
       </Container>
 
-      <Modal
-        isOpen={open}
-        toggle={onCloseModal}
-        className="modal-xg" 
-      >
+      <Modal isOpen={open} toggle={onCloseModal} className="modal-xg">
         <ModalHeader toggle={onCloseModal}>
           <h5 className="modal-title f-w-600" id="exampleModalLabel2">
             Add
@@ -268,21 +265,26 @@ const DoctorList = () => {
               <Label htmlFor="collection_center_id" className="col-form-label">
                 Collection Center:
               </Label>
-              <Input
-                type="select"
-                name="collection_center_id"
-                value={formData.collection_center_id}
-                onChange={handleInputChange}
+              <Autocomplete
                 id="collection_center_id"
-              >
-                <option value="">Select Collection Center</option>
-                {collectionDropdown?.data?.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {item.organization_name}
-                  </option>
-                ))}
-              </Input>
+                options={collectionDropdown?.data || []} // Ensure it's an array
+                getOptionLabel={(option) => option.organization_name || ""}
+                onChange={(event, newValue) => {
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    collection_center_id: newValue ? newValue.id : "",
+                  }));
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Collection Center"
+                    variant="outlined"
+                  />
+                )}
+              />
             </FormGroup>
+            
           </Form>
         </ModalBody>
         <ModalFooter>
@@ -328,24 +330,29 @@ const DoctorList = () => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor="collection_center_id" className="col-form-label">
-                Collection Center:
-              </Label>
-              <Input
-                type="select"
-                name="collection_center_id"
-                value={selectedvarity.collection_center_id}
-                onChange={handleInputChanges}
-                id="collection_center_id"
-              >
-                <option value="">Select Collection</option>
-                {collectionDropdown?.data?.map((variety) => (
-                  <option key={variety._id} value={variety.id}>
-                    {variety.organization_name}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
+  <Label htmlFor="collection_center_id" className="col-form-label">
+    Collection Center:
+  </Label>
+  <Autocomplete
+    id="collection_center_id"
+    options={collectionDropdown?.data || []} // Ensure it's an array
+    getOptionLabel={(option) => option.organization_name || ""}
+    value={collectionDropdown?.data?.find(
+      (item) => item.id === selectedvarity.collection_center_id
+    ) || null}
+    onChange={(event, newValue) => {
+      handleInputChanges({
+        target: {
+          name: "collection_center_id",
+          value: newValue ? newValue.id : "",
+        },
+      });
+    }}
+    renderInput={(params) => (
+      <TextField {...params} label="Select Collection" variant="outlined" />
+    )}
+  />
+</FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
