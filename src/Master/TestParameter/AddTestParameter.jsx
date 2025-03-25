@@ -17,12 +17,13 @@ const AddTestParameter = () => {
     allPPL,
     addTestParameter,
     getDDunitList,
-    allUnitList,getTestParaGr,allTestParaGr
+    allUnitList, getTestParaGr, allTestParaGr, allBreedList, allbreed
   } = useMasterContext();
 
   useEffect(() => {
     getAllTest();
     getDDunitList();
+    allBreedList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -32,7 +33,8 @@ const AddTestParameter = () => {
     lower_range: "",
     parentId: "",
     test_id: "",
-    group_id:"",
+    group_id: "",
+    breed_id: ""
   });
 
   const [selectedTestId, setSelectedTestId] = useState("");
@@ -62,7 +64,12 @@ const AddTestParameter = () => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
+    if(!inputData.breed_id) {
+      return
+    }
+
     formDataToSend.append("parameter", inputData.parameter);
+    formDataToSend.append("breed_id", inputData.breed_id);
     formDataToSend.append("parameter_unit_id", parseInt(inputData.unit, 10));
     formDataToSend.append("upper_range", parseInt(inputData.upper_range, 10));
     formDataToSend.append("lower_range", parseInt(inputData.lower_range, 10));
@@ -88,6 +95,30 @@ const AddTestParameter = () => {
             border: "1px solid #e0e0e0",
           }}
         >
+          <div className="row">
+            <div className="col-md-12">
+              <FormGroup>
+                <Label htmlFor="breed_id">
+                  Select Breed
+                </Label>
+                <Input
+                  type="select"
+                  name="breed_id"
+                  id="breed_id"
+                  value={inputData.breed_id}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Breed</option>
+                  {allbreed?.data?.map((breed) => (
+                    <option key={breed.id} value={breed.id}>
+                      {breed.name}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+          </div>
+
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -204,8 +235,8 @@ const AddTestParameter = () => {
             </div>
           </div>
 
-        <div className="row">
-        <div className="col-md-6">
+          <div className="row">
+            <div className="col-md-6">
               {selectedTestId && allTestParaGr?.data?.length > 0 && (
                 <FormGroup>
                   <Label for="group_id">Test Parameter Group </Label>
@@ -226,7 +257,7 @@ const AddTestParameter = () => {
                 </FormGroup>
               )}
             </div>
-        </div>
+          </div>
 
 
           <Button type="submit" color="primary">

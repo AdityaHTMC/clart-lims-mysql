@@ -107,8 +107,8 @@ const LoginForm = () => {
 
       {!isOtpSend && formValues.email && (
         <ReCAPTCHA
-          // sitekey="6LfZeIMqAAAAABOvtLmqRSwd3A4n1HaCm73yEoeO"  // for live 
-          sitekey= "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" //  For testing in local
+          sitekey="6LfZeIMqAAAAABOvtLmqRSwd3A4n1HaCm73yEoeO"  // for live 
+          // sitekey= "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" //  For testing in local
           onChange={onVerified}
           ref={recaptchaRef}
           size="normal"
