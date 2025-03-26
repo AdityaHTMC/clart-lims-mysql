@@ -136,6 +136,7 @@ import UserManagementList from "./screen/SubAdmin/UserManagementList";
 import UnPaidOrders from "./OrderMenu/UnPaidOrders";
 import CrmMaster from "./screen/Customers/CrmMaster";
 import CustomerOrderList from "./screen/Customers/CustomerOrderList";
+import DailyReport from "./screen/DailyReports";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -340,6 +341,7 @@ function App() {
           <Route path="/create-vendor" element={<CreateVendors />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/add-products" element={<AddUnitList />} />
+          <Route path="/daily-report" element={<DailyReport />} />
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/login" element={<Login />} />

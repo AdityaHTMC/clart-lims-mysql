@@ -29,8 +29,6 @@ const Header = () => {
 
   const {user} = useAuthContext()
 
-  console.log(user, 'user')
-
   const [fullScreen, setFullScreen] = useState(false);
   const [toggleSidebar, setToggleSidebar] = useState(false);
   const [navMenus, setNavMenus] = useState(false);
