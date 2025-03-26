@@ -17,13 +17,13 @@ const AddTestParameter = () => {
     allPPL,
     addTestParameter,
     getDDunitList,
-    allUnitList, getTestParaGr, allTestParaGr, allBreedList, allbreed
+    allUnitList, getTestParaGr, allTestParaGr, getAllSpeciesList, allspecies
   } = useMasterContext();
 
   useEffect(() => {
     getAllTest();
     getDDunitList();
-    allBreedList();
+    getAllSpeciesList();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -34,7 +34,7 @@ const AddTestParameter = () => {
     parentId: "",
     test_id: "",
     group_id: "",
-    breed_id: ""
+    species_id: ""
   });
 
   const [selectedTestId, setSelectedTestId] = useState("");
@@ -64,12 +64,12 @@ const AddTestParameter = () => {
     e.preventDefault();
     const formDataToSend = new FormData();
 
-    if(!inputData.breed_id) {
+    if(!inputData.species_id) {
       return
     }
 
     formDataToSend.append("parameter", inputData.parameter);
-    formDataToSend.append("breed_id", inputData.breed_id);
+    formDataToSend.append("species_id", inputData.species_id);
     formDataToSend.append("parameter_unit_id", parseInt(inputData.unit, 10));
     formDataToSend.append("upper_range", parseInt(inputData.upper_range, 10));
     formDataToSend.append("lower_range", parseInt(inputData.lower_range, 10));
@@ -98,20 +98,20 @@ const AddTestParameter = () => {
           <div className="row">
             <div className="col-md-12">
               <FormGroup>
-                <Label htmlFor="breed_id">
-                  Select Breed
+                <Label htmlFor="species_id">
+                  Select Species
                 </Label>
                 <Input
                   type="select"
-                  name="breed_id"
-                  id="breed_id"
-                  value={inputData.breed_id}
+                  name="species_id"
+                  id="species_id"
+                  value={inputData.species_id}
                   onChange={handleInputChange}
                 >
-                  <option value="">Select Breed</option>
-                  {allbreed?.data?.map((breed) => (
+                  <option value="">Select Species</option>
+                  {allspecies?.data?.map((breed) => (
                     <option key={breed.id} value={breed.id}>
-                      {breed.name}
+                      {breed.title}
                     </option>
                   ))}
                 </Input>

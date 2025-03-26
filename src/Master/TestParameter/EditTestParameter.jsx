@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from "react";
 import { Button, FormGroup, Input, Label } from "reactstrap";
-import { FaTrash } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useMasterContext } from "../../helper/MasterProvider";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useCategoryContext } from "../../helper/CategoryProvider";
-import { FaEdit, FaTrashAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
+
 const EditTestParameter = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -21,7 +20,7 @@ const EditTestParameter = () => {
     allPPL,
     addTestParameter,
     getDDunitList,
-    allUnitList,getTestParaGr,allTestParaGr
+    allUnitList, getTestParaGr, allTestParaGr, getAllSpeciesList, allspecies
   } = useMasterContext();
 
   useEffect(() => {
@@ -29,6 +28,10 @@ const EditTestParameter = () => {
       getTpDetails(id);
     }
   }, [id]);
+
+  useEffect(() => {
+    getAllSpeciesList()
+  }, [])
 
 
 
@@ -39,7 +42,8 @@ const EditTestParameter = () => {
     lower_range: "",
     parentId: "",
     test_id: "",
-    group_id:"",
+    group_id: "",
+    species_id: ""
   });
 
   const [selectedTestId, setSelectedTestId] = useState("");
@@ -53,6 +57,7 @@ const EditTestParameter = () => {
         parentId: tpDetails.data.parent_id || "",
         test_id: tpDetails.data.test_id || "",
         group_id: tpDetails.data.group_id || "",
+        species_id: tpDetails.data.species_id || "",
       });
       setSelectedTestId(tpDetails.data.test_id);
     }
@@ -62,8 +67,8 @@ const EditTestParameter = () => {
   useEffect(() => {
     getAllTest();
     getDDunitList();
-    getTestParaGr(tpDetails?.data?.test_id );
-  }, [tpDetails?.data?.test_id ]);
+    getTestParaGr(tpDetails?.data?.test_id);
+  }, [tpDetails?.data?.test_id]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -84,6 +89,10 @@ const EditTestParameter = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(!inputData.species_id) {
+      toast.info("Please select a species")
+      return;
+    }
 
     const formDataToSend = new FormData();
 
@@ -94,7 +103,8 @@ const EditTestParameter = () => {
     formDataToSend.append("parent_id", inputData.parentId || "");
     formDataToSend.append("test_id", selectedTestId);
     formDataToSend.append("group_id", inputData.group_id);
-    
+    formDataToSend.append("species_id", inputData.species_id);
+
     editTp(id, formDataToSend);
   };
 
@@ -112,6 +122,29 @@ const EditTestParameter = () => {
             border: "1px solid #e0e0e0",
           }}
         >
+          <div className="row">
+            <div className="col-md-12">
+              <FormGroup>
+                <Label htmlFor="species_id">
+                  Select Species
+                </Label>
+                <Input
+                  type="select"
+                  name="species_id"
+                  id="species_id"
+                  value={inputData.species_id}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Species</option>
+                  {allspecies?.data?.map((breed) => (
+                    <option key={breed.id} value={breed.id}>
+                      {breed.title}
+                    </option>
+                  ))}
+                </Input>
+              </FormGroup>
+            </div>
+          </div>
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
@@ -226,23 +259,23 @@ const EditTestParameter = () => {
           <div className="row">
             {tpDetails?.data?.group_name && (
               <div className="col-md-6">
-                  <FormGroup>
-                    <Label for="group_id">Test Parameter Group </Label>
-                    <Input
-                      type="select"
-                      name="group_id"
-                      id="group_id"
-                      value={inputData.group_id}
-                      onChange={handleInputChange}
-                    >
-                      <option value="">Select Test Parameter Group</option>
-                      {allTestParaGr?.data?.map((parent) => (
-                        <option key={parent._id} value={parent.id}>
-                          {parent.name}
-                        </option>
-                      ))}
-                    </Input>
-                  </FormGroup>
+                <FormGroup>
+                  <Label for="group_id">Test Parameter Group </Label>
+                  <Input
+                    type="select"
+                    name="group_id"
+                    id="group_id"
+                    value={inputData.group_id}
+                    onChange={handleInputChange}
+                  >
+                    <option value="">Select Test Parameter Group</option>
+                    {allTestParaGr?.data?.map((parent) => (
+                      <option key={parent._id} value={parent.id}>
+                        {parent.name}
+                      </option>
+                    ))}
+                  </Input>
+                </FormGroup>
               </div>
             )}
           </div>
