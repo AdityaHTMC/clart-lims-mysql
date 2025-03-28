@@ -155,6 +155,7 @@ const PackageOrder = () => {
                        
                         <th>Sample Collection Date</th>
                         <th>Lab Accepted Date</th>
+                        <th>Organization Name</th>
                         <th>Customer Info</th>
                         <th>Pet</th>
                         <th>Total Amount</th>
@@ -192,6 +193,7 @@ const PackageOrder = () => {
                                   })
                                 : "NA"}
                             </td>
+                            <td>{order?.organization_name || "N/A"}</td>
                             <td>
                               <div className="d-flex align-items-center gap-3">
                                 <div>

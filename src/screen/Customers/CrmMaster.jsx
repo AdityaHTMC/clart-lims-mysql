@@ -273,6 +273,7 @@ const CrmMaster = () => {
                           <th>Mobile</th>
                           <th>Address</th>
                           <th>District</th>
+                          <th>Organization Name</th>
                           <th> Total Order </th>
                           <th>Total Amount Paid </th>
                           <th>Paid Order</th>
@@ -330,6 +331,7 @@ const CrmMaster = () => {
                                 )}
                               </td>
                               <td>{product?.district || "NA"}</td>
+                              <td>{product?.organization_name || "NA"}</td>
                               <td>{product?.total_orders || "NA"}</td>
                               <td> {product?.total_paid} </td>
                               <td>

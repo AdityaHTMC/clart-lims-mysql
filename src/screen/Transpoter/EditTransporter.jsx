@@ -12,7 +12,9 @@ import AddLocationIcon from "@mui/icons-material/AddLocation";
 const EditTransporter = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-
+  const [selectedPhlebotomist, setSelectedPhlebotomist] = useState([]);
+  const { getAllPhelboList, allphelboList } =
+    useMasterContext();
   const {
     getallstateList,
     getallDistrictList,
@@ -34,6 +36,7 @@ const EditTransporter = () => {
     getAllUnit();
     getallstateList();
     getAllLabs();
+    getAllPhelboList()
   }, []);
 
   useEffect(() => {
@@ -93,6 +96,7 @@ const EditTransporter = () => {
       setSelectedProducts3(
         phelboDetails.data.associated_collection_centers_details || []
       );
+      setSelectedPhlebotomist(phelboDetails.data?.associated_phlebotomist_details || []) 
       setPincodes(phelboDetails.data.serviceable_pincodes || []);
     }
   }, [phelboDetails]);
@@ -145,7 +149,7 @@ const EditTransporter = () => {
     );
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const allSelectedProductIds = [
@@ -177,21 +181,25 @@ const EditTransporter = () => {
       formDataToSend.append(`associated_units[${index}]`, id);
     });
 
+    selectedPhlebotomist.forEach((item, index) => {
+      formDataToSend.append(`associated_phlebotomists[${index}]`, item?.id);
+    });
+
     allSelectedProduct3Ids.forEach((id, index) => {
       formDataToSend.append(`associated_collection_centers[${index}]`, id);
     });
-    
-    pincodes.forEach((pin, index) => {
-        formDataToSend.append(`serviceable_pincode[${index}]`, pin);
-      });
 
-      try {
-        await editTransporter(id,formDataToSend);
-      } catch (error) {
-        console.error("Error submitting the form:", error);
-      } finally {
-        setIsLoading(false);
-      }
+    pincodes.forEach((pin, index) => {
+      formDataToSend.append(`serviceable_pincode[${index}]`, pin);
+    });
+
+    try {
+      await editTransporter(id, formDataToSend);
+    } catch (error) {
+      console.error("Error submitting the form:", error);
+    } finally {
+      setIsLoading(false);
+    }
 
   };
 
@@ -459,6 +467,29 @@ const EditTransporter = () => {
                 </div>
               </FormGroup>
             </div>
+          </div>
+
+          <div className="col-md-6">
+            <FormGroup>
+              <Label for="New">Associate Phlebototmist</Label>
+              <Autocomplete
+                sx={{ m: 1 }}
+                multiple
+                options={allphelboList.data || []}
+                getOptionLabel={(option) => option?.name || ""}
+                value={selectedPhlebotomist}
+                onChange={(event, newValue) => setSelectedPhlebotomist(newValue)}
+                disableCloseOnSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Phlebotomist"
+                    placeholder="Select Phlebotomist"
+                  />
+                )}
+              />
+            </FormGroup>
           </div>
 
           <Button type="submit" color="primary" disabled={isLoading}>

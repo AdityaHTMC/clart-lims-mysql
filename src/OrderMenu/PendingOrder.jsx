@@ -146,6 +146,7 @@ import {
                           
                           <th>Sample Collection Date</th>
                           <th>Lab Accepted Date</th>
+                          <th>Organization Name</th>
                           <th>Customer Info</th>
                           <th>Pet</th>
                           <th>Total Amount</th>
@@ -183,6 +184,7 @@ import {
                                   })
                                 : "NA"}
                             </td>
+                            <td>{order?.organization_name || "N/A"}</td>
                               <td>
                                 <div className="d-flex align-items-center gap-3">
                                   {/* <img className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded" src={order?.customer_image || `/assets/images/profile.png`} alt="header-user" /> */}

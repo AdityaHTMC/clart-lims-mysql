@@ -21,7 +21,7 @@ const AddTransporter = () => {
     labDropdown,
   } = useCategoryContext();
 
-  const { getAlldistrictList, allDistrictList, getAllStateList, allStateList } =
+  const { getAlldistrictList, allDistrictList, getAllStateList, allStateList, getAllPhelboList, allphelboList } =
     useMasterContext();
 
   const [inputData, setInputData] = useState({
@@ -34,12 +34,17 @@ const AddTransporter = () => {
     districtId: "",
     image: "",
   });
+  const [selectedPhlebotomist, setSelectedPhlebotomist] = useState([]);
 
   useEffect(() => {
     getAllCollection();
     getAllUnit();
     getAllStateList();
     getAllLabs();
+    getAllPhelboList()
+  }, []);
+
+  useEffect(() => {
     if (inputData.stateId) {
       getAlldistrictList(inputData.stateId);
     }
@@ -90,7 +95,7 @@ const AddTransporter = () => {
     }));
   };
 
-  const handleSubmit =async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     const allSelectedProductIds = [
@@ -120,6 +125,10 @@ const AddTransporter = () => {
 
     allselectedlab.forEach((id, index) => {
       formDataToSend.append(`associated_labs[${index}]`, id);
+    });
+
+    selectedPhlebotomist.forEach((item, index) => {
+      formDataToSend.append(`associated_phlebotomists[${index}]`, item?._id);
     });
 
     pincodes.forEach((pin, index) => {
@@ -368,6 +377,29 @@ const AddTransporter = () => {
                 />
               </FormGroup>
             </div>
+          </div>
+
+          <div className="col-md-6">
+            <FormGroup>
+              <Label for="New">Associate Phlebototmist</Label>
+              <Autocomplete
+                sx={{ m: 1 }}
+                multiple
+                options={allphelboList.data || []}
+                getOptionLabel={(option) => option?.name || ""}
+                value={selectedPhlebotomist}
+                onChange={(event, newValue) => setSelectedPhlebotomist(newValue)}
+                disableCloseOnSelect
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    label="Select Phlebotomist"
+                    placeholder="Select Phlebotomist"
+                  />
+                )}
+              />
+            </FormGroup>
           </div>
 
           <Button type="submit" color="primary" disabled={isLoading}>
