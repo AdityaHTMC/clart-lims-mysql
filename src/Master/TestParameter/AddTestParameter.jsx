@@ -163,7 +163,8 @@ const AddTestParameter = () => {
                   Lower Range:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
+                  step="any" // allows decimals
                   name="lower_range"
                   value={inputData.lower_range}
                   onChange={handleInputChange}
@@ -177,7 +178,8 @@ const AddTestParameter = () => {
                   Upper Range:
                 </Label>
                 <Input
-                  type="text"
+                  type="number"
+                  step="any" // allows decimals
                   name="upper_range"
                   value={inputData.upper_range}
                   onChange={handleInputChange}
