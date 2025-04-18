@@ -8,17 +8,21 @@ import { useNavigate } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { useOrderContext } from "../../helper/OrderProvider";
 
 const AddTestPackage = () => {
   const navigate = useNavigate();
 
   const {
-    addtestPackage,getAllTest, alltest
+    addtestPackage, getAllTest, alltest
   } = useMasterContext();
 
-  useEffect(()=>{
+  const { test_package, getTestPackageList } = useOrderContext()
+
+  useEffect(() => {
     getAllTest()
-  },[])
+    getTestPackageList()
+  }, [])
 
   const [inputData, setInputData] = useState({
     package_name: "",
@@ -31,6 +35,7 @@ const AddTestPackage = () => {
     is_popular: "",
     hsn_code: "",
   });
+  const [selectedPackages, setSelectedPackages] = useState([]);
 
   const [selectedProducts, setSelectedProducts] = useState([]);
 
@@ -43,12 +48,12 @@ const AddTestPackage = () => {
         type === "checkbox"
           ? checked
           : ["turn_around_time", "price", "sell_price"].includes(name)
-          ? parseInt(value, 10) || 0
-          : value,
+            ? parseInt(value, 10) || 0
+            : value,
     }));
   };
-  
-  
+
+
 
   const handlePopularChange = (e) => {
     setInputData((prevState) => ({
@@ -57,13 +62,17 @@ const AddTestPackage = () => {
     }));
   };
 
+  const onPackageSelect = (data) => {
+    setSelectedPackages(data);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const allSelectedProductIds = [
       ...selectedProducts.map(product => product.id)
     ];
-    
+
 
 
     const formDataToSend = new FormData();
@@ -73,17 +82,18 @@ const AddTestPackage = () => {
     formDataToSend.append("sample_type", inputData.sample_type);
     formDataToSend.append("turn_around_time", inputData.turn_around_time);
     formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price );
-    formDataToSend.append("is_popular", inputData.is_popular );
-    formDataToSend.append("hsn_code", inputData.hsn_code );
+    formDataToSend.append("sell_price", inputData.sell_price);
+    formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("hsn_code", inputData.hsn_code);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`tests[${index}]`, parseInt(id, 10));
     });
-  
+
+    selectedPackages?.forEach((el, index) => {
+      formDataToSend.append(`packages[${index}]`, el.id)
+    })
 
     addtestPackage(formDataToSend);
-
-
   };
 
   return (
@@ -262,10 +272,37 @@ const AddTestPackage = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
+              <FormGroup className="mt-3">
+                <Label for="selectPackage" className="fw-bold">
+                  Select Package
+                </Label>
+                <Autocomplete
+                  multiple
+                  options={test_package?.data || []}
+                  getOptionLabel={(option) =>
+                    `${option?.package_name}`
+                  }
+                  disableCloseOnSelect
+                  value={selectedPackages}
+                  onChange={(event, newValue) =>
+                    onPackageSelect(newValue)
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Health Package"
+                      placeholder="Select Health Package"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="hsn_code" className="col-form-label">
-                 Hsn Code:
+                  Hsn Code:
                 </Label>
                 <Input
                   type="text"

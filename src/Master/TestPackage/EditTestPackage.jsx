@@ -8,20 +8,25 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { useMasterContext } from "../../helper/MasterProvider";
+import { useOrderContext } from "../../helper/OrderProvider";
 
 const EditTestPackage = () => {
   const navigate = useNavigate();
- const {id} = useParams()
+  const { id } = useParams()
   const {
-    addtestPackage,getAllTest, alltest,TestPackageDetail,tpdetails,editTestPackage} = useMasterContext();
+    addtestPackage, getAllTest, alltest, TestPackageDetail, tpdetails, editTestPackage } = useMasterContext();
 
-  useEffect(()=>{
+  const { test_package, getTestPackageList } = useOrderContext()
+  const [selectedPackages, setSelectedPackages] = useState([]);
+
+  useEffect(() => {
     getAllTest()
-  },[])
+    getTestPackageList()
+  }, [])
 
   useEffect(() => {
     if (id) {
-    TestPackageDetail(id);
+      TestPackageDetail(id);
     }
   }, [id]);
 
@@ -56,6 +61,7 @@ const EditTestPackage = () => {
         hsn_code: tpdetails.data.hsn_code || "",
       });
       setSelectedProducts(tpdetails.data.test_details || []);
+      setSelectedPackages(tpdetails?.data?.package_details || []);
     }
   }, [tpdetails]);
 
@@ -67,6 +73,11 @@ const EditTestPackage = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  const onPackageSelect = (data) => {
+    setSelectedPackages(data);
+  };
+
 
   const handlePopularChange = (e) => {
     setInputData((prevState) => ({
@@ -87,7 +98,7 @@ const EditTestPackage = () => {
     const allSelectedProductIds = [
       ...selectedProducts.map(product => product.id)
     ];
-    
+
     const formDataToSend = new FormData();
 
     formDataToSend.append("package_name", inputData.package_name);
@@ -95,14 +106,18 @@ const EditTestPackage = () => {
     formDataToSend.append("sample_type", inputData.sample_type);
     formDataToSend.append("turn_around_time", inputData.turn_around_time);
     formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price );
-    formDataToSend.append("is_popular", inputData.is_popular );
-    formDataToSend.append("hsn_code", inputData.hsn_code );
+    formDataToSend.append("sell_price", inputData.sell_price);
+    formDataToSend.append("is_popular", inputData.is_popular);
+    formDataToSend.append("hsn_code", inputData.hsn_code);
     allSelectedProductIds.forEach((id, index) => {
       formDataToSend.append(`tests[${index}]`, id);
     });
-  
-    editTestPackage(formDataToSend,id);
+
+    selectedPackages?.forEach((el, index) => {
+      formDataToSend.append(`packages[${index}]`, el.id)
+    })
+
+    editTestPackage(formDataToSend, id);
 
 
   };
@@ -222,9 +237,9 @@ const EditTestPackage = () => {
           <div className="row">
             <div className="col-md-6">
               <FormGroup>
-        
-    
-    {/* Display selected tests in MUI Chip
+
+
+                {/* Display selected tests in MUI Chip
     <div style={{ display: 'flex', flexWrap: 'wrap' }}>
       {selectedProducts.map((test) => (
         <Chip
@@ -293,7 +308,34 @@ const EditTestPackage = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
+              <FormGroup className="mt-3">
+                <Label for="selectPackage" className="fw-bold">
+                  Select Package
+                </Label>
+                <Autocomplete
+                  multiple
+                  options={test_package?.data || []}
+                  getOptionLabel={(option) =>
+                    `${option?.package_name}`
+                  }
+                  disableCloseOnSelect
+                  value={selectedPackages}
+                  onChange={(event, newValue) =>
+                    onPackageSelect(newValue)
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      label="Select Health Package"
+                      placeholder="Select Health Package"
+                    />
+                  )}
+                />
+              </FormGroup>
+            </div>
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="hsn_code">Hsn Code</Label>
                 <Input
