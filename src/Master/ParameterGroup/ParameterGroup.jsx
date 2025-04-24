@@ -2,7 +2,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 
 import {
-    Badge,
     Button,
     Card,
     CardBody,
@@ -30,10 +29,8 @@ import {
   import { useMasterContext } from "../../helper/MasterProvider";
   import CommonBreadcrumb from "../../component/common/bread-crumb";
   import { Pagination, Stack } from "@mui/material";
-  import { useCategoryContext } from "../../helper/CategoryProvider";
   
   const ParameterGroup = () => {
-    const navigate = useNavigate();
   
     const { getParameterGrList,parameterGrList,addParameterGrMaster,editParameterGrList,DeleteParameterGr} =
       useMasterContext();

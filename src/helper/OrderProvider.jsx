@@ -24,11 +24,12 @@ export const OrderProvider = ({ children }) => {
     const [packageOrder, setPackageOrder] = useState({ loading: true, data: [] ,total: ""})
     const [pendingOrder, setPendingOrder] = useState({ loading: true, data: [] ,total: ""})
 
-    const getAllTest = async (data) => {
+    const getAllTest = async (q) => {
         try {
+            const body = q ? {species_category: q} : {}
             const response = await axios.post(
                 `${base_url}/admin/all/tests`,
-                {},
+                body,
                 { headers: { Authorization: Authtoken } }
             );
             if (response.status === 200) {
@@ -67,11 +68,12 @@ export const OrderProvider = ({ children }) => {
         }
     };
 
-    const getTestPackageList = async () => {
+    const getTestPackageList = async (query) => {
         try {
             setTestPackage({ ...test_package, loading: true });
-            const response = await axios.get(
-                `${base_url}/admin/test-packages/getAll`,
+            const body = query ? {species_category: query} : {}
+            const response = await axios.post(
+                `${base_url}/admin/test-packages/getAll`, body, 
                 { headers: { Authorization: Authtoken } }
             );
             if (response.status === 200) {

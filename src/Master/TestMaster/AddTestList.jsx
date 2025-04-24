@@ -10,6 +10,8 @@ import CommonBreadcrumb from "../../component/common/bread-crumb";
 import { Autocomplete, Chip, TextField } from "@mui/material";
 import { useMasterContext } from "../../helper/MasterProvider";
 import { useOrderContext } from "../../helper/OrderProvider";
+import { useCommonContext } from "../../helper/CommonProvider";
+import { toast } from "react-toastify";
 const AddTestList = () => {
   const navigate = useNavigate();
 
@@ -28,6 +30,7 @@ const AddTestList = () => {
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
+  const { getSpeciesCategoryList, speciesCategoryList } = useCommonContext()
 
   useEffect(() => {
     getAllTestCategory();
@@ -36,13 +39,12 @@ const AddTestList = () => {
     getAllItemList();
     getAllConatinerList();
     getAllParameterGrList();
+    getSpeciesCategoryList()
   }, []);
 
   const [inputData, setInputData] = useState({
     test_name: "",
     group: "",
-    price: "",
-    sell_price: "",
     collection_fee: "",
     is_popular: "",
     testcode: "",
@@ -57,6 +59,10 @@ const AddTestList = () => {
     hsn_code: "",
     isPrescriptionRequired : "",
   });
+
+  const [priceCatalog, setPriceCatalog] = useState([{
+    category_id: '', sell_price: '', price: ''
+  }])
 
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -82,6 +88,45 @@ const AddTestList = () => {
       ...prevState,
       observation: prevState.observation.filter((_, i) => i !== index),
     }));
+  };
+
+  const addPriceCatalog = () => {
+    if(priceCatalog.length === speciesCategoryList?.data?.length) {
+      toast.info("All category selected already");
+      return
+    }
+    setPriceCatalog((prev) => [...prev, {category_id: "", sell_price: "", price: ""}])
+  };
+
+  const removePriceCatalog = (index) => {
+    setPriceCatalog((prev) => prev.filter((_, i) => i !== index))
+  };
+
+  const handlePriceChange = (index, key, value) => {
+    if(key === "category_id"){
+      const find = priceCatalog.find((item) => item.category_id === value)
+      if(find) {
+        toast.info("Category already select choose different category")
+        retrun
+      }
+    }
+
+    
+    const updatedItems = [...priceCatalog];
+    if(key === "price") {
+      if(updatedItems[index].sell_price && parseInt(updatedItems[index].sell_price) > parseInt(value) ) {
+        toast.info("Price should be greater than or equal to with discounted price")
+        return
+      }
+    }
+    if(key === "sell_price") {
+      if(updatedItems[index].price && parseInt(updatedItems[index].price) < parseInt(value) ) {
+        toast.info("Discounted price should be less than or equal to with price")
+        return
+      }
+    }
+    updatedItems[index][key] = value; // Update the specific key (item or quantity)
+    setPriceCatalog(updatedItems);
   };
 
   const handleItemChange = (index, key, value) => {
@@ -140,21 +185,32 @@ const AddTestList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
+    
+    let isCheck = false
 
+    priceCatalog?.forEach((item) => {
+      if(!item?.category_id || !item?.price || !item?.sell_price) {
+        toast.info("Price category, price, discounted price required")
+        isCheck = true
+      }
+    })
+
+    if(isCheck) {
+      retrun
+    }
+    
     const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
-
+    
     const allSelectedParameterGrIds = [...selectedParameterGrList.map((product) => product.id)];
-
+    
+    setIsLoading(true);
     const formDataToSend = new FormData();
 
     formDataToSend.append("test_name", inputData.test_name);
     formDataToSend.append("group_id", inputData.group);
-    formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price);
     formDataToSend.append("testcode", inputData.testcode);
     formDataToSend.append("advice", inputData.advice);
     formDataToSend.append("duration", inputData.duration);
@@ -176,6 +232,12 @@ const AddTestList = () => {
     allSelectedParameterGrIds.forEach((id, index) => {
       formDataToSend.append(`parameter_groups[${index}]`, parseInt(id, 10));
     });
+
+    priceCatalog.forEach((item, index) => {
+      formDataToSend.append(`catalogs[${index}][category_id]`, item?.category_id)
+      formDataToSend.append(`catalogs[${index}][price]`, item?.price)
+      formDataToSend.append(`catalogs[${index}][sell_price]`, item?.sell_price)
+    })
 
     allSelectedfeesIds.forEach((id, index) => {
       formDataToSend.append(`professional_fees[${index}]`, parseInt(id, 10));
@@ -233,8 +295,24 @@ const AddTestList = () => {
               </FormGroup>
             </div>
 
-            {/* Price Field */}
             <div className="col-md-6">
+              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
+                <Label htmlFor="test_preparation">Test Preparation:</Label>
+                <Input
+                  type="textarea"
+                  name="test_preparation"
+                  className="form-control shadow-sm"
+                  value={inputData.test_preparation}
+                  onChange={handleInputChange}
+                  id="test_preparation"
+                  rows="3"
+                  placeholder="Enter Test Preparation"
+                />
+              </FormGroup>
+            </div>
+
+            {/* Price Field */}
+            {/* <div className="col-md-6">
               <FormGroup className="mb-3">
                 <Label for="price" className="form-label">
                   MRP <span className="text-danger">*</span>
@@ -251,11 +329,11 @@ const AddTestList = () => {
                   required
                 />
               </FormGroup>
-            </div>
+            </div> */}
           </div>
 
           <div className="row" style={{ marginBottom: "15px" }}>
-            <div className="col-md-6">
+            {/* <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
                 <Label htmlFor="sell_price">
                   Discounted Price <span className="text-danger">*</span>
@@ -272,22 +350,8 @@ const AddTestList = () => {
                   required
                 />
               </FormGroup>
-            </div>
-            <div className="col-md-6">
-              <FormGroup style={{ display: "flex", flexDirection: "column" }}>
-                <Label htmlFor="test_preparation">Test Preparation:</Label>
-                <Input
-                  type="textarea"
-                  name="test_preparation"
-                  className="form-control shadow-sm"
-                  value={inputData.test_preparation}
-                  onChange={handleInputChange}
-                  id="test_preparation"
-                  rows="3"
-                  placeholder="Enter Test Preparation"
-                />
-              </FormGroup>
-            </div>
+            </div> */}
+
           </div>
 
           <div
@@ -752,6 +816,143 @@ const AddTestList = () => {
                   </div>
                 </div>
               </FormGroup>
+            </div>
+          </div>
+
+          <div className="row" style={{ marginBottom: "20px" }}>
+            {priceCatalog.map((itemData, index) => (
+              <div className="col-md-12 mb-2" key={index}>
+                <FormGroup style={{ marginBottom: "15px" }}>
+                  <Label
+                    htmlFor={`category-${index}`}
+                    className="col-form-label"
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      color: "#495057",
+                      marginBottom: "5px",
+                      display: "block",
+                    }}
+                  >
+                    Price List {index + 1}
+                  </Label>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#f8f9fa",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    {/* Dropdown for selecting item */}
+                    <Input
+                      type="select"
+                      name={`category-${index}`}
+                      id={`category-${index}`}
+                      value={itemData.category_id}
+                      onChange={(e) =>
+                        handlePriceChange(index, "category_id", e.target.value)
+                      }
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {speciesCategoryList?.data?.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.title}
+                        </option>
+                      ))}
+                    </Input>
+
+                    {/* Input for quantity */}
+                    <Input
+                      type="number"
+                      name={`price-${index}`}
+                      id={`price-${index}`}
+                      value={itemData.price}
+                      onChange={(e) =>
+                        handlePriceChange(index, "price", e.target.value)
+                      }
+                      placeholder="Price"
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+
+                    <Input
+                      type="number"
+                      name={`sell_price-${index}`}
+                      id={`sell_price-${index}`}
+                      value={itemData.sell_price}
+                      onChange={(e) =>
+                        handlePriceChange(index, "sell_price", e.target.value)
+                      }
+                      placeholder="Discounted Price"
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+
+                    {/* Remove button */}
+                    <Button
+                      type="button"
+                      color="primary"
+                      onClick={() => removePriceCatalog(index)}
+                      style={{
+                        color: "white",
+                        backgroundColor: "#dc3545",
+                        borderColor: "#dc3545",
+                        padding: "8px 12px",
+                        borderRadius: "5px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            ))}
+
+            <div className="col-md-12">
+              <Button
+                type="button"
+                color="primary"
+                outline
+                onClick={addPriceCatalog}
+                size="sm"
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 20px",
+                  borderRadius: "5px",
+                  fontSize: "14px",
+                  border: "1px solid #007bff",
+                  color: "#007bff",
+                  backgroundColor: "white",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.2s ease-in-out",
+                }}
+              >
+                Add Price
+              </Button>
             </div>
           </div>
 

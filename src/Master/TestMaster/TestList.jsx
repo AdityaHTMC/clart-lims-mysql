@@ -22,7 +22,7 @@ import SearchIcon from "@mui/icons-material/Search";
 const TestList = () => {
   const navigate = useNavigate();
 
-  const { gettestTestList, testList,deleteTest } = useMasterContext();
+  const { gettestTestList, testList, deleteTest } = useMasterContext();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
@@ -31,13 +31,13 @@ const TestList = () => {
   const totalPages =
     testList?.total && Math.ceil(testList?.total / itemperPage);
 
-    useEffect(() => {
-      const handler = setTimeout(() => {
-        setDebouncedSearchTerm(searchTerm);
-      }, 700); // Delay API call by 700ms
-  
-      return () => clearTimeout(handler); // Cleanup previous timer
-    }, [searchTerm]);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 700); // Delay API call by 700ms
+
+    return () => clearTimeout(handler); // Cleanup previous timer
+  }, [searchTerm]);
 
   useEffect(() => {
     const dataToSend = {
@@ -46,7 +46,7 @@ const TestList = () => {
       keyword_search: debouncedSearchTerm,
     };
     gettestTestList(dataToSend);
-  }, [currentPage,debouncedSearchTerm]);
+  }, [currentPage, debouncedSearchTerm]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
@@ -116,7 +116,6 @@ const TestList = () => {
                         <tr>
                           <th>Test Name </th>
                           <th>Group</th>
-                          <th>Price</th>
                           <th>Sell Price</th>
                           <th>Test Code</th>
                           <th>Action</th>
@@ -138,72 +137,73 @@ const TestList = () => {
                             </td>
                           </tr>
                         ) : (
-                          testList?.data?.map((product, index) => (
-                            <tr key={index}>
-                              {/* <td>
-                                {product?.test_name?.length > 20
-                                  ? `${product.test_name.slice(0, 20)}...`
-                                  : product.test_name}
-                              </td> */}
+                          testList?.data?.map((product, index) => {
+                            return (
+                              <tr key={index}>
+                                <td id={`test_name-${index}`}>
+                                  {product?.test_name
+                                    ? product.test_name.length > 30
+                                      ? `${product.test_name.slice(0, 35)}...`
+                                      : product.test_name
+                                    : "NA"}
+                                  {product?.test_name && (
+                                    <UncontrolledTooltip
+                                      placement="top"
+                                      target={`test_name-${index}`}
+                                    >
+                                      {product?.test_name}
+                                    </UncontrolledTooltip>
+                                  )}
+                                </td>
 
-                              <td id={`test_name-${index}`}>
-                                {product?.test_name
-                                  ? product.test_name.length > 30
-                                    ? `${product.test_name.slice(0, 35)}...`
-                                    : product.test_name
-                                  : "NA"}
-                                {product?.test_name && (
-                                  <UncontrolledTooltip
-                                    placement="top"
-                                    target={`test_name-${index}`}
-                                  >
-                                    {product?.test_name}
-                                  </UncontrolledTooltip>
-                                )}
-                              </td>
-                              
 
-                              <td id={`group_name-${index}`}>
-                                {product?.group_name
-                                  ? product?.group_name.length > 20
-                                    ? `${product?.group_name.slice(0, 20)}...`
-                                    : product?.group_name
-                                  : "NA"}
-                                {product?.group_name && (
-                                  <UncontrolledTooltip
-                                    placement="top"
-                                    target={`group_name-${index}`}
-                                  >
-                                    {product?.group_name}
-                                  </UncontrolledTooltip>
-                                )}
-                              </td>
+                                <td id={`group_name-${index}`}>
+                                  {product?.group_name
+                                    ? product?.group_name.length > 20
+                                      ? `${product?.group_name.slice(0, 20)}...`
+                                      : product?.group_name
+                                    : "NA"}
+                                  {product?.group_name && (
+                                    <UncontrolledTooltip
+                                      placement="top"
+                                      target={`group_name-${index}`}
+                                    >
+                                      {product?.group_name}
+                                    </UncontrolledTooltip>
+                                  )}
+                                </td>
 
-                              <td>{product?.price || "NA"}</td>
-                              <td>{product?.sell_price || "NA"}</td>
-                              <td>{product?.testcode || "NA"}</td>
-                              {/* <td>{product.pincode}</td> */}
+                                <td>
+                                  {product?.price_list?.map((el, i) => (
+                                    <div key={i}>
+                                      <span><b>{el.category_title}</b> : {el.sell_price}</span>
+                                    </div>
+                                  ))}
+                                </td>
+                                <td>{product?.testcode || "NA"}</td>
+                                {/* <td>{product.pincode}</td> */}
 
-                              <td>
-                                <div className="circelBtnBx">
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handleEdit(product?.id)}
-                                  >
-                                    <FaEdit />
-                                  </Button>
-                                  <Button
-                                    className="btn"
-                                    color="link"
-                                    onClick={() => handleDelete(product?.id)}
-                                  >
-                                    <FaTrashAlt />
-                                  </Button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))
+                                <td>
+                                  <div className="circelBtnBx">
+                                    <Button
+                                      className="btn"
+                                      color="link"
+                                      onClick={() => handleEdit(product?.id)}
+                                    >
+                                      <FaEdit />
+                                    </Button>
+                                    <Button
+                                      className="btn"
+                                      color="link"
+                                      onClick={() => handleDelete(product?.id)}
+                                    >
+                                      <FaTrashAlt />
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            )
+                          })
                         )}
                       </tbody>
                       <Stack className="rightPagination mt10" spacing={2}>

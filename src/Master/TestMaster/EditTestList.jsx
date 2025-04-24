@@ -10,6 +10,8 @@ import { useCategoryContext } from "../../helper/CategoryProvider";
 import { useOrderContext } from "../../helper/OrderProvider";
 import { useMasterContext } from "../../helper/MasterProvider";
 import { FaTrashAlt } from "react-icons/fa";
+import { useCommonContext } from "../../helper/CommonProvider";
+import { toast } from "react-toastify";
 
 const EditTestList = () => {
   const navigate = useNavigate();
@@ -28,10 +30,11 @@ const EditTestList = () => {
     getAllItemList,
     allItemList,
     getAllConatinerList,
-    allContainerList,    getAllParameterGrList,allparameterGrList,
+    allContainerList, getAllParameterGrList, allparameterGrList,
   } = useMasterContext();
 
   const { getProfessionalFees, professionalFees } = useOrderContext();
+  const { getSpeciesCategoryList, speciesCategoryList } = useCommonContext()
 
   useEffect(() => {
     getAllTestCategory();
@@ -40,6 +43,7 @@ const EditTestList = () => {
     getAllItemList();
     getAllConatinerList();
     getAllParameterGrList();
+    getSpeciesCategoryList();
   }, []);
 
   useEffect(() => {
@@ -51,11 +55,9 @@ const EditTestList = () => {
   const [inputData, setInputData] = useState({
     test_name: "",
     group: "",
-    price: "",
-    sell_price: "",
     collection_fee: "",
     is_popular: "",
-    isPrescriptionRequired : "",
+    isPrescriptionRequired: "",
     testcode: "",
     advice: "",
     duration: "",
@@ -67,6 +69,11 @@ const EditTestList = () => {
     hsn_code: "",
   });
 
+
+  const [priceCatalog, setPriceCatalog] = useState([{
+    category_id: '', sell_price: '', price: ''
+  }])
+
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedParameterGrList, setparameterGrList] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
@@ -75,16 +82,15 @@ const EditTestList = () => {
   const [preview, setPreview] = useState(null);
   const [priImages, setPriImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     if (testDetails) {
       setInputData({
         test_name: testDetails.data.test_name || "",
         group: testDetails.data.group_id || "",
-        price: testDetails.data.price || [],
-        sell_price: testDetails.data.sell_price || "",
         collection_fee: testDetails.data.collection_fee || "",
         is_popular: testDetails.data.is_popular || "",
-        isPrescriptionRequired : testDetails.data.isPrescriptionRequired || "",
+        isPrescriptionRequired: testDetails.data.isPrescriptionRequired || "",
         testcode: testDetails.data.testcode || "",
         advice: testDetails.data.advice || "",
         duration: testDetails.data.duration || "",
@@ -100,8 +106,53 @@ const EditTestList = () => {
       setObservations(testDetails.data.observations || []);
       setItemDataList(testDetails.data.items || []);
       setparameterGrList(testDetails.data.parameter_groups || []);
+      const prices = testDetails?.data?.price_list?.map((item) => {
+        return { category_id: item?.category_id, price: item?.price, sell_price: item?.sell_price }
+      })
+      setPriceCatalog(prices && prices?.length > 0 ? prices : [{
+        category_id: '', sell_price: '', price: ''
+      }])
     }
   }, [testDetails]);
+
+  const addPriceCatalog = () => {
+    if (priceCatalog.length === speciesCategoryList?.data?.length) {
+      toast.info("All category selected already");
+      return
+    }
+    setPriceCatalog((prev) => [...prev, { category_id: "", sell_price: "", price: "" }])
+  };
+
+  const removePriceCatalog = (index) => {
+    setPriceCatalog((prev) => prev.filter((_, i) => i !== index))
+  };
+
+  const handlePriceChange = (index, key, value) => {
+    if (key === "category_id") {
+      const find = priceCatalog.find((item) => item.category_id === value)
+      if (find) {
+        toast.info("Category already select choose different category")
+        retrun
+      }
+    }
+
+
+    const updatedItems = [...priceCatalog];
+    if (key === "price") {
+      if (updatedItems[index].sell_price && parseInt(updatedItems[index].sell_price) > parseInt(value)) {
+        toast.info("Price should be greater than or equal to with discounted price")
+        return
+      }
+    }
+    if (key === "sell_price") {
+      if (updatedItems[index].price && parseInt(updatedItems[index].price) < parseInt(value)) {
+        toast.info("Discounted price should be less than or equal to with price")
+        return
+      }
+    }
+    updatedItems[index][key] = value; // Update the specific key (item or quantity)
+    setPriceCatalog(updatedItems);
+  };
 
   const handleSingleImageChange = (e) => {
     const file = e.target.files[0];
@@ -125,8 +176,8 @@ const EditTestList = () => {
         type === "checkbox"
           ? checked
           : ["price", "sell_price", "collection_fee"].includes(name)
-          ? parseInt(value, 10) || 0
-          : value,
+            ? parseInt(value, 10) || 0
+            : value,
     }));
   };
 
@@ -192,6 +243,19 @@ const EditTestList = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    let isCheck = false
+
+    priceCatalog?.forEach((item) => {
+      if (!item?.category_id || !item?.price || !item?.sell_price) {
+        toast.info("Price category, price, discounted price required")
+        isCheck = true
+      }
+    })
+
+    if (isCheck) {
+      retrun
+    }
     setIsLoading(true);
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
@@ -206,8 +270,6 @@ const EditTestList = () => {
 
     formDataToSend.append("test_name", inputData.test_name);
     formDataToSend.append("group_id", inputData.group);
-    formDataToSend.append("price", inputData.price);
-    formDataToSend.append("sell_price", inputData.sell_price);
     formDataToSend.append("collection_fee", inputData.collection_fee);
     formDataToSend.append("testcode", inputData.testcode);
     formDataToSend.append("advice", inputData.advice);
@@ -239,6 +301,12 @@ const EditTestList = () => {
       formDataToSend.append(`observations[${index}]`, obs);
     });
 
+    priceCatalog.forEach((item, index) => {
+      formDataToSend.append(`catalogs[${index}][category_id]`, item?.category_id)
+      formDataToSend.append(`catalogs[${index}][price]`, item?.price)
+      formDataToSend.append(`catalogs[${index}][sell_price]`, item?.sell_price)
+    })
+
     itemDataList.forEach((item, index) => {
       formDataToSend.append(`items[${index}][item_id]`, item.id); // Send only the ID
       formDataToSend.append(`items[${index}][quantity]`, item.quantity);
@@ -253,7 +321,7 @@ const EditTestList = () => {
     }
   };
 
-  console.log(testDetails.loading , 'testDetails loading')
+  console.log(testDetails.loading, 'testDetails loading')
 
   if (testDetails.loading) {
     return <div className="spinner"><Spinner color="secondary" className="my-4" /></div>;
@@ -291,38 +359,6 @@ const EditTestList = () => {
               </FormGroup>
             </div>
             <div className="col-md-6">
-              <FormGroup className="mb-3">
-                <Label htmlFor="price" className="col-form-label">
-                  MRP: <span className="text-danger">*</span>
-                </Label>
-                <Input
-                  type="number"
-                  name="price"
-                  className="form-control shadow-sm"
-                  value={inputData.price}
-                  onChange={handleInputChange}
-                  id="price"
-                />
-              </FormGroup>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-md-6">
-              <FormGroup>
-                <Label htmlFor="sell_price" className="col-form-label">
-                  Discounted Price:
-                </Label>
-                <Input
-                  type="number"
-                  name="sell_price"
-                  value={inputData.sell_price}
-                  onChange={handleInputChange}
-                  id="sell_price"
-                />
-              </FormGroup>
-            </div>
-            <div className="col-md-6">
               <FormGroup>
                 <Label htmlFor="test_preparation" className="col-form-label">
                   Test Preparation:
@@ -341,6 +377,38 @@ const EditTestList = () => {
                 />
               </FormGroup>
             </div>
+            {/* <div className="col-md-6">
+              <FormGroup className="mb-3">
+                <Label htmlFor="price" className="col-form-label">
+                  MRP: <span className="text-danger">*</span>
+                </Label>
+                <Input
+                  type="number"
+                  name="price"
+                  className="form-control shadow-sm"
+                  value={inputData.price}
+                  onChange={handleInputChange}
+                  id="price"
+                />
+              </FormGroup>
+            </div> */}
+          </div>
+
+          <div className="row">
+            {/* <div className="col-md-6">
+              <FormGroup>
+                <Label htmlFor="sell_price" className="col-form-label">
+                  Discounted Price:
+                </Label>
+                <Input
+                  type="number"
+                  name="sell_price"
+                  value={inputData.sell_price}
+                  onChange={handleInputChange}
+                  id="sell_price"
+                />
+              </FormGroup>
+            </div> */}
           </div>
 
           <div className="row">
@@ -637,7 +705,7 @@ const EditTestList = () => {
           </div>
 
           <div className="row">
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label for="New">Parameter Group</Label>
                 <Autocomplete
@@ -671,7 +739,7 @@ const EditTestList = () => {
                       value="Yes"
                       className="form-check-input"
                       id="radioYes"
-                      checked={inputData.isPrescriptionRequired  === "Yes"}
+                      checked={inputData.isPrescriptionRequired === "Yes"}
                       onChange={handlePrescription}
                     />
                     <Label className="form-check-label" htmlFor="radioYes">
@@ -685,7 +753,7 @@ const EditTestList = () => {
                       value="No"
                       className="form-check-input"
                       id="radioNo"
-                      checked={inputData.isPrescriptionRequired  === "No"}
+                      checked={inputData.isPrescriptionRequired === "No"}
                       onChange={handlePrescription}
                     />
                     <Label className="form-check-label" htmlFor="radioNo">
@@ -741,6 +809,143 @@ const EditTestList = () => {
               Add Observation
             </Button>
           </FormGroup>
+
+          <div className="row" style={{ marginBottom: "20px" }}>
+            {priceCatalog.map((itemData, index) => (
+              <div className="col-md-12 mb-2" key={index}>
+                <FormGroup style={{ marginBottom: "15px" }}>
+                  <Label
+                    htmlFor={`category-${index}`}
+                    className="col-form-label"
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "14px",
+                      color: "#495057",
+                      marginBottom: "5px",
+                      display: "block",
+                    }}
+                  >
+                    Price List {index + 1}
+                  </Label>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      backgroundColor: "#f8f9fa",
+                      padding: "10px",
+                      borderRadius: "5px",
+                      boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+                    }}
+                  >
+                    {/* Dropdown for selecting item */}
+                    <Input
+                      type="select"
+                      name={`category-${index}`}
+                      id={`category-${index}`}
+                      value={itemData.category_id}
+                      onChange={(e) =>
+                        handlePriceChange(index, "category_id", e.target.value)
+                      }
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    >
+                      <option value="">Select Category</option>
+                      {speciesCategoryList?.data?.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.title}
+                        </option>
+                      ))}
+                    </Input>
+
+                    {/* Input for quantity */}
+                    <Input
+                      type="number"
+                      name={`price-${index}`}
+                      id={`price-${index}`}
+                      value={itemData.price}
+                      onChange={(e) =>
+                        handlePriceChange(index, "price", e.target.value)
+                      }
+                      placeholder="Price"
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+
+                    <Input
+                      type="number"
+                      name={`sell_price-${index}`}
+                      id={`sell_price-${index}`}
+                      value={itemData.sell_price}
+                      onChange={(e) =>
+                        handlePriceChange(index, "sell_price", e.target.value)
+                      }
+                      placeholder="Discounted Price"
+                      style={{
+                        marginRight: "10px",
+                        padding: "8px 10px",
+                        borderRadius: "5px",
+                        border: "1px solid #ced4da",
+                        backgroundColor: "#fff",
+                        boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+
+                    {/* Remove button */}
+                    <Button
+                      type="button"
+                      color="primary"
+                      onClick={() => removePriceCatalog(index)}
+                      style={{
+                        color: "white",
+                        backgroundColor: "#dc3545",
+                        borderColor: "#dc3545",
+                        padding: "8px 12px",
+                        borderRadius: "5px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      <FaTrash />
+                    </Button>
+                  </div>
+                </FormGroup>
+              </div>
+            ))}
+
+            <div className="col-md-12">
+              <Button
+                type="button"
+                color="primary"
+                outline
+                onClick={addPriceCatalog}
+                size="sm"
+                style={{
+                  marginTop: "10px",
+                  padding: "8px 20px",
+                  borderRadius: "5px",
+                  fontSize: "14px",
+                  border: "1px solid #007bff",
+                  color: "#007bff",
+                  backgroundColor: "white",
+                  boxShadow: "0 1px 3px rgba(0, 0, 0, 0.1)",
+                  transition: "all 0.2s ease-in-out",
+                }}
+              >
+                Add Price
+              </Button>
+            </div>
+          </div>
 
           <FormGroup>
             <label className="mb-3 mt-3">Items:</label>

@@ -48,12 +48,10 @@ const CreateOrder = () => {
     petList,
     getZonePrice,
     zoneprice,
-    getallSahcList,
-    allsahcList,
     getSahcwiseDoc,
     sahcDoc,
   } = useMasterContext();
-  const { getAllLabs, labDropdown, getAllCollection, collectionDropdown } = useCategoryContext();
+  const { getAllCollection, collectionDropdown } = useCategoryContext();
   const Navigate = useNavigate();
 
   const [search, setSearch] = useState("");
@@ -65,6 +63,9 @@ const CreateOrder = () => {
   const [selectedTest, setSelectedTest] = useState([]);
   const [selectedPackages, setSelectedPackages] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
+
+  const [speciesCategory, setSpeciesCategory] = useState(null)
+
   const [formData, setFormData] = useState({
     pet: "",
     type: "Home Visit",
@@ -76,8 +77,6 @@ const CreateOrder = () => {
     other_doctor: "",
   });
 
-
-
   const [totalAmount, setTotalAmount] = useState(0);
   const [collectionFees, setCollectionFees] = useState(0);
   const [selectedSlot, setSelectedSlot] = useState('');
@@ -87,10 +86,7 @@ const CreateOrder = () => {
     setSelectedSlot(slot);
   };
 
-
-
   useEffect(() => {
-
     if (formData.booking_date && selectedCustomer?.pincode) {
       const dataToSend = {
         booking_date: formData.booking_date,
@@ -111,11 +107,16 @@ const CreateOrder = () => {
 
 
   useEffect(() => {
-    getAllTest();
     getProfessionalFees();
-    getTestPackageList();
     getAllCollection();
   }, []);
+  
+  useEffect(() => {
+    if(speciesCategory) {
+      getAllTest(speciesCategory);
+      getTestPackageList(speciesCategory);
+    }
+  }, [speciesCategory])
 
   useEffect(() => {
     if (selectedsahc) {
@@ -191,7 +192,19 @@ const CreateOrder = () => {
   const onChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if(name === "pet") {
+      const petInfo = petList?.data?.find((pet) => pet.id == value)
+      setSpeciesCategory(petInfo?.species_category)
+    }
   };
+
+
+  useEffect(() => {
+    setSelectedTest([])
+    setSelectedPackages([])
+  }, [speciesCategory])
+
   const resetForm = () => {
     setFormData({
       pet: "",
@@ -286,6 +299,7 @@ const CreateOrder = () => {
     bodyData.append("colleciton_center_id", selectedCC || "");
     bodyData.append("collection_fees", collectionFees || "");
     bodyData.append("pincode", selectedCustomer.pincode || "");
+    bodyData.append("category", speciesCategory || "");
     if (selectedPhelbo) {
       bodyData.append("phlebotomist_id", selectedPhelbo.id || "");
     }
@@ -297,7 +311,7 @@ const CreateOrder = () => {
       bodyData.append(`tests[${i}][price]`, el.sell_price);
     });
     selectedPackages.forEach((el, i) => {
-      bodyData.append(`packages[${i}][package]`, el.id);
+      bodyData.append(`packages[${i}][package]`, el._id);
       bodyData.append(`packages[${i}][price]`, el.sell_price);
     });
     selectedFees?.forEach((el, i) => {
@@ -475,49 +489,55 @@ const CreateOrder = () => {
                                 ))}
                               </Input>
                             </FormGroup>
-                            <FormGroup className="mt-3">
-                              <Label for="prescription" className="fw-bold">
-                                Add Prescription
-                              </Label>
-                              <Input
-                                type="file"
-                                id="prescription"
-                                multiple
-                                disabled={isProcessing}
-                                onChange={handleImageChange}
-                              />
-                            </FormGroup>
-                            <FormGroup className="mt-4 d-flex align-items-center">
-                              <Label className="me-3 fw-bold">
-                                Collection Type
-                              </Label>
-                              <div className="form-check me-4">
-                                <Input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="type"
-                                  value="Home Visit"
-                                  onChange={onChange}
-                                  disabled={isProcessing}
-                                  checked={formData.type === "Home Visit"}
-                                />
-                                <Label className="form-check-label">
-                                  Home Collection
+                            {formData?.pet && (
+                              <FormGroup className="mt-3">
+                                <Label for="prescription" className="fw-bold">
+                                  Add Prescription
                                 </Label>
-                              </div>
-                              <div className="form-check">
                                 <Input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="type"
-                                  value="Collection_Center"
-                                  onChange={onChange}
+                                  type="file"
+                                  id="prescription"
+                                  multiple
                                   disabled={isProcessing}
-                                  checked={formData.type === "Collection_Center"}
+                                  onChange={handleImageChange}
                                 />
-                                <Label className="form-check-label">Colleciton Center</Label>
-                              </div>
-                            </FormGroup>
+                              </FormGroup>
+                            )}
+
+                            {formData?.pet && (
+                              <FormGroup className="mt-4 d-flex align-items-center">
+                                <Label className="me-3 fw-bold">
+                                  Collection Type
+                                </Label>
+                                <div className="form-check me-4">
+                                  <Input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="type"
+                                    value="Home Visit"
+                                    onChange={onChange}
+                                    disabled={isProcessing}
+                                    checked={formData.type === "Home Visit"}
+                                  />
+                                  <Label className="form-check-label">
+                                    Home Collection
+                                  </Label>
+                                </div>
+                                <div className="form-check">
+                                  <Input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="type"
+                                    value="Collection_Center"
+                                    onChange={onChange}
+                                    disabled={isProcessing}
+                                    checked={formData.type === "Collection_Center"}
+                                  />
+                                  <Label className="form-check-label">Colleciton Center</Label>
+                                </div>
+                              </FormGroup>
+
+                            )}
                             {formData.type === "Collection_Center" && (
                               <FormGroup className="mt-3">
                                 <Label for="Collection_Center" className="fw-bold">
@@ -545,51 +565,54 @@ const CreateOrder = () => {
                                 </Input>
                               </FormGroup>
                             )}
-                            <FormGroup className="mt-4 d-flex align-items-center">
-                              <Label className="me-3 fw-bold">
-                                Referred Type
-                              </Label>
-                              <div className="form-check me-4">
-                                <Input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="referred_from" // Make sure the name matches
-                                  value="self"
-                                  onChange={onChange}
-                                  disabled={isProcessing}
-                                  checked={formData.referred_from === "self"}
-                                />
-                                <Label className="form-check-label">Self</Label>
-                              </div>
-                              <div className="form-check me-4">
-                                <Input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="referred_from"
-                                  value="doctor"
-                                  onChange={onChange}
-                                  disabled={isProcessing}
-                                  checked={formData.referred_from === "doctor"}
-                                />
-                                <Label className="form-check-label">
-                                  Doctor
+
+                            {formData?.pet && (
+                              <FormGroup className="mt-4 d-flex align-items-center">
+                                <Label className="me-3 fw-bold">
+                                  Referred Type
                                 </Label>
-                              </div>
-                              <div className="form-check">
-                                <Input
-                                  className="form-check-input"
-                                  type="radio"
-                                  name="referred_from"
-                                  value="other"
-                                  onChange={onChange}
-                                  disabled={isProcessing}
-                                  checked={formData.referred_from === "other"}
-                                />
-                                <Label className="form-check-label">
-                                  other
-                                </Label>
-                              </div>
-                            </FormGroup>
+                                <div className="form-check me-4">
+                                  <Input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="referred_from" // Make sure the name matches
+                                    value="self"
+                                    onChange={onChange}
+                                    disabled={isProcessing || !formData?.pet}
+                                    checked={formData.referred_from === "self"}
+                                  />
+                                  <Label className="form-check-label">Self</Label>
+                                </div>
+                                <div className="form-check me-4">
+                                  <Input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="referred_from"
+                                    value="doctor"
+                                    onChange={onChange}
+                                    disabled={isProcessing || !formData.pet}
+                                    checked={formData.referred_from === "doctor"}
+                                  />
+                                  <Label className="form-check-label">
+                                    Doctor
+                                  </Label>
+                                </div>
+                                <div className="form-check">
+                                  <Input
+                                    className="form-check-input"
+                                    type="radio"
+                                    name="referred_from"
+                                    value="other"
+                                    onChange={onChange}
+                                    disabled={isProcessing || !formData?.pet}
+                                    checked={formData.referred_from === "other"}
+                                  />
+                                  <Label className="form-check-label">
+                                    other
+                                  </Label>
+                                </div>
+                              </FormGroup>
+                            )}
 
                             {formData.referred_from === "other" && (
                               <FormGroup>
@@ -620,6 +643,7 @@ const CreateOrder = () => {
                                   id="sahc"
                                   name="sahc"
                                   className="form-select"
+                                  disabled={!formData.pet}
                                   value={selectedsahc || ""}
                                   onChange={(e) =>
                                     handleSahcSelect(e.target.value)
@@ -646,6 +670,7 @@ const CreateOrder = () => {
                                     type="select"
                                     id="doctor"
                                     name="doctor"
+                                    disabled={!formData.pet}
                                     className="form-select"
                                     value={selectedDoc || ""}
                                     onChange={(e) =>
@@ -664,7 +689,7 @@ const CreateOrder = () => {
                                 </FormGroup>
                               )}
                               {
-                                formData.type === "Home Visit" && (
+                                formData.type === "Home Visit" && formData?.pet && (
                                   <>
                                      <FormGroup className="mt-3">
                               <Label for="bookingDate" className="fw-bold">
@@ -675,7 +700,7 @@ const CreateOrder = () => {
                                 id="bookingDate"
                                 name="booking_date"
                                 className="form-control"
-                                disabled={isProcessing}
+                                disabled={isProcessing || !formData.pet}
                                 value={getFormattedDate(formData.booking_date)}
                                 onChange={handleDateChange}
                               />
@@ -704,87 +729,92 @@ const CreateOrder = () => {
                                   </>
                                 )
                               }
-                         
-                            <FormGroup className="mt-3">
-                              <Label for="selectTest" className="fw-bold">
-                                Select Test
-                              </Label>
-                              <Autocomplete
-                                multiple
-                                options={allTest.data || []}
-                                getOptionLabel={(option) =>
-                                  `${option?.test_name} (${option?.sell_price})` ||
-                                  ""
-                                }
-                                value={selectedTest}
-                                disabled={isProcessing}
-                                onChange={(event, newValue) =>
-                                  onTestSelect(newValue)
-                                }
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Select Test"
-                                    placeholder="Select Test"
-                                  />
-                                )}
-                              />
-                            </FormGroup>
+                           {formData?.pet && (
+                              <FormGroup className="mt-3">
+                                <Label for="selectTest" className="fw-bold">
+                                  Select Test
+                                </Label>
+                                <Autocomplete
+                                  multiple
+                                  options={allTest.data || []}
+                                  getOptionLabel={(option) =>
+                                    `${option?.test_name} (${option?.sell_price})` ||
+                                    ""
+                                  }
+                                  value={selectedTest}
+                                  disabled={isProcessing}
+                                  onChange={(event, newValue) =>
+                                    onTestSelect(newValue)
+                                  }
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="outlined"
+                                      label="Select Test"
+                                      placeholder="Select Test"
+                                    />
+                                  )}
+                                />
+                              </FormGroup>
+                           )}
 
-                            <FormGroup className="mt-3">
-                              <Label for="selectPackage" className="fw-bold">
-                                Select Health Package
-                              </Label>
-                              <Autocomplete
-                                multiple
-                                options={test_package?.data || []}
-                                getOptionLabel={(option) =>
-                                  `${option?.package_name} (${option?.sell_price})` ||
-                                  ""
-                                }
-                                value={selectedPackages}
-                                disabled={isProcessing}
-                                onChange={(event, newValue) =>
-                                  onPackageSelect(newValue)
-                                }
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Select Health Package"
-                                    placeholder="Select Health Package"
-                                  />
-                                )}
-                              />
-                            </FormGroup>
+                           {formData?.pet && (
+                              <FormGroup className="mt-3">
+                                <Label for="selectPackage" className="fw-bold">
+                                  Select Health Package
+                                </Label>
+                                <Autocomplete
+                                  multiple
+                                  options={test_package?.data || []}
+                                  getOptionLabel={(option) =>
+                                    `${option?.package_name} (${option?.sell_price})` ||
+                                    ""
+                                  }
+                                  value={selectedPackages}
+                                  disabled={isProcessing}
+                                  onChange={(event, newValue) =>
+                                    onPackageSelect(newValue)
+                                  }
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="outlined"
+                                      label="Select Health Package"
+                                      placeholder="Select Health Package"
+                                    />
+                                  )}
+                                />
+                              </FormGroup>
+                           )}
 
-                            <FormGroup className="mt-3">
-                              <Label for="selectFees" className="fw-bold">
-                                Select Professional Fees
-                              </Label>
-                              <Autocomplete
-                                multiple
-                                options={professionalFees?.data || []}
-                                getOptionLabel={(option) =>
-                                  `${option?.name} (${option?.expected_charges})` ||
-                                  ""
-                                }
-                                value={selectedFees}
-                                disabled={isProcessing}
-                                onChange={(event, newValue) =>
-                                  onFeesSelect(newValue)
-                                }
-                                renderInput={(params) => (
-                                  <TextField
-                                    {...params}
-                                    variant="outlined"
-                                    label="Select Professional Fees"
-                                    placeholder="Select Professional Fees"
-                                  />
-                                )}
-                              />
-                            </FormGroup>
+                           {formData?.pet && (
+                              <FormGroup className="mt-3">
+                                <Label for="selectFees" className="fw-bold">
+                                  Select Professional Fees
+                                </Label>
+                                <Autocomplete
+                                  multiple
+                                  options={professionalFees?.data || []}
+                                  getOptionLabel={(option) =>
+                                    `${option?.name} (${option?.expected_charges})` ||
+                                    ""
+                                  }
+                                  value={selectedFees}
+                                  disabled={isProcessing}
+                                  onChange={(event, newValue) =>
+                                    onFeesSelect(newValue)
+                                  }
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      variant="outlined"
+                                      label="Select Professional Fees"
+                                      placeholder="Select Professional Fees"
+                                    />
+                                  )}
+                                />
+                              </FormGroup>
+                           )}
                             {formData.booking_date && selectedSlot && (
                               <FormGroup className="mt-3">
                                 <Autocomplete

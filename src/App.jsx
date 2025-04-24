@@ -137,6 +137,7 @@ import UnPaidOrders from "./OrderMenu/UnPaidOrders";
 import CrmMaster from "./screen/Customers/CrmMaster";
 import CustomerOrderList from "./screen/Customers/CustomerOrderList";
 import DailyReport from "./screen/DailyReports";
+import SpeciesCategoryList from "./Master/SpeciesCategory/SpeciesCategory";
 
 function App() {
   const { initialLoading } = useAuthContext();
@@ -342,6 +343,9 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/add-products" element={<AddUnitList />} />
           <Route path="/daily-report" element={<DailyReport />} />
+
+          <Route path="/species-category" element={<SpeciesCategoryList />} />
+
           <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/login" element={<Login />} />
