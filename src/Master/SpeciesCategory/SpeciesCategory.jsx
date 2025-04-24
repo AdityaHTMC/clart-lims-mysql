@@ -117,7 +117,7 @@ const SpeciesCategoryList = () => {
 
     return (
         <>
-            <CommonBreadcrumb title="Parameter Group List" />
+            <CommonBreadcrumb title="Species Category" />
             <Container fluid>
                 <Row>
                     <Col sm="12">
