@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
   Container,
   Row,
@@ -224,16 +224,16 @@ const OrderDetailspage = () => {
                   </span>
                 </h5>
                 <p style={{ color: "#777", margin: 0 }}>
-                 Order Collection Date :{" "}
+                  Order Collection Date :{" "}
                   {orderDetails.data?.booking_date
                     ? new Date(orderDetails.data.booking_date).toLocaleString(
-                        "en-GB",
-                        {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        }
-                      )
+                      "en-GB",
+                      {
+                        day: "2-digit",
+                        month: "short",
+                        year: "numeric",
+                      }
+                    )
                     : "No Date"}
                 </p>
 
@@ -253,6 +253,35 @@ const OrderDetailspage = () => {
                   )}
                 </p>
               </div>
+
+              {orderDetails?.data?.prescription && orderDetails?.data?.prescription?.length > 0 && (
+                <>
+                  <div className="mt-2 h6 fs-4">Prescriptions : </div>
+
+                  <Table bordered hover style={{ marginTop: "10px" }}>
+                    <thead>
+                      <tr>
+                        <th>SL No.</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orderDetails?.data?.prescription?.map((item, i) => (
+                        <Fragment key={i}>
+                          <tr>
+                            <td>{i + 1}</td>
+                            <td>
+                              <a href={item} download>Download</a>
+                            </td>
+                          </tr>
+                        </Fragment>
+                      ))}
+                    </tbody>
+                  </Table>
+                </>
+              )}
+
+
               {orderDetails?.data?.tests?.length > 0 && (
                 <>
                   <div className="mt-2 h6 fs-4">Test List </div>
@@ -361,8 +390,8 @@ const OrderDetailspage = () => {
                     <td className="text-wrap">
                       {orderDetails.data?.pet_details?.date_of_birth
                         ? new Date(
-                            orderDetails.data.pet_details.date_of_birth
-                          ).toLocaleDateString("en-GB")
+                          orderDetails.data.pet_details.date_of_birth
+                        ).toLocaleDateString("en-GB")
                         : ""}
                     </td>
                   </tr>
@@ -406,7 +435,7 @@ const OrderDetailspage = () => {
                 </Button>
               )}
 
-               {orderDetails?.data?.report && (
+              {orderDetails?.data?.report && (
                 <Button
                   color="primary"
                   style={{ marginBottom: "10px", float: "right" }}
@@ -582,7 +611,7 @@ const OrderDetailspage = () => {
                 </Button>
               )}
 
-              {orderDetails.data?.payment_status === "Paid" && 
+              {orderDetails.data?.payment_status === "Paid" &&
                 (orderDetails.data?.status === "Order Received" ||
                   orderDetails.data?.status === "Rejected" ||
                   orderDetails.data?.status === "Cancelled") && (

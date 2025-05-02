@@ -26,10 +26,10 @@ const AddTestList = () => {
     allItemList,
     getAllConatinerList,
     allContainerList,
-    getAllParameterGrList,allparameterGrList,
+    getAllParameterGrList, allparameterGrList,
   } = useMasterContext();
 
-  const { getProfessionalFees, professionalFees } = useOrderContext();
+  const { getProfessionalFees, professionalFees, allTest, getAllTest } = useOrderContext();
   const { getSpeciesCategoryList, speciesCategoryList } = useCommonContext()
 
   useEffect(() => {
@@ -39,7 +39,8 @@ const AddTestList = () => {
     getAllItemList();
     getAllConatinerList();
     getAllParameterGrList();
-    getSpeciesCategoryList()
+    getSpeciesCategoryList();
+    getAllTest();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -57,7 +58,7 @@ const AddTestList = () => {
     observation: [""],
     container_id: "",
     hsn_code: "",
-    isPrescriptionRequired : "",
+    isPrescriptionRequired: "",
   });
 
   const [priceCatalog, setPriceCatalog] = useState([{
@@ -67,6 +68,7 @@ const AddTestList = () => {
   const [itemsData, setItemsData] = useState([{ item: "", quantity: "" }]);
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [selectedParameterGrList, setparameterGrList] = useState([]);
+  const [selectedTests, setSelectedTests] = useState([]);
   const [selectedFees, setSelectedFees] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -91,11 +93,11 @@ const AddTestList = () => {
   };
 
   const addPriceCatalog = () => {
-    if(priceCatalog.length === speciesCategoryList?.data?.length) {
+    if (priceCatalog.length === speciesCategoryList?.data?.length) {
       toast.info("All category selected already");
       return
     }
-    setPriceCatalog((prev) => [...prev, {category_id: "", sell_price: "", price: ""}])
+    setPriceCatalog((prev) => [...prev, { category_id: "", sell_price: "", price: "" }])
   };
 
   const removePriceCatalog = (index) => {
@@ -103,24 +105,24 @@ const AddTestList = () => {
   };
 
   const handlePriceChange = (index, key, value) => {
-    if(key === "category_id"){
+    if (key === "category_id") {
       const find = priceCatalog.find((item) => item.category_id === value)
-      if(find) {
+      if (find) {
         toast.info("Category already select choose different category")
         retrun
       }
     }
 
-    
+
     const updatedItems = [...priceCatalog];
-    if(key === "price") {
-      if(updatedItems[index].sell_price && parseInt(updatedItems[index].sell_price) > parseInt(value) ) {
+    if (key === "price") {
+      if (updatedItems[index].sell_price && parseInt(updatedItems[index].sell_price) > parseInt(value)) {
         toast.info("Price should be greater than or equal to with discounted price")
         return
       }
     }
-    if(key === "sell_price") {
-      if(updatedItems[index].price && parseInt(updatedItems[index].price) < parseInt(value) ) {
+    if (key === "sell_price") {
+      if (updatedItems[index].price && parseInt(updatedItems[index].price) < parseInt(value)) {
         toast.info("Discounted price should be less than or equal to with price")
         return
       }
@@ -153,8 +155,8 @@ const AddTestList = () => {
         type === "checkbox"
           ? checked
           : ["price", "sell_price", "collection_fee"].includes(name)
-          ? parseInt(value, 10) || 0
-          : value,
+            ? parseInt(value, 10) || 0
+            : value,
     }));
   };
 
@@ -188,24 +190,24 @@ const AddTestList = () => {
     const allSelectedProductIds = [
       ...selectedProducts.map((product) => product.id),
     ];
-    
+
     let isCheck = false
 
     priceCatalog?.forEach((item) => {
-      if(!item?.category_id || !item?.price || !item?.sell_price) {
+      if (!item?.category_id || !item?.price || !item?.sell_price) {
         toast.info("Price category, price, discounted price required")
         isCheck = true
       }
     })
 
-    if(isCheck) {
+    if (isCheck) {
       retrun
     }
-    
+
     const allSelectedfeesIds = [...selectedFees.map((product) => product.id)];
-    
+
     const allSelectedParameterGrIds = [...selectedParameterGrList.map((product) => product.id)];
-    
+
     setIsLoading(true);
     const formDataToSend = new FormData();
 
@@ -232,6 +234,12 @@ const AddTestList = () => {
     allSelectedParameterGrIds.forEach((id, index) => {
       formDataToSend.append(`parameter_groups[${index}]`, parseInt(id, 10));
     });
+
+    if(selectedTests && selectedTests?.length > 0){
+      selectedTests?.forEach((el, index) => {
+        formDataToSend.append(`tests[${index}]`, el.id);
+      });
+    }
 
     priceCatalog.forEach((item, index) => {
       formDataToSend.append(`catalogs[${index}][category_id]`, item?.category_id)
@@ -691,7 +699,7 @@ const AddTestList = () => {
             <div className="col-md-6">
               <FormGroup style={{ display: "flex", flexDirection: "column" }}>
                 <Label htmlFor="hsn_code">
-                 Hsn Code 
+                  Hsn Code
                 </Label>
                 <Input
                   type="text"
@@ -707,7 +715,7 @@ const AddTestList = () => {
           </div>
 
           <div className="row" style={{ marginBottom: "20px" }}>
-          <div className="col-md-6">
+            <div className="col-md-6">
               <FormGroup>
                 <Label
                   for="New"
@@ -779,7 +787,7 @@ const AddTestList = () => {
                       value="Yes"
                       className="form-check-input"
                       id="radioYes"
-                      checked={inputData.isPrescriptionRequired  === "Yes"}
+                      checked={inputData.isPrescriptionRequired === "Yes"}
                       onChange={handlePrescription}
                       style={{
                         marginRight: "5px",
@@ -800,7 +808,7 @@ const AddTestList = () => {
                       value="No"
                       className="form-check-input"
                       id="radioNo"
-                      checked={inputData.isPrescriptionRequired  === "No"}
+                      checked={inputData.isPrescriptionRequired === "No"}
                       onChange={handlePrescription}
                       style={{
                         marginRight: "5px",
@@ -1143,6 +1151,7 @@ const AddTestList = () => {
               </div>
             ))}
 
+
             <div className="col-md-12">
               <Button
                 type="button"
@@ -1166,6 +1175,32 @@ const AddTestList = () => {
               </Button>
             </div>
           </div>
+
+          <FormGroup className="mt-3">
+            <Label for="selectTest" className="fw-bold">
+              Select Sub Tests
+            </Label>
+            <Autocomplete
+              multiple
+              options={allTest.data || []}
+              disableCloseOnSelect
+              getOptionLabel={(option) =>
+                `${option?.test_name}`
+              }
+              value={selectedTests}
+              onChange={(event, newValue) =>
+                setSelectedTests(newValue)
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Select Sub Tests"
+                  placeholder="Select Sub Tests"
+                />
+              )}
+            />
+          </FormGroup>
 
           <Button
             type="submit"

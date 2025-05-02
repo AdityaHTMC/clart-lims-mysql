@@ -98,8 +98,6 @@ const Notification = () => {
     getNotificationList();
   }, []);
 
-  console.log(notificationList, "notificationList");
-
   const handleToggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };

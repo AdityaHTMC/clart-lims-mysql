@@ -33,8 +33,9 @@ const EditTestList = () => {
     allContainerList, getAllParameterGrList, allparameterGrList,
   } = useMasterContext();
 
-  const { getProfessionalFees, professionalFees } = useOrderContext();
+  const { getProfessionalFees, professionalFees, allTest, getAllTest } = useOrderContext();
   const { getSpeciesCategoryList, speciesCategoryList } = useCommonContext()
+  const [fullTestArray, setFullTestArray] = useState([])
 
   useEffect(() => {
     getAllTestCategory();
@@ -44,7 +45,17 @@ const EditTestList = () => {
     getAllConatinerList();
     getAllParameterGrList();
     getSpeciesCategoryList();
+    getAllTest()
   }, []);
+
+  useEffect(() => {
+    if (allTest?.data?.length > 0) {
+      const arr = allTest?.data?.map((item) => {
+        return { id: item.id, test_name: item?.test_name, testcode: item?.testcode }
+      })
+      setFullTestArray(arr)
+    }
+  }, [allTest])
 
   useEffect(() => {
     if (id) {
@@ -81,6 +92,7 @@ const EditTestList = () => {
   const [itemDataList, setItemDataList] = useState([""]);
   const [preview, setPreview] = useState(null);
   const [priImages, setPriImages] = useState([]);
+  const [selectedTests, setSelectedTests] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -112,6 +124,7 @@ const EditTestList = () => {
       setPriceCatalog(prices && prices?.length > 0 ? prices : [{
         category_id: '', sell_price: '', price: ''
       }])
+      setSelectedTests(testDetails?.data?.tests || [])
     }
   }, [testDetails]);
 
@@ -289,6 +302,10 @@ const EditTestList = () => {
       formDataToSend.append(`species[${index}]`, parseInt(id, 10));
     });
 
+    selectedTests?.forEach((el, index) => {
+      formDataToSend.append(`tests[${index}]`, el.id);
+    });
+    
     allSelectedParameterGrIds.forEach((id, index) => {
       formDataToSend.append(`parameter_groups[${index}]`, parseInt(id, 10));
     });
@@ -1006,6 +1023,32 @@ const EditTestList = () => {
             >
               Add Item
             </Button>
+          </FormGroup>
+
+          <FormGroup className="mt-3">
+            <Label for="selectTest" className="fw-bold">
+              Select Sub Tests
+            </Label>
+            <Autocomplete
+              multiple
+              options={allTest.data || []}
+              disableCloseOnSelect
+              getOptionLabel={(option) =>
+                `${option?.test_name}`
+              }
+              value={selectedTests}
+              onChange={(event, newValue) =>
+                setSelectedTests(newValue)
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  label="Select Sub Tests"
+                  placeholder="Select Sub Tests"
+                />
+              )}
+            />
           </FormGroup>
 
           <Button
