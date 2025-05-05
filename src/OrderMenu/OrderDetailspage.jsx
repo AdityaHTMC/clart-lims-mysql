@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import CommonBreadcrumb from "../component/common/bread-crumb";
 import { FaReceipt } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useCommonContext } from "../helper/CommonProvider";
 import { toast } from "react-toastify";
 import { useOrderContext } from "../helper/OrderProvider";
@@ -48,6 +48,8 @@ const OrderDetailspage = () => {
   const handleNext = () => {
     sliderRef.current.slickNext(); // Move slider to the next slide
   };
+
+  const Navigate = useNavigate()
 
   const {
     updateOrderRefund,
@@ -435,11 +437,16 @@ const OrderDetailspage = () => {
                 </Button>
               )}
 
-              {orderDetails?.data?.report && (
+              {(orderDetails?.data?.status === "Completed" || (orderDetails?.data?.report === 'Processing' || orderDetails?.data?.report === 'Completed')) && (
                 <Button
                   color="primary"
                   style={{ marginBottom: "10px", float: "right" }}
-                  onClick={handleDownloadReport}
+                  onClick={() =>
+                    // window.open(order?.report, '_blank')
+                    Navigate(
+                      `/report-download/${id}`
+                    )
+                  }
                 >
                   <FaReceipt fontSize={12} /> Report
                 </Button>

@@ -23,6 +23,7 @@ export const OrderProvider = ({ children }) => {
     const [allOrderlist, setAllOrderlist] = useState({ loading: true, data: [] ,total: ""})
     const [packageOrder, setPackageOrder] = useState({ loading: true, data: [] ,total: ""})
     const [pendingOrder, setPendingOrder] = useState({ loading: true, data: [] ,total: ""})
+    const [orderDetail, setOrderDetail] = useState({ loading: true, data: null })
 
     const getAllTest = async (q) => {
         try {
@@ -45,6 +46,21 @@ export const OrderProvider = ({ children }) => {
             // toast.error("Failed to test list");
         }
     };
+
+    const getOrderTestList = async (id) => {
+        try {
+            setOrderDetail({ loading: true, data: null })
+            const { data } = await axios.get(`${base_url}/admin/order/tests/${id}`, { headers: { 'Authorization': Authtoken } })
+            if (data.status === 200) {
+                setOrderDetail({ loading: false, data: data.data })
+            } else {
+                toast.error('Failed to fetch order tests')
+                setOrderDetail({ loading: false, data: null })
+            }
+        } catch (error) {
+            setOrderDetail({ loading: false, data: null })
+        }
+    }
 
     const getCustomerDetail = async (data) => {
         try {
@@ -260,7 +276,7 @@ export const OrderProvider = ({ children }) => {
     };
 
     const values = {
-        getAllTest, allTest, getCustomerDetail, allCustomer, getTestPackageList, test_package, professionalFees, getProfessionalFees, createNewOrder, getTestOrderList, allOrder, getAllOrderStatus, orderStatus ,getpackageOrderList,packageOrder,getAllOrderList,allOrderlist,getPendingOrderList,pendingOrder
+        getAllTest, allTest, getCustomerDetail, allCustomer, getTestPackageList, test_package, professionalFees, getProfessionalFees, createNewOrder, getTestOrderList, allOrder, getAllOrderStatus, orderStatus ,getpackageOrderList,packageOrder,getAllOrderList,allOrderlist,getPendingOrderList,pendingOrder, getOrderTestList, orderDetail
     }
 
     return (
