@@ -218,42 +218,49 @@ const OrderDetailspage = () => {
                 boxShadow: "0px 0px 15px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <div style={{ marginBottom: "10px" }}>
-                <h5>
-                  Order Id:{" "}
-                  <span style={{ fontWeight: "bold" }}>
-                    {orderDetails?.data?.orderId}
-                  </span>
-                </h5>
-                <p style={{ color: "#777", margin: 0 }}>
-                  Order Collection Date :{" "}
-                  {orderDetails.data?.booking_date
-                    ? new Date(orderDetails.data.booking_date).toLocaleString(
+              <div className="d-flex justify-content-between">
+                <div style={{ marginBottom: "10px" }}>
+                  <h5>
+                    Order Id:{" "}
+                    <span style={{ fontWeight: "bold" }}>
+                      {orderDetails?.data?.orderId}
+                    </span>
+                  </h5>
+                  <p style={{ color: "#777", margin: 0 }}>
+                    Order Collection Date :{" "}
+                    {orderDetails.data?.booking_date
+                      ? new Date(orderDetails.data.booking_date).toLocaleString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )
+                      : "No Date"}
+                  </p>
+
+                  <p style={{ color: "#777", margin: 0 }}>
+                    {" "}
+                    Order Placed Date : {""}
+                    {new Date(orderDetails.data?.createdAt).toLocaleString(
                       "en-GB",
                       {
                         day: "2-digit",
                         month: "short",
                         year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
                       }
-                    )
-                    : "No Date"}
-                </p>
-
-                <p style={{ color: "#777", margin: 0 }}>
-                  {" "}
-                  Order Placed Date : {""}
-                  {new Date(orderDetails.data?.createdAt).toLocaleString(
-                    "en-GB",
-                    {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    }
-                  )}
-                </p>
+                    )}
+                  </p>
+                </div>
+                {orderDetails?.data?.pet_image && (
+                  <div className="">
+                    <img src={orderDetails?.data?.pet_image} alt="" width={150} />
+                  </div>
+                )}
               </div>
 
               {orderDetails?.data?.prescription && orderDetails?.data?.prescription?.length > 0 && (
